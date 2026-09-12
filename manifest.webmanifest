@@ -1,0 +1,25 @@
+{
+  "id": "nba2k27-build-lab",
+  "name": "NBA 2K27 Build Lab",
+  "short_name": "2K27 Build Lab",
+  "description": "Builder MyPLAYER NBA 2K27 : attributs, caps, badges, animations, Cap Breakers et builds communautaires.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#050A12",
+  "theme_color": "#050A12",
+  "lang": "fr-FR",
+  "dir": "ltr",
+  "categories": ["games", "sports", "utilities"],
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "shortcuts": [
+    {"name": "Builder", "url": "./#builder"},
+    {"name": "Build hub", "url": "./#community"},
+    {"name": "Badges", "url": "./#badges"}
+  ]
+}

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="NBA 2K27 Build Lab">
+  <rect width="64" height="64" rx="14" fill="#050A12"/>
+  <circle cx="32" cy="32" r="19" fill="none" stroke="#1D8BFF" stroke-width="3"/>
+  <path d="M32 13v38M13 32h38M20 18c6 4 9 9 9 14s-3 10-9 14M44 18c-6 4-9 9-9 14s3 10 9 14"
+        fill="none" stroke="#22D3EE" stroke-width="2.4" stroke-linecap="round"/>
+</svg>

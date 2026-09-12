@@ -1,0 +1,19 @@
+# Dependencies / tooling
+node_modules/
+.npm/
+.cache/
+
+# Local / secret configuration
+.env
+.env.*
+!.env.example
+wrangler.toml
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
