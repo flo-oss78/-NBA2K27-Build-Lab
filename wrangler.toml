@@ -1,0 +1,8 @@
+name = "nba2k27-build-lab"
+compatibility_date = "2026-09-13"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "nba-build-lab"
+database_id = "f887621d-6b78-4d6a-8671-e4cee9c0d94d"

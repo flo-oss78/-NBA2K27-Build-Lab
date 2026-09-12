@@ -7,7 +7,9 @@ node_modules/
 .env
 .env.*
 !.env.example
-wrangler.toml
+# wrangler.toml est désormais commité : le déploiement Git (Workers Builds)
+# en a besoin pour connaître pages_build_output_dir et le binding D1. L'ID
+# D1 qu'il contient n'est pas un secret (juste un identifiant de ressource).
 
 # OS / editor files
 .DS_Store
