@@ -5,7 +5,7 @@
    - /api/ : jamais mis en cache
    - install : addAll tolérant aux 404 (un fichier manquant ne casse plus l'installation)
 */
-const VERSION='v25.0.0';
+const VERSION='v25.0.1';
 const SHELL_CACHE='nbabl-shell-'+VERSION;
 const RUNTIME_CACHE='nbabl-runtime-'+VERSION;
 
@@ -84,21 +84,32 @@ self.addEventListener('fetch',e=>{
   }
 
   // Assets : stale-while-revalidate.
-  // La réponse fraîche doit être réécrite dans le cache d'où venait la copie
-  // servie. Écrire systématiquement dans RUNTIME laissait la copie du SHELL
-  // intacte — or caches.match() la trouve en premier : le JS et le CSS de la
-  // coquille restaient alors figés indéfiniment chez tout visiteur déjà venu,
-  // et aucun déploiement ne les atteignait plus.
+  //
+  // Deux conditions pour qu'un déploiement finisse par atteindre un visiteur
+  // déjà venu, et il a fallu les deux :
+  //
+  // 1. Réécrire la réponse fraîche dans le cache d'où venait la copie servie.
+  //    Écrire systématiquement dans RUNTIME laissait la copie du SHELL intacte,
+  //    et caches.match() la trouve en premier : elle gagnait à chaque fois.
+  //
+  // 2. Retenir le worker jusqu'à la fin de cette écriture avec waitUntil().
+  //    Sans ça, respondWith() rend la copie en cache, l'événement se termine,
+  //    et le navigateur peut arrêter le worker avant que cache.put() ait fini.
+  //    La revalidation était donc lancée mais n'aboutissait jamais : le JS et
+  //    le CSS restaient figés malgré le point 1.
+  const target=SHELL_URLS.has(url.href)?SHELL_CACHE:RUNTIME_CACHE;
+  const network=fetch(req).then(async res=>{
+    if(res&&res.ok){
+      const copy=res.clone();
+      const cache=await caches.open(target);
+      await cache.put(req,copy);
+    }
+    return res;
+  }).catch(()=>null);
+  e.waitUntil(network);
+
   e.respondWith((async()=>{
     const cached=await caches.match(req);
-    const target=SHELL_URLS.has(url.href)?SHELL_CACHE:RUNTIME_CACHE;
-    const network=fetch(req).then(res=>{
-      if(res&&res.ok){
-        const copy=res.clone();
-        caches.open(target).then(c=>c.put(req,copy));
-      }
-      return res;
-    }).catch(()=>null);
     return cached||(await network)||new Response('',{status:504});
   })());
 });
