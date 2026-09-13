@@ -5,7 +5,7 @@
    - /api/ : jamais mis en cache
    - install : addAll tolérant aux 404 (un fichier manquant ne casse plus l'installation)
 */
-const VERSION='v24.1.0';
+const VERSION='v24.1.1';
 const SHELL_CACHE='nbabl-shell-'+VERSION;
 const RUNTIME_CACHE='nbabl-runtime-'+VERSION;
 
@@ -17,6 +17,10 @@ const SHELL=[
   './build-sheet.js','./community.js',
   './manifest.webmanifest','./favicon.svg','./icon-192.png','./icon-512.png'
 ];
+
+// Adresses absolues des fichiers de la coquille, pour savoir dans quel cache
+// réécrire une réponse fraîche (voir le gestionnaire fetch plus bas).
+const SHELL_URLS=new Set(SHELL.map(u=>new URL(u,self.registration.scope).href));
 
 self.addEventListener('install',e=>{
   e.waitUntil((async()=>{
@@ -71,12 +75,18 @@ self.addEventListener('fetch',e=>{
   }
 
   // Assets : stale-while-revalidate.
+  // La réponse fraîche doit être réécrite dans le cache d'où venait la copie
+  // servie. Écrire systématiquement dans RUNTIME laissait la copie du SHELL
+  // intacte — or caches.match() la trouve en premier : le JS et le CSS de la
+  // coquille restaient alors figés indéfiniment chez tout visiteur déjà venu,
+  // et aucun déploiement ne les atteignait plus.
   e.respondWith((async()=>{
     const cached=await caches.match(req);
+    const target=SHELL_URLS.has(url.href)?SHELL_CACHE:RUNTIME_CACHE;
     const network=fetch(req).then(res=>{
       if(res&&res.ok){
         const copy=res.clone();
-        caches.open(RUNTIME_CACHE).then(c=>c.put(req,copy));
+        caches.open(target).then(c=>c.put(req,copy));
       }
       return res;
     }).catch(()=>null);
