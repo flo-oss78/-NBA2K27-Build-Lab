@@ -2,6 +2,7 @@
 node_modules/
 .npm/
 .cache/
+.wrangler/
 
 # Local / secret configuration
 .env

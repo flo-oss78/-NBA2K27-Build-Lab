@@ -213,12 +213,25 @@
     return ((b.likes||0)*4+(b.views||0)*.5+(b.comments||0)*3)/Math.pow(ageDays,.8);
   }
 
+  /* Un build publié perd son marqueur `local` dès que mergeServerBuilds()
+     le remplace par la version renvoyée par le serveur (source:'Serveur').
+     Le jeton propriétaire (server-client.js, sauvegardé côté navigateur au
+     moment de la publication) reste lui présent quel que soit ce remplacement :
+     c'est le seul signal fiable pour retrouver un build publié par cet appareil. */
+  function ownedBuildIds(){
+    try{
+      var owners=JSON.parse(localStorage.getItem('nba2k27_owner_tokens_v1')||'{}');
+      return owners&&typeof owners==='object'?owners:{};
+    }catch(e){return {}}
+  }
+
   function sortFor(tab,list){
     var c=list.slice();
     if(tab==='trending')return c.sort(function(a,b){return trendScore(b)-trendScore(a)});
     if(tab==='latest')  return c.sort(function(a,b){return ts(b)-ts(a)});
     if(tab==='top')     return c.sort(function(a,b){return ((b.likes||0)*3+(b.views||0))-((a.likes||0)*3+(a.views||0))});
-    return c.filter(function(b){return b.mine||b.local});
+    var owned=ownedBuildIds();
+    return c.filter(function(b){return b.mine||b.local||owned[b.id]!=null});
   }
 
   function renderTabs(){
