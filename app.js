@@ -33,7 +33,13 @@ function ecrireContexte(){
       height:heightInches(),
       weight:+document.getElementById('weight').value,
       wing:+document.getElementById('wing').value,
-      position:document.getElementById('position').value
+      position:document.getElementById('position').value,
+      style:document.getElementById('style')?.value||'Équilibré',
+      name:document.getElementById('buildname')?.textContent||'Mon build',
+      score:+document.getElementById('score')?.textContent||0,
+      badges:unlockedBadgeCount(),
+      animations:unlockedAnimationCount(),
+      capBreakers:breakerTotalValue()
     }));
   }catch(e){/* stockage plein ou refusé : sans conséquence */}
 }
@@ -206,8 +212,23 @@ if(codeURL){try{apply(JSON.parse(decodeURIComponent(escape(atob(codeURL)))))}cat
 
 
 const DISCIPLINES=['Finition','Tir','Création','Défense','Rebond','Physique'];
-function unlockedBadgeCount(){const el=document.getElementById('badgeUnlocked');if(!el)return 0;const m=String(el.textContent).match(/\d+/);return m?+m[0]:0;}
-function unlockedAnimationCount(){const el=document.getElementById('animUnlocked');return el?Math.max(0,+el.textContent||0):0;}
+/* Ces deux compteurs lisaient le texte affiché par les sections badges et
+   animations. Depuis que ces sections ont leur propre page, elles ne sont plus
+   dans le DOM du builder : la lecture renvoyait 0, et tout build publié
+   déclarait 0 badge et 0 animation. Ils sont donc calculés directement. */
+function unlockedBadgeCount(r){
+  const notes=r||ratings(); let n=0;
+  for(const d of badgeDefs) if(badgeTier(d,notes).level>0) n++;
+  return n;
+}
+function unlockedAnimationCount(r){
+  const notes=r||ratings(), h=heightInches(); let n=0;
+  for(const a of (window.ANIMATIONS||[])){
+    if(h<a.minH||h>a.maxH) continue;
+    if(Object.entries(a.req||{}).every(([k,v])=>(notes[k]??0)>=v)) n++;
+  }
+  return n;
+}
 
 function escapeHTML(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function breakerTotalValue(){return inputs.reduce((s,x)=>s+ +(getBreaker(x.dataset.name)||0),0)}
@@ -327,6 +348,8 @@ window.NBABL_BASE_ATTRIBUTES=(function(){var o={};Object.keys(data).forEach(func
 window.heightInches=heightInches;
 window.setAttributeBaseline=setAttributeBaseline;
 window.appUpdate=function(){update()};
+// Contexte du dernier build composé, lu par hub.js quand le builder est absent.
+window.NBABL_CONTEXTE=lireContexte;
 
 /* Pages sans builder : update() ne tourne pas, mais /reference/ doit tout de
    même remplir ses tables. Chaque fonction se protège déjà si sa section est

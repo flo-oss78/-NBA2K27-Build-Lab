@@ -60,6 +60,13 @@
 
   async function publishCurrent(){
     const build=currentBuildObject();
+    // Depuis /hub/, sans build encore composé sur cet appareil : on envoie
+    // l'utilisateur au builder plutôt que de publier un objet vide.
+    if(!build){
+      alert('Compose d’abord ton build dans le builder, puis reviens le publier.');
+      location.href='/';
+      return;
+    }
     const meta=currentBuildMeta();
     if(meta)build.meta=meta;
     try{

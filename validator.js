@@ -17,7 +17,7 @@ function validateBuild(r,caps){
   // Badge engine itself is the source of truth for the embedded badge table: no impossible tier is displayed.
   // renderBadges() vient de parcourir les 53 badges pour le même r : on relit son
   // total plutôt que de refaire la boucle badgeTier().
-  const badgeCount=unlockedBadgeCount();
+  const badgeCount=unlockedBadgeCount(r);
   const used=simulatedCost(r), budget=1000;
   if(used>budget) warnings.push(`Le budget indicatif simulé est dépassé de ${used-budget}.`);
   warnings.push('Le coût des attributs et les caps sont indicatifs tant que les tables internes complètes de 2K27 ne sont pas publiées.');

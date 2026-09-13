@@ -20,15 +20,34 @@ const demoCommunity=[
 ];
 function readHub(){try{return JSON.parse(localStorage.getItem(V10_KEY)||'[]')}catch(e){return []}}
 function writeHub(v){localStorage.setItem(V10_KEY,JSON.stringify(v))}
+/* Le hub a sa propre page, sans les contrôles du builder : « Publier mon
+   build » doit alors reposer sur le contexte enregistré par le builder
+   (attributs, gabarit) plutôt que sur des champs absents. */
 function currentBuildObject(){
  const r=ratings();
  const id='b-'+Date.now();
+ const elt=id=>document.getElementById(id);
+ const ctx=window.NBABL_CONTEXTE?window.NBABL_CONTEXTE():null;
+ const surLeBuilder=!!elt('position');
+
+ if(!surLeBuilder){
+   if(!ctx)return null;   // aucun build encore composé sur cet appareil
+   return {
+     id,name:ctx.name||'Mon build',position:ctx.position,
+     height:ctx.height,weight:ctx.weight,wing:ctx.wing,
+     score:ctx.score||0,style:ctx.style||'Équilibré',
+     attributes:r,badges:ctx.badges||0,animations:ctx.animations||0,
+     created:Date.now(),views:0,likes:0,rating:0,local:true,
+     validated:false,validation:{ok:true,errors:[]},capBreakers:ctx.capBreakers||0
+   };
+ }
+
  const caps=bodyCaps();
  const validation=validateBuild(r,caps);
  return {
-   id,name:document.getElementById('buildname').textContent,position:position.value,
+   id,name:elt('buildname').textContent,position:position.value,
    height:+height.value,weight:+weight.value,wing:+wing.value,
-   score:+document.getElementById('score').textContent,style:style.value,
+   score:+elt('score').textContent,style:style.value,
    attributes:r,badges:unlockedBadgeCount(),
    animations:unlockedAnimationCount(),
    created:Date.now(),views:0,likes:0,rating:0,local:true,
@@ -132,7 +151,12 @@ function loadHubBuild(id){
  location.hash='builder';
  window.scrollTo({top:document.getElementById('builder').offsetTop-80,behavior:'smooth'});
 }
-function addCurrentToHub(){const x=currentBuildObject();const arr=readHub();arr.unshift(x);writeHub(arr.slice(0,30));renderCommunity();alert('Build ajouté à ta bibliothèque locale.')}
+function addCurrentToHub(){
+ const x=currentBuildObject();
+ if(!x){alert('Compose d’abord ton build dans le builder.');location.href='/';return}
+ const arr=readHub();arr.unshift(x);writeHub(arr.slice(0,30));renderCommunity();
+ alert('Build ajouté à ta bibliothèque locale.');
+}
 
 let compareBuilds=[];
 function addCompareById(id){const x=hubById(id);if(!x)return;if(compareBuilds.some(b=>b.id===x.id))return;if(compareBuilds.length>=3){alert('Maximum 3 builds.');return}compareBuilds.push(x);renderCompare()}
