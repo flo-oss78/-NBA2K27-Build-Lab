@@ -5,7 +5,7 @@
    - /api/ : jamais mis en cache
    - install : addAll tolérant aux 404 (un fichier manquant ne casse plus l'installation)
 */
-const VERSION='v25.0.1';
+const VERSION='v25.0.2';
 const SHELL_CACHE='nbabl-shell-'+VERSION;
 const RUNTIME_CACHE='nbabl-runtime-'+VERSION;
 
@@ -30,7 +30,16 @@ const SHELL_URLS=new Set(SHELL.map(u=>new URL(u,self.registration.scope).href));
 self.addEventListener('install',e=>{
   e.waitUntil((async()=>{
     const cache=await caches.open(SHELL_CACHE);
-    await Promise.all(SHELL.map(url=>cache.add(url).catch(()=>{})));
+    // cache.add() passe par le cache HTTP du navigateur, où _headers autorisait
+    // jusqu'à 10 minutes de conservation : un service worker fraîchement
+    // installé y récupérait les anciens fichiers et figeait une version
+    // périmée dans sa propre coquille. cache:'reload' force le réseau.
+    await Promise.all(SHELL.map(async url=>{
+      try{
+        const res=await fetch(url,{cache:'reload'});
+        if(res&&res.ok)await cache.put(url,res);
+      }catch(e){/* un fichier manquant ne doit pas casser l'installation */}
+    }));
     // Pas de skipWaiting() ici : ui.js affiche une bannière « Mettre à jour »
     // et n'envoie SKIP_WAITING qu'au clic (voir le listener 'message' ci-dessous).
     // Sauter l'attente automatiquement ici rendait cette bannière inopérante et
@@ -98,7 +107,9 @@ self.addEventListener('fetch',e=>{
   //    La revalidation était donc lancée mais n'aboutissait jamais : le JS et
   //    le CSS restaient figés malgré le point 1.
   const target=SHELL_URLS.has(url.href)?SHELL_CACHE:RUNTIME_CACHE;
-  const network=fetch(req).then(async res=>{
+  // no-cache : la revalidation doit interroger l'origine, pas se contenter de
+  // la copie que le cache HTTP du navigateur juge encore fraîche.
+  const network=fetch(new Request(req,{cache:'no-cache'})).then(async res=>{
     if(res&&res.ok){
       const copy=res.clone();
       const cache=await caches.open(target);

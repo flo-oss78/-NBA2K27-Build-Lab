@@ -31,11 +31,14 @@
 /manifest.webmanifest
   Cache-Control: public, max-age=3600
 
+# Le service worker assure déjà la vitesse et le hors-ligne : garder en plus
+# 10 minutes de cache navigateur ne faisait que retarder les déploiements,
+# jusqu'à figer une version périmée dans la coquille du service worker.
 /*.css
-  Cache-Control: public, max-age=600
+  Cache-Control: public, max-age=0, must-revalidate
 
 /*.js
-  Cache-Control: public, max-age=600
+  Cache-Control: public, max-age=0, must-revalidate
 
 /*.png
   Cache-Control: public, max-age=604800
