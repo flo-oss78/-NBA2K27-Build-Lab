@@ -214,13 +214,17 @@
   }
 
   /* ---------- Application d'un style ---------- */
-  function applyStyle(style,reset){
-    if(window.NBABL_HISTORY)window.NBABL_HISTORY.snapshot();
+  /* affichageSeul : rafraîchit les visuels du style sans toucher aux attributs.
+     C'est le cas au chargement de la page — sans ce garde-fou, le preset
+     réécrivait les attributs par-dessus un build restauré depuis un lien de
+     partage ou depuis un blueprint, qui arrivent tous deux via ?build=. */
+  function applyStyle(style,reset,affichageSeul){
+    if(!affichageSeul&&window.NBABL_HISTORY)window.NBABL_HISTORY.snapshot();
     var preset=PRESETS[style]||PRESETS['Équilibré'];
     var select=el('style');
     if(select)select.value=style;
 
-    Object.keys(preset.targets).forEach(function(k){
+    if(!affichageSeul)Object.keys(preset.targets).forEach(function(k){
       var v=preset.targets[k];
       if(reset){setAttr(k,v);return}
       var input=inputsList().find(function(x){return x.dataset.name===k});
@@ -294,7 +298,8 @@
       if(target)target.scrollIntoView({behavior:'smooth',block:'start'});
     });
 
-    applyStyle((el('style')||{}).value||'Slasher',true);
+    // Au chargement : on reflète le style courant, on ne réécrit pas le build.
+    applyStyle((el('style')||{}).value||'Slasher',false,true);
   }
 
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);
