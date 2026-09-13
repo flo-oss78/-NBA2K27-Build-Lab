@@ -85,7 +85,10 @@
   }
   function boot(){
     if(typeof PLAYERS_DATA==='undefined')return;
-    $('beginnerMode').onclick=()=>setMode(true); $('expertMode').onclick=()=>setMode(false);
+    // La section n'est présente que sur la page du builder.
+    if(!$('v15IdentityName'))return;
+    $('beginnerMode')?.addEventListener('click',()=>setMode(true));
+    $('expertMode')?.addEventListener('click',()=>setMode(false));
     document.querySelectorAll('#attributeGroups input').forEach(x=>x.addEventListener('input',renderThrottled));
     ['position','height','weight','wing'].forEach(id=>$(id)?.addEventListener('input',renderThrottled));
     render();

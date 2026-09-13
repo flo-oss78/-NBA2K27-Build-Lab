@@ -258,6 +258,9 @@
   }
 
   function boot(){
+    // Les styles pilotent les curseurs du builder : rien à faire sur les
+    // pages qui ne l'affichent pas (/hub/, /reference/, /progression/…).
+    if(!el('style'))return;
     document.querySelectorAll('.style-card').forEach(function(b){
       b.addEventListener('click',function(){applyStyle(b.dataset.stylePreset,false)});
     });

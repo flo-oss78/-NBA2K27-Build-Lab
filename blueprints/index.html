@@ -38,8 +38,12 @@
     <a href="/blueprints/" class="active" aria-current="page">Blueprints</a>
     <a href="/hub/">Builds</a>
     <a href="/reference/">Badges & animations</a>
-    <a href="/progression/">Progression</a>
+    <a href="/progression/" data-mode="expert">Progression</a>
   </nav>
+  <div class="mode-switch header-mode" role="group" aria-label="Niveau d'affichage">
+    <button id="modeSimple" type="button" class="mode-btn" aria-pressed="true">Simple</button>
+    <button id="modeExpert" type="button" class="mode-btn" aria-pressed="false">Expert</button>
+  </div>
   <div class="reference-actions">
     <span id="referenceVersion">V24.1</span>
     <button id="referenceSettings" type="button" aria-label="Ouvrir les réglages" aria-expanded="false">

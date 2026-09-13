@@ -68,6 +68,7 @@ stockés dans le navigateur du visiteur et le statut affiche « Serveur : local 
 | Fichier | Rôle |
 |---|---|
 | `index.html` | Page du builder (`/`) : corps, attributs, validateur, fiche, Cap Breakers |
+| — | *Mode **Simple** par défaut : builder, scouting et validateur. Le mode **Expert** ajoute les neuf panneaux de méta-jeu et la page Progression. Le choix est mémorisé pour tout le site.* |
 | `blueprints/index.html` | `/blueprints/` — les 40 Signature Blueprints |
 | `hub/index.html` | `/hub/` — builds de la communauté et comparateur |
 | `reference/index.html` | `/reference/` — tables des badges et animations |

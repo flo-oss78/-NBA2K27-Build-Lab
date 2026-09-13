@@ -253,6 +253,10 @@
 
     var start=el('startWizard');
     if(start)start.addEventListener('click',openWizard);
+    // Le bandeau « Par où commencer ? » du mode simple ouvre le même assistant.
+    document.querySelectorAll('[data-ouvrir-assistant]').forEach(function(b){
+      b.addEventListener('click',openWizard);
+    });
 
     var first=false;
     try{first=!localStorage.getItem(WIZ_KEY)}catch(e){}

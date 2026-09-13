@@ -38,8 +38,12 @@
     <a href="/blueprints/">Blueprints</a>
     <a href="/hub/">Builds</a>
     <a href="/reference/">Badges & animations</a>
-    <a href="/progression/">Progression</a>
+    <a href="/progression/" data-mode="expert">Progression</a>
   </nav>
+  <div class="mode-switch header-mode" role="group" aria-label="Niveau d'affichage">
+    <button id="modeSimple" type="button" class="mode-btn" aria-pressed="true">Simple</button>
+    <button id="modeExpert" type="button" class="mode-btn" aria-pressed="false">Expert</button>
+  </div>
   <div class="reference-actions">
     <span id="referenceVersion">V24.1</span>
     <button id="referenceSettings" type="button" aria-label="Ouvrir les réglages" aria-expanded="false">
@@ -49,6 +53,20 @@
 </header>
 
 <main id="main">
+
+<!-- Entrée du mode simple : les deux façons de partir d'un build tout fait
+     plutôt que de vingt-deux curseurs vides. Masqué en mode expert. -->
+<div class="start-here">
+  <div>
+    <b>Par où commencer&nbsp;?</b>
+    <span>Pars d'un modèle ou réponds à trois questions — tu ajusteras ensuite.</span>
+  </div>
+  <div class="start-here-actions">
+    <a class="primary" href="/blueprints/">Partir d'un blueprint</a>
+    <button type="button" data-ouvrir-assistant>Répondre à 3 questions</button>
+    <button type="button" data-passer-expert class="secondary">Tout afficher</button>
+  </div>
+</div>
 
 <!-- ============ BUILDER (écran principal) ============ -->
 <section id="builder" class="builder-exact" aria-label="Builder NBA 2K27">
@@ -243,16 +261,12 @@
 </section>
 
 <!-- ============ BUILD INTELLIGENCE ============ -->
-<section id="intelligence" class="panel v15-intelligence">
+<section id="intelligence" data-mode="expert" class="panel v15-intelligence">
   <div class="section-title">
     <div>
       <p class="eyebrow">Build intelligence</p>
       <h2>Comprends ton build avant de dépenser tes VC</h2>
       <p class="sub">Ton identité de joueur, les prochains paliers utiles et les profils NBA 2K27 les plus proches.</p>
-    </div>
-    <div class="mode-switch" role="group" aria-label="Niveau de détail">
-      <button id="beginnerMode" type="button" class="mode-btn active" aria-pressed="true">Simple</button>
-      <button id="expertMode" type="button" class="mode-btn" aria-pressed="false">Expert</button>
     </div>
   </div>
   <div class="identity-grid">
@@ -275,7 +289,7 @@
 </section>
 
 <!-- ============ BUILD DNA ============ -->
-<section id="build-dna" class="panel build-dna-panel">
+<section id="build-dna" data-mode="expert" class="panel build-dna-panel">
   <div class="section-title">
     <div>
       <p class="eyebrow">Build DNA</p>
@@ -321,7 +335,7 @@
 </section>
 
 <!-- ============ FICHE DE BUILD ============ -->
-<section id="buildSheet" class="panel sheet-section">
+<section id="buildSheet" data-mode="expert" class="panel sheet-section">
   <div class="section-title">
     <div>
       <p class="eyebrow">Fiche de build</p>
@@ -333,7 +347,7 @@
 </section>
 
 <!-- ============ BADGES PAR DISCIPLINE ============ -->
-<section id="badgeGrid" class="panel badge-grid-section">
+<section id="badgeGrid" data-mode="expert" class="panel badge-grid-section">
   <div class="section-title">
     <div>
       <p class="eyebrow">Badges accessibles</p>
@@ -346,7 +360,7 @@
 </section>
 
 <!-- ============ GUIDE CAP BREAKER ============ -->
-<section id="cbGuideSection" class="panel cb-guide-section">
+<section id="cbGuideSection" data-mode="expert" class="panel cb-guide-section">
   <div class="section-title">
     <div>
       <p class="eyebrow">Guide Cap Breaker</p>
@@ -358,7 +372,7 @@
 </section>
 
 <!-- ============ CAP BREAKER LAB ============ -->
-<section class="panel cap-progression" id="capProgression">
+<section class="panel cap-progression" id="capProgression" data-mode="expert">
   <div class="section-title">
     <div>
       <p class="eyebrow">Cap Breaker Lab</p>
@@ -379,14 +393,14 @@
 </section>
 
 <!-- ============ CAP BREAKERS ============ -->
-<section class="panel capbreaker" id="capbreakers">
+<section class="panel capbreaker" id="capbreakers" data-mode="expert">
   <div class="section-title"><div><p class="eyebrow">Cap breakers</p><h2>Planifie tes +1 / +5</h2></div><span class="pill">Max 5 par attribut</span></div>
   <p class="sub">Planificateur visuel : choisis les attributs sur lesquels investir. Les gains réels dépendent des règles finales du jeu.</p>
   <div id="breakerList" class="breaker-list"></div>
 </section>
 
 <!-- ============ BADGE TOKENS ============ -->
-<section class="panel token-panel" id="tokens">
+<section class="panel token-panel" id="tokens" data-mode="expert">
   <div class="section-title">
     <div><p class="eyebrow">Badge Tokens</p><h2>Répartition des 20 emplacements</h2></div>
     <span id="tokenSlots" class="pill">20 slots</span>
@@ -412,7 +426,7 @@
 </section>
 
 <!-- ============ PRO DASHBOARD ============ -->
-<section id="proDashboard" class="panel pro-dashboard">
+<section id="proDashboard" data-mode="expert" class="panel pro-dashboard">
   <div class="section-title">
     <div>
       <p class="eyebrow">Pro dashboard</p>

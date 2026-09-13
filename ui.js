@@ -8,6 +8,41 @@
   var SECTIONS=['blueprints','community','builder','build-dna','badges','animations',
                 'buildSheet','loadouts','compare','validator'];
 
+  /* ---- 0. Mode Simple / Expert, commun à toutes les pages ----
+     Simple est le mode par défaut : quelqu'un qui arrive pour la première fois
+     voit un builder et de quoi juger son build, pas les neuf panneaux de
+     méta-jeu. Le choix est mémorisé et vaut pour tout le site. */
+  var MODE_KEY='nba2k27_mode_v1';
+
+  function modeActuel(){
+    try{ return localStorage.getItem(MODE_KEY)==='expert'?'expert':'simple' }
+    catch(e){ return 'simple' }
+  }
+
+  function appliquerMode(mode){
+    var expert=mode==='expert';
+    document.body.classList.toggle('mode-expert',expert);
+    var s=document.getElementById('modeSimple'), x=document.getElementById('modeExpert');
+    if(s){s.classList.toggle('active',!expert); s.setAttribute('aria-pressed',String(!expert))}
+    if(x){x.classList.toggle('active',expert); x.setAttribute('aria-pressed',String(expert))}
+    // Les écrans qui se redessinent selon le mode (identité de build, etc.).
+    document.dispatchEvent(new CustomEvent('nbabl:mode',{detail:{mode:mode}}));
+  }
+
+  function initMode(){
+    appliquerMode(modeActuel());
+    function choisir(mode){
+      try{ localStorage.setItem(MODE_KEY,mode) }catch(e){}
+      appliquerMode(mode);
+    }
+    document.getElementById('modeSimple')?.addEventListener('click',function(){choisir('simple')});
+    document.getElementById('modeExpert')?.addEventListener('click',function(){choisir('expert')});
+    // Les entrées du mode simple qui renvoient vers l'affichage complet.
+    document.querySelectorAll('[data-passer-expert]').forEach(function(b){
+      b.addEventListener('click',function(){choisir('expert')});
+    });
+  }
+
   /* ---- 1. Surlignage de l'onglet actif pendant le défilement ---- */
   function initNavHighlight(){
     /* Depuis le découpage en pages, la navigation pointe vers d'autres pages
@@ -159,7 +194,10 @@
     if(!('serviceWorker' in navigator))return;
 
     window.addEventListener('load',function(){
-      navigator.serviceWorker.register('sw.js').then(function(reg){
+      // Chemin absolu : depuis /hub/ ou /reference/, 'sw.js' viserait
+      // /hub/sw.js (404 servi en HTML) et le service worker n'était pas
+      // enregistré du tout sur les sous-pages.
+      navigator.serviceWorker.register('/sw.js').then(function(reg){
         if(reg.waiting&&update)update.hidden=false;
         reg.addEventListener('updatefound',function(){
           var w=reg.installing;
@@ -199,31 +237,13 @@
   }
 
   /* ---- 6. Mode simple / expert ---- */
-  function initModeSwitch(){
-    var simple=document.getElementById('beginnerMode');
-    var expert=document.getElementById('expertMode');
-    if(!simple||!expert)return;
-    function set(isSimple){
-      simple.classList.toggle('active',isSimple);
-      expert.classList.toggle('active',!isSimple);
-      simple.setAttribute('aria-pressed',String(isSimple));
-      expert.setAttribute('aria-pressed',String(!isSimple));
-      document.body.classList.toggle('expert-mode',!isSimple);
-      if(window.NBABL_V15&&typeof window.NBABL_V15.setMode==='function'){
-        window.NBABL_V15.setMode(isSimple?'simple':'expert');
-      }
-    }
-    simple.addEventListener('click',function(){set(true)});
-    expert.addEventListener('click',function(){set(false)});
-  }
-
   function boot(){
     initVersion();
     initNavHighlight();
     initSettings();
     initPWA();
     initDNAExamples();
-    initModeSwitch();
+    initMode();
   }
 
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);
