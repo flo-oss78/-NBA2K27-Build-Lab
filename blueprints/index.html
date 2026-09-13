@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050A12">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="40 Signature Blueprints NBA 2K27, chacun façonné par trois comparaisons d’athlètes NBA et WNBA. Choisis un modèle, ouvre-le dans le builder.">
+<title>Signature Blueprints NBA 2K27 — 40 modèles de build</title>
+
+<link rel="canonical" href="https://nbabuildlab.pages.dev/blueprints/">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="stylesheet" href="/theme.css">
+
+<meta property="og:title" content="Signature Blueprints NBA 2K27 — 40 modèles de build">
+<meta property="og:description" content="40 Signature Blueprints NBA 2K27, chacun façonné par trois comparaisons d’athlètes NBA et WNBA. Choisis un modèle, ouvre-le dans le builder.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nbabuildlab.pages.dev/blueprints/">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+
+<body>
+<a class="skip-link" href="#blueprints">Aller au contenu</a>
+
+<header class="reference-header">
+  <div class="reference-brand">
+    <div>NBA <b>2K27</b></div>
+    <small>BUILD LAB</small>
+  </div>
+  <nav class="reference-nav" aria-label="Navigation principale">
+    <a href="/">Builder</a>
+    <a href="/blueprints/" class="active" aria-current="page">Blueprints</a>
+    <a href="/hub/">Builds</a>
+    <a href="/reference/">Badges & animations</a>
+    <a href="/progression/">Progression</a>
+  </nav>
+  <div class="reference-actions">
+    <span id="referenceVersion">V24.1</span>
+    <button id="referenceSettings" type="button" aria-label="Ouvrir les réglages" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.9 19.3a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.7 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.56V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.56 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============ SIGNATURE BLUEPRINTS ============ -->
+<section id="blueprints" class="panel blueprint-panel">
+  <div class="section-title">
+    <div>
+      <p class="eyebrow">Signature Blueprints</p>
+      <h2>Choisis trois joueurs, pas vingt-deux curseurs</h2>
+      <p class="sub">NBA 2K27 remplace les Pro-Tuned par des Signature Blueprints : des modèles façonnés chacun par trois comparaisons d'athlètes NBA et WNBA. Voici la même logique, appliquée au builder.</p>
+    </div>
+    <span id="blueprintCount" class="pill">0 blueprint</span>
+  </div>
+  <div class="blueprint-tools">
+    <select id="blueprintPos" aria-label="Filtrer par poste">
+      <option value="all">Tous les postes</option><option>PG</option><option>SG</option><option>SF</option><option>PF</option><option>C</option>
+    </select>
+    <select id="blueprintDisc" aria-label="Filtrer par discipline">
+      <option value="all">Toutes les disciplines</option>
+      <option>Finition</option><option>Tir</option><option>Création</option>
+      <option>Défense</option><option>Rebond</option><option>Physique</option><option>Équilibré</option>
+    </select>
+    <input id="blueprintSearch" aria-label="Rechercher un blueprint ou un joueur" placeholder="Rechercher un joueur ou un blueprint…">
+  </div>
+  <div id="blueprintGrid" class="blueprint-grid"></div>
+  <p class="data-note">Les blueprints ci-dessus sont un <strong>modèle indicatif</strong> construit à partir des profils publics des joueurs. 2K ne publie pas la table officielle des Signature Blueprints : ceci en reproduit le principe, pas la liste du jeu.</p>
+</section>
+
+<div id="buildModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Détail du build">
+  <div class="modal-backdrop" data-close-modal></div>
+  <div class="modal-card">
+    <button class="modal-close" type="button" data-close-modal aria-label="Fermer">×</button>
+    <div id="buildModalContent"></div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <p>NBA 2K27 Build Lab — outil indépendant, données publiques, aucune affiliation officielle avec 2K.</p>
+  <p class="footer-credit">Pour les données de tir mesurées en laboratoire (green window, vitesse de tir, tests de badges), va voir <a href="https://www.nba2klab.com/" target="_blank" rel="noopener">NBA2KLab</a> : leurs jumpers sont testés en Hall of Fame, sans boosts, sans badges et sans shot meter, sur une station automatisée. On ne cherche pas à refaire ça ici.</p>
+</footer>
+
+<div id="pwaInstall" class="pwa-install" hidden>
+  <span id="pwaInstallText">Installe NBA 2K27 Build Lab sur ton téléphone.</span>
+  <button id="pwaInstallBtn" type="button">Installer</button>
+  <button id="pwaInstallClose" type="button" class="secondary">Plus tard</button>
+</div>
+<div id="pwaUpdate" class="pwa-install" hidden>
+  <span>Une nouvelle version de Build Lab est disponible.</span>
+  <button id="pwaUpdateBtn" type="button">Actualiser</button>
+</div>
+
+<script src="/site-config.js"></script>
+<script src="/animations.js"></script>
+<script src="/dna-engine.js"></script>
+<script src="/data-registry.js"></script>
+<script src="/data-validation.js"></script>
+<script src="/players-core.js"></script>
+<!-- Ordre imposé par l'exécution d'app.js :
+     - builder-data.js et validator.js AVANT : app.js lit les tables et appelle
+       renderValidation() dès son premier rendu ;
+     - optimizer.js et hub.js APRÈS : ils appellent app.js, jamais l'inverse ;
+     - hub.js avant server-client.js, qui remplace likeBuild/openBuildModal. -->
+<script src="/builder-data.js"></script>
+<script src="/validator.js"></script>
+<script src="/app.js"></script>
+<script src="/optimizer.js"></script>
+<script src="/hub.js"></script>
+<script src="/v15-intelligence.js"></script>
+<script src="/server-client.js"></script>
+<script src="/style-presets.js"></script>
+<script src="/blueprints.js"></script>
+<script src="/progression.js"></script>
+<script src="/qr.js"></script>
+<script src="/share.js"></script>
+<script src="/assist.js"></script>
+<script src="/build-sheet.js"></script>
+<script src="/community.js"></script>
+<script src="/ui.js"></script>
+</body>
+</html>

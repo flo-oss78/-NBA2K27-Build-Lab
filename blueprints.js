@@ -185,9 +185,29 @@
             'Rebond':'rebound','Physique':'physical','Équilibré':'balanced'}[d]||'balanced';
   }
 
+  /* Le style découle du poste et de la discipline du blueprint. */
+  function styleFor(bp){
+    var style=DISC_TO_STYLE[bp.disc]||'Équilibré';
+    if((bp.pos==='C'||bp.pos==='PF')&&(bp.disc==='Défense'||bp.disc==='Rebond'||bp.disc==='Physique'))style='Big';
+    if((bp.pos==='PG'||bp.pos==='SG')&&bp.disc==='Rebond')style='Lockdown';
+    return style;
+  }
+
+  /* Sur la page /blueprints/, le builder n'est pas dans le DOM : on encode le
+     blueprint dans l'URL et on laisse app.js l'appliquer à l'arrivée (il sait
+     déjà lire ?build=, c'est le format des liens de partage). */
+  function ouvrirDansLeBuilder(bp){
+    var cibles=fullTargets(bp), attrs={};
+    Object.keys(cibles).forEach(function(k){attrs[k]=String(cibles[k])});
+    var obj={position:bp.pos,height:String(bp.h),weight:String(bp.w),
+             wing:String(bp.wing),style:styleFor(bp),hand:'Droite',attrs:attrs};
+    location.href='/?build='+encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(obj)))));
+  }
+
   function applyBlueprint(id){
     var bp=BLUEPRINTS.filter(function(b){return b.id===id})[0];
     if(!bp)return;
+    if(!el('position')){ouvrirDansLeBuilder(bp);return}
     if(window.NBABL_HISTORY)window.NBABL_HISTORY.snapshot();
 
     el('position').value=bp.pos;
@@ -201,9 +221,7 @@
       if(v!=null)x.value=Math.min(+x.max,Math.max(+x.min,v));
     });
 
-    var style=DISC_TO_STYLE[bp.disc]||'Équilibré';
-    if((bp.pos==='C'||bp.pos==='PF')&&(bp.disc==='Défense'||bp.disc==='Rebond'||bp.disc==='Physique'))style='Big';
-    if((bp.pos==='PG'||bp.pos==='SG')&&bp.disc==='Rebond')style='Lockdown';
+    var style=styleFor(bp);
     el('style').value=style;
     if(window.NBABL_APPLY_STYLE_VISUALS)window.NBABL_APPLY_STYLE_VISUALS(style);
     if(window.setAttributeBaseline)window.setAttributeBaseline(targets);

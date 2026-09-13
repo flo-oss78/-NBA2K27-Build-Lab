@@ -5,17 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050A12">
 <meta name="color-scheme" content="dark">
-<meta name="description" content="NBA 2K27 Build Lab — Builder MyPLAYER, badges, animations, Cap Breakers, comparateur et builds communautaires.">
+<meta name="description" content="Builder MyPLAYER NBA 2K27 : attributs, caps dynamiques, badges, Cap Breakers, validateur et fiche de build.">
 <title>NBA 2K27 Build Lab — Builder MyPLAYER</title>
 
 <link rel="canonical" href="https://nbabuildlab.pages.dev/">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon-192.png">
-<link rel="stylesheet" href="theme.css">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="stylesheet" href="/theme.css">
 
-<meta property="og:title" content="NBA 2K27 Build Lab">
-<meta property="og:description" content="Builder NBA 2K27, badges, animations, Cap Breakers et builds communautaires.">
+<meta property="og:title" content="NBA 2K27 Build Lab — Builder MyPLAYER">
+<meta property="og:description" content="Builder MyPLAYER NBA 2K27 : attributs, caps dynamiques, badges, Cap Breakers, validateur et fiche de build.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://nbabuildlab.pages.dev/">
 <meta property="og:locale" content="fr_FR">
@@ -26,7 +26,7 @@
 </head>
 
 <body>
-<a class="skip-link" href="#builder">Aller au builder</a>
+<a class="skip-link" href="#builder">Aller au contenu</a>
 
 <header class="reference-header">
   <div class="reference-brand">
@@ -34,16 +34,11 @@
     <small>BUILD LAB</small>
   </div>
   <nav class="reference-nav" aria-label="Navigation principale">
-    <a href="#community">Builds</a>
-    <a class="active" href="#builder" data-builder-route>Builder</a>
-    <a href="#blueprints">Blueprints</a>
-    <a href="#build-dna">Build DNA</a>
-    <a href="#badges">Badges</a>
-    <a href="#animations">Animations</a>
-    <a href="#buildSheet">Fiche</a>
-    <a href="#loadouts">Progression</a>
-    <a href="#compare">Comparer</a>
-    <a href="#validator">Validateur</a>
+    <a href="/" class="active" aria-current="page">Builder</a>
+    <a href="/blueprints/">Blueprints</a>
+    <a href="/hub/">Builds</a>
+    <a href="/reference/">Badges & animations</a>
+    <a href="/progression/">Progression</a>
   </nav>
   <div class="reference-actions">
     <span id="referenceVersion">V24.1</span>
@@ -54,31 +49,6 @@
 </header>
 
 <main id="main">
-
-<!-- ============ SIGNATURE BLUEPRINTS ============ -->
-<section id="blueprints" class="panel blueprint-panel">
-  <div class="section-title">
-    <div>
-      <p class="eyebrow">Signature Blueprints</p>
-      <h2>Choisis trois joueurs, pas vingt-deux curseurs</h2>
-      <p class="sub">NBA 2K27 remplace les Pro-Tuned par des Signature Blueprints : des modèles façonnés chacun par trois comparaisons d'athlètes NBA et WNBA. Voici la même logique, appliquée au builder.</p>
-    </div>
-    <span id="blueprintCount" class="pill">0 blueprint</span>
-  </div>
-  <div class="blueprint-tools">
-    <select id="blueprintPos" aria-label="Filtrer par poste">
-      <option value="all">Tous les postes</option><option>PG</option><option>SG</option><option>SF</option><option>PF</option><option>C</option>
-    </select>
-    <select id="blueprintDisc" aria-label="Filtrer par discipline">
-      <option value="all">Toutes les disciplines</option>
-      <option>Finition</option><option>Tir</option><option>Création</option>
-      <option>Défense</option><option>Rebond</option><option>Physique</option><option>Équilibré</option>
-    </select>
-    <input id="blueprintSearch" aria-label="Rechercher un blueprint ou un joueur" placeholder="Rechercher un joueur ou un blueprint…">
-  </div>
-  <div id="blueprintGrid" class="blueprint-grid"></div>
-  <p class="data-note">Les blueprints ci-dessus sont un <strong>modèle indicatif</strong> construit à partir des profils publics des joueurs. 2K ne publie pas la table officielle des Signature Blueprints : ceci en reproduit le principe, pas la liste du jeu.</p>
-</section>
 
 <!-- ============ BUILDER (écran principal) ============ -->
 <section id="builder" class="builder-exact" aria-label="Builder NBA 2K27">
@@ -327,97 +297,27 @@
   <div id="dnaReadout" class="dna-readout"><div class="empty">Décris ton joueur, puis lance l'analyse.</div></div>
 </section>
 
-<!-- ============ HUB COMMUNAUTAIRE ============ -->
-<section id="community" class="panel community-hub">
+<!-- ============ VALIDATEUR ============ -->
+<section id="validator" class="panel validator-panel">
   <div class="section-title">
-    <div>
-      <p class="eyebrow">Build hub</p>
-      <h2>Découvre, sauvegarde et compare les builds</h2>
-      <p class="sub">Cartes lisibles, filtres, comparaison jusqu'à 3 builds et partage par lien.</p>
+    <div><p class="eyebrow">Validateur</p><h2>Vérification du build</h2></div>
+    <span id="validationStatus" class="validation-status">Analyse…</span>
+  </div>
+  <div class="validation-grid">
+    <div class="validation-main">
+      <div id="validationHeadline" class="validation-headline">Analyse en cours…</div>
+      <p id="validationText" class="sub">Le moteur contrôle le gabarit, les caps, les badges et les animations présentes dans la base embarquée.</p>
+      <div id="validationErrors" class="validation-errors"></div>
     </div>
-    <span id="serverStatus" class="pill">Serveur : connexion…</span>
-  </div>
-  <div class="hub-tools">
-    <input id="communitySearch" aria-label="Rechercher un build" placeholder="Rechercher un build, un joueur ou un style…">
-    <select id="communityPos" aria-label="Filtrer par poste"><option value="all">Tous les postes</option><option>PG</option><option>SG</option><option>SF</option><option>PF</option><option>C</option></select>
-    <button id="addCurrentBuild" type="button">Publier mon build</button>
-  </div>
-  <div class="advanced-community-filters">
-    <select id="communityStyle" aria-label="Filtrer par style"><option value="all">Tous les styles</option><option>Shooter</option><option>Slasher</option><option>Playmaker</option><option>Lockdown</option><option>Big</option><option>Équilibré</option></select>
-    <label><input id="communityValidated" type="checkbox"> Builds validés seulement</label>
-    <label><input id="communityCapBreakers" type="checkbox"> Avec Cap Breakers</label>
-    <button id="clearCommunityFilters" type="button" class="secondary small-btn">Réinitialiser</button>
-  </div>
-  <div id="playerProfile" class="player-profile"></div>
-  <div id="featuredBuild" class="featured-build" hidden></div>
-  <div class="hub-tabs-wrap">
-    <div id="hubTabs" class="hub-tabs" role="tablist" aria-label="Tri des builds"></div>
-    <p id="hubTabHint" class="hub-tab-hint"></p>
-  </div>
-  <div id="communityList" class="community-list"></div>
-  <p class="hub-note">Les builds publiés sur le serveur sont visibles par toute la communauté. Si le serveur n'est pas encore configuré, le site bascule automatiquement en mode local.</p>
-</section>
-
-<!-- ============ PRO DASHBOARD ============ -->
-<section id="proDashboard" class="panel pro-dashboard">
-  <div class="section-title">
-    <div>
-      <p class="eyebrow">Pro dashboard</p>
-      <h2>Tout contrôler avant de dépenser tes VC</h2>
-      <p class="sub">Qualité du build, reproductibilité et points encore incertains, au même endroit.</p>
-    </div>
-    <span id="dataConfidencePill" class="pill">Analyse</span>
-  </div>
-  <div class="pro-dashboard-grid">
-    <div class="pro-score-card">
-      <div class="pro-score-ring"><strong id="proQualityScore">0</strong><small>/100</small></div>
-      <div><b id="proQualityLabel">Analyse en cours</b><span id="proQualityText">Le moteur combine cohérence du gabarit, caps, badges, animations et budget indicatif.</span></div>
-    </div>
-    <div class="coverage-card">
-      <h3>Couverture des données</h3>
-      <div class="coverage-grid">
-        <div><b id="coverageBadges">53</b><span>badges intégrés</span></div>
-        <div><b id="coverageAnimations">0</b><span>animations intégrées</span></div>
-        <div><b id="coverageOfficial">0</b><span>règles vérifiées</span></div>
-        <div><b id="coverageIndicative">0</b><span>règles indicatives</span></div>
-      </div>
+    <div class="validation-checks">
+      <div><span>Gabarit</span><b id="checkBody">—</b></div>
+      <div><span>Attributs et caps</span><b id="checkCaps">—</b></div>
+      <div><span>Badges</span><b id="checkBadges">—</b></div>
+      <div><span>Animations</span><b id="checkAnimations">—</b></div>
+      <div><span>Budget indicatif</span><b id="checkBudget">—</b></div>
     </div>
   </div>
-  <div class="repro-grid">
-    <div class="repro-card"><div class="repro-title"><b>Checklist de reproductibilité</b><span id="reproPercent">0%</span></div><div id="reproList"></div></div>
-    <div class="repro-card"><b>Ce qui peut encore changer</b><ul id="uncertaintyList" class="uncertainty-list"></ul></div>
-  </div>
-</section>
-
-<!-- ============ CAP BREAKER LAB ============ -->
-<section class="panel cap-progression" id="capProgression">
-  <div class="section-title">
-    <div>
-      <p class="eyebrow">Cap Breaker Lab</p>
-      <h2>Prévisualise ton build à chaque étape</h2>
-      <p class="sub">Planification locale : les valeurs proposées sont des scénarios, pas une reproduction des règles internes de 2K.</p>
-    </div>
-    <span id="cbStagePill" class="pill">Base</span>
-  </div>
-  <div class="cb-toolbar">
-    <label for="cbStage">Étape
-      <select id="cbStage"><option value="0">Base</option><option value="3">3 CB</option><option value="5">5 CB</option><option value="8">8 CB</option><option value="10">10 CB</option><option value="12">12 CB</option><option value="15">15 CB</option><option value="20">20 CB</option><option value="28">28 CB</option><option value="40">40 CB</option><option value="50">50 CB</option></select>
-    </label>
-    <button id="cbAutoPlan" type="button">Plan automatique</button>
-    <button id="cbClearPlan" type="button" class="secondary">Effacer</button>
-  </div>
-  <div id="cbSummary" class="cb-summary"></div>
-  <div id="cbPreview" class="cb-preview"></div>
-</section>
-
-<!-- ============ COMPARATEUR ============ -->
-<section id="compare" class="panel compare-panel">
-  <div class="section-title">
-    <div><p class="eyebrow">Comparateur</p><h2>Compare jusqu'à 3 builds</h2></div>
-    <button id="clearCompare" type="button" class="secondary small-btn">Effacer</button>
-  </div>
-  <div id="compareSlots" class="compare-slots"></div>
-  <div id="compareTable" class="compare-table-wrap"></div>
+  <p class="validation-note"><b>À savoir :</b> ce validateur garantit la cohérence avec les règles de données intégrées au site. Il ne peut pas promettre une exactitude officielle tant que 2K ne publie pas les tables internes des caps et des coûts du builder 2K27. Les règles non documentées sont signalées comme <b>indicatives</b>.</p>
 </section>
 
 <!-- ============ FICHE DE BUILD ============ -->
@@ -457,58 +357,32 @@
   <div id="cbGuide" class="cb-guide"></div>
 </section>
 
-<!-- ============ BADGE LOADOUTS ============ -->
-<section id="loadouts" class="panel loadout-section">
+<!-- ============ CAP BREAKER LAB ============ -->
+<section class="panel cap-progression" id="capProgression">
   <div class="section-title">
     <div>
-      <p class="eyebrow">Badge Loadouts</p>
-      <h2>Prépare plusieurs combinaisons de badges</h2>
-      <p class="sub">Nouveau en 2K27 : on sauvegarde plusieurs loadouts et on change l'actif avant l'engagement pour contrer la taille ou le style d'un adversaire, sans quitter le menu.</p>
+      <p class="eyebrow">Cap Breaker Lab</p>
+      <h2>Prévisualise ton build à chaque étape</h2>
+      <p class="sub">Planification locale : les valeurs proposées sont des scénarios, pas une reproduction des règles internes de 2K.</p>
     </div>
-    <span class="pill">20 slots</span>
+    <span id="cbStagePill" class="pill">Base</span>
   </div>
-  <div id="loadoutPanel" class="loadout-panel"></div>
-  <p class="data-note">L'indicateur <strong>✓</strong> signale les badges dont NBA2KLab a publié un test. Les autres sont encore « test en attente » chez eux : leur effet réel n'est pas mesuré.</p>
+  <div class="cb-toolbar">
+    <label for="cbStage">Étape
+      <select id="cbStage"><option value="0">Base</option><option value="3">3 CB</option><option value="5">5 CB</option><option value="8">8 CB</option><option value="10">10 CB</option><option value="12">12 CB</option><option value="15">15 CB</option><option value="20">20 CB</option><option value="28">28 CB</option><option value="40">40 CB</option><option value="50">50 CB</option></select>
+    </label>
+    <button id="cbAutoPlan" type="button">Plan automatique</button>
+    <button id="cbClearPlan" type="button" class="secondary">Effacer</button>
+  </div>
+  <div id="cbSummary" class="cb-summary"></div>
+  <div id="cbPreview" class="cb-preview"></div>
 </section>
 
-<!-- ============ SYNERGY ============ -->
-<section id="synergy" class="panel synergy-section">
-  <div class="section-title">
-    <div>
-      <p class="eyebrow">Synergy</p>
-      <h2>Fuse et Reaction</h2>
-      <p class="sub">Le système compte 16 emplacements répartis entre Fuse Badges et Reaction Badges. Ensemble, ils poussent les badges au-delà de leur potentiel de base, jusqu'au tier Legend.</p>
-    </div>
-    <span class="pill">16 slots + bonus</span>
-  </div>
-  <div id="synergyPlanner" class="synergy-planner"></div>
-</section>
-
-<!-- ============ TAKEOVER LOADOUT ============ -->
-<section id="takeoverPro" class="panel takeover-pro">
-  <div class="section-title">
-    <div>
-      <p class="eyebrow">Takeover</p>
-      <h2>Cinq emplacements, trois types de perk</h2>
-      <p class="sub">Accelerator remplit la jauge plus vite, Longevity prolonge la capacité active, Overdrive augmente les bonus d'attributs.</p>
-    </div>
-    <span class="pill">5 slots</span>
-  </div>
-  <div id="takeoverLoadout" class="takeover-loadout"></div>
-</section>
-
-<!-- ============ SPÉCIALISATION ============ -->
-<section id="quests" class="panel quest-section">
-  <div class="section-title">
-    <div>
-      <p class="eyebrow">Spécialisation</p>
-      <h2>Six pistes, dix quêtes chacune</h2>
-      <p class="sub">Chaque piste donne des cosmétiques, des Cap Breakers, et un slot de Synergy permanent au niveau 10. Coche ce que tu as terminé : les slots gagnés apparaissent dans le planificateur ci-dessus.</p>
-    </div>
-    <span id="questProgress" class="pill">0 / 60 quêtes</span>
-  </div>
-  <div id="questTracks" class="quest-tracks"></div>
-  <button type="button" id="questReset" class="secondary small-btn quest-reset">Remettre à zéro</button>
+<!-- ============ CAP BREAKERS ============ -->
+<section class="panel capbreaker" id="capbreakers">
+  <div class="section-title"><div><p class="eyebrow">Cap breakers</p><h2>Planifie tes +1 / +5</h2></div><span class="pill">Max 5 par attribut</span></div>
+  <p class="sub">Planificateur visuel : choisis les attributs sur lesquels investir. Les gains réels dépendent des règles finales du jeu.</p>
+  <div id="breakerList" class="breaker-list"></div>
 </section>
 
 <!-- ============ BADGE TOKENS ============ -->
@@ -520,73 +394,6 @@
   <p class="sub">Les 20 emplacements sont disponibles immédiatement, mais il faut gagner des Badge Tokens pour les remplir. La progression est suivie par six compteurs alimentés par les performances en match, les entraînements d'équipe et les séances Gatorade.</p>
   <div class="discipline-grid" id="disciplineGrid"></div>
   <div class="token-total"><b id="tokenUsed">0</b><span>/ 20 emplacements planifiés</span></div>
-</section>
-
-<!-- ============ VALIDATEUR ============ -->
-<section id="validator" class="panel validator-panel">
-  <div class="section-title">
-    <div><p class="eyebrow">Validateur</p><h2>Vérification du build</h2></div>
-    <span id="validationStatus" class="validation-status">Analyse…</span>
-  </div>
-  <div class="validation-grid">
-    <div class="validation-main">
-      <div id="validationHeadline" class="validation-headline">Analyse en cours…</div>
-      <p id="validationText" class="sub">Le moteur contrôle le gabarit, les caps, les badges et les animations présentes dans la base embarquée.</p>
-      <div id="validationErrors" class="validation-errors"></div>
-    </div>
-    <div class="validation-checks">
-      <div><span>Gabarit</span><b id="checkBody">—</b></div>
-      <div><span>Attributs et caps</span><b id="checkCaps">—</b></div>
-      <div><span>Badges</span><b id="checkBadges">—</b></div>
-      <div><span>Animations</span><b id="checkAnimations">—</b></div>
-      <div><span>Budget indicatif</span><b id="checkBudget">—</b></div>
-    </div>
-  </div>
-  <p class="validation-note"><b>À savoir :</b> ce validateur garantit la cohérence avec les règles de données intégrées au site. Il ne peut pas promettre une exactitude officielle tant que 2K ne publie pas les tables internes des caps et des coûts du builder 2K27. Les règles non documentées sont signalées comme <b>indicatives</b>.</p>
-</section>
-
-<!-- ============ BADGES + TAKEOVER ============ -->
-<div class="dashboard-grid">
-  <section id="badges" class="panel dashboard">
-    <div class="section-title"><div><p class="eyebrow">Badges</p><h2>Ce que ton build débloque</h2></div><span id="badgeUnlocked" class="pill">0 accessibles</span></div>
-    <div class="badge-legend"><span class="lb">● Bronze</span><span class="ls">● Argent</span><span class="lg">● Or</span><span class="lh">● Hall of Fame</span> — la couleur indique le plus haut niveau accessible.</div>
-    <div id="badgeDataSource" class="data-note">Source badges : table publique NBA 2K27. <strong>Vérifié communauté</strong>, ce n'est pas une donnée officielle 2K.</div>
-    <div class="filter-row">
-      <select id="badgeFilter" aria-label="Filtrer les badges"><option value="all">Tous les badges</option><option value="unlocked">Accessibles</option><option value="locked">Non accessibles</option></select>
-      <input id="badgeSearch" aria-label="Rechercher un badge" placeholder="Rechercher un badge…">
-    </div>
-    <div id="badgeList" class="badge-list"></div>
-  </section>
-  <section id="takeover" class="panel dashboard">
-    <div class="section-title"><div><p class="eyebrow">Takeover</p><h2>Spécialisation</h2></div><span id="takeoverScore" class="pill">0 / 100</span></div>
-    <div id="takeoverList" class="takeover-list"></div>
-  </section>
-</div>
-
-<!-- ============ ANIMATIONS ============ -->
-<section id="animations" class="animations">
-  <div class="anim-head">
-    <div>
-      <p class="eyebrow">Animations</p>
-      <h2>Animations accessibles</h2>
-      <p class="sub">Le moteur vérifie les attributs et la taille. Chaque carte explique ce qu'il manque.</p>
-    </div>
-    <div class="anim-count"><b id="animUnlocked">0</b><span>accessibles</span></div>
-  </div>
-  <div class="data-note">Base animations : données publiques NBA 2K27. Le fichier embarqué contient uniquement les packages publiquement structurés que nous avons intégrés — le site n'affirme pas être exhaustif.</div>
-  <div class="anim-tools">
-    <select id="animCategory" aria-label="Filtrer par catégorie"><option value="all">Toutes les catégories</option><option>Alley-Oops / Contact</option><option>Layup Style</option><option>Dribble • Behind the Back</option><option>Pass Style</option><option>Shooting • Dribble Pull-Up</option><option>Shooting • Go-To Shot</option><option>Jumpshot • Base</option><option>Motion Style</option><option>Signature Size-Up</option><option>Dribble Style</option><option>Dribble</option><option>Shooting</option><option>Jumpshot</option></select>
-    <select id="animStatus" aria-label="Filtrer par accessibilité"><option value="all">Toutes</option><option value="yes">Accessibles</option><option value="no">Non accessibles</option></select>
-    <input id="animSearch" aria-label="Rechercher une animation" placeholder="Rechercher une animation…">
-  </div>
-  <div id="animationList" class="animation-list"></div>
-</section>
-
-<!-- ============ CAP BREAKERS ============ -->
-<section class="panel capbreaker" id="capbreakers">
-  <div class="section-title"><div><p class="eyebrow">Cap breakers</p><h2>Planifie tes +1 / +5</h2></div><span class="pill">Max 5 par attribut</span></div>
-  <p class="sub">Planificateur visuel : choisis les attributs sur lesquels investir. Les gains réels dépendent des règles finales du jeu.</p>
-  <div id="breakerList" class="breaker-list"></div>
 </section>
 
 <!-- ============ SCOUTING ============ -->
@@ -601,6 +408,37 @@
     <div><b>Profil NBA 2K27 de référence</b><span id="referenceBuild">—</span></div>
     <div><b>Compatibilité</b><strong id="referenceScore">0%</strong></div>
     <button id="exportBuild" type="button" class="secondary">Exporter la fiche</button>
+  </div>
+</section>
+
+<!-- ============ PRO DASHBOARD ============ -->
+<section id="proDashboard" class="panel pro-dashboard">
+  <div class="section-title">
+    <div>
+      <p class="eyebrow">Pro dashboard</p>
+      <h2>Tout contrôler avant de dépenser tes VC</h2>
+      <p class="sub">Qualité du build, reproductibilité et points encore incertains, au même endroit.</p>
+    </div>
+    <span id="dataConfidencePill" class="pill">Analyse</span>
+  </div>
+  <div class="pro-dashboard-grid">
+    <div class="pro-score-card">
+      <div class="pro-score-ring"><strong id="proQualityScore">0</strong><small>/100</small></div>
+      <div><b id="proQualityLabel">Analyse en cours</b><span id="proQualityText">Le moteur combine cohérence du gabarit, caps, badges, animations et budget indicatif.</span></div>
+    </div>
+    <div class="coverage-card">
+      <h3>Couverture des données</h3>
+      <div class="coverage-grid">
+        <div><b id="coverageBadges">53</b><span>badges intégrés</span></div>
+        <div><b id="coverageAnimations">0</b><span>animations intégrées</span></div>
+        <div><b id="coverageOfficial">0</b><span>règles vérifiées</span></div>
+        <div><b id="coverageIndicative">0</b><span>règles indicatives</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="repro-grid">
+    <div class="repro-card"><div class="repro-title"><b>Checklist de reproductibilité</b><span id="reproPercent">0%</span></div><div id="reproList"></div></div>
+    <div class="repro-card"><b>Ce qui peut encore changer</b><ul id="uncertaintyList" class="uncertainty-list"></ul></div>
   </div>
 </section>
 
@@ -648,32 +486,32 @@
   <button id="pwaUpdateBtn" type="button">Actualiser</button>
 </div>
 
-<script src="site-config.js"></script>
-<script src="animations.js"></script>
-<script src="dna-engine.js"></script>
-<script src="data-registry.js"></script>
-<script src="data-validation.js"></script>
-<script src="players-core.js"></script>
+<script src="/site-config.js"></script>
+<script src="/animations.js"></script>
+<script src="/dna-engine.js"></script>
+<script src="/data-registry.js"></script>
+<script src="/data-validation.js"></script>
+<script src="/players-core.js"></script>
 <!-- Ordre imposé par l'exécution d'app.js :
      - builder-data.js et validator.js AVANT : app.js lit les tables et appelle
        renderValidation() dès son premier rendu ;
      - optimizer.js et hub.js APRÈS : ils appellent app.js, jamais l'inverse ;
      - hub.js avant server-client.js, qui remplace likeBuild/openBuildModal. -->
-<script src="builder-data.js"></script>
-<script src="validator.js"></script>
-<script src="app.js"></script>
-<script src="optimizer.js"></script>
-<script src="hub.js"></script>
-<script src="v15-intelligence.js"></script>
-<script src="server-client.js"></script>
-<script src="style-presets.js"></script>
-<script src="blueprints.js"></script>
-<script src="progression.js"></script>
-<script src="qr.js"></script>
-<script src="share.js"></script>
-<script src="assist.js"></script>
-<script src="build-sheet.js"></script>
-<script src="community.js"></script>
-<script src="ui.js"></script>
+<script src="/builder-data.js"></script>
+<script src="/validator.js"></script>
+<script src="/app.js"></script>
+<script src="/optimizer.js"></script>
+<script src="/hub.js"></script>
+<script src="/v15-intelligence.js"></script>
+<script src="/server-client.js"></script>
+<script src="/style-presets.js"></script>
+<script src="/blueprints.js"></script>
+<script src="/progression.js"></script>
+<script src="/qr.js"></script>
+<script src="/share.js"></script>
+<script src="/assist.js"></script>
+<script src="/build-sheet.js"></script>
+<script src="/community.js"></script>
+<script src="/ui.js"></script>
 </body>
 </html>

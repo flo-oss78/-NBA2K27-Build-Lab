@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050A12">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Découvre, filtre et compare les builds NBA 2K27 publiés par la communauté. Jusqu’à 3 builds côte à côte.">
+<title>Build Hub NBA 2K27 — builds de la communauté</title>
+
+<link rel="canonical" href="https://nbabuildlab.pages.dev/hub/">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="stylesheet" href="/theme.css">
+
+<meta property="og:title" content="Build Hub NBA 2K27 — builds de la communauté">
+<meta property="og:description" content="Découvre, filtre et compare les builds NBA 2K27 publiés par la communauté. Jusqu’à 3 builds côte à côte.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nbabuildlab.pages.dev/hub/">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+
+<body>
+<a class="skip-link" href="#community">Aller au contenu</a>
+
+<header class="reference-header">
+  <div class="reference-brand">
+    <div>NBA <b>2K27</b></div>
+    <small>BUILD LAB</small>
+  </div>
+  <nav class="reference-nav" aria-label="Navigation principale">
+    <a href="/">Builder</a>
+    <a href="/blueprints/">Blueprints</a>
+    <a href="/hub/" class="active" aria-current="page">Builds</a>
+    <a href="/reference/">Badges & animations</a>
+    <a href="/progression/">Progression</a>
+  </nav>
+  <div class="reference-actions">
+    <span id="referenceVersion">V24.1</span>
+    <button id="referenceSettings" type="button" aria-label="Ouvrir les réglages" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.9 19.3a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.7 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.56V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.56 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============ HUB COMMUNAUTAIRE ============ -->
+<section id="community" class="panel community-hub">
+  <div class="section-title">
+    <div>
+      <p class="eyebrow">Build hub</p>
+      <h2>Découvre, sauvegarde et compare les builds</h2>
+      <p class="sub">Cartes lisibles, filtres, comparaison jusqu'à 3 builds et partage par lien.</p>
+    </div>
+    <span id="serverStatus" class="pill">Serveur : connexion…</span>
+  </div>
+  <div class="hub-tools">
+    <input id="communitySearch" aria-label="Rechercher un build" placeholder="Rechercher un build, un joueur ou un style…">
+    <select id="communityPos" aria-label="Filtrer par poste"><option value="all">Tous les postes</option><option>PG</option><option>SG</option><option>SF</option><option>PF</option><option>C</option></select>
+    <button id="addCurrentBuild" type="button">Publier mon build</button>
+  </div>
+  <div class="advanced-community-filters">
+    <select id="communityStyle" aria-label="Filtrer par style"><option value="all">Tous les styles</option><option>Shooter</option><option>Slasher</option><option>Playmaker</option><option>Lockdown</option><option>Big</option><option>Équilibré</option></select>
+    <label><input id="communityValidated" type="checkbox"> Builds validés seulement</label>
+    <label><input id="communityCapBreakers" type="checkbox"> Avec Cap Breakers</label>
+    <button id="clearCommunityFilters" type="button" class="secondary small-btn">Réinitialiser</button>
+  </div>
+  <div id="playerProfile" class="player-profile"></div>
+  <div id="featuredBuild" class="featured-build" hidden></div>
+  <div class="hub-tabs-wrap">
+    <div id="hubTabs" class="hub-tabs" role="tablist" aria-label="Tri des builds"></div>
+    <p id="hubTabHint" class="hub-tab-hint"></p>
+  </div>
+  <div id="communityList" class="community-list"></div>
+  <p class="hub-note">Les builds publiés sur le serveur sont visibles par toute la communauté. Si le serveur n'est pas encore configuré, le site bascule automatiquement en mode local.</p>
+</section>
+
+<!-- ============ COMPARATEUR ============ -->
+<section id="compare" class="panel compare-panel">
+  <div class="section-title">
+    <div><p class="eyebrow">Comparateur</p><h2>Compare jusqu'à 3 builds</h2></div>
+    <button id="clearCompare" type="button" class="secondary small-btn">Effacer</button>
+  </div>
+  <div id="compareSlots" class="compare-slots"></div>
+  <div id="compareTable" class="compare-table-wrap"></div>
+</section>
+
+<div id="buildModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Détail du build">
+  <div class="modal-backdrop" data-close-modal></div>
+  <div class="modal-card">
+    <button class="modal-close" type="button" data-close-modal aria-label="Fermer">×</button>
+    <div id="buildModalContent"></div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <p>NBA 2K27 Build Lab — outil indépendant, données publiques, aucune affiliation officielle avec 2K.</p>
+  <p class="footer-credit">Pour les données de tir mesurées en laboratoire (green window, vitesse de tir, tests de badges), va voir <a href="https://www.nba2klab.com/" target="_blank" rel="noopener">NBA2KLab</a> : leurs jumpers sont testés en Hall of Fame, sans boosts, sans badges et sans shot meter, sur une station automatisée. On ne cherche pas à refaire ça ici.</p>
+</footer>
+
+<div id="pwaInstall" class="pwa-install" hidden>
+  <span id="pwaInstallText">Installe NBA 2K27 Build Lab sur ton téléphone.</span>
+  <button id="pwaInstallBtn" type="button">Installer</button>
+  <button id="pwaInstallClose" type="button" class="secondary">Plus tard</button>
+</div>
+<div id="pwaUpdate" class="pwa-install" hidden>
+  <span>Une nouvelle version de Build Lab est disponible.</span>
+  <button id="pwaUpdateBtn" type="button">Actualiser</button>
+</div>
+
+<script src="/site-config.js"></script>
+<script src="/animations.js"></script>
+<script src="/dna-engine.js"></script>
+<script src="/data-registry.js"></script>
+<script src="/data-validation.js"></script>
+<script src="/players-core.js"></script>
+<!-- Ordre imposé par l'exécution d'app.js :
+     - builder-data.js et validator.js AVANT : app.js lit les tables et appelle
+       renderValidation() dès son premier rendu ;
+     - optimizer.js et hub.js APRÈS : ils appellent app.js, jamais l'inverse ;
+     - hub.js avant server-client.js, qui remplace likeBuild/openBuildModal. -->
+<script src="/builder-data.js"></script>
+<script src="/validator.js"></script>
+<script src="/app.js"></script>
+<script src="/optimizer.js"></script>
+<script src="/hub.js"></script>
+<script src="/v15-intelligence.js"></script>
+<script src="/server-client.js"></script>
+<script src="/style-presets.js"></script>
+<script src="/blueprints.js"></script>
+<script src="/progression.js"></script>
+<script src="/qr.js"></script>
+<script src="/share.js"></script>
+<script src="/assist.js"></script>
+<script src="/build-sheet.js"></script>
+<script src="/community.js"></script>
+<script src="/ui.js"></script>
+</body>
+</html>

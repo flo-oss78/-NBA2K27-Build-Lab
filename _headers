@@ -5,7 +5,24 @@
   Permissions-Policy: geolocation=(), microphone=(), camera=(), interest-cohort=()
   Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'
 
+# Les cinq pages du site doivent être revalidées à chaque visite, sans quoi un
+# déploiement peut rester invisible derrière le cache du navigateur.
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
 /index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/blueprints/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/hub/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/reference/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/progression/*
   Cache-Control: public, max-age=0, must-revalidate
 
 /sw.js

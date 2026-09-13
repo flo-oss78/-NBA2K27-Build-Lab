@@ -10,11 +10,16 @@
 
   /* ---- 1. Surlignage de l'onglet actif pendant le défilement ---- */
   function initNavHighlight(){
-    var links={};
-    document.querySelectorAll('.reference-nav a').forEach(function(a){
-      var id=a.getAttribute('href').replace(/^#/,'');
-      links[id]=a;
+    /* Depuis le découpage en pages, la navigation pointe vers d'autres pages
+       (/hub/, /reference/…) et non plus vers des ancres : la page active est
+       marquée dans le HTML servi. On ne pilote donc ici que les liens d'ancre,
+       sans quoi ce surlignage effacerait la page active à chaque défilement. */
+    var links={}, ancres=0;
+    document.querySelectorAll('.reference-nav a[href^="#"]').forEach(function(a){
+      links[a.getAttribute('href').slice(1)]=a;
+      ancres++;
     });
+    if(!ancres)return;
     var targets=SECTIONS.map(function(id){return document.getElementById(id)}).filter(Boolean);
     if(!targets.length||!('IntersectionObserver' in window))return;
 
@@ -38,8 +43,8 @@
 
     targets.forEach(function(t){io.observe(t)});
 
-    document.querySelectorAll('.reference-nav a').forEach(function(a){
-      a.addEventListener('click',function(){setActive(a.getAttribute('href').replace(/^#/,''))});
+    document.querySelectorAll('.reference-nav a[href^="#"]').forEach(function(a){
+      a.addEventListener('click',function(){setActive(a.getAttribute('href').slice(1))});
     });
   }
 

@@ -15,9 +15,18 @@ function iso(ms){
 
 export async function onRequestGet({request, env}){
   const origin = new URL(request.url).origin;
-  const urls = [
-    `<url><loc>${esc(origin)}/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>`
+  // Les cinq pages du site, chacune indexable pour ce qu'elle contient
+  // (blueprints, badges et animations sont les pages de contenu réel).
+  const PAGES = [
+    ['/', '1.0'],
+    ['/blueprints/', '0.9'],
+    ['/reference/', '0.9'],
+    ['/hub/', '0.8'],
+    ['/progression/', '0.7']
   ];
+  const urls = PAGES.map(([chemin, priorite]) =>
+    `<url><loc>${esc(origin)}${chemin}</loc><changefreq>weekly</changefreq><priority>${priorite}</priority></url>`
+  );
 
   // Sans base configurée, on renvoie quand même un sitemap valide :
   // un 500 ferait échouer la soumission dans la Search Console.

@@ -5,12 +5,16 @@
    - /api/ : jamais mis en cache
    - install : addAll tolérant aux 404 (un fichier manquant ne casse plus l'installation)
 */
-const VERSION='v24.1.1';
+const VERSION='v25.0.0';
 const SHELL_CACHE='nbabl-shell-'+VERSION;
 const RUNTIME_CACHE='nbabl-runtime-'+VERSION;
 
+// Les cinq pages du site. Chacune est mise en cache pour être servie hors ligne.
+const PAGES=['/','/blueprints/','/hub/','/reference/','/progression/'];
+
 const SHELL=[
-  './','./index.html','./theme.css','./site-config.js','./builder-data.js',
+  ...PAGES,
+  './theme.css','./site-config.js','./builder-data.js',
   './validator.js','./app.js','./optimizer.js','./hub.js','./animations.js',
   './dna-engine.js','./data-registry.js','./data-validation.js','./players-core.js',
   './v15-intelligence.js','./server-client.js','./style-presets.js','./ui.js',
@@ -58,17 +62,21 @@ self.addEventListener('fetch',e=>{
     e.respondWith((async()=>{
       try{
         const fresh=await fetch(req);
-        // Seule la coquille de l'app (/, /index.html) doit remplacer l'entrée
-        // ./index.html du cache — les autres navigations (ex. /b/<id>) ne
-        // doivent jamais l'écraser, sous peine de servir une fiche de build
-        // à la place du builder une fois hors-ligne.
-        if(url.pathname==='/'||url.pathname.endsWith('/index.html')){
+        // Seule une page du site met à jour sa propre entrée en cache. Les
+        // autres navigations (ex. /b/<id>, rendue par une Function) ne doivent
+        // écraser aucune page, sous peine de servir une fiche de build à la
+        // place du builder une fois hors ligne.
+        const page=PAGES.find(p=>url.pathname===p||url.pathname===p+'index.html');
+        if(page){
           const cache=await caches.open(SHELL_CACHE);
-          cache.put('./index.html',fresh.clone());
+          cache.put(page,fresh.clone());
         }
         return fresh;
       }catch(err){
-        const cached=await caches.match(req)||await caches.match('./index.html');
+        // Hors ligne : la page demandée, sinon le builder comme repli.
+        const cached=await caches.match(req)
+          ||await caches.match(PAGES.find(p=>url.pathname.startsWith(p)&&p!=='/')||'/')
+          ||await caches.match('/');
         return cached||new Response('Hors ligne',{status:503,headers:{'content-type':'text/plain; charset=utf-8'}});
       }
     })());

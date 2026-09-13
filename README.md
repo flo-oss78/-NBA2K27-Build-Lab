@@ -67,7 +67,11 @@ stockés dans le navigateur du visiteur et le statut affiche « Serveur : local 
 
 | Fichier | Rôle |
 |---|---|
-| `index.html` | Structure de la page, un seul écran par section |
+| `index.html` | Page du builder (`/`) : corps, attributs, validateur, fiche, Cap Breakers |
+| `blueprints/index.html` | `/blueprints/` — les 40 Signature Blueprints |
+| `hub/index.html` | `/hub/` — builds de la communauté et comparateur |
+| `reference/index.html` | `/reference/` — tables des badges et animations |
+| `progression/index.html` | `/progression/` — loadouts, synergy, takeovers, quêtes |
 | `theme.css` | **Système de design complet** (remplace `style.css` + `identity-v22.css`) |
 | `builder-data.js` | Tables de référence : attributs, 53 badges, takeovers, coûts. **Chargé avant `app.js`** |
 | `validator.js` | Validateur de cohérence (gabarit, caps, badges, animations). **Chargé avant `app.js`** |

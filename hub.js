@@ -110,12 +110,28 @@ function openBuildModal(id){
 function closeBuildModal(){const m=document.getElementById('buildModal');m.classList.remove('open');m.setAttribute('aria-hidden','true')}
 function shareBuildObject(x){
  const payload={position:x.position,height:x.height,weight:x.weight,wing:x.wing,style:x.style,attrs:x.attributes};
- const url=location.origin+location.pathname+'?build='+btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+ // Toujours vers la page du builder, et base64 encodé (ses « + » deviendraient
+ // des espaces dans l'URL, et le build partagé ne se chargerait pas).
+ const url=location.origin+'/?build='+encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(payload)))));
  navigator.clipboard?.writeText(url).then(()=>alert('Lien du build copié.')).catch(()=>prompt('Copie ce lien :',url));
 }
 
 function hubById(id){return [...readHub(),...demoCommunity].find(x=>x.id===id)}
-function loadHubBuild(id){const x=hubById(id);if(!x)return;apply({position:x.position,height:x.height,weight:x.weight,wing:x.wing,style:x.style,attrs:x.attributes});location.hash='builder';window.scrollTo({top:document.getElementById('builder').offsetTop-80,behavior:'smooth'})}
+function loadHubBuild(id){
+ const x=hubById(id); if(!x)return;
+ const obj={position:x.position,height:x.height,weight:x.weight,wing:x.wing,style:x.style,attrs:x.attributes};
+ // Le hub a sa propre page : sans builder dans le DOM, on passe par ?build=,
+ // le format que app.js lit déjà au chargement (liens de partage).
+ if(!document.getElementById('builder')){
+   const attrs={}; Object.keys(obj.attrs||{}).forEach(k=>attrs[k]=String(obj.attrs[k]));
+   const charge={...obj,attrs,hand:'Droite'};
+   location.href='/?build='+encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(charge)))));
+   return;
+ }
+ apply(obj);
+ location.hash='builder';
+ window.scrollTo({top:document.getElementById('builder').offsetTop-80,behavior:'smooth'});
+}
 function addCurrentToHub(){const x=currentBuildObject();const arr=readHub();arr.unshift(x);writeHub(arr.slice(0,30));renderCommunity();alert('Build ajouté à ta bibliothèque locale.')}
 
 let compareBuilds=[];

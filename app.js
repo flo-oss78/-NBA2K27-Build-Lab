@@ -1,4 +1,9 @@
 const root=document.getElementById('attributeGroups');let inputs=[];
+/* Toutes les pages chargent ce noyau, mais seule celle du builder contient
+   #attributeGroups. Ailleurs on n'installe ni curseurs ni écouteurs : les
+   fonctions restent définies — hub.js et share.js les appellent — mais rien
+   ne s'exécute au chargement. */
+const BUILDER_PRESENT=!!root;
 const CATEGORY_UI={
  Finition:{label:'Finition',cls:'finish',icon:'◉',desc:'Terminer au cercle, layups, dunks et jeu au poste.'},
  Tir:{label:'Tir',cls:'shoot',icon:'◎',desc:'Mid-range, trois points et lancer franc.'},
@@ -8,12 +13,42 @@ const CATEGORY_UI={
  Physique:{label:'Physique',cls:'physical',icon:'✦',desc:'Vitesse, agilité, force, verticalité et endurance.'}
 };
 function safeGroupId(group){return group.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/gi,'').toLowerCase()}
-Object.entries(data).forEach(([group,arr])=>{const ui=CATEGORY_UI[group]||CATEGORY_UI.Finition;let g=document.createElement('div');g.className=`group attr-group group-${ui.cls}`;g.id=`attr-group-${safeGroupId(group)}`;g.dataset.group=group;g.innerHTML=`<div class="group-head ${ui.cls}"><div class="group-title-wrap"><span class="group-icon">${ui.icon}</span><div><h3>${ui.label}</h3><small>${ui.desc}</small></div></div><b class="group-avg" id="avg-${safeGroupId(group)}">0</b></div>`;arr.forEach(([name,val])=>{let id=name.replace(/[^a-z0-9]/gi,'');let d=document.createElement('div');d.className=`attr attr-${ui.cls}`;d.dataset.category=group;d.innerHTML=`<div class="attrhead"><div class="attr-name"><span>${name}</span><small id="cap${id}">CAP 99</small></div><div class="attr-controls"><button type="button" class="attr-step minus" data-target="${id}" aria-label="Diminuer ${name}">−</button><b id="v${id}" class="attr-rating">${val}</b><span id="d${id}" class="attr-delta zero"></span><button type="button" class="attr-step plus" data-target="${id}" aria-label="Augmenter ${name}">+</button></div></div><input class="attribute-range ${ui.cls}" data-group="${group}" data-name="${name}" data-category-class="${ui.cls}" id="i${id}" type="range" min="25" max="99" value="${val}" aria-label="${name}"><div class="thresholds"><span class="threshold-label">Paliers</span>${BADGE_THRESHOLDS.map(t=>`<span data-threshold="${t}">${t}</span>`).join('')}</div>`;g.appendChild(d);inputs.push(d.querySelector('input'));});root.appendChild(g)});
-function ratings(){let r={};inputs.forEach(x=>r[x.dataset.name]=+x.value);return r}
+if(BUILDER_PRESENT)Object.entries(data).forEach(([group,arr])=>{const ui=CATEGORY_UI[group]||CATEGORY_UI.Finition;let g=document.createElement('div');g.className=`group attr-group group-${ui.cls}`;g.id=`attr-group-${safeGroupId(group)}`;g.dataset.group=group;g.innerHTML=`<div class="group-head ${ui.cls}"><div class="group-title-wrap"><span class="group-icon">${ui.icon}</span><div><h3>${ui.label}</h3><small>${ui.desc}</small></div></div><b class="group-avg" id="avg-${safeGroupId(group)}">0</b></div>`;arr.forEach(([name,val])=>{let id=name.replace(/[^a-z0-9]/gi,'');let d=document.createElement('div');d.className=`attr attr-${ui.cls}`;d.dataset.category=group;d.innerHTML=`<div class="attrhead"><div class="attr-name"><span>${name}</span><small id="cap${id}">CAP 99</small></div><div class="attr-controls"><button type="button" class="attr-step minus" data-target="${id}" aria-label="Diminuer ${name}">−</button><b id="v${id}" class="attr-rating">${val}</b><span id="d${id}" class="attr-delta zero"></span><button type="button" class="attr-step plus" data-target="${id}" aria-label="Augmenter ${name}">+</button></div></div><input class="attribute-range ${ui.cls}" data-group="${group}" data-name="${name}" data-category-class="${ui.cls}" id="i${id}" type="range" min="25" max="99" value="${val}" aria-label="${name}"><div class="thresholds"><span class="threshold-label">Paliers</span>${BADGE_THRESHOLDS.map(t=>`<span data-threshold="${t}">${t}</span>`).join('')}</div>`;g.appendChild(d);inputs.push(d.querySelector('input'));});root.appendChild(g)});
+/* Contexte du build courant, partagé entre les pages.
+   Le builder n'existe que sur « / », mais /reference/ doit afficher les badges
+   et animations accessibles AU BUILD EN COURS. Le builder écrit donc son état
+   à chaque rendu, et les autres pages le relisent ici. */
+/* Certains compteurs (badgeTotal, animTotal…) vivent dans la section builder
+   et n'existent pas sur les autres pages : leur écriture ne doit pas planter. */
+function texte(id,v){const el=document.getElementById(id);if(el)el.textContent=v}
+const CTX_KEY='nba2k27_ctx_v1';
+function lireContexte(){
+  try{const c=JSON.parse(localStorage.getItem(CTX_KEY)||'null');return c&&c.attrs?c:null}catch(e){return null}
+}
+function ecrireContexte(){
+  if(!BUILDER_PRESENT)return;
+  try{
+    localStorage.setItem(CTX_KEY,JSON.stringify({
+      attrs:Object.fromEntries(inputs.map(x=>[x.dataset.name,+x.value])),
+      height:heightInches(),
+      weight:+document.getElementById('weight').value,
+      wing:+document.getElementById('wing').value,
+      position:document.getElementById('position').value
+    }));
+  }catch(e){/* stockage plein ou refusé : sans conséquence */}
+}
+function ratings(){
+  if(!inputs.length){const c=lireContexte();if(c)return {...c.attrs};return {...(window.NBABL_BASE_ATTRIBUTES||{})}}
+  let r={};inputs.forEach(x=>r[x.dataset.name]=+x.value);return r;
+}
 function updateAttributeVisuals(){inputs.forEach(x=>{const pct=Math.max(0,Math.min(100,((+x.value-25)/(+x.max-25))*100));const color=getComputedStyle(document.documentElement).getPropertyValue({'finish':'--cat-finish','shoot':'--cat-shoot','play':'--cat-play','defense':'--cat-defense','physical':'--cat-physical'}[x.dataset.categoryClass]||'--ui-accent').trim();x.style.setProperty('--attr-color',color);x.style.setProperty('--attr-pct',pct+'%');const card=x.closest('.attr');if(card)card.style.setProperty('--cat-color',color);});}
-root.querySelectorAll('.attr-step').forEach(btn=>btn.addEventListener('click',()=>{const x=document.getElementById('i'+btn.dataset.target);if(!x)return;const dir=btn.classList.contains('plus')?1:-1;x.value=Math.max(+x.min,Math.min(+x.max,+x.value+dir));x.dispatchEvent(new Event('input',{bubbles:true}));}));
-root.querySelectorAll('.quicknav-btn').forEach(btn=>btn.addEventListener('click',()=>{root.querySelectorAll('.quicknav-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('attr-group-'+safeGroupId(btn.dataset.targetGroup))?.scrollIntoView({behavior:'smooth',block:'center'});}));
-function heightInches(){return +document.getElementById('height').value}
+if(BUILDER_PRESENT)root.querySelectorAll('.attr-step').forEach(btn=>btn.addEventListener('click',()=>{const x=document.getElementById('i'+btn.dataset.target);if(!x)return;const dir=btn.classList.contains('plus')?1:-1;x.value=Math.max(+x.min,Math.min(+x.max,+x.value+dir));x.dispatchEvent(new Event('input',{bubbles:true}));}));
+if(BUILDER_PRESENT)root.querySelectorAll('.quicknav-btn').forEach(btn=>btn.addEventListener('click',()=>{root.querySelectorAll('.quicknav-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('attr-group-'+safeGroupId(btn.dataset.targetGroup))?.scrollIntoView({behavior:'smooth',block:'center'});}));
+function heightInches(){
+  const el=document.getElementById('height');
+  if(el)return +el.value;
+  const c=lireContexte(); return c?c.height:78; /* page sans builder : taille du dernier build */
+}
 function heightText(h){return `${Math.floor(h/12)}'${h%12}"`}
 function cmOf(inches){return Math.round(inches*2.54)}
 function kgOf(lbs){return Math.round(lbs*0.45359237)}
@@ -57,7 +92,7 @@ function renderScouting(r,vals){if(!document.getElementById("strengths"))return;
  document.getElementById('scoutText').textContent=`Ton profil est surtout orienté ${bestStyle[0].toLowerCase()}. Le rapport compare automatiquement tes attributs, ton poste et ton gabarit à plusieurs profils de référence. Les profils de référence sont des exemples publics, pas des builds officiels imposés par 2K.`;
 }
 function exportBuild(){const obj={schemaVersion:23,dataVersion:window.NBABL_DATA_REGISTRY?.DATA_VERSION||null,position:position.value,height:height.value,weight:weight.value,wing:wing.value,style:style.value,hand:handValue(),attributes:ratings(),badges:unlockedBadgeCount(),animations:unlockedAnimationCount(),capBreakers:breakerTotalValue(),simulatedCost:simulatedCost(ratings()),score:document.getElementById('score').textContent,name:document.getElementById('buildname').textContent,date:new Date().toISOString()};const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='nba2k27-build.json';a.click();URL.revokeObjectURL(a.href)}
-document.getElementById('exportBuild').onclick=exportBuild;
+document.getElementById('exportBuild')?.addEventListener('click',exportBuild);
 
 function simulatedCost(r){return Math.round(Object.entries(r).reduce((sum,[name,v])=>sum+Math.max(0,v-25)*(COST_WEIGHT[name]||1),0));}
 function updateBudget(r){const used=simulatedCost(r),budget=1000,pct=Math.min(100,used/budget*100);document.getElementById('budgetUsed').textContent=used;document.getElementById('points').textContent=used;document.getElementById('budgetBar').style.width=pct+'%';document.getElementById('budgetHint').textContent=`Budget indicatif : ${used} / ${budget} — modèle non officiel`;document.getElementById('budgetBox')?.classList.toggle('over',used>budget);inputs.forEach(x=>{const id=x.dataset.name.replace(/[^a-z0-9]/gi,'');document.querySelectorAll('#i'+id+' + .thresholds span').forEach(s=>s.classList.toggle('hit',+x.value>=+s.dataset.threshold))})}
@@ -76,8 +111,9 @@ function updateAttributeDeltas(){
  });
 }
 function update(){
+ if(!BUILDER_PRESENT)return; /* page sans builder */
  updateProfileLabels();const caps=bodyCaps();clampInputsToCaps(caps);const r=ratings();updateBudget(r);let sums={};Object.keys(data).forEach(k=>sums[k]=[]);inputs.forEach(x=>{document.getElementById('v'+x.dataset.name.replace(/[^a-z0-9]/gi,'')).textContent=x.value;sums[x.dataset.group].push(+x.value)});let avg=k=>Math.round(sums[k].reduce((a,b)=>a+b,0)/sums[k].length),vals={Finition:avg('Finition'),Tir:avg('Tir'),Création:avg('Création'),Défense:avg('Défense'),Rebond:avg('Rebond'),Physique:avg('Physique')};Object.entries(vals).forEach(([k,v])=>{const el=document.getElementById('avg-'+safeGroupId(k));if(el)el.textContent=v;});updateAttributeVisuals();const SCORE_W={Finition:1,Tir:1,Création:1,Défense:1,Rebond:.6,Physique:1};let wsum=0,wtot=0;Object.keys(vals).forEach(k=>{const w=SCORE_W[k]||1;wsum+=vals[k]*w;wtot+=w});let score=Math.round(wsum/wtot);document.getElementById('score').textContent=score;const ring=document.querySelector('.summary-ring');if(ring)ring.style.setProperty('--score-pct',Math.max(0,Math.min(100,score))+'%');document.getElementById('buildGrade').textContent=scoreGrade(score);let nm=buildName(vals);document.getElementById('buildname').textContent=nm;const meta=document.getElementById('buildMeta');if(meta)meta.textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${document.getElementById('weight').value} lbs`;for(const [k,v] of Object.entries(vals)){let id={Finition:'finish',Tir:'shoot',Création:'play',Défense:'def',Rebond:'reb',Physique:'phys'}[k];const ve=document.getElementById(id+'Val');if(ve)ve.textContent=v;const be=document.getElementById(id+'Bar');if(be)be.style.width=v+'%'}updateAttributeDeltas();
- let capped=inputs.filter(x=>+x.value>=+(x.max||99)).length;document.getElementById('capStatus').textContent=`${capped} / ${inputs.length} au cap`;document.getElementById('bodyHint').textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${heightText(+document.getElementById('wing').value)} envergure — les caps évoluent avec le gabarit.`;renderBadges(r);renderTakeovers(r);renderBreakers(r);renderAnimations();renderScouting(r,vals);renderValidation(r,caps);
+ let capped=inputs.filter(x=>+x.value>=+(x.max||99)).length;document.getElementById('capStatus').textContent=`${capped} / ${inputs.length} au cap`;document.getElementById('bodyHint').textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${heightText(+document.getElementById('wing').value)} envergure — les caps évoluent avec le gabarit.`;renderBadges(r);renderTakeovers(r);renderBreakers(r);renderAnimations();renderScouting(r,vals);renderValidation(r,caps);ecrireContexte();
 }
 function badgeTier(def,r){
  const h=heightInches();
@@ -114,10 +150,10 @@ function renderBadges(r){if(!document.getElementById("badgeList"))return; /* sec
    </div></article>`;
  });
  list.innerHTML=html||'<div class="empty">Aucun badge dans ce filtre.</div>';
- document.getElementById('badgeUnlocked').textContent=unlocked+' accessibles'; document.getElementById('badgeTotal').textContent=badgeDefs.length;
+ texte('badgeUnlocked',unlocked+' accessibles'); texte('badgeTotal',badgeDefs.length);
 }
 
-function renderTakeovers(r){if(!document.getElementById("takeoverList"))return; /* section absente de cette page */let list=document.getElementById('takeoverList'),scores=takeoverDefs.map(([name,attr,need])=>({name,attr,need,score:Math.min(100,Math.round((r[attr]||0)/need*100))})).sort((a,b)=>b.score-a.score);list.innerHTML=scores.map(x=>`<button class="takeover ${x.score>=100?'ready':''}" data-take="${x.name}"><span>${x.name}<small>${x.attr} requis : ${x.need}</small></span><b>${x.score}%</b></button>`).join('');document.getElementById('takeoverScore').textContent=scores[0].score+' / 100';list.querySelectorAll('.takeover').forEach(b=>b.onclick=()=>{list.querySelectorAll('.takeover').forEach(x=>x.classList.remove('selected'));b.classList.add('selected')})}
+function renderTakeovers(r){if(!document.getElementById("takeoverList"))return; /* section absente de cette page */let list=document.getElementById('takeoverList'),scores=takeoverDefs.map(([name,attr,need])=>({name,attr,need,score:Math.min(100,Math.round((r[attr]||0)/need*100))})).sort((a,b)=>b.score-a.score);list.innerHTML=scores.map(x=>`<button class="takeover ${x.score>=100?'ready':''}" data-take="${x.name}"><span>${x.name}<small>${x.attr} requis : ${x.need}</small></span><b>${x.score}%</b></button>`).join('');texte('takeoverScore',scores[0].score+' / 100');list.querySelectorAll('.takeover').forEach(b=>b.onclick=()=>{list.querySelectorAll('.takeover').forEach(x=>x.classList.remove('selected'));b.classList.add('selected')})}
 function buildBodySignature(){
  const p=[position.value,height.value,weight.value,wing.value].join('|');
  let h=0; for(let i=0;i<p.length;i++) h=((h<<5)-h+p.charCodeAt(i))|0;
@@ -146,15 +182,26 @@ function renderBreakers(r){if(!document.getElementById("breakerList"))return; /*
  const total=inputs.reduce((s,x)=>s+ +(getBreaker(x.dataset.name)||0),0);
  document.getElementById('breakerTotal').textContent=total;
 }
-function renderAnimations(){if(!document.getElementById("animationList"))return; /* section absente de cette page */const r=ratings(),h=heightInches(),cat=document.getElementById('animCategory').value,status=document.getElementById('animStatus').value,search=document.getElementById('animSearch').value.toLowerCase().trim();let all=ANIMATIONS.filter(a=>(cat==='all'||a.category===cat)&&(!search||a.name.toLowerCase().includes(search)||a.category.toLowerCase().includes(search))),unlocked=0,list=document.getElementById('animationList');list.innerHTML='';all.forEach(a=>{const heightOK=h>=a.minH&&h<=a.maxH,fails=Object.entries(a.req).filter(([k,v])=>(r[k]??0)<v),ok=heightOK&&!fails.length;if(ok)unlocked++;if(status==='yes'&&!ok||status==='no'&&ok)return;const reqHtml=Object.entries(a.req).map(([k,v])=>`<span class="req ${r[k]>=v?'pass':'fail'}">${k}: ${r[k]??0}/${v}</span>`).join('');list.insertAdjacentHTML('beforeend',`<article class="anim-card ${ok?'ok':''}"><div class="anim-top"><div class="anim-name">${a.name}</div><span class="anim-badge">${ok?'✓ ACCESSIBLE':'🔒 BLOQUÉE'}</span></div><div class="anim-meta">${a.category} • ${heightText(a.minH)} – ${heightText(a.maxH)}</div><div class="reqs">${reqHtml||'<span class="req pass">Aucun attribut requis</span>'}</div>${!heightOK?`<div class="missing">Taille requise : ${heightText(a.minH)} à ${heightText(a.maxH)}.</div>`:''}${fails.length?`<div class="missing">Il manque : ${fails.map(([k,v])=>`${k} ${v-(r[k]??0)} pts`).join(' • ')}</div>`:''}<small>${ok?'Équipable avec ce build.':'Modifie le build pour débloquer cette animation.'}</small></article>`)});document.getElementById('animUnlocked').textContent=unlocked;document.getElementById('animTotal').textContent=ANIMATIONS.length}
+function renderAnimations(){if(!document.getElementById("animationList"))return; /* section absente de cette page */const r=ratings(),h=heightInches(),cat=document.getElementById('animCategory').value,status=document.getElementById('animStatus').value,search=document.getElementById('animSearch').value.toLowerCase().trim();let all=ANIMATIONS.filter(a=>(cat==='all'||a.category===cat)&&(!search||a.name.toLowerCase().includes(search)||a.category.toLowerCase().includes(search))),unlocked=0,list=document.getElementById('animationList');list.innerHTML='';all.forEach(a=>{const heightOK=h>=a.minH&&h<=a.maxH,fails=Object.entries(a.req).filter(([k,v])=>(r[k]??0)<v),ok=heightOK&&!fails.length;if(ok)unlocked++;if(status==='yes'&&!ok||status==='no'&&ok)return;const reqHtml=Object.entries(a.req).map(([k,v])=>`<span class="req ${r[k]>=v?'pass':'fail'}">${k}: ${r[k]??0}/${v}</span>`).join('');list.insertAdjacentHTML('beforeend',`<article class="anim-card ${ok?'ok':''}"><div class="anim-top"><div class="anim-name">${a.name}</div><span class="anim-badge">${ok?'✓ ACCESSIBLE':'🔒 BLOQUÉE'}</span></div><div class="anim-meta">${a.category} • ${heightText(a.minH)} – ${heightText(a.maxH)}</div><div class="reqs">${reqHtml||'<span class="req pass">Aucun attribut requis</span>'}</div>${!heightOK?`<div class="missing">Taille requise : ${heightText(a.minH)} à ${heightText(a.maxH)}.</div>`:''}${fails.length?`<div class="missing">Il manque : ${fails.map(([k,v])=>`${k} ${v-(r[k]??0)} pts`).join(' • ')}</div>`:''}<small>${ok?'Équipable avec ce build.':'Modifie le build pour débloquer cette animation.'}</small></article>`)});texte('animUnlocked',unlocked);texte('animTotal',ANIMATIONS.length)}
 function handValue(){return document.getElementById('dominantHand')?.value||'Droite'}
 function serialize(){let obj={position:position.value,height:height.value,weight:weight.value,wing:wing.value,style:style.value,hand:handValue(),attrs:Object.fromEntries(inputs.map(x=>[x.dataset.name,x.value]))};return btoa(unescape(encodeURIComponent(JSON.stringify(obj))))}
 function apply(obj){position.value=obj.position||'SF';height.value=obj.height||80;weight.value=obj.weight||210;wing.value=obj.wing||84;style.value=obj.style||'Équilibré';const handEl=document.getElementById('dominantHand');if(handEl&&obj.hand)handEl.value=obj.hand;update();if(obj.attrs)inputs.forEach(x=>{if(obj.attrs[x.dataset.name])x.value=Math.min(+obj.attrs[x.dataset.name],+x.max)});update()}
-inputs.forEach(x=>x.addEventListener('input',update));['position','height','weight','wing','style'].forEach(id=>document.getElementById(id).addEventListener('input',update));['animCategory','animStatus'].forEach(id=>document.getElementById(id).addEventListener('change',renderAnimations));document.getElementById('animSearch').addEventListener('input',renderAnimations);['badgeFilter'].forEach(id=>document.getElementById(id).addEventListener('change',()=>renderBadges(ratings())));document.getElementById('badgeSearch').addEventListener('input',()=>renderBadges(ratings()));
+inputs.forEach(x=>x.addEventListener('input',update));['position','height','weight','wing','style'].forEach(id=>document.getElementById(id)?.addEventListener('input',update));['animCategory','animStatus'].forEach(id=>document.getElementById(id)?.addEventListener('change',renderAnimations));document.getElementById('animSearch')?.addEventListener('input',renderAnimations);['badgeFilter'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>renderBadges(ratings())));document.getElementById('badgeSearch')?.addEventListener('input',()=>renderBadges(ratings()));
 
-document.getElementById('reset').onclick=()=>{localStorage.removeItem('nba2k27_build');location.reload()};document.getElementById('save').onclick=()=>{localStorage.setItem('nba2k27_build',serialize());alert('Build sauvegardé sur cet appareil.')};document.getElementById('load').onclick=()=>{let s=localStorage.getItem('nba2k27_build');if(!s)return alert('Aucun build sauvegardé.');apply(JSON.parse(decodeURIComponent(escape(atob(s)))))};document.getElementById('share').onclick=()=>{navigator.clipboard?.writeText(location.origin+location.pathname+'?build='+serialize()).then(()=>alert('Lien du build copié.')).catch(()=>alert('Copie automatique indisponible.'))};
+/* Ces quatre boutons n'existent que sur la page du builder : liaisons protégées. */
+document.getElementById('reset')?.addEventListener('click',()=>{localStorage.removeItem('nba2k27_build');location.reload()});
+document.getElementById('save')?.addEventListener('click',()=>{localStorage.setItem('nba2k27_build',serialize());alert('Build sauvegardé sur cet appareil.')});
+document.getElementById('load')?.addEventListener('click',()=>{let s=localStorage.getItem('nba2k27_build');if(!s)return alert('Aucun build sauvegardé.');apply(JSON.parse(decodeURIComponent(escape(atob(s)))))});
+/* encodeURIComponent est indispensable : le base64 contient des « + », qu'une
+   URL décode en espaces — atob échouait alors et le build partagé ne se
+   chargeait pas. */
+document.getElementById('share')?.addEventListener('click',()=>{navigator.clipboard?.writeText(location.origin+location.pathname+'?build='+encodeURIComponent(serialize())).then(()=>alert('Lien du build copié.')).catch(()=>alert('Copie automatique indisponible.'))});
 document.querySelectorAll('[data-close-modal]').forEach(el=>el.addEventListener('click',()=>{const m=document.getElementById('buildModal');m.classList.remove('open');m.setAttribute('aria-hidden','true')}));
-let params=new URLSearchParams(location.search);if(params.get('build')){try{apply(JSON.parse(decodeURIComponent(escape(atob(params.get('build'))))))}catch(e){update()}}else update();
+/* Les liens partagés avant la correction ci-dessus ont leurs « + » transformés
+   en espaces par l'URL : on les restaure pour que ces liens fonctionnent aussi. */
+function buildDepuisURL(){const q=new URLSearchParams(location.search).get('build');return q?q.replace(/ /g,'+'):null}
+const codeURL=buildDepuisURL();
+if(codeURL){try{apply(JSON.parse(decodeURIComponent(escape(atob(codeURL)))))}catch(e){update()}}else update();
 
 
 
@@ -261,7 +308,7 @@ update=function(){
 };
 
 (function loadURLBuild(){
- const q=new URLSearchParams(location.search).get('build');
+ const q=buildDepuisURL();
  if(q){try{apply(JSON.parse(decodeURIComponent(escape(atob(q)))))}catch(e){}}
 })();
 
@@ -280,4 +327,14 @@ window.NBABL_BASE_ATTRIBUTES=(function(){var o={};Object.keys(data).forEach(func
 window.heightInches=heightInches;
 window.setAttributeBaseline=setAttributeBaseline;
 window.appUpdate=function(){update()};
+
+/* Pages sans builder : update() ne tourne pas, mais /reference/ doit tout de
+   même remplir ses tables. Chaque fonction se protège déjà si sa section est
+   absente, l'appel est donc sans risque sur les autres pages. */
+if(!BUILDER_PRESENT){
+  const r=ratings();
+  renderBadges(r);
+  renderTakeovers(r);
+  renderAnimations();
+}
 // Les onglets du hub (community.js) redemandent un rendu de la liste.

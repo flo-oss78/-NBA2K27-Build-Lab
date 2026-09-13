@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050A12">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Badge Loadouts, Synergy Fuse, perks de Takeover et suivi des quêtes pour faire progresser ton MyPLAYER NBA 2K27.">
+<title>Progression NBA 2K27 — loadouts, synergy et quêtes</title>
+
+<link rel="canonical" href="https://nbabuildlab.pages.dev/progression/">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="stylesheet" href="/theme.css">
+
+<meta property="og:title" content="Progression NBA 2K27 — loadouts, synergy et quêtes">
+<meta property="og:description" content="Badge Loadouts, Synergy Fuse, perks de Takeover et suivi des quêtes pour faire progresser ton MyPLAYER NBA 2K27.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nbabuildlab.pages.dev/progression/">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+
+<body>
+<a class="skip-link" href="#loadouts">Aller au contenu</a>
+
+<header class="reference-header">
+  <div class="reference-brand">
+    <div>NBA <b>2K27</b></div>
+    <small>BUILD LAB</small>
+  </div>
+  <nav class="reference-nav" aria-label="Navigation principale">
+    <a href="/">Builder</a>
+    <a href="/blueprints/">Blueprints</a>
+    <a href="/hub/">Builds</a>
+    <a href="/reference/">Badges & animations</a>
+    <a href="/progression/" class="active" aria-current="page">Progression</a>
+  </nav>
+  <div class="reference-actions">
+    <span id="referenceVersion">V24.1</span>
+    <button id="referenceSettings" type="button" aria-label="Ouvrir les réglages" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.9 19.3a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.7 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.56V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.56 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============ BADGE LOADOUTS ============ -->
+<section id="loadouts" class="panel loadout-section">
+  <div class="section-title">
+    <div>
+      <p class="eyebrow">Badge Loadouts</p>
+      <h2>Prépare plusieurs combinaisons de badges</h2>
+      <p class="sub">Nouveau en 2K27 : on sauvegarde plusieurs loadouts et on change l'actif avant l'engagement pour contrer la taille ou le style d'un adversaire, sans quitter le menu.</p>
+    </div>
+    <span class="pill">20 slots</span>
+  </div>
+  <div id="loadoutPanel" class="loadout-panel"></div>
+  <p class="data-note">L'indicateur <strong>✓</strong> signale les badges dont NBA2KLab a publié un test. Les autres sont encore « test en attente » chez eux : leur effet réel n'est pas mesuré.</p>
+</section>
+
+<!-- ============ SYNERGY ============ -->
+<section id="synergy" class="panel synergy-section">
+  <div class="section-title">
+    <div>
+      <p class="eyebrow">Synergy</p>
+      <h2>Fuse et Reaction</h2>
+      <p class="sub">Le système compte 16 emplacements répartis entre Fuse Badges et Reaction Badges. Ensemble, ils poussent les badges au-delà de leur potentiel de base, jusqu'au tier Legend.</p>
+    </div>
+    <span class="pill">16 slots + bonus</span>
+  </div>
+  <div id="synergyPlanner" class="synergy-planner"></div>
+</section>
+
+<!-- ============ TAKEOVER LOADOUT ============ -->
+<section id="takeoverPro" class="panel takeover-pro">
+  <div class="section-title">
+    <div>
+      <p class="eyebrow">Takeover</p>
+      <h2>Cinq emplacements, trois types de perk</h2>
+      <p class="sub">Accelerator remplit la jauge plus vite, Longevity prolonge la capacité active, Overdrive augmente les bonus d'attributs.</p>
+    </div>
+    <span class="pill">5 slots</span>
+  </div>
+  <div id="takeoverLoadout" class="takeover-loadout"></div>
+</section>
+
+<!-- ============ SPÉCIALISATION ============ -->
+<section id="quests" class="panel quest-section">
+  <div class="section-title">
+    <div>
+      <p class="eyebrow">Spécialisation</p>
+      <h2>Six pistes, dix quêtes chacune</h2>
+      <p class="sub">Chaque piste donne des cosmétiques, des Cap Breakers, et un slot de Synergy permanent au niveau 10. Coche ce que tu as terminé : les slots gagnés apparaissent dans le planificateur ci-dessus.</p>
+    </div>
+    <span id="questProgress" class="pill">0 / 60 quêtes</span>
+  </div>
+  <div id="questTracks" class="quest-tracks"></div>
+  <button type="button" id="questReset" class="secondary small-btn quest-reset">Remettre à zéro</button>
+</section>
+
+<div id="buildModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Détail du build">
+  <div class="modal-backdrop" data-close-modal></div>
+  <div class="modal-card">
+    <button class="modal-close" type="button" data-close-modal aria-label="Fermer">×</button>
+    <div id="buildModalContent"></div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <p>NBA 2K27 Build Lab — outil indépendant, données publiques, aucune affiliation officielle avec 2K.</p>
+  <p class="footer-credit">Pour les données de tir mesurées en laboratoire (green window, vitesse de tir, tests de badges), va voir <a href="https://www.nba2klab.com/" target="_blank" rel="noopener">NBA2KLab</a> : leurs jumpers sont testés en Hall of Fame, sans boosts, sans badges et sans shot meter, sur une station automatisée. On ne cherche pas à refaire ça ici.</p>
+</footer>
+
+<div id="pwaInstall" class="pwa-install" hidden>
+  <span id="pwaInstallText">Installe NBA 2K27 Build Lab sur ton téléphone.</span>
+  <button id="pwaInstallBtn" type="button">Installer</button>
+  <button id="pwaInstallClose" type="button" class="secondary">Plus tard</button>
+</div>
+<div id="pwaUpdate" class="pwa-install" hidden>
+  <span>Une nouvelle version de Build Lab est disponible.</span>
+  <button id="pwaUpdateBtn" type="button">Actualiser</button>
+</div>
+
+<script src="/site-config.js"></script>
+<script src="/animations.js"></script>
+<script src="/dna-engine.js"></script>
+<script src="/data-registry.js"></script>
+<script src="/data-validation.js"></script>
+<script src="/players-core.js"></script>
+<!-- Ordre imposé par l'exécution d'app.js :
+     - builder-data.js et validator.js AVANT : app.js lit les tables et appelle
+       renderValidation() dès son premier rendu ;
+     - optimizer.js et hub.js APRÈS : ils appellent app.js, jamais l'inverse ;
+     - hub.js avant server-client.js, qui remplace likeBuild/openBuildModal. -->
+<script src="/builder-data.js"></script>
+<script src="/validator.js"></script>
+<script src="/app.js"></script>
+<script src="/optimizer.js"></script>
+<script src="/hub.js"></script>
+<script src="/v15-intelligence.js"></script>
+<script src="/server-client.js"></script>
+<script src="/style-presets.js"></script>
+<script src="/blueprints.js"></script>
+<script src="/progression.js"></script>
+<script src="/qr.js"></script>
+<script src="/share.js"></script>
+<script src="/assist.js"></script>
+<script src="/build-sheet.js"></script>
+<script src="/community.js"></script>
+<script src="/ui.js"></script>
+</body>
+</html>
