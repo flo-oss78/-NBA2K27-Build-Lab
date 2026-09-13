@@ -69,7 +69,11 @@ stockés dans le navigateur du visiteur et le statut affiche « Serveur : local 
 |---|---|
 | `index.html` | Structure de la page, un seul écran par section |
 | `theme.css` | **Système de design complet** (remplace `style.css` + `identity-v22.css`) |
-| `app.js` | Moteur : attributs, caps, badges, takeovers, validateur, hub, comparateur |
+| `builder-data.js` | Tables de référence : attributs, 53 badges, takeovers, coûts. **Chargé avant `app.js`** |
+| `validator.js` | Validateur de cohérence (gabarit, caps, badges, animations). **Chargé avant `app.js`** |
+| `app.js` | Moteur : attributs, caps, badges, takeovers, animations, jetons, scouting |
+| `optimizer.js` | Optimiseur : redistribution des points à coût simulé constant |
+| `hub.js` | Build Hub et comparateur. **Chargé après `app.js`, avant `server-client.js`** |
 | `style-presets.js` | Les 6 styles de build : cibles d'attributs, badges, animations, takeovers |
 | `blueprints.js` | 40 Signature Blueprints (trois athlètes par modèle) |
 | `progression.js` | Badge Loadouts, Synergy Fuse/Reaction, perks de Takeover, quêtes |

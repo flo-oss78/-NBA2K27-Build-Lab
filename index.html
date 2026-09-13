@@ -654,7 +654,16 @@
 <script src="data-registry.js"></script>
 <script src="data-validation.js"></script>
 <script src="players-core.js"></script>
+<!-- Ordre imposé par l'exécution d'app.js :
+     - builder-data.js et validator.js AVANT : app.js lit les tables et appelle
+       renderValidation() dès son premier rendu ;
+     - optimizer.js et hub.js APRÈS : ils appellent app.js, jamais l'inverse ;
+     - hub.js avant server-client.js, qui remplace likeBuild/openBuildModal. -->
+<script src="builder-data.js"></script>
+<script src="validator.js"></script>
 <script src="app.js"></script>
+<script src="optimizer.js"></script>
+<script src="hub.js"></script>
 <script src="v15-intelligence.js"></script>
 <script src="server-client.js"></script>
 <script src="style-presets.js"></script>

@@ -1,67 +1,3 @@
-const data={Finition:[['Close Shot',75],['Driving Layup',82],['Driving Dunk',85],['Standing Dunk',55],['Post Control',60]],Tir:[['Mid-Range',82],['Three-Point',88],['Free Throw',78]],Création:[['Pass Accuracy',78],['Ball Handle',86],['Speed With Ball',84]],Défense:[['Interior Defense',55],['Perimeter Defense',85],['Steal',80],['Block',70]],Rebond:[['Offensive Rebound',45],['Defensive Rebound',65]],Physique:[['Speed',84],['Agility',82],['Strength',72],['Vertical',80],['Stamina',94]]};
-const badgeDefs=[
-{name:'Arc Cadence',cat:'Tir',req:[['Three-Point',70,86,91,98]],logic:'AND',minH:69,maxH:83},
-{name:'Deadeye',cat:'Tir',req:[['Mid-Range',65,85,92,99],['Three-Point',65,85,92,99]],logic:'OR',minH:69,maxH:88},
-{name:'Limitless Range',cat:'Tir',req:[['Three-Point',83,89,93,99]],logic:'AND',minH:69,maxH:88},
-{name:'Mini Marksman',cat:'Tir',req:[['Mid-Range',60,79,94,99],['Three-Point',60,79,94,99]],logic:'OR',minH:69,maxH:76},
-{name:'Post Fade Phenom',cat:'Tir',req:[['Mid-Range',60,71,84,91],['Post Control',55,74,84,93]],logic:'AND',minH:69,maxH:88},
-{name:'Quick Trigger',cat:'Tir',req:[['Mid-Range',80,88,95,99],['Three-Point',80,88,95,99]],logic:'OR',minH:69,maxH:88},
-{name:'Set and Fire',cat:'Tir',req:[['Three-Point',60,78,89,97]],logic:'AND',minH:69,maxH:88},
-{name:'Smooth Operator',cat:'Tir',req:[['Mid-Range',70,87,93,99]],logic:'AND',minH:69,maxH:88},
-{name:'Static Middy',cat:'Tir',req:[['Mid-Range',55,75,85,95]],logic:'AND',minH:69,maxH:88},
-{name:'Ankle Assassin',cat:'Création',req:[['Ball Handle',75,86,93,96]],logic:'AND',minH:69,maxH:82},
-{name:'Bail Out',cat:'Création',req:[['Pass Accuracy',85,93,96,99]],logic:'AND',minH:69,maxH:88},
-{name:'Break Starter',cat:'Création',req:[['Pass Accuracy',65,77,89,97]],logic:'AND',minH:69,maxH:88},
-{name:'Dimer',cat:'Création',req:[['Pass Accuracy',50,70,86,95]],logic:'AND',minH:69,maxH:88},
-{name:'Handles for Days',cat:'Création',req:[['Ball Handle',71,81,90,95]],logic:'AND',minH:69,maxH:84},
-{name:'Lightning Launch',cat:'Création',req:[['Speed With Ball',68,75,86,91]],logic:'AND',minH:69,maxH:83},
-{name:'Pace',cat:'Création',req:[['Speed With Ball',70,80,88,93]],logic:'AND',minH:69,maxH:82},
-{name:'Strong Handle',cat:'Création',req:[['Ball Handle',60,67,73,78],['Strength',75,82,89,95]],logic:'AND',minH:69,maxH:83},
-{name:'Unpluckable',cat:'Création',req:[['Post Control',65,86,96,null],['Ball Handle',65,80,92,97]],logic:'OR',minH:69,maxH:88},
-{name:'Versatile Visionary',cat:'Création',req:[['Pass Accuracy',65,80,90,99]],logic:'AND',minH:69,maxH:88},
-{name:'Aerial Wizard',cat:'Finition',req:[['Driving Dunk',60,70,80,94],['Standing Dunk',60,70,80,93]],logic:'OR',minH:69,maxH:88},
-{name:'Float Game',cat:'Finition',req:[['Close Shot',65,80,90,96],['Driving Layup',65,85,93,95]],logic:'OR',minH:69,maxH:88},
-{name:'Ghost Stepper',cat:'Finition',req:[['Close Shot',55,77,86,94],['Post Control',55,77,86,94]],logic:'OR',minH:69,maxH:88},
-{name:'Hook Specialist',cat:'Finition',req:[['Close Shot',60,75,87,94],['Post Control',55,65,80,90]],logic:'AND',minH:69,maxH:88},
-{name:'Layup Mixmaster',cat:'Finition',req:[['Driving Layup',70,83,90,99]],logic:'AND',minH:69,maxH:84},
-{name:'Paint Prodigy',cat:'Finition',req:[['Close Shot',60,85,90,96]],logic:'AND',minH:75,maxH:88},
-{name:'Physical Finisher',cat:'Finition',req:[['Driving Layup',60,80,90,96],['Strength',60,70,80,90]],logic:'AND',minH:69,maxH:88},
-{name:'Post Powerhouse',cat:'Finition',req:[['Post Control',60,75,85,95],['Strength',65,79,86,95]],logic:'AND',minH:77,maxH:88},
-{name:'Post Spin Catalyst',cat:'Finition',req:[['Post Control',65,83,91,99]],logic:'AND',minH:73,maxH:88},
-{name:'Posterizer',cat:'Finition',req:[['Driving Dunk',73,87,93,99],['Vertical',65,75,80,90]],logic:'AND',minH:69,maxH:88},
-{name:'Rise Up',cat:'Finition',req:[['Standing Dunk',60,81,90,99],['Vertical',55,62,66,70]],logic:'AND',minH:77,maxH:88},
-{name:'Ankle Braces',cat:'Défense',req:[['Perimeter Defense',60,86,93,95],['Agility',65,82,89,92]],logic:'AND',minH:69,maxH:81},
-{name:'Challenger',cat:'Défense',req:[['Perimeter Defense',71,82,92,98]],logic:'AND',minH:69,maxH:83},
-{name:'Glove',cat:'Défense',req:[['Steal',70,83,93,99]],logic:'AND',minH:69,maxH:84},
-{name:'High-Flying Denier',cat:'Défense',req:[['Block',68,78,88,92],['Vertical',60,74,80,83]],logic:'AND',minH:75,maxH:88},
-{name:'Immovable Enforcer',cat:'Défense',req:[['Perimeter Defense',62,72,84,91],['Strength',71,82,85,92]],logic:'AND',minH:69,maxH:88},
-{name:'Interceptor',cat:'Défense',req:[['Steal',60,77,90,97]],logic:'AND',minH:69,maxH:88},
-{name:'Off-Ball Pest',cat:'Défense',req:[['Interior Defense',60,76,85,93],['Perimeter Defense',55,68,80,89]],logic:'OR',minH:69,maxH:88},
-{name:'Paint Patroller',cat:'Défense',req:[['Interior Defense',60,71,77,84],['Block',70,84,93,99]],logic:'AND',minH:77,maxH:88},
-{name:'Pick Dodger',cat:'Défense',req:[['Perimeter Defense',73,83,90,97],['Agility',71,81,88,91]],logic:'AND',minH:69,maxH:82},
-{name:'Post Lockdown',cat:'Défense',req:[['Interior Defense',65,82,88,93],['Strength',65,74,80,88]],logic:'AND',minH:77,maxH:88},
-{name:'Seatbelt',cat:'Défense',req:[['Perimeter Defense',75,85,91,99],['Agility',70,77,80,86]],logic:'AND',minH:69,maxH:81},
-{name:'Wall Up',cat:'Défense',req:[['Interior Defense',80,85,95,99],['Strength',75,80,90,92]],logic:'AND',minH:77,maxH:88},
-{name:'Boxout Boss',cat:'Rebond',req:[['Defensive Rebound',65,75,90,98],['Strength',60,76,88,94]],logic:'AND',minH:75,maxH:88},
-{name:'Breaker',cat:'Rebond',req:[['Offensive Rebound',65,82,92,98],['Strength',70,79,90,96]],logic:'AND',minH:75,maxH:88},
-{name:'Crasher',cat:'Rebond',req:[['Offensive Rebound',60,80,93,99],['Vertical',60,65,67,70]],logic:'AND',minH:69,maxH:88},
-{name:'Possession Closer',cat:'Rebond',req:[['Defensive Rebound',67,87,95,99],['Vertical',60,65,67,70]],logic:'AND',minH:69,maxH:88},
-{name:'Sync Snatcher',cat:'Rebond',req:[['Offensive Rebound',55,70,82,90],['Defensive Rebound',55,70,82,90]],logic:'OR',minH:69,maxH:88},
-{name:'Brick Wall',cat:'Physique',req:[['Strength',75,83,95,99]],logic:'AND',minH:77,maxH:88},
-{name:'Bruiser',cat:'Physique',req:[['Strength',71,84,93,99]],logic:'AND',minH:69,maxH:88},
-{name:'Flash',cat:'Physique',req:[['Speed',70,82,87,95],['Agility',60,78,81,91]],logic:'AND',minH:69,maxH:88},
-{name:'Pogo Stick',cat:'Physique',req:[['Vertical',63,70,80,90]],logic:'AND',minH:69,maxH:88},
-{name:'Slippery Off-Ball',cat:'Physique',req:[['Speed',57,73,85,94],['Agility',57,65,77,90]],logic:'AND',minH:69,maxH:81},
-{name:'Work Horse',cat:'Physique',req:[['Agility',60,75,85,95],['Strength',60,75,85,95]],logic:'OR',minH:69,maxH:88}
-];
-
-const takeoverDefs=[['Sharpshooter','Three-Point',88],['Shot Creator','Mid-Range',88],['Slasher','Driving Dunk',88],['Playmaker','Pass Accuracy',88],['Ball Handler','Ball Handle',88],['Perimeter Lock','Perimeter Defense',88],['Pick Pocket','Steal',88],['Rim Protector','Block',88],['Glass Cleaner','Defensive Rebound',88],['Post Scorer','Post Control',88],['Two-Way','Perimeter Defense',80]];
-const COST_WEIGHT={
- 'Close Shot':1.00,'Driving Layup':1.05,'Driving Dunk':1.35,'Standing Dunk':1.15,'Post Control':1.05,
- 'Mid-Range':1.10,'Three-Point':1.35,'Free Throw':0.55,'Pass Accuracy':0.95,'Ball Handle':1.30,'Speed With Ball':1.20,
- 'Interior Defense':0.95,'Perimeter Defense':1.15,'Steal':1.10,'Block':1.10,'Offensive Rebound':0.80,'Defensive Rebound':0.90,
- 'Speed':1.15,'Agility':1.10,'Strength':0.95,'Vertical':1.00,'Stamina':0.55};
-const BADGE_THRESHOLDS=[60,70,80,90,95];
 const root=document.getElementById('attributeGroups');let inputs=[];
 const CATEGORY_UI={
  Finition:{label:'Finition',cls:'finish',icon:'◉',desc:'Terminer au cercle, layups, dunks et jeu au poste.'},
@@ -110,7 +46,7 @@ const referenceBuilds=[
  {name:'Shot-Creating Two-Way',pos:['PG','SG'],h:73,w:190,wing:76,vals:{'Driving Layup':88,'Mid-Range':92,'Three-Point':88,'Pass Accuracy':80,'Ball Handle':90,'Speed With Ball':88,'Perimeter Defense':85,'Steal':85,'Speed':90,'Agility':90,'Strength':60,'Vertical':75}}
 ];
 function categoryAverages(r){let out={};Object.entries(data).forEach(([g,arr])=>out[g]=Math.round(arr.reduce((sum,[n])=>sum+(r[n]||0),0)/arr.length));return out}
-function renderScouting(r,vals){
+function renderScouting(r,vals){if(!document.getElementById("strengths"))return; /* section absente de cette page */
  const pairs=Object.entries(vals).sort((a,b)=>b[1]-a[1]);
  document.getElementById('strengths').innerHTML=pairs.slice(0,3).map(([k,v])=>`<span>${k} <b>${v}</b></span>`).join('');
  document.getElementById('weaknesses').innerHTML=pairs.slice(-3).reverse().map(([k,v])=>`<span>${k} <b>${v}</b></span>`).join('');
@@ -125,7 +61,6 @@ document.getElementById('exportBuild').onclick=exportBuild;
 
 function simulatedCost(r){return Math.round(Object.entries(r).reduce((sum,[name,v])=>sum+Math.max(0,v-25)*(COST_WEIGHT[name]||1),0));}
 function updateBudget(r){const used=simulatedCost(r),budget=1000,pct=Math.min(100,used/budget*100);document.getElementById('budgetUsed').textContent=used;document.getElementById('points').textContent=used;document.getElementById('budgetBar').style.width=pct+'%';document.getElementById('budgetHint').textContent=`Budget indicatif : ${used} / ${budget} — modèle non officiel`;document.getElementById('budgetBox')?.classList.toggle('over',used>budget);inputs.forEach(x=>{const id=x.dataset.name.replace(/[^a-z0-9]/gi,'');document.querySelectorAll('#i'+id+' + .thresholds span').forEach(s=>s.classList.toggle('hit',+x.value>=+s.dataset.threshold))})}
-function nextUnlocks(r){return Object.entries(r).map(([k,v])=>({k,v,next:BADGE_THRESHOLDS.find(t=>t>v)})).filter(x=>x.next).sort((a,b)=>(a.next-a.v)-(b.next-b.v)).slice(0,5)}
 let attrBaseline={};
 function setAttributeBaseline(map){attrBaseline=map||{};updateAttributeDeltas()}
 function updateAttributeDeltas(){
@@ -152,11 +87,8 @@ function badgeTier(def,r){
  let level=0; for(let i=0;i<4;i++){if(okAt(i)) level=i+1;}
  return level?{tier:tiers[level-1],cls:['bronze','silver','gold','hof'][level-1],level}:{tier:'Non débloqué',cls:'none',level:0};
 }
-const BADGE_ART_IDS={
-'Aerial Wizard':1,'Ankle Assassin':2,'Ankle Braces':3,'Arc Cadence':4,'Bail Out':5,'Boxout Boss':6,'Break Starter':7,'Breaker':8,'Brick Wall':9,'Bruiser':10,'Challenger':11,'Crasher':12,'Deadeye':13,'Dimer':14,'Flash':15,'Float Game':16,'Ghost Stepper':17,'Glove':18,'Handles for Days':19,'High-Flying Denier':20,'Hook Specialist':21,'Immovable Enforcer':22,'Interceptor':23,'Layup Mixmaster':24,'Lightning Launch':25,'Limitless Range':26,'Mini Marksman':27,'Off-Ball Pest':28,'Pace':29,'Paint Patroller':30,'Paint Prodigy':31,'Physical Finisher':32,'Pick Dodger':33,'Pogo Stick':34,'Possession Closer':35,'Posterizer':36,'Post Fade Phenom':37,'Post Lockdown':38,'Post Powerhouse':39,'Post Spin Catalyst':40,'Quick Trigger':41,'Rise Up':42,'Seatbelt':43,'Set and Fire':44,'Slippery Off-Ball':45,'Smooth Operator':46,'Static Middy':47,'Strong Handle':48,'Sync Snatcher':49,'Unpluckable':50,'Versatile Visionary':51,'Wall Up':52,'Work Horse':53};
-function badgeArtUrl(name,tier){const id=BADGE_ART_IDS[name];if(!id)return '';const slug=name.toLowerCase().replace(/\s+/g,'-');const ts={bronze:'bronze',silver:'silver',gold:'gold',hof:'hof'}[tier]||'bronze';return `https://www.2kratings.com/wp-content/uploads/${String(id).padStart(2,'0')}-${slug}-${ts}.png`}
 function badgeIcon(cat){return ({Tir:'🎯',Création:'🪄',Finition:'🔥',Défense:'🛡️',Rebond:'🏀',Physique:'⚡'}[cat]||'🏅')}
-function renderBadges(r){
+function renderBadges(r){if(!document.getElementById("badgeList"))return; /* section absente de cette page */
  const filter=document.getElementById('badgeFilter').value,search=document.getElementById('badgeSearch').value.toLowerCase().trim();
  const source=getDataQuality?.('badges');
  const sourceEl=document.getElementById('badgeDataSource');
@@ -185,7 +117,7 @@ function renderBadges(r){
  document.getElementById('badgeUnlocked').textContent=unlocked+' accessibles'; document.getElementById('badgeTotal').textContent=badgeDefs.length;
 }
 
-function renderTakeovers(r){let list=document.getElementById('takeoverList'),scores=takeoverDefs.map(([name,attr,need])=>({name,attr,need,score:Math.min(100,Math.round((r[attr]||0)/need*100))})).sort((a,b)=>b.score-a.score);list.innerHTML=scores.map(x=>`<button class="takeover ${x.score>=100?'ready':''}" data-take="${x.name}"><span>${x.name}<small>${x.attr} requis : ${x.need}</small></span><b>${x.score}%</b></button>`).join('');document.getElementById('takeoverScore').textContent=scores[0].score+' / 100';list.querySelectorAll('.takeover').forEach(b=>b.onclick=()=>{list.querySelectorAll('.takeover').forEach(x=>x.classList.remove('selected'));b.classList.add('selected')})}
+function renderTakeovers(r){if(!document.getElementById("takeoverList"))return; /* section absente de cette page */let list=document.getElementById('takeoverList'),scores=takeoverDefs.map(([name,attr,need])=>({name,attr,need,score:Math.min(100,Math.round((r[attr]||0)/need*100))})).sort((a,b)=>b.score-a.score);list.innerHTML=scores.map(x=>`<button class="takeover ${x.score>=100?'ready':''}" data-take="${x.name}"><span>${x.name}<small>${x.attr} requis : ${x.need}</small></span><b>${x.score}%</b></button>`).join('');document.getElementById('takeoverScore').textContent=scores[0].score+' / 100';list.querySelectorAll('.takeover').forEach(b=>b.onclick=()=>{list.querySelectorAll('.takeover').forEach(x=>x.classList.remove('selected'));b.classList.add('selected')})}
 function buildBodySignature(){
  const p=[position.value,height.value,weight.value,wing.value].join('|');
  let h=0; for(let i=0;i<p.length;i++) h=((h<<5)-h+p.charCodeAt(i))|0;
@@ -195,7 +127,7 @@ function breakerStorageKey(attr){return 'nba2k27_cb_'+buildBodySignature()+'_'+a
 function tokenStorageKey(){return 'nba2k27_tokens_'+buildBodySignature();}
 function getBreaker(attr){return +(localStorage.getItem(breakerStorageKey(attr))||0)}
 function setBreaker(attr,value){localStorage.setItem(breakerStorageKey(attr),String(Math.max(0,Math.min(5,Math.round(value)))))}
-function renderBreakers(r){
+function renderBreakers(r){if(!document.getElementById("breakerList"))return; /* section absente de cette page */
  const list=document.getElementById('breakerList');
  list.innerHTML=inputs.map(x=>{
   const id=x.dataset.name.replace(/[^a-z0-9]/gi,''), used=+(getBreaker(x.dataset.name)||0), cap=+x.max;
@@ -214,250 +146,26 @@ function renderBreakers(r){
  const total=inputs.reduce((s,x)=>s+ +(getBreaker(x.dataset.name)||0),0);
  document.getElementById('breakerTotal').textContent=total;
 }
-function renderAnimations(){const r=ratings(),h=heightInches(),cat=document.getElementById('animCategory').value,status=document.getElementById('animStatus').value,search=document.getElementById('animSearch').value.toLowerCase().trim();let all=ANIMATIONS.filter(a=>(cat==='all'||a.category===cat)&&(!search||a.name.toLowerCase().includes(search)||a.category.toLowerCase().includes(search))),unlocked=0,list=document.getElementById('animationList');list.innerHTML='';all.forEach(a=>{const heightOK=h>=a.minH&&h<=a.maxH,fails=Object.entries(a.req).filter(([k,v])=>(r[k]??0)<v),ok=heightOK&&!fails.length;if(ok)unlocked++;if(status==='yes'&&!ok||status==='no'&&ok)return;const reqHtml=Object.entries(a.req).map(([k,v])=>`<span class="req ${r[k]>=v?'pass':'fail'}">${k}: ${r[k]??0}/${v}</span>`).join('');list.insertAdjacentHTML('beforeend',`<article class="anim-card ${ok?'ok':''}"><div class="anim-top"><div class="anim-name">${a.name}</div><span class="anim-badge">${ok?'✓ ACCESSIBLE':'🔒 BLOQUÉE'}</span></div><div class="anim-meta">${a.category} • ${heightText(a.minH)} – ${heightText(a.maxH)}</div><div class="reqs">${reqHtml||'<span class="req pass">Aucun attribut requis</span>'}</div>${!heightOK?`<div class="missing">Taille requise : ${heightText(a.minH)} à ${heightText(a.maxH)}.</div>`:''}${fails.length?`<div class="missing">Il manque : ${fails.map(([k,v])=>`${k} ${v-(r[k]??0)} pts`).join(' • ')}</div>`:''}<small>${ok?'Équipable avec ce build.':'Modifie le build pour débloquer cette animation.'}</small></article>`)});document.getElementById('animUnlocked').textContent=unlocked;document.getElementById('animTotal').textContent=ANIMATIONS.length}
+function renderAnimations(){if(!document.getElementById("animationList"))return; /* section absente de cette page */const r=ratings(),h=heightInches(),cat=document.getElementById('animCategory').value,status=document.getElementById('animStatus').value,search=document.getElementById('animSearch').value.toLowerCase().trim();let all=ANIMATIONS.filter(a=>(cat==='all'||a.category===cat)&&(!search||a.name.toLowerCase().includes(search)||a.category.toLowerCase().includes(search))),unlocked=0,list=document.getElementById('animationList');list.innerHTML='';all.forEach(a=>{const heightOK=h>=a.minH&&h<=a.maxH,fails=Object.entries(a.req).filter(([k,v])=>(r[k]??0)<v),ok=heightOK&&!fails.length;if(ok)unlocked++;if(status==='yes'&&!ok||status==='no'&&ok)return;const reqHtml=Object.entries(a.req).map(([k,v])=>`<span class="req ${r[k]>=v?'pass':'fail'}">${k}: ${r[k]??0}/${v}</span>`).join('');list.insertAdjacentHTML('beforeend',`<article class="anim-card ${ok?'ok':''}"><div class="anim-top"><div class="anim-name">${a.name}</div><span class="anim-badge">${ok?'✓ ACCESSIBLE':'🔒 BLOQUÉE'}</span></div><div class="anim-meta">${a.category} • ${heightText(a.minH)} – ${heightText(a.maxH)}</div><div class="reqs">${reqHtml||'<span class="req pass">Aucun attribut requis</span>'}</div>${!heightOK?`<div class="missing">Taille requise : ${heightText(a.minH)} à ${heightText(a.maxH)}.</div>`:''}${fails.length?`<div class="missing">Il manque : ${fails.map(([k,v])=>`${k} ${v-(r[k]??0)} pts`).join(' • ')}</div>`:''}<small>${ok?'Équipable avec ce build.':'Modifie le build pour débloquer cette animation.'}</small></article>`)});document.getElementById('animUnlocked').textContent=unlocked;document.getElementById('animTotal').textContent=ANIMATIONS.length}
 function handValue(){return document.getElementById('dominantHand')?.value||'Droite'}
 function serialize(){let obj={position:position.value,height:height.value,weight:weight.value,wing:wing.value,style:style.value,hand:handValue(),attrs:Object.fromEntries(inputs.map(x=>[x.dataset.name,x.value]))};return btoa(unescape(encodeURIComponent(JSON.stringify(obj))))}
 function apply(obj){position.value=obj.position||'SF';height.value=obj.height||80;weight.value=obj.weight||210;wing.value=obj.wing||84;style.value=obj.style||'Équilibré';const handEl=document.getElementById('dominantHand');if(handEl&&obj.hand)handEl.value=obj.hand;update();if(obj.attrs)inputs.forEach(x=>{if(obj.attrs[x.dataset.name])x.value=Math.min(+obj.attrs[x.dataset.name],+x.max)});update()}
 inputs.forEach(x=>x.addEventListener('input',update));['position','height','weight','wing','style'].forEach(id=>document.getElementById(id).addEventListener('input',update));['animCategory','animStatus'].forEach(id=>document.getElementById(id).addEventListener('change',renderAnimations));document.getElementById('animSearch').addEventListener('input',renderAnimations);['badgeFilter'].forEach(id=>document.getElementById(id).addEventListener('change',()=>renderBadges(ratings())));document.getElementById('badgeSearch').addEventListener('input',()=>renderBadges(ratings()));
-function optimizerProfile(style){
- const profiles={
-  'Shooter':{'Three-Point':1.35,'Mid-Range':1.05,'Free Throw':.45,'Speed':.65,'Agility':.7,'Ball Handle':.55,'Perimeter Defense':.55},
-  'Slasher':{'Driving Dunk':1.35,'Driving Layup':1.05,'Vertical':1.0,'Speed':.8,'Agility':.75,'Ball Handle':.45,'Strength':.55},
-  'Playmaker':{'Ball Handle':1.25,'Pass Accuracy':1.15,'Speed With Ball':1.15,'Speed':.8,'Agility':.8,'Three-Point':.55,'Perimeter Defense':.45},
-  'Lockdown':{'Perimeter Defense':1.3,'Steal':1.15,'Agility':1.0,'Strength':.9,'Block':.75,'Speed':.8,'Vertical':.6},
-  'Big':{'Interior Defense':1.1,'Block':1.15,'Defensive Rebound':1.3,'Offensive Rebound':1.15,'Strength':1.15,'Standing Dunk':.9,'Vertical':.75,'Post Control':.8},
-  'Équilibré':{'Three-Point':.8,'Driving Dunk':.8,'Ball Handle':.8,'Pass Accuracy':.8,'Perimeter Defense':.8,'Speed':.75,'Agility':.75,'Strength':.7,'Vertical':.7}
- };
- return profiles[style]||profiles['Équilibré'];
-}
-function badgeTargetScore(r, height){
- let score=0, unlocked=0;
- for(const d of badgeDefs){
-  if(height<d.minH||height>d.maxH) continue;
-  const st=badgeTier(d,r); if(st.level>0){unlocked++; score+=12+st.level*5;}
- }
- return {score,unlocked};
-}
-function optimizerScore(r,style,height){
- const weights=optimizerProfile(style); let score=0;
- for(const [k,w] of Object.entries(weights)) score+=(r[k]||0)*w;
- const b=badgeTargetScore(r,height); score+=b.score;
- const cats=categoryAverages(r); const avg=Object.values(cats).reduce((a,b)=>a+b,0)/Object.keys(cats).length;
- if(style==='Équilibré') score+=avg*2;
- return score;
-}
-function optimizeBuild(){
- const style=document.getElementById('style').value, caps=bodyCaps(), original=ratings(), height=heightInches();
- const target=optimizerProfile(style), names=inputs.map(x=>x.dataset.name);
- let base={...original};
- // Keep the current simulated investment roughly constant: the optimizer only redistributes points.
- const budget=simulatedCost(base);
- const protectedAttrs=new Set(Object.entries(target).filter(([,w])=>w>=1.0).map(([k])=>k));
- const candidates=[];
- for(let pass=0;pass<4;pass++){
-  let improved=true;
-  while(improved){
-   improved=false; let best=null;
-   // base ne change pas durant ce passage : un seul calcul, pas un par paire (up,down).
-   const baseScore=optimizerScore(base,style,height);
-   for(const up of names){
-    if(!(target[up]>0) || base[up]>=caps[up]) continue;
-    for(const down of names){
-     if(up===down || base[down]<=25) continue;
-     const trial={...base,[up]:base[up]+1,[down]:base[down]-1};
-     const cost=simulatedCost(trial);
-     if(cost>budget+1.2 || cost<budget-1.2) continue;
-     const delta=optimizerScore(trial,style,height)-baseScore;
-     if(delta>0.05 && (!best||delta>best.delta)) best={up,down,delta,trial};
-    }
-   }
-   if(best){base=best.trial;improved=true}
-  }
-  // Small targeted bump toward the next badge threshold when there is spare budget.
-  for(const attr of protectedAttrs){
-   if(base[attr]>=caps[attr]) continue;
-   let next=badgeDefs.flatMap(d=>d.req.filter(q=>q[0]===attr).map(q=>q[1])).filter(v=>v>base[attr]).sort((a,b)=>a-b)[0];
-   if(next && next-base[attr]<=3){const trial={...base,[attr]:Math.min(caps[attr],next)};if(simulatedCost(trial)<=budget+1.2)base=trial}
-  }
- }
- const before=badgeTargetScore(original,height),after=badgeTargetScore(base,height);
- const changed=names.filter(k=>base[k]!==original[k]).map(k=>({name:k,from:original[k],to:base[k],delta:base[k]-original[k]}));
- inputs.forEach(x=>x.value=Math.min(+x.max,Math.max(+x.min,base[x.dataset.name]??+x.value)));
- update();
- const top=changed.sort((a,b)=>Math.abs(b.delta)-Math.abs(a.delta)).slice(0,10);
- const content=`<div class="modal-kicker">OPTIMISEUR V20.4 • ${style.toUpperCase()}</div><h2>Optimisation terminée</h2><p class="sub">Le moteur a redistribué les points à coût simulé quasi constant. Les caps et coûts utilisés restent <strong>indicatifs</strong> tant que les tables internes complètes de 2K27 ne sont pas publiques.</p><div class="modal-stats"><div><b>${before.unlocked}</b><span>badges avant</span></div><div><b>${after.unlocked}</b><span>badges après</span></div><div><b>${simulatedCost(original)}</b><span>coût avant</span></div><div><b>${simulatedCost(base)}</b><span>coût après</span></div></div><h3>Principaux changements</h3><div class="modal-attrs">${top.length?top.map(x=>`<div><span>${x.name}</span><b>${x.from} → ${x.to}</b></div>`).join(''):'<div><span>Build déjà optimisé</span><b>Aucun changement</b></div>'}</div><div class="modal-actions"><button data-close-modal>Garder ce build</button><button class="secondary" data-close-modal>Fermer</button></div>`;
- const modal=document.getElementById('buildModal');document.getElementById('buildModalContent').innerHTML=content;modal.classList.add('open');modal.setAttribute('aria-hidden','false');
-}
-document.getElementById('optimize').onclick=optimizeBuild;
 
 document.getElementById('reset').onclick=()=>{localStorage.removeItem('nba2k27_build');location.reload()};document.getElementById('save').onclick=()=>{localStorage.setItem('nba2k27_build',serialize());alert('Build sauvegardé sur cet appareil.')};document.getElementById('load').onclick=()=>{let s=localStorage.getItem('nba2k27_build');if(!s)return alert('Aucun build sauvegardé.');apply(JSON.parse(decodeURIComponent(escape(atob(s)))))};document.getElementById('share').onclick=()=>{navigator.clipboard?.writeText(location.origin+location.pathname+'?build='+serialize()).then(()=>alert('Lien du build copié.')).catch(()=>alert('Copie automatique indisponible.'))};
 document.querySelectorAll('[data-close-modal]').forEach(el=>el.addEventListener('click',()=>{const m=document.getElementById('buildModal');m.classList.remove('open');m.setAttribute('aria-hidden','true')}));
 let params=new URLSearchParams(location.search);if(params.get('build')){try{apply(JSON.parse(decodeURIComponent(escape(atob(params.get('build'))))))}catch(e){update()}}else update();
 
-// V9 — Build Validator: explicit consistency checks without claiming undocumented 2K internals.
-function validateBuild(r,caps){
-  const errors=[]; const warnings=[];
-  const h=heightInches(), w=+document.getElementById('weight').value, wing=+document.getElementById('wing').value;
-  const wingEl=document.getElementById('wing'), wingSliderMax=+wingEl.max, wingSliderMin=+wingEl.min;
-  const minWing=Math.max(wingSliderMin,h+2), maxWing=Math.min(wingSliderMax,h+6);
-  if(wing<minWing||wing>maxWing) errors.push(`Envergure invalide pour ${heightText(h)} : ${heightText(minWing)} à ${heightText(maxWing)}.`);
-  inputs.forEach(x=>{const v=+x.value, cap=+(caps[x.dataset.name]??99); if(v>cap) errors.push(`${x.dataset.name} ${v} dépasse le cap calculé de ${cap}.`);});
-  const animFailures=[]; ANIMATIONS.forEach(a=>{const heightOK=h>=a.minH&&h<=a.maxH; const fails=Object.entries(a.req).filter(([k,v])=>(r[k]??0)<v); if(!heightOK||fails.length) animFailures.push(a)});
-  // Badge engine itself is the source of truth for the embedded badge table: no impossible tier is displayed.
-  // renderBadges() vient de parcourir les 53 badges pour le même r : on relit son
-  // total plutôt que de refaire la boucle badgeTier().
-  const badgeCount=unlockedBadgeCount();
-  const used=simulatedCost(r), budget=1000;
-  if(used>budget) warnings.push(`Le budget indicatif simulé est dépassé de ${used-budget}.`);
-  warnings.push('Le coût des attributs et les caps sont indicatifs tant que les tables internes complètes de 2K27 ne sont pas publiées.');
-  return {errors,warnings,animFailures,badgeCount,used,budget};
-}
-function renderValidation(r,caps){
-  const v=validateBuild(r,caps), status=document.getElementById('validationStatus'), head=document.getElementById('validationHeadline'), list=document.getElementById('validationErrors');
-  const valid=v.errors.length===0; const hasWarn=v.warnings.length>0;
-  status.className='validation-status '+(valid?'valid': 'invalid'); status.textContent=valid?'BUILD COHÉRENT':'BUILD À CORRIGER';
-  head.className='validation-headline '+(valid?'valid':'invalid'); head.textContent=valid?'🟢 Build cohérent avec les règles intégrées':'🔴 Build non valide selon les règles intégrées';
-  document.getElementById('validationText').textContent=valid?'Aucune contradiction détectée entre le gabarit, les caps calculés et les données de badges/animations embarquées.':'Le site a détecté au moins une contradiction. Corrige les points ci-dessous avant de considérer le build comme reproductible.';
-  document.getElementById('checkBody').textContent=(v.errors.some(e=>e.includes('Envergure'))?'✕':'✓');
-  document.getElementById('checkCaps').textContent=(v.errors.some(e=>e.includes('dépasse le cap'))?'✕':'✓');
-  document.getElementById('checkBadges').textContent=`✓ ${v.badgeCount} accessibles`;
-  document.getElementById('checkAnimations').textContent=`✓ ${ANIMATIONS.length-v.animFailures.length}/${ANIMATIONS.length}`;
-  const budgetEl=document.getElementById('checkBudget');budgetEl.textContent=`${v.used>v.budget?'✕':'✓'} ${v.used}/${v.budget}`;
-  ['checkBody','checkCaps','checkBadges','checkAnimations','checkBudget'].forEach(id=>{const el=document.getElementById(id);el.className=(el.textContent.includes('✕')?'fail':(el.textContent.includes('✓')?'pass':'warn'))});
-  let html=v.errors.map(e=>`<div class="validation-error">❌ ${e}</div>`).join(''); if(!html) html='<div class="validation-ok">✅ Aucun conflit détecté avec les règles actuellement intégrées.</div>'; list.innerHTML=html;
-  if(v.warnings.length) list.insertAdjacentHTML('beforeend',`<div class="validation-error" style="background:rgba(255,190,50,.07);border-color:rgba(255,190,50,.18)">⚠️ ${v.warnings[0]}</div>`);
-}
 
 
-/* V10 — Build Hub / Compare / Badge Tokens / Synergy / Takeover Loadout */
-const V10_KEY='nba2k27_build_hub_v19';
 const DISCIPLINES=['Finition','Tir','Création','Défense','Rebond','Physique'];
-// Exemples affichés quand le hub est vide, explicitement étiquetés « Démo ».
-// Leurs compteurs restent à zéro : afficher 1200 vues et 94 likes identiques sur
-// les trois serait de la fausse preuve sociale, exactement ce que ce site
-// reproche aux autres builders.
-const demoCommunity=[
- {id:'demo-1',name:'6\'8 Two-Way Shot Creator',position:'SG',height:80,weight:210,wing:84,score:89,style:'Équilibré',top:[['Three-Point',92],['Ball Handle',89],['Perimeter Defense',88]],badges:18,source:'Démo locale',validated:false,capBreakers:5,views:0,likes:0,rating:0},
- {id:'demo-2',name:'6\'7 Lockdown Creator',position:'SF',height:79,weight:205,wing:85,score:91,style:'Lockdown',top:[['Perimeter Defense',94],['Steal',91],['Three-Point',86]],badges:21,source:'Démo locale',validated:false,capBreakers:5,views:0,likes:0,rating:0},
- {id:'demo-3',name:'7\'0 Inside-Out Big',position:'C',height:84,weight:245,wing:86,score:88,style:'Big',top:[['Block',93],['Defensive Rebound',92],['Three-Point',82]],badges:17,source:'Démo locale',validated:false,capBreakers:5,views:0,likes:0,rating:0}
-];
-function readHub(){try{return JSON.parse(localStorage.getItem(V10_KEY)||'[]')}catch(e){return []}}
-function writeHub(v){localStorage.setItem(V10_KEY,JSON.stringify(v))}
 function unlockedBadgeCount(){const el=document.getElementById('badgeUnlocked');if(!el)return 0;const m=String(el.textContent).match(/\d+/);return m?+m[0]:0;}
 function unlockedAnimationCount(){const el=document.getElementById('animUnlocked');return el?Math.max(0,+el.textContent||0):0;}
-function currentBuildObject(){
- const r=ratings();
- const id='b-'+Date.now();
- const caps=bodyCaps();
- const validation=validateBuild(r,caps);
- return {
-   id,name:document.getElementById('buildname').textContent,position:position.value,
-   height:+height.value,weight:+weight.value,wing:+wing.value,
-   score:+document.getElementById('score').textContent,style:style.value,
-   attributes:r,badges:unlockedBadgeCount(),
-   animations:unlockedAnimationCount(),
-   created:Date.now(),views:0,likes:0,rating:0,local:true,
-   validated:false,validation:{ok:validation.errors.length===0,errors:validation.errors},capBreakers:breakerTotalValue()
- };
-}
-function heightLabel(h){return heightText(+h)}
-function hubEmptyMessage(hub){
- const tab=hub?hub.tab():null;
- if(tab==='mine')return 'Aucun build sauvegardé ou publié depuis cet appareil pour l’instant.';
- const filtre=(document.getElementById('communitySearch')?.value||'').trim()
-   ||(document.getElementById('communityPos')?.value||'all')!=='all'
-   ||(document.getElementById('communityStyle')?.value||'all')!=='all'
-   ||document.getElementById('communityValidated')?.checked
-   ||document.getElementById('communityCapBreakers')?.checked;
- return filtre?'Aucun build ne correspond à ces filtres.':'Le hub est encore vide. Publie ton build pour ouvrir le bal.';
-}
-function renderCommunity(){
- const q=(document.getElementById('communitySearch')?.value||'').toLowerCase().trim();
- const pos=document.getElementById('communityPos')?.value||'all';
- const sty=document.getElementById('communityStyle')?.value||'all';
- const validatedOnly=!!document.getElementById('communityValidated')?.checked;
- const cbOnly=!!document.getElementById('communityCapBreakers')?.checked;
- let items=[...readHub(),...demoCommunity].filter(x=>{
-   const text=(x.name+' '+(x.style||'')+' '+x.position).toLowerCase();
-   return (!q||text.includes(q))
-     && (pos==='all'||x.position===pos)
-     && (sty==='all'||x.style===sty)
-     && (!validatedOnly||x.validated)
-     && (!cbOnly||+(x.capBreakers||0)>0);
- });
- // Le tri (et le filtre « Mes builds ») vient des onglets du hub, dans community.js.
- // Repli sur le tri par note si ce fichier n'est pas encore chargé.
- const hub=window.NBABL_HUB;
- items = hub ? hub.sort(hub.tab(), items) : items.sort((a,b)=>(b.score||0)-(a.score||0));
- const list=document.getElementById('communityList'); if(!list)return;
- list.innerHTML=items.map(x=>{
-   const top=(x.top||Object.entries(x.attributes||{}).sort((a,b)=>b[1]-a[1]).slice(0,3));
-   const status=x.validated?'✓ Validé':'⚠ À vérifier';
-   // Seuls les builds réellement en base ont une fiche publique : ne pas
-   // proposer /b/<id> pour une démo ou un build resté local (404 assuré).
-   const onServer=x.source==='Serveur'||/^build_/.test(x.id||'');
-   const quality=window.NBABL_HUB?.quality?.(x);
-   const isDemo=x.source==='Démo locale';
-   return `<article class="build-card ${x.validated?'is-validated':''}">
-     <div class="build-card-top"><div class="build-avatar">${x.position}</div><div><b>${escapeHTML(x.name)}</b>${isDemo?'<span class="build-demo-tag">Démo</span>':''}${quality?`<span class="hub-quality ${quality.cls}">${escapeHTML(quality.t)}</span>`:''}<small>${heightLabel(x.height)} • ${x.weight} lbs • ${heightLabel(x.wing)} ENVG • ${escapeHTML(x.style||'—')}</small></div><strong>${x.score||0}</strong></div>
-     <div class="build-status-line"><span class="${x.validated?'ok':'warn'}">${status}</span><span>⭐ ${(x.rating||0).toFixed(1)}</span><span>👁 ${(x.views||0)}</span><span>♥ ${(x.likes||0)}</span></div>
-     <div class="build-top-attrs">${top.map(([k,v])=>`<span>${escapeHTML(k)}<b>${v}</b></span>`).join('')}</div>
-     <div class="build-card-foot"><span>🏆 ${x.badges||0} badges</span><span>🎯 ${x.animations||0} animations</span><span>🧱 ${x.capBreakers||0} CB</span><button data-open-build="${x.id}">Voir</button><button data-like-build="${x.id}">♥</button><button data-compare-build="${x.id}">Comparer</button>${onServer?`<a class="build-card-link" href="/b/${encodeURIComponent(x.id)}">Fiche publique</a>`:''}</div>
-   </article>`;
- }).join('')||`<div class="empty">${hubEmptyMessage(hub)}</div>`;
- list.querySelectorAll('[data-open-build]').forEach(btn=>btn.onclick=()=>openBuildModal(btn.dataset.openBuild));
- list.querySelectorAll('[data-compare-build]').forEach(btn=>btn.onclick=()=>addCompareById(btn.dataset.compareBuild));
- list.querySelectorAll('[data-like-build]').forEach(btn=>btn.onclick=()=>likeBuild(btn.dataset.likeBuild));
-}
 
 function escapeHTML(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function breakerTotalValue(){return inputs.reduce((s,x)=>s+ +(getBreaker(x.dataset.name)||0),0)}
-function likeBuild(id){
- const all=readHub(); const idx=all.findIndex(x=>x.id===id);
- if(idx>=0){all[idx].likes=(all[idx].likes||0)+1;writeHub(all);renderCommunity();return}
- const d=demoCommunity.find(x=>x.id===id); if(d){d.likes=(d.likes||0)+1;renderCommunity()}
-}
-function openBuildModal(id){
- const x=hubById(id); if(!x)return;
- if(!x.views)x.views=0; x.views++;
- const local=readHub(), idx=local.findIndex(b=>b.id===id);
- if(idx>=0){local[idx].views=x.views;writeHub(local)}
- const attrs=x.attributes||{};
- const top=Object.entries(attrs).sort((a,b)=>b[1]-a[1]).slice(0,6);
- const body=`<div class="modal-kicker">${x.validated?'✓ BUILD VALIDÉ':'⚠ BUILD À VÉRIFIER'}</div>
-   <h2>${escapeHTML(x.name)}</h2><p class="sub">${x.position} • ${heightLabel(x.height)} • ${x.weight} lbs • ${heightLabel(x.wing)} envergure • ${escapeHTML(x.style||'—')}</p>
-   <div class="modal-stats"><div><b>${x.score||0}</b><span>Score</span></div><div><b>${x.badges||0}</b><span>Badges</span></div><div><b>${x.animations||0}</b><span>Animations</span></div><div><b>${x.capBreakers||0}</b><span>CB</span></div></div>
-   <h3>Top attributs</h3><div class="modal-attrs">${top.map(([k,v])=>`<div><span>${escapeHTML(k)}</span><b>${v}</b></div>`).join('')}</div>
-   <div class="modal-actions"><button id="modalLoad">Charger ce build</button><button id="modalCompare" class="secondary">Comparer</button><button id="modalShare" class="secondary">Copier le lien</button></div>`;
- document.getElementById('buildModalContent').innerHTML=body;
- const modal=document.getElementById('buildModal');modal.classList.add('open');modal.setAttribute('aria-hidden','false');
- document.getElementById('modalLoad').onclick=()=>{loadHubBuild(id);closeBuildModal()};
- document.getElementById('modalCompare').onclick=()=>{addCompareById(id);closeBuildModal();document.getElementById('compare').scrollIntoView({behavior:'smooth'})};
- document.getElementById('modalShare').onclick=()=>shareBuildObject(x);
-}
-function closeBuildModal(){const m=document.getElementById('buildModal');m.classList.remove('open');m.setAttribute('aria-hidden','true')}
-function shareBuildObject(x){
- const payload={position:x.position,height:x.height,weight:x.weight,wing:x.wing,style:x.style,attrs:x.attributes};
- const url=location.origin+location.pathname+'?build='+btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
- navigator.clipboard?.writeText(url).then(()=>alert('Lien du build copié.')).catch(()=>prompt('Copie ce lien :',url));
-}
 
-function hubById(id){return [...readHub(),...demoCommunity].find(x=>x.id===id)}
-function loadHubBuild(id){const x=hubById(id);if(!x)return;apply({position:x.position,height:x.height,weight:x.weight,wing:x.wing,style:x.style,attrs:x.attributes});location.hash='builder';window.scrollTo({top:document.getElementById('builder').offsetTop-80,behavior:'smooth'})}
-function addCurrentToHub(){const x=currentBuildObject();const arr=readHub();arr.unshift(x);writeHub(arr.slice(0,30));renderCommunity();alert('Build ajouté à ta bibliothèque locale.')}
-
-let compareBuilds=[];
-function addCompareById(id){const x=hubById(id);if(!x)return;if(compareBuilds.some(b=>b.id===x.id))return;if(compareBuilds.length>=3){alert('Maximum 3 builds.');return}compareBuilds.push(x);renderCompare()}
-function renderCompare(){
- const slots=document.getElementById('compareSlots');if(!slots)return;
- slots.innerHTML=[0,1,2].map(i=>{const x=compareBuilds[i];return x?`<div class="compare-slot filled"><b>${x.name}</b><small>${x.position} • ${heightLabel(x.height)} • ${x.score}/100</small><button data-remove-compare="${x.id}">×</button></div>`:`<div class="compare-slot"><span>Emplacement ${i+1}</span><small>Ajoute un build depuis le Build Hub</small></div>`}).join('');
- slots.querySelectorAll('[data-remove-compare]').forEach(b=>b.onclick=()=>{compareBuilds=compareBuilds.filter(x=>x.id!==b.dataset.removeCompare);renderCompare()});
- const wrap=document.getElementById('compareTable'); if(compareBuilds.length<2){wrap.innerHTML='<div class="empty">Sélectionne au moins 2 builds pour lancer la comparaison.</div>';return}
- const keys=['Close Shot','Driving Layup','Driving Dunk','Three-Point','Mid-Range','Pass Accuracy','Ball Handle','Speed With Ball','Perimeter Defense','Steal','Block','Defensive Rebound','Speed','Agility','Strength','Vertical'];
- wrap.innerHTML=`<table class="compare-table"><thead><tr><th>Attribut</th>${compareBuilds.map(x=>`<th>${x.name}<small>${x.position} • ${heightLabel(x.height)}</small></th>`).join('')}</tr></thead><tbody>${keys.map(k=>`<tr><td>${k}</td>${compareBuilds.map(x=>`<td>${x.attributes?.[k]??'—'}</td>`).join('')}</tr>`).join('')}<tr class="compare-total"><td>Score</td>${compareBuilds.map(x=>`<td>${x.score}</td>`).join('')}</tr></tbody></table>`;
-}
-
-function renderProDashboard(){
+function renderProDashboard(){if(!document.getElementById("proQualityScore"))return; /* section absente de cette page */
  const caps=bodyCaps(), r=ratings(), v=validateBuild(r,caps);
  const badgeCount=+document.getElementById('badgeTotal').textContent||0;
  const animCount=+document.getElementById('animTotal').textContent||0;
@@ -537,22 +245,7 @@ function renderTakeoverLoadout(){
 }
 function printBuildCard(){window.print()}
 document.getElementById('printCard')?.addEventListener('click',printBuildCard);
-document.getElementById('addCurrentBuild')?.addEventListener('click',addCurrentToHub);
-document.getElementById('communitySearch')?.addEventListener('input',renderCommunity);document.getElementById('communityPos')?.addEventListener('change',renderCommunity);
-document.getElementById('clearCompare')?.addEventListener('click',()=>{compareBuilds=[];renderCompare()});
 const oldUpdate=update; update=function(){oldUpdate();renderSynergy();renderTakeoverLoadout()};
-document.getElementById('communityStyle')?.addEventListener('change',renderCommunity);
-document.getElementById('communityValidated')?.addEventListener('change',renderCommunity);
-document.getElementById('communityCapBreakers')?.addEventListener('change',renderCommunity);
-document.getElementById('clearCommunityFilters')?.addEventListener('click',()=>{
- document.getElementById('communitySearch').value='';
- document.getElementById('communityPos').value='all';
- document.getElementById('communityStyle').value='all';
- document.getElementById('communityValidated').checked=false;
- document.getElementById('communityCapBreakers').checked=false;
- renderCommunity();
-});
-document.querySelectorAll('[data-close-modal]').forEach(x=>x.addEventListener('click',closeBuildModal));
 document.getElementById('cbStage')?.addEventListener('change',renderCBProgression);
 document.getElementById('cbAutoPlan')?.addEventListener('click',autoPlanCB);
 document.getElementById('cbClearPlan')?.addEventListener('click',clearCBPlan);
@@ -572,7 +265,6 @@ update=function(){
  if(q){try{apply(JSON.parse(decodeURIComponent(escape(atob(q)))))}catch(e){}}
 })();
 
-renderCommunity();renderCompare();renderTokens();renderProDashboard();renderCBProgression();
 
 // V20.5 data bridge for Build DNA
 window.badgeDefs=badgeDefs; window.takeoverDefs=takeoverDefs; window.ANIMATIONS=ANIMATIONS;
@@ -589,4 +281,3 @@ window.heightInches=heightInches;
 window.setAttributeBaseline=setAttributeBaseline;
 window.appUpdate=function(){update()};
 // Les onglets du hub (community.js) redemandent un rendu de la liste.
-window.renderCommunity=renderCommunity;

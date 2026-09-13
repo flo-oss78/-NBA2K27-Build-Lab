@@ -10,7 +10,8 @@ const SHELL_CACHE='nbabl-shell-'+VERSION;
 const RUNTIME_CACHE='nbabl-runtime-'+VERSION;
 
 const SHELL=[
-  './','./index.html','./theme.css','./site-config.js','./app.js','./animations.js',
+  './','./index.html','./theme.css','./site-config.js','./builder-data.js',
+  './validator.js','./app.js','./optimizer.js','./hub.js','./animations.js',
   './dna-engine.js','./data-registry.js','./data-validation.js','./players-core.js',
   './v15-intelligence.js','./server-client.js','./style-presets.js','./ui.js',
   './blueprints.js','./progression.js','./qr.js','./share.js','./assist.js',
