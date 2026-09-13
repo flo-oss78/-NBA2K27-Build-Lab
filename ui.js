@@ -5,7 +5,8 @@
 (function(){
   'use strict';
 
-  var SECTIONS=['blueprints','community','builder','badges','animations','compare','validator'];
+  var SECTIONS=['blueprints','community','builder','build-dna','badges','animations',
+                'buildSheet','loadouts','compare','validator'];
 
   /* ---- 1. Surlignage de l'onglet actif pendant le défilement ---- */
   function initNavHighlight(){

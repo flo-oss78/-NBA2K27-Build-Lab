@@ -332,10 +332,14 @@ function renderValidation(r,caps){
 /* V10 — Build Hub / Compare / Badge Tokens / Synergy / Takeover Loadout */
 const V10_KEY='nba2k27_build_hub_v19';
 const DISCIPLINES=['Finition','Tir','Création','Défense','Rebond','Physique'];
+// Exemples affichés quand le hub est vide, explicitement étiquetés « Démo ».
+// Leurs compteurs restent à zéro : afficher 1200 vues et 94 likes identiques sur
+// les trois serait de la fausse preuve sociale, exactement ce que ce site
+// reproche aux autres builders.
 const demoCommunity=[
- {id:'demo-1',name:'6\'8 Two-Way Shot Creator',position:'SG',height:80,weight:210,wing:84,score:89,style:'Équilibré',top:[['Three-Point',92],['Ball Handle',89],['Perimeter Defense',88]],badges:18,source:'Démo locale',validated:false,capBreakers:5,views:1200,likes:94,rating:4.8},
- {id:'demo-2',name:'6\'7 Lockdown Creator',position:'SF',height:79,weight:205,wing:85,score:91,style:'Lockdown',top:[['Perimeter Defense',94],['Steal',91],['Three-Point',86]],badges:21,source:'Démo locale',validated:false,capBreakers:5,views:1200,likes:94,rating:4.8},
- {id:'demo-3',name:'7\'0 Inside-Out Big',position:'C',height:84,weight:245,wing:86,score:88,style:'Big',top:[['Block',93],['Defensive Rebound',92],['Three-Point',82]],badges:17,source:'Démo locale',validated:false,capBreakers:5,views:1200,likes:94,rating:4.8}
+ {id:'demo-1',name:'6\'8 Two-Way Shot Creator',position:'SG',height:80,weight:210,wing:84,score:89,style:'Équilibré',top:[['Three-Point',92],['Ball Handle',89],['Perimeter Defense',88]],badges:18,source:'Démo locale',validated:false,capBreakers:5,views:0,likes:0,rating:0},
+ {id:'demo-2',name:'6\'7 Lockdown Creator',position:'SF',height:79,weight:205,wing:85,score:91,style:'Lockdown',top:[['Perimeter Defense',94],['Steal',91],['Three-Point',86]],badges:21,source:'Démo locale',validated:false,capBreakers:5,views:0,likes:0,rating:0},
+ {id:'demo-3',name:'7\'0 Inside-Out Big',position:'C',height:84,weight:245,wing:86,score:88,style:'Big',top:[['Block',93],['Defensive Rebound',92],['Three-Point',82]],badges:17,source:'Démo locale',validated:false,capBreakers:5,views:0,likes:0,rating:0}
 ];
 function readHub(){try{return JSON.parse(localStorage.getItem(V10_KEY)||'[]')}catch(e){return []}}
 function writeHub(v){localStorage.setItem(V10_KEY,JSON.stringify(v))}
@@ -357,10 +361,19 @@ function currentBuildObject(){
  };
 }
 function heightLabel(h){return heightText(+h)}
+function hubEmptyMessage(hub){
+ const tab=hub?hub.tab():null;
+ if(tab==='mine')return 'Aucun build sauvegardé ou publié depuis cet appareil pour l’instant.';
+ const filtre=(document.getElementById('communitySearch')?.value||'').trim()
+   ||(document.getElementById('communityPos')?.value||'all')!=='all'
+   ||(document.getElementById('communityStyle')?.value||'all')!=='all'
+   ||document.getElementById('communityValidated')?.checked
+   ||document.getElementById('communityCapBreakers')?.checked;
+ return filtre?'Aucun build ne correspond à ces filtres.':'Le hub est encore vide. Publie ton build pour ouvrir le bal.';
+}
 function renderCommunity(){
  const q=(document.getElementById('communitySearch')?.value||'').toLowerCase().trim();
  const pos=document.getElementById('communityPos')?.value||'all';
- const sort=document.getElementById('communitySort')?.value||'score';
  const sty=document.getElementById('communityStyle')?.value||'all';
  const validatedOnly=!!document.getElementById('communityValidated')?.checked;
  const cbOnly=!!document.getElementById('communityCapBreakers')?.checked;
@@ -372,24 +385,26 @@ function renderCommunity(){
      && (!validatedOnly||x.validated)
      && (!cbOnly||+(x.capBreakers||0)>0);
  });
- items.sort((a,b)=>{
-   if(sort==='new') return (b.created||0)-(a.created||0);
-   if(sort==='height') return b.height-a.height;
-   if(sort==='views') return (b.views||0)-(a.views||0);
-   if(sort==='likes') return (b.likes||0)-(a.likes||0);
-   return (b.score||0)-(a.score||0);
- });
+ // Le tri (et le filtre « Mes builds ») vient des onglets du hub, dans community.js.
+ // Repli sur le tri par note si ce fichier n'est pas encore chargé.
+ const hub=window.NBABL_HUB;
+ items = hub ? hub.sort(hub.tab(), items) : items.sort((a,b)=>(b.score||0)-(a.score||0));
  const list=document.getElementById('communityList'); if(!list)return;
  list.innerHTML=items.map(x=>{
    const top=(x.top||Object.entries(x.attributes||{}).sort((a,b)=>b[1]-a[1]).slice(0,3));
    const status=x.validated?'✓ Validé':'⚠ À vérifier';
+   // Seuls les builds réellement en base ont une fiche publique : ne pas
+   // proposer /b/<id> pour une démo ou un build resté local (404 assuré).
+   const onServer=x.source==='Serveur'||/^build_/.test(x.id||'');
+   const quality=window.NBABL_HUB?.quality?.(x);
+   const isDemo=x.source==='Démo locale';
    return `<article class="build-card ${x.validated?'is-validated':''}">
-     <div class="build-card-top"><div class="build-avatar">${x.position}</div><div><b>${escapeHTML(x.name)}</b><small>${heightLabel(x.height)} • ${x.weight} lbs • ${heightLabel(x.wing)} ENVG • ${escapeHTML(x.style||'—')}</small></div><strong>${x.score||0}</strong></div>
+     <div class="build-card-top"><div class="build-avatar">${x.position}</div><div><b>${escapeHTML(x.name)}</b>${isDemo?'<span class="build-demo-tag">Démo</span>':''}${quality?`<span class="hub-quality ${quality.cls}">${escapeHTML(quality.t)}</span>`:''}<small>${heightLabel(x.height)} • ${x.weight} lbs • ${heightLabel(x.wing)} ENVG • ${escapeHTML(x.style||'—')}</small></div><strong>${x.score||0}</strong></div>
      <div class="build-status-line"><span class="${x.validated?'ok':'warn'}">${status}</span><span>⭐ ${(x.rating||0).toFixed(1)}</span><span>👁 ${(x.views||0)}</span><span>♥ ${(x.likes||0)}</span></div>
      <div class="build-top-attrs">${top.map(([k,v])=>`<span>${escapeHTML(k)}<b>${v}</b></span>`).join('')}</div>
-     <div class="build-card-foot"><span>🏆 ${x.badges||0} badges</span><span>🎯 ${x.animations||0} animations</span><span>🧱 ${x.capBreakers||0} CB</span><button data-open-build="${x.id}">Voir</button><button data-like-build="${x.id}">♥</button><button data-compare-build="${x.id}">Comparer</button></div>
+     <div class="build-card-foot"><span>🏆 ${x.badges||0} badges</span><span>🎯 ${x.animations||0} animations</span><span>🧱 ${x.capBreakers||0} CB</span><button data-open-build="${x.id}">Voir</button><button data-like-build="${x.id}">♥</button><button data-compare-build="${x.id}">Comparer</button>${onServer?`<a class="build-card-link" href="/b/${encodeURIComponent(x.id)}">Fiche publique</a>`:''}</div>
    </article>`;
- }).join('')||'<div class="empty">Aucun build trouvé avec ces filtres.</div>';
+ }).join('')||`<div class="empty">${hubEmptyMessage(hub)}</div>`;
  list.querySelectorAll('[data-open-build]').forEach(btn=>btn.onclick=()=>openBuildModal(btn.dataset.openBuild));
  list.querySelectorAll('[data-compare-build]').forEach(btn=>btn.onclick=()=>addCompareById(btn.dataset.compareBuild));
  list.querySelectorAll('[data-like-build]').forEach(btn=>btn.onclick=()=>likeBuild(btn.dataset.likeBuild));
@@ -523,7 +538,7 @@ function renderTakeoverLoadout(){
 function printBuildCard(){window.print()}
 document.getElementById('printCard')?.addEventListener('click',printBuildCard);
 document.getElementById('addCurrentBuild')?.addEventListener('click',addCurrentToHub);
-document.getElementById('communitySearch')?.addEventListener('input',renderCommunity);document.getElementById('communityPos')?.addEventListener('change',renderCommunity);document.getElementById('communitySort')?.addEventListener('change',renderCommunity);
+document.getElementById('communitySearch')?.addEventListener('input',renderCommunity);document.getElementById('communityPos')?.addEventListener('change',renderCommunity);
 document.getElementById('clearCompare')?.addEventListener('click',()=>{compareBuilds=[];renderCompare()});
 const oldUpdate=update; update=function(){oldUpdate();renderSynergy();renderTakeoverLoadout()};
 document.getElementById('communityStyle')?.addEventListener('change',renderCommunity);
@@ -532,7 +547,6 @@ document.getElementById('communityCapBreakers')?.addEventListener('change',rende
 document.getElementById('clearCommunityFilters')?.addEventListener('click',()=>{
  document.getElementById('communitySearch').value='';
  document.getElementById('communityPos').value='all';
- document.getElementById('communitySort').value='score';
  document.getElementById('communityStyle').value='all';
  document.getElementById('communityValidated').checked=false;
  document.getElementById('communityCapBreakers').checked=false;
@@ -574,3 +588,5 @@ window.NBABL_BASE_ATTRIBUTES=(function(){var o={};Object.keys(data).forEach(func
 window.heightInches=heightInches;
 window.setAttributeBaseline=setAttributeBaseline;
 window.appUpdate=function(){update()};
+// Les onglets du hub (community.js) redemandent un rendu de la liste.
+window.renderCommunity=renderCommunity;

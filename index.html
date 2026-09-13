@@ -37,8 +37,11 @@
     <a href="#community">Builds</a>
     <a class="active" href="#builder" data-builder-route>Builder</a>
     <a href="#blueprints">Blueprints</a>
+    <a href="#build-dna">Build DNA</a>
     <a href="#badges">Badges</a>
     <a href="#animations">Animations</a>
+    <a href="#buildSheet">Fiche</a>
+    <a href="#loadouts">Progression</a>
     <a href="#compare">Comparer</a>
     <a href="#validator">Validateur</a>
   </nav>
@@ -337,7 +340,6 @@
   <div class="hub-tools">
     <input id="communitySearch" aria-label="Rechercher un build" placeholder="Rechercher un build, un joueur ou un style…">
     <select id="communityPos" aria-label="Filtrer par poste"><option value="all">Tous les postes</option><option>PG</option><option>SG</option><option>SF</option><option>PF</option><option>C</option></select>
-    <select id="communitySort" aria-label="Trier les builds"><option value="score">Mieux notés</option><option value="new">Récents</option><option value="views">Plus vus</option><option value="likes">Plus aimés</option><option value="height">Taille</option></select>
     <button id="addCurrentBuild" type="button">Publier mon build</button>
   </div>
   <div class="advanced-community-filters">
@@ -352,10 +354,7 @@
     <div id="hubTabs" class="hub-tabs" role="tablist" aria-label="Tri des builds"></div>
     <p id="hubTabHint" class="hub-tab-hint"></p>
   </div>
-  <div id="hubTabbedList" class="hub-tabbed-list"></div>
-  <details class="hub-legacy"><summary>Liste complète et filtres avancés</summary>
   <div id="communityList" class="community-list"></div>
-  </details>
   <p class="hub-note">Les builds publiés sur le serveur sont visibles par toute la communauté. Si le serveur n'est pas encore configuré, le site bascule automatiquement en mode local.</p>
 </section>
 

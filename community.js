@@ -183,11 +183,15 @@
   }
 
   /* ================= 4. Onglets du hub ================= */
+  /* Les onglets ont remplacé le menu déroulant « Trier les builds » : les deux
+     faisaient le même travail, et le menu pilotait une liste repliée que
+     personne n'ouvrait. « Mieux notés » vient de ce menu supprimé. */
   var TABS=[
     {id:'trending',n:'Tendances',d:'Ce qui bouge en ce moment'},
     {id:'latest',  n:'Récents',  d:'Les derniers publiés'},
+    {id:'score',   n:'Mieux notés',d:'Les meilleures notes de build'},
     {id:'top',     n:'Top',      d:'Les plus aimés et les plus vus'},
-    {id:'mine',    n:'Mes builds',d:'Sauvegardés sur cet appareil'}
+    {id:'mine',    n:'Mes builds',d:'Sauvegardés ou publiés depuis cet appareil'}
   ];
   var activeTab='trending';
 
@@ -229,6 +233,7 @@
     var c=list.slice();
     if(tab==='trending')return c.sort(function(a,b){return trendScore(b)-trendScore(a)});
     if(tab==='latest')  return c.sort(function(a,b){return ts(b)-ts(a)});
+    if(tab==='score')   return c.sort(function(a,b){return (b.score||0)-(a.score||0)});
     if(tab==='top')     return c.sort(function(a,b){return ((b.likes||0)*3+(b.views||0))-((a.likes||0)*3+(a.views||0))});
     var owned=ownedBuildIds();
     return c.filter(function(b){return b.mine||b.local||owned[b.id]!=null});
@@ -242,7 +247,7 @@
              esc(t.n)+'</button>';
     }).join('');
     root.querySelectorAll('[data-tab]').forEach(function(b){
-      b.addEventListener('click',function(){activeTab=b.dataset.tab;renderTabs();renderTabbed()});
+      b.addEventListener('click',function(){activeTab=b.dataset.tab;renderTabs();refreshHub()});
     });
     var hint=el('hubTabHint');
     if(hint){
@@ -258,44 +263,14 @@
     return null;
   }
 
-  function renderTabbed(){
-    var root=el('hubTabbedList');
-    if(!root)return;
-    var list=sortFor(activeTab,hubBuilds()).slice(0,8);
-    if(!list.length){
-      root.innerHTML='<div class="empty">'+(activeTab==='mine'
-        ? 'Aucun build sauvegardé sur cet appareil pour l\u2019instant.'
-        : 'Le hub est encore vide. Publie ton build pour ouvrir le bal.')+'</div>';
-      return;
-    }
-    root.innerHTML=list.map(function(b,i){
-      var q=qualityLabel(b);
-      var top=[];
-      try{
-        top=Object.entries(b.attrs||b.attributes||{})
-          .sort(function(x,y){return y[1]-x[1]}).slice(0,3);
-      }catch(e){}
-      return '<article class="hub-card">'+
-        (activeTab!=='mine'?'<span class="hub-rank">#'+(i+1)+'</span>':'')+
-        '<div class="hub-card-head">'+
-          '<h3>'+esc(b.name||'Build sans nom')+'</h3>'+
-          (q?'<span class="hub-quality '+q.cls+'">'+q.t+'</span>':'')+
-        '</div>'+
-        '<div class="hub-card-meta">'+
-          '<span>'+esc(b.position||'—')+'</span>'+
-          (b.height?'<span>'+esc(window.heightText?window.heightText(+b.height):b.height)+'</span>':'')+
-          (b.style?'<span>'+esc(b.style)+'</span>':'')+
-          (b.score?'<span class="hub-score">'+b.score+'</span>':'')+
-        '</div>'+
-        (top.length?'<div class="hub-top">'+top.map(function(t){
-          return '<span><b>'+t[1]+'</b>'+esc(shortAttr(t[0]))+'</span>';
-        }).join('')+'</div>':'')+
-        '<div class="hub-card-foot">'+
-          '<span>'+(b.likes||0)+' ♥</span><span>'+(b.views||0)+' vues</span>'+
-          (b.id?'<a href="/b/'+encodeURIComponent(b.id)+'">Voir la fiche</a>':'')+
-        '</div>'+
-      '</article>';
-    }).join('');
+  /* Il y avait deux listes de builds dans la meme section : celle-ci, pilotee par
+     les onglets, et #communityList (app.js), pilotee par la recherche et les
+     filtres mais repliee dans un <details> que personne n'ouvrait. Resultat :
+     taper dans la recherche ne changeait rien a l'ecran. Il ne reste qu'une
+     liste - celle d'app.js, qui porte les actions (voir, aimer, comparer) - et
+     les onglets ci-dessus lui fournissent son tri. */
+  function refreshHub(){
+    if(typeof window.renderCommunity==='function')window.renderCommunity();
   }
 
   var SHORT={'Three-Point':'3PT','Mid-Range':'MID','Close Shot':'CLOSE','Driving Layup':'LAY',
@@ -309,7 +284,7 @@
   function boot(){
     renderProfile();
     renderTabs();
-    renderTabbed();
+    refreshHub();
     checkAchievements();
 
     var saveBtn=el('save');
@@ -329,13 +304,17 @@
     });
 
     // Le hub se remplit après l'appel réseau ; on rafraîchit quand il arrive.
-    setTimeout(renderTabbed,1500);
-    setTimeout(renderTabbed,5000);
+    setTimeout(refreshHub,1500);
+    setTimeout(refreshHub,5000);
     setInterval(checkAchievements,4000);
   }
 
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);
   else boot();
 
-  window.NBABL_COMMUNITY={award:award,unlock:unlock,state:state,toast:toast,refresh:renderTabbed};
+  window.NBABL_COMMUNITY={award:award,unlock:unlock,state:state,toast:toast,refresh:refreshHub};
+
+  /* Contrat avec app.js : les onglets fournissent le tri (et le filtre « Mes
+     builds »), app.js fournit la liste, les filtres et les actions. */
+  window.NBABL_HUB={tab:function(){return activeTab},sort:sortFor,quality:qualityLabel};
 })();

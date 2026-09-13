@@ -1349,35 +1349,19 @@ footer{
 .hub-tab{min-height:38px;padding:7px 14px;font-size:12.5px;font-weight:700;border-radius:var(--r-pill)}
 .hub-tab.active{border-color:var(--blue);background:rgba(29,139,255,.13);color:#fff}
 .hub-tab-hint{margin-top:7px;font-size:11.5px;color:var(--dim)}
-.hub-tabbed-list{display:grid;gap:10px}
-.hub-card{
-  position:relative;padding:13px;border-radius:var(--r);
-  background:var(--panel-2);border:1px solid var(--line-soft);display:grid;gap:8px;
-}
-.hub-rank{
-  position:absolute;top:11px;right:12px;
-  font-size:11px;font-weight:900;color:var(--dim);font-variant-numeric:tabular-nums;
-}
-.hub-card-head{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;padding-right:32px}
-.hub-card-head h3{font-size:14.5px;font-weight:800}
+/* Badge de qualité et étiquette « Démo », portés par les cartes de .community-list.
+   Les styles .hub-card / .hub-tabbed-list / .hub-legacy ont été retirés avec la
+   seconde liste du hub : il n'y a plus qu'une liste, celle de .community-list. */
 .hub-quality{
   font-size:9.5px;font-weight:800;letter-spacing:.05em;padding:3px 8px;border-radius:var(--r-pill);
   background:rgba(34,224,138,.09);border:1px solid rgba(34,224,138,.3);color:var(--green);
 }
 .hub-quality.elite{background:rgba(255,201,74,.09);border-color:rgba(255,201,74,.34);color:var(--amber)}
-.hub-card-meta{display:flex;flex-wrap:wrap;gap:6px}
-.hub-card-meta span{
-  font-size:10.5px;font-weight:700;color:var(--dim);
-  background:var(--field);border:1px solid var(--line-soft);border-radius:var(--r-sm);padding:3px 8px;
+.build-demo-tag{
+  font-size:9.5px;font-weight:800;letter-spacing:.05em;padding:3px 8px;border-radius:var(--r-pill);
+  background:var(--field);border:1px solid var(--line-soft);color:var(--dim);
 }
-.hub-card-meta .hub-score{color:var(--cyan);border-color:rgba(34,211,238,.3)}
-.hub-top{display:flex;gap:7px;flex-wrap:wrap}
-.hub-top span{display:flex;align-items:baseline;gap:4px;font-size:9.5px;font-weight:800;letter-spacing:.04em;color:var(--dim)}
-.hub-top b{font-size:14px;font-weight:900;color:var(--text);font-variant-numeric:tabular-nums}
-.hub-card-foot{display:flex;gap:12px;align-items:center;font-size:11.5px;color:var(--dim)}
-.hub-card-foot a{margin-left:auto;font-weight:700}
-.hub-legacy{margin-top:14px;border-top:1px solid var(--line-soft);padding-top:12px}
-.hub-legacy summary{cursor:pointer;font-size:12.5px;font-weight:700;color:var(--muted);min-height:32px}
+.build-card-link{margin-left:auto;font-weight:700;font-size:11.5px}
 
 /* ---- Étiquettes de build ---- */
 .build-tag-preview{display:flex;flex-wrap:wrap;gap:7px}
@@ -1501,7 +1485,6 @@ footer{
 }
 @media (min-width:1000px){
   .pp-achievements{grid-template-columns:repeat(4,1fr)}
-  .hub-tabbed-list{grid-template-columns:repeat(2,1fr)}
   .bd-groups{grid-template-columns:repeat(3,1fr)}
   .badge-discipline-grid{grid-template-columns:repeat(3,1fr)}
 }
