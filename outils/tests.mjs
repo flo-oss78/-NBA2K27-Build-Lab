@@ -476,25 +476,34 @@ async function testsNavigateur(base) {
       sansErreur('builder avec la nouvelle base d’animations');
     });
 
-    await test('chaque badge porte son nom français et son nom officiel du jeu', async () => {
+    await test('chaque badge porte son nom officiel du jeu en français, sa description et son icône', async () => {
+      const officiels = JSON.parse(fs.readFileSync('donnees/badges-fr-2khq.json', 'utf8')).badges;
       await nav.ouvrir(base + '/reference/');
       const r = await nav.evaluer(`
+        const officiels = ${JSON.stringify(officiels.map(b => [b.en, b.fr, b.desc]))};
         const cartes = [...document.querySelectorAll('#badgeList .badge-card')];
         const sansTraduction = badgeDefs.filter(d => !BADGE_FR[d.name]).map(d => d.name);
+        const differents = officiels.filter(([en, fr, desc]) => BADGE_FR[en] !== fr || BADGE_DESC_FR[en] !== desc).map(([en]) => en);
+        const sansIcone = cartes.filter(c => !c.querySelector('.badge-photo svg.badge-icone')).length;
+        const sansDesc = cartes.filter(c => !c.querySelector('.badge-desc')?.textContent.trim()).length;
+        const pictos = new Set(cartes.map(c => c.querySelector('.badge-icone g')?.innerHTML));
         const malAffiches = cartes.filter(c => {
           const fr = c.querySelector('.badge-fr')?.textContent, en = c.querySelector('.badge-en')?.textContent;
-          return !fr || !en || fr === en || BADGE_FR[en] !== fr;
+          return !fr || !en || BADGE_FR[en] !== fr;
         }).length;
-        // Recherche par nom français, sans accent : « eclair » doit trouver « Éclair » (Flash).
+        // Recherche par nom français, sans accent : « baton » doit trouver « Bâton sauteur » (Pogo Stick).
         const s = document.getElementById('badgeSearch');
-        s.value = 'eclair'; s.dispatchEvent(new Event('input', { bubbles: true }));
+        s.value = 'baton'; s.dispatchEvent(new Event('input', { bubbles: true }));
         await new Promise(r => setTimeout(r, 200));
         const trouves = [...document.querySelectorAll('#badgeList .badge-en')].map(e => e.textContent);
         s.value = ''; s.dispatchEvent(new Event('input', { bubbles: true }));
-        return { cartes: cartes.length, sansTraduction, malAffiches, trouves };`);
-      verifier(!r.sansTraduction.length, 'badges sans traduction : ' + r.sansTraduction.join(', '));
-      verifier(r.malAffiches === 0, `${r.malAffiches} carte(s) sans nom français ou sans nom officiel`);
-      verifier(r.trouves.includes('Flash'), `la recherche « eclair » ne trouve pas Flash (trouvé : ${r.trouves.join(', ') || 'rien'})`);
+        return { cartes: cartes.length, sansTraduction, differents, sansIcone, sansDesc, pictos: pictos.size, malAffiches, trouves };`);
+      verifier(!r.sansTraduction.length, 'badges sans nom français : ' + r.sansTraduction.join(', '));
+      verifier(!r.differents.length, 'noms ou descriptions différents du relevé du jeu : ' + r.differents.join(', '));
+      verifier(r.malAffiches === 0, `${r.malAffiches} carte(s) sans nom français ou sans nom anglais`);
+      verifier(r.sansIcone === 0 && r.sansDesc === 0, `${r.sansIcone} carte(s) sans icône, ${r.sansDesc} sans description`);
+      verifier(r.pictos === r.cartes, `${r.pictos} pictogrammes différents pour ${r.cartes} badges`);
+      verifier(r.trouves.includes('Pogo Stick'), `la recherche « baton » ne trouve pas Bâton sauteur (trouvé : ${r.trouves.join(', ') || 'rien'})`);
     });
 
     await test('un lien de partage restaure le build à l\u2019identique', async () => {

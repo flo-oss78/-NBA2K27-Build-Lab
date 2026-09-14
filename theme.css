@@ -730,6 +730,8 @@ input[type=range]:focus-visible::-moz-range-thumb{box-shadow:var(--ring)}
 .style-badge-icon.silver{background:linear-gradient(165deg,#E3EAF3,#93A3B6)}
 .style-badge-icon.bronze{background:linear-gradient(165deg,#E0A377,#9C5C2C)}
 .style-badge-icon.none{background:linear-gradient(165deg,#33445A,#1D2938);color:#7A8BA0}
+.style-badge-icon.avec-icone{background:none;padding:0}
+.style-badge-icon.avec-icone svg{width:100%;height:100%;display:block}
 .style-badge-item b{font-size:10px;font-weight:700;line-height:1.2;color:#CBD7E6}
 .style-badge-item small{font-size:9.5px;font-weight:800;letter-spacing:.03em}
 .style-badge-item small{color:var(--dim)}
@@ -903,6 +905,11 @@ input[type=range]:focus-visible::-moz-range-thumb{box-shadow:var(--ring)}
 .badge-main>small{display:block;font-size:11.5px;color:var(--muted);line-height:1.5}
 .badge-main>small strong{color:var(--text)}
 .badge-req{margin-top:6px;font-size:10.5px;color:var(--dim);line-height:1.5}
+/* Icônes des badges (badge-icones.js) : l'écusson porte déjà couleur et palier. */
+.badge-photo:has(svg.badge-icone){background:none;box-shadow:none}
+.badge-photo svg.badge-icone{width:100%;height:100%;display:block;filter:drop-shadow(0 2px 4px rgba(0,0,0,.35))}
+svg.badge-icone.verrouille{filter:grayscale(.85) brightness(.75)}
+.badge-desc{margin:3px 0 6px;font-size:11.5px;line-height:1.45;color:var(--muted)}
 .badge-next{margin-top:5px;font-size:11px;color:var(--cyan)}
 
 /* ---------- 17. Takeover ---------- */

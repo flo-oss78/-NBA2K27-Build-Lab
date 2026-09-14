@@ -175,7 +175,11 @@
       }
       var cls=TIER_CLASS[tier]||'none';
       var glyph=BADGE_GLYPH[name]||'✦';
-      html+='<div class="style-badge-item"><div class="style-badge-icon '+cls+'" aria-hidden="true">'+glyph+'</div>'+
+      // Icône du badge (badge-icones.js) si disponible : même visuel que la page Référence.
+      var def=(window.badgeDefs||[]).find(function(d){return d.name===name});
+      var niveau={Bronze:1,Silver:2,Gold:3,HOF:4}[tier]||0;
+      if(def&&typeof window.iconeBadge==='function')glyph=window.iconeBadge(name,def.cat,niveau);
+      html+='<div class="style-badge-item"><div class="style-badge-icon '+cls+(def?' avec-icone':'')+'" aria-hidden="true">'+glyph+'</div>'+
             '<b>'+nomBadgeHTML(name)+'</b><small>'+esc(tier)+'</small></div>';
     });
     box.innerHTML=html;

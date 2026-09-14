@@ -5,7 +5,7 @@
    - /api/ : jamais mis en cache
    - install : addAll tolérant aux 404 (un fichier manquant ne casse plus l'installation)
 */
-const VERSION='v25.4.0';
+const VERSION='v25.5.0';
 const SHELL_CACHE='nbabl-shell-'+VERSION;
 const RUNTIME_CACHE='nbabl-runtime-'+VERSION;
 
@@ -14,7 +14,7 @@ const PAGES=['/','/trios/','/hub/','/reference/','/progression/'];
 
 const SHELL=[
   ...PAGES,
-  './theme.css','./site-config.js','./builder-data.js',
+  './theme.css','./site-config.js','./builder-data.js','./badge-icones.js',
   './validator.js','./builds-reels.js','./app.js','./import-jeu.js','./builds-ui.js','./optimizer.js','./hub.js','./animations.js',
   './dna-engine.js','./data-registry.js','./data-validation.js','./players-core.js',
   './v15-intelligence.js','./server-client.js','./style-presets.js','./ui.js',

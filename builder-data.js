@@ -74,43 +74,134 @@ const COST_WEIGHT={
  'Speed':1.15,'Agility':1.10,'Strength':0.95,'Vertical':1.00,'Stamina':0.55};
 const BADGE_THRESHOLDS=[60,70,80,90,95];
 
-/* Noms français des badges.
-   2K ne publie aucune traduction officielle : même en français, le jeu et la
-   communauté emploient les noms anglais. Ces traductions sont donc celles du
-   site, et le nom officiel reste toujours affiché à côté pour que le joueur
-   retrouve le badge dans le jeu.
-   Le nom anglais demeure la clé partout (loadouts enregistrés, Build DNA,
-   recommandations) : ce dictionnaire ne sert qu'à l'affichage. */
+/* Noms français OFFICIELS des badges, tels qu'affichés par NBA 2K27 en français
+   (bulles d'aide du builder de l'app NBA 2K HQ, relevées le 14 septembre 2026 ;
+   source complète avec descriptions : donnees/badges-fr-2khq.json).
+   Le nom anglais reste la clé partout (loadouts enregistrés, Build DNA,
+   recommandations) et reste affiché sous le nom français. */
 const BADGE_FR={
   // Tir
-  'Arc Cadence':'Cadence de tir', 'Deadeye':'Œil de lynx', 'Limitless Range':'Portée illimitée',
-  'Mini Marksman':'Petit sniper', 'Post Fade Phenom':'Fadeaway au poste', 'Quick Trigger':'Gâchette rapide',
-  'Set and Fire':'Pieds posés', 'Smooth Operator':'Toucher soyeux', 'Static Middy':'Mi-distance à l’arrêt',
-  'Green Machine':'Tir parfait en série', 'Agent 3':'Agent 3 points',
+  "Arc Cadence":"Mitraillette",
+  "Deadeye":"Œil de lynx",
+  "Limitless Range":"Portée infinie",
+  "Mini Marksman":"Mini tireur d'élite",
+  "Post Fade Phenom":"Pro des fadeaways au poste",
+  "Quick Trigger":"Gâchette",
+  "Set and Fire":"Allumette",
+  "Smooth Operator":"Smooth Operator",
+  "Static Middy":"Métronome mi-distance",
   // Création
-  'Ankle Assassin':'Casseur de chevilles', 'Bail Out':'Passe de secours', 'Bailout':'Passe de secours',
-  'Break Starter':'Relanceur', 'Dimer':'Passeur décisif', 'Handles for Days':'Dribble inépuisable',
-  'Lightning Launch':'Départ éclair', 'Pace':'Changement de rythme', 'Strong Handle':'Dribble costaud',
-  'Unpluckable':'Inarrachable', 'Versatile Visionary':'Visionnaire', 'Killer Combos':'Combos mortels',
-  'Speed Booster':'Accélérateur',
+  "Ankle Assassin":"Assassin de cheville",
+  "Bail Out":"Sauveteur",
+  "Break Starter":"Lanceur de contre",
+  "Dimer":"Altruiste",
+  "Handles for Days":"Dribbleur infatigable",
+  "Lightning Launch":"Lancement éclair",
+  "Pace":"Rythme",
+  "Strong Handle":"Excellent dribbleur",
+  "Unpluckable":"Mains fermes",
+  "Versatile Visionary":"Visionnaire polyvalent",
   // Finition
-  'Aerial Wizard':'Magicien aérien', 'Float Game':'Floater', 'Ghost Stepper':'Pas fantôme',
-  'Hook Specialist':'Spécialiste du bras roulé', 'Layup Mixmaster':'Maître du lay-up',
-  'Paint Prodigy':'Prodige de la raquette', 'Physical Finisher':'Finisseur physique',
-  'Post Powerhouse':'Force au poste', 'Post Spin Catalyst':'Spin au poste', 'Posterizer':'Faiseur de posters',
-  'Rise Up':'Envol sous le cercle', 'Slithery':'Anguille', 'Precision Dunker':'Dunkeur précis',
+  "Aerial Wizard":"Roi des airs",
+  "Float Game":"Flotteur",
+  "Ghost Stepper":"Funambule",
+  "Hook Specialist":"Spécialiste du bras roulé",
+  "Layup Mixmaster":"Mixeur au double-pas",
+  "Paint Prodigy":"Prodige dans la raquette",
+  "Physical Finisher":"Finisseur physique",
+  "Post Powerhouse":"Machine au poste",
+  "Post Spin Catalyst":"Toupie au poste",
+  "Posterizer":"Dunker de génie",
+  "Rise Up":"Détente sèche",
   // Défense
-  'Ankle Braces':'Chevilles d’acier', 'Challenger':'Contesteur', 'Glove':'Gant',
-  'High-Flying Denier':'Contreur aérien', 'Immovable Enforcer':'Mur inébranlable', 'Interceptor':'Intercepteur',
-  'Off-Ball Pest':'Poison sans ballon', 'Paint Patroller':'Gardien de la raquette', 'Pick Dodger':'Esquive d’écran',
-  'Post Lockdown':'Verrou au poste', 'Seatbelt':'Marquage collant', 'Wall Up':'Mur vertical',
+  "Ankle Braces":"Chevillères",
+  "Challenger":"Challenger",
+  "Glove":"Gant",
+  "High-Flying Denier":"Contreur de haute voltige",
+  "Immovable Enforcer":"Inamovible",
+  "Interceptor":"Intercepteur",
+  "Off-Ball Pest":"Teigne",
+  "Paint Patroller":"Patrouilleur dans la raquette",
+  "Pick Dodger":"Pro de l'esquive",
+  "Post Lockdown":"Muraille au poste",
+  "Seatbelt":"Ceinture de sécurité",
+  "Wall Up":"Wall Up",
   // Rebond
-  'Boxout Boss':'Patron du box-out', 'Breaker':'Perce-muraille', 'Crasher':'Fonceur au rebond',
-  'Possession Closer':'Finisseur de possession', 'Sync Snatcher':'Rebond au bon timing',
-  'Rebound Chaser':'Chasseur de rebonds',
+  "Boxout Boss":"Boss du boxout",
+  "Breaker":"Briseur de reins",
+  "Crasher":"Crasher",
+  "Possession Closer":"Clutch en fin de possession",
+  "Sync Snatcher":"Anticipateur défensif",
   // Physique
-  'Brick Wall':'Mur de briques', 'Bruiser':'Cogneur', 'Flash':'Éclair', 'Pogo Stick':'Ressort',
-  'Slippery Off-Ball':'Insaisissable sans ballon', 'Work Horse':'Bourreau de travail'
+  "Brick Wall":"Mur de briques",
+  "Bruiser":"Costaud",
+  "Flash":"Flash",
+  "Pogo Stick":"Bâton sauteur",
+  "Slippery Off-Ball":"Pro du démarquage",
+  "Work Horse":"Bourreau de travail"
+};
+
+/* Descriptions officielles du jeu, même source. */
+const BADGE_DESC_FR={
+  // Tir
+  "Arc Cadence":"Améliore l'aptitude du joueur à rentrer des tirs à 3 points en mouvement, y compris les hop shots, les tirs en sortie de dribble et les tirs après un dribble renversé.",
+  "Deadeye":"Réduit la pénalité infligée lorsqu'un défenseur arrive pour contester un tir.",
+  "Limitless Range":"Augmente la portée de tir à 3 points lointain d'un joueur.",
+  "Mini Marksman":"Augmente les chances de tirer par-dessus les défenseurs plus grands.",
+  "Post Fade Phenom":"Améliore l'aptitude du joueur à rentrer ses Hop Shots ou ses fadeaways au poste.",
+  "Quick Trigger":"Améliore l'aptitude du joueur à rentrer des tirs sans armer.",
+  "Set and Fire":"Octroie un bonus aux tirs à 3 points à l'arrêt.",
+  "Smooth Operator":"Améliore l'aptitude du joueur à rentrer des tirs à mi-distance en mouvement, y compris les hop shots, les tirs en sortie de dribble et les tirs après un dribble renversé.",
+  "Static Middy":"Octroie un bonus aux tirs à mi-distance à l'arrêt.",
+  // Création
+  "Ankle Assassin":"Améliore l'aptitude du joueur à se débarrasser d'un défenseur.",
+  "Bail Out":"Les passes en cours de double-pas ou de tir en suspension génèrent moins de déchets. Permet également d'exploiter plus facilement les prises à deux par une passe.",
+  "Break Starter":"Après un rebond défensif, les passes de dégagement sont plus précises. Les passes doivent être réalisées juste après le rebond défensif.",
+  "Dimer":"Améliore la réussite des coéquipiers démarqués pour les tirs après réception de passe.",
+  "Handles for Days":"Le joueur dépense moins d'énergie s'il réalise plusieurs dribbles consécutifs, cela lui permet de faire des enchaînements plus rapides et plus longtemps.",
+  "Lightning Launch":"Accélère les démarrages sur les pénétrations depuis le périmètre.",
+  "Pace":"Augmente la vitesse du porteur de balle lors des sprints.",
+  "Strong Handle":"Réduit l'impact de la défense lors des dribbles.",
+  "Unpluckable":"Les défenseurs ont plus de mal à chiper le ballon.",
+  "Versatile Visionary":"Améliore l'aptitude du joueur à réussir des passes millimétrées au bon moment, y compris des alley-oops.",
+  // Finition
+  "Aerial Wizard":"Améliore l'aptitude à conclure le alley-oop d'un coéquipier, ou de faire une claquette sur un rebond offensif.",
+  "Float Game":"(vu dans la capture de l'écran Amélioration des insignes)",
+  "Ghost Stepper":"Augmente l'efficacité des step through et des tirs de près suite à une feinte.",
+  "Hook Specialist":"Améliore l'aptitude du joueur à rentrer ses bras roulés au poste.",
+  "Layup Mixmaster":"Améliore l'aptitude du joueur à réussir des doubles-pas acrobatiques ou spectaculaires.",
+  "Paint Prodigy":"Améliore l'aptitude du joueur à marquer rapidement et efficacement sous le panier après une pénétration dans la raquette.",
+  "Physical Finisher":"Améliore l'aptitude du joueur à absorber les contacts et à réussir des doubles-pas après contact.",
+  "Post Powerhouse":"Améliore l'aptitude du joueur à enfoncer des défenseurs au panier et avec des drop steps.",
+  "Post Spin Catalyst":"Les tentatives de dribbles renversés au poste et de pénétrations sont plus efficaces et plus dures à intercepter.",
+  "Posterizer":"Augmente les chances de rentrer un dunk sur votre défenseur.",
+  "Rise Up":"Augmente les chances de réussir un dunk ou de postériser un adversaire dans la raquette.",
+  // Défense
+  "Ankle Braces":"Réduit les risques de subir un cassage de chevilles sur un dribble adverse.",
+  "Challenger":"Améliore l'efficacité des contestations dans le bon timing sur les tirs extérieurs.",
+  "Glove":"Améliore l'aptitude du joueur à intercepter le ballon dans les mains du porteur ou à contester les tentatives de double-pas.",
+  "High-Flying Denier":"Améliore la vitesse et la détente d'un défenseur pour augmenter ses chances de réussir un contre en poursuite.",
+  "Immovable Enforcer":"Améliore la force du défenseur et lui permet de mieux repousser les porteurs de balle et les finisseurs qui arrivent droit sur lui.",
+  "Interceptor":"Augmente la fréquence des passes déviées ou interceptées.",
+  "Off-Ball Pest":"Rend les passes des autres joueurs plus difficiles, car vous pouvez attraper et retenir votre adversaire direct en défense loin du ballon.",
+  "Paint Patroller":"Améliore l'aptitude du joueur à contrer ou contester les tirs près du cercle.",
+  "Pick Dodger":"Améliore la capacité du joueur à contourner et à éviter les écrans en défense.",
+  "Post Lockdown":"Renforce la capacité à défendre les mouvements au poste et augmente les chances de forcer une perte de balle.",
+  "Seatbelt":"Augmente l'efficacité de la défense sur le haut du corps afin de cadenasser les porteurs de balle et gêner leurs pénétrations.",
+  "Wall Up":"Augmente l'efficacité des contestations de tirs lorsque vous levez les bras en défense pour protéger la raquette.",
+  // Rebond
+  "Boxout Boss":"Augmente la réussite des écrans de retard posés.",
+  "Breaker":"Augmente la réussite des luttes au rebond contre les écrans de retard adverses.",
+  "Crasher":"Améliore l'aptitude du joueur à capter des rebonds offensifs.",
+  "Possession Closer":"Améliore l'aptitude du joueur à capter des rebonds défensifs.",
+  "Sync Snatcher":"Octroie un bonus de détente et de rebond en cas de timing parfait du saut.",
+  // Physique
+  "Brick Wall":"Augmente l'efficacité des écrans.",
+  "Bruiser":"Fatigue davantage l'adversaire lors des contacts.",
+  "Flash":"Augmente la vitesse de déplacement sans ballon sur les transitions offensives et défensives.",
+  "Pogo Stick":"Permet aux joueurs de tenter plus rapidement un deuxième saut que ce soit pour un rebond, un contre ou un tir.",
+  "Slippery Off-Ball":"Lorsque le joueur essaie de se démarquer après un écran, il contourne plus facilement les autres joueurs.",
+  "Work Horse":"Augmente l'agilité et la vitesse du joueur lorsqu'il court après un ballon qui traîne."
 };
 
 /* Nom affiché d'un badge : sa traduction, ou le nom officiel s'il n'en a pas. */
