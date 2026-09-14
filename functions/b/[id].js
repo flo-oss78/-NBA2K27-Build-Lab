@@ -53,7 +53,7 @@ export async function onRequestGet({params,env,request}){
   const posLabel=POS_LABEL[row.position]||row.position;
   const title=`${row.name} — ${row.position} ${heightText(row.height)} | NBA 2K27 Build Lab`;
   const desc=`Build NBA 2K27 ${posLabel} ${heightText(row.height)}, ${row.weight} lbs. `+
-    top.map(([k,v])=>`${k} ${v}`).join(', ')+`. Note ${row.score||'—'}.`;
+    top.map(([k,v])=>`${k} ${v}`).join(', ')+`. Moyenne des attributs ${row.score||'—'}.`;
   const url=new URL(request.url);
   const canonical=`${url.origin}/b/${encodeURIComponent(id)}`;
 
@@ -108,7 +108,7 @@ export async function onRequestGet({params,env,request}){
       <div><b>${esc(heightText(row.height))}</b><span>${cm(row.height)} cm</span></div>
       <div><b>${row.weight} lbs</b><span>${kg(row.weight)} kg</span></div>
       <div><b>${esc(heightText(row.wing))}</b><span>envergure</span></div>
-      <div><b>${row.score||'—'}</b><span>note</span></div>
+      <div><b>${row.score||'—'}</b><span>moyenne</span></div>
     </div>
 
     ${tags.length||modes.length?`<div class="bd-tags">

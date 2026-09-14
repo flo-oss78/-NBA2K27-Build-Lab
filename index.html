@@ -188,11 +188,14 @@
       </div>
 
       <div class="panel exact-card summary-card">
-        <div class="exact-card-title"><h2>Résumé du build</h2><span id="buildGrade">—</span></div>
+        <div class="exact-card-title"><h2>Résumé du build</h2></div>
         <div class="summary-head">
-          <div class="summary-ring"><strong id="score">86</strong><small>Note</small></div>
+          <div class="summary-ring"><strong id="score">86</strong><small>Moyenne</small></div>
           <div><b id="buildname">Two-Way Creator</b><p id="buildMeta">PG • 6'6" • 180 lbs</p></div>
         </div>
+        <!-- Ce chiffre n'est PAS la note globale du jeu : un build à 96 en jeu
+             tombait ici à 70 et recevait « B+ ». -->
+        <p class="summary-note">Moyenne de tes attributs par secteur. Ce n’est pas la note globale (GNR) du jeu, que 2K calcule autrement.</p>
         <div class="summary-bars">
           <div class="sbar finish"><span>Finition</span><b id="finishVal">0</b><i><em id="finishBar"></em></i></div>
           <div class="sbar shoot"><span>Tir</span><b id="shootVal">0</b><i><em id="shootBar"></em></i></div>
@@ -205,7 +208,7 @@
           <div><b id="badgeTotal">0</b><span>badges en base</span></div>
           <div><b id="animTotal">0</b><span>animations</span></div>
           <div><b id="breakerTotal">0</b><span>cap breakers</span></div>
-          <div><b id="budgetUsed">0</b><span>coût simulé</span></div>
+          <div><b id="badgeReachable">0</b><span>badges à portée</span></div>
         </div>
         <div class="summary-actions">
           <button id="optimize" type="button">Optimiser ce build</button>
@@ -227,11 +230,6 @@
           </div>
         </div>
         <div id="attributeGroups"></div>
-        <div class="exact-budget" id="budgetBox">
-          <div><span>Coût simulé</span><b id="points">0</b></div>
-          <span id="budgetHint">Budget indicatif : 0 / 1000 — modèle non officiel</span>
-          <i><em id="budgetBar"></em></i>
-        </div>
       </div>
 
       <div class="panel exact-card animation-reco-card">
@@ -250,7 +248,7 @@
   <div class="exact-footer-bar">
     <div>
       <b>Données badges et animations : sources publiques vérifiées par la communauté.</b>
-      <small>Les caps et les coûts du builder restent un modèle indicatif, sans validation officielle de 2K.</small>
+      <small>Les caps du builder restent un modèle indicatif, sans validation officielle de 2K.</small>
     </div>
     <span id="styleAppliedStatus">Style appliqué automatiquement</span>
   </div>
@@ -328,10 +326,9 @@
       <div><span>Attributs et caps</span><b id="checkCaps">—</b></div>
       <div><span>Badges</span><b id="checkBadges">—</b></div>
       <div><span>Animations</span><b id="checkAnimations">—</b></div>
-      <div><span>Budget indicatif</span><b id="checkBudget">—</b></div>
     </div>
   </div>
-  <p class="validation-note"><b>À savoir :</b> ce validateur garantit la cohérence avec les règles de données intégrées au site. Il ne peut pas promettre une exactitude officielle tant que 2K ne publie pas les tables internes des caps et des coûts du builder 2K27. Les règles non documentées sont signalées comme <b>indicatives</b>.</p>
+  <p class="validation-note"><b>À savoir :</b> ce validateur garantit la cohérence avec les règles de données intégrées au site. Il ne peut pas promettre une exactitude officielle tant que 2K ne publie pas les tables internes des caps du builder 2K27. Les règles non documentées sont signalées comme <b>indicatives</b>.</p>
 </section>
 
 <!-- ============ FICHE DE BUILD ============ -->
@@ -438,7 +435,7 @@
   <div class="pro-dashboard-grid">
     <div class="pro-score-card">
       <div class="pro-score-ring"><strong id="proQualityScore">0</strong><small>/100</small></div>
-      <div><b id="proQualityLabel">Analyse en cours</b><span id="proQualityText">Le moteur combine cohérence du gabarit, caps, badges, animations et budget indicatif.</span></div>
+      <div><b id="proQualityLabel">Analyse en cours</b><span id="proQualityText">Le moteur combine cohérence du gabarit, caps, badges et animations.</span></div>
     </div>
     <div class="coverage-card">
       <h3>Couverture des données</h3>

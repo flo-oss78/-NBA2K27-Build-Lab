@@ -97,11 +97,13 @@ function renderScouting(r,vals){if(!document.getElementById("strengths"))return;
  const bestStyle=Object.entries(styleScore).sort((a,b)=>b[1]-a[1])[0];document.getElementById('recommendedStyle').textContent=bestStyle[0];document.getElementById('scoutVerdict').textContent=scoreGrade(Math.round(bestStyle[1]))+' • '+Math.round(bestStyle[1])+'/100';
  document.getElementById('scoutText').textContent=`Ton profil est surtout orienté ${bestStyle[0].toLowerCase()}. Le rapport compare automatiquement tes attributs, ton poste et ton gabarit à plusieurs profils de référence. Les profils de référence sont des exemples publics, pas des builds officiels imposés par 2K.`;
 }
-function exportBuild(){const obj={schemaVersion:23,dataVersion:window.NBABL_DATA_REGISTRY?.DATA_VERSION||null,position:position.value,height:height.value,weight:weight.value,wing:wing.value,style:style.value,hand:handValue(),attributes:ratings(),badges:unlockedBadgeCount(),animations:unlockedAnimationCount(),capBreakers:breakerTotalValue(),simulatedCost:simulatedCost(ratings()),score:document.getElementById('score').textContent,name:document.getElementById('buildname').textContent,date:new Date().toISOString()};const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='nba2k27-build.json';a.click();URL.revokeObjectURL(a.href)}
+function exportBuild(){const obj={schemaVersion:23,dataVersion:window.NBABL_DATA_REGISTRY?.DATA_VERSION||null,position:position.value,height:height.value,weight:weight.value,wing:wing.value,style:style.value,hand:handValue(),attributes:ratings(),badges:unlockedBadgeCount(),animations:unlockedAnimationCount(),capBreakers:breakerTotalValue(),moyenneAttributs:document.getElementById('score').textContent,name:document.getElementById('buildname').textContent,date:new Date().toISOString()};const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='nba2k27-build.json';a.click();URL.revokeObjectURL(a.href)}
 document.getElementById('exportBuild')?.addEventListener('click',exportBuild);
 
 function simulatedCost(r){return Math.round(Object.entries(r).reduce((sum,[name,v])=>sum+Math.max(0,v-25)*(COST_WEIGHT[name]||1),0));}
-function updateBudget(r){const used=simulatedCost(r),budget=1000,pct=Math.min(100,used/budget*100);document.getElementById('budgetUsed').textContent=used;document.getElementById('points').textContent=used;document.getElementById('budgetBar').style.width=pct+'%';document.getElementById('budgetHint').textContent=`Budget indicatif : ${used} / ${budget} — modèle non officiel`;document.getElementById('budgetBox')?.classList.toggle('over',used>budget);inputs.forEach(x=>{const id=x.dataset.name.replace(/[^a-z0-9]/gi,'');document.querySelectorAll('#i'+id+' + .thresholds span').forEach(s=>s.classList.toggle('hit',+x.value>=+s.dataset.threshold))})}
+/* Allume les paliers atteints sous chaque curseur. (Cette fonction affichait
+   aussi un « budget indicatif » de 1000 points, retiré : il était inventé.) */
+function updateThresholds(){inputs.forEach(x=>{const id=x.dataset.name.replace(/[^a-z0-9]/gi,'');document.querySelectorAll('#i'+id+' + .thresholds span').forEach(s=>s.classList.toggle('hit',+x.value>=+s.dataset.threshold))})}
 let attrBaseline={};
 function setAttributeBaseline(map){attrBaseline=map||{};updateAttributeDeltas()}
 function updateAttributeDeltas(){
@@ -118,7 +120,7 @@ function updateAttributeDeltas(){
 }
 function update(){
  if(!BUILDER_PRESENT)return; /* page sans builder */
- updateProfileLabels();const caps=bodyCaps();clampInputsToCaps(caps);const r=ratings();updateBudget(r);let sums={};Object.keys(data).forEach(k=>sums[k]=[]);inputs.forEach(x=>{document.getElementById('v'+x.dataset.name.replace(/[^a-z0-9]/gi,'')).textContent=x.value;sums[x.dataset.group].push(+x.value)});let avg=k=>Math.round(sums[k].reduce((a,b)=>a+b,0)/sums[k].length),vals={Finition:avg('Finition'),Tir:avg('Tir'),Création:avg('Création'),Défense:avg('Défense'),Rebond:avg('Rebond'),Physique:avg('Physique')};Object.entries(vals).forEach(([k,v])=>{const el=document.getElementById('avg-'+safeGroupId(k));if(el)el.textContent=v;});updateAttributeVisuals();const SCORE_W={Finition:1,Tir:1,Création:1,Défense:1,Rebond:.6,Physique:1};let wsum=0,wtot=0;Object.keys(vals).forEach(k=>{const w=SCORE_W[k]||1;wsum+=vals[k]*w;wtot+=w});let score=Math.round(wsum/wtot);document.getElementById('score').textContent=score;const ring=document.querySelector('.summary-ring');if(ring)ring.style.setProperty('--score-pct',Math.max(0,Math.min(100,score))+'%');document.getElementById('buildGrade').textContent=scoreGrade(score);let nm=buildName(vals);document.getElementById('buildname').textContent=nm;const meta=document.getElementById('buildMeta');if(meta)meta.textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${document.getElementById('weight').value} lbs`;for(const [k,v] of Object.entries(vals)){let id={Finition:'finish',Tir:'shoot',Création:'play',Défense:'def',Rebond:'reb',Physique:'phys'}[k];const ve=document.getElementById(id+'Val');if(ve)ve.textContent=v;const be=document.getElementById(id+'Bar');if(be)be.style.width=v+'%'}updateAttributeDeltas();
+ updateProfileLabels();const caps=bodyCaps();clampInputsToCaps(caps);const r=ratings();updateThresholds();let sums={};Object.keys(data).forEach(k=>sums[k]=[]);inputs.forEach(x=>{document.getElementById('v'+x.dataset.name.replace(/[^a-z0-9]/gi,'')).textContent=x.value;sums[x.dataset.group].push(+x.value)});let avg=k=>Math.round(sums[k].reduce((a,b)=>a+b,0)/sums[k].length),vals={Finition:avg('Finition'),Tir:avg('Tir'),Création:avg('Création'),Défense:avg('Défense'),Rebond:avg('Rebond'),Physique:avg('Physique')};Object.entries(vals).forEach(([k,v])=>{const el=document.getElementById('avg-'+safeGroupId(k));if(el)el.textContent=v;});updateAttributeVisuals();const SCORE_W={Finition:1,Tir:1,Création:1,Défense:1,Rebond:.6,Physique:1};let wsum=0,wtot=0;Object.keys(vals).forEach(k=>{const w=SCORE_W[k]||1;wsum+=vals[k]*w;wtot+=w});let score=Math.round(wsum/wtot);document.getElementById('score').textContent=score;const ring=document.querySelector('.summary-ring');if(ring)ring.style.setProperty('--score-pct',Math.max(0,Math.min(100,score))+'%');texte('badgeReachable',unlockedBadgeCount(r));let nm=buildName(vals);document.getElementById('buildname').textContent=nm;const meta=document.getElementById('buildMeta');if(meta)meta.textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${document.getElementById('weight').value} lbs`;for(const [k,v] of Object.entries(vals)){let id={Finition:'finish',Tir:'shoot',Création:'play',Défense:'def',Rebond:'reb',Physique:'phys'}[k];const ve=document.getElementById(id+'Val');if(ve)ve.textContent=v;const be=document.getElementById(id+'Bar');if(be)be.style.width=v+'%'}updateAttributeDeltas();
  let capped=inputs.filter(x=>+x.value>=+(x.max||99)).length;document.getElementById('capStatus').textContent=`${capped} / ${inputs.length} au cap`;document.getElementById('bodyHint').textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${heightText(+document.getElementById('wing').value)} envergure — les caps évoluent avec le gabarit.`;renderBadges(r);renderTakeovers(r);renderBreakers(r);renderAnimations();renderScouting(r,vals);renderValidation(r,caps);ecrireContexte();
 }
 function badgeTier(def,r){
@@ -241,8 +243,7 @@ function renderProDashboard(){if(!document.getElementById("proQualityScore"))ret
  const capOK=v.errors.filter(e=>e.includes('dépasse le cap')).length===0;
  const badgeOK=badgeCount>0;
  const animOK=animCount>0;
- const budgetOK=v.used<=v.budget;
- const checks=[bodyOK,capOK,badgeOK,animOK,budgetOK];
+ const checks=[bodyOK,capOK,badgeOK,animOK];
  const pct=Math.round(checks.filter(Boolean).length/checks.length*100);
  const ring=document.getElementById('proQualityScore'); if(ring)ring.textContent=pct;
  const label=document.getElementById('proQualityLabel'); if(label)label.textContent=pct===100?'Prêt à être vérifié dans le jeu':pct>=80?'Très bon niveau de cohérence':'Build à corriger';
@@ -256,13 +257,13 @@ function renderProDashboard(){if(!document.getElementById("proQualityScore"))ret
    ['Gabarit taille / envergure',bodyOK],
    ['Attributs sous les caps intégrés',capOK],
    ['Au moins un palier de badge accessible',badgeOK],
-   ['Animations calculées pour ce profil',animOK],
-   ['Budget indicatif non dépassé',budgetOK]
+   ['Animations calculées pour ce profil',animOK]
  ];
  const rp=document.getElementById('reproList'); if(rp)rp.innerHTML=repro.map(([n,ok])=>`<div class="repro-row"><span>${ok?'✓':'✕'} ${n}</span><b class="${ok?'pass':'fail'}">${ok?'OK':'À corriger'}</b></div>`).join('');
  const rpp=document.getElementById('reproPercent');if(rpp)rpp.textContent=pct+'%';
  const ul=document.getElementById('uncertaintyList');if(ul)ul.innerHTML=[
-   'Caps et coûts internes exacts : non publiés comme table complète.',
+   'Caps internes exacts : non publiés comme table complète.',
+   'La moyenne affichée n’est pas la note globale (GNR) du jeu.',
    'La base d’animations embarquée n’est pas une exportation exhaustive.',
    'Les systèmes de progression (Synergie / Tokens / Takeovers) sont affichés séparément des règles de caps.',
    'Une validation verte signifie « cohérent avec la base intégrée », pas « garantie officielle 2K ».'

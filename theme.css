@@ -662,18 +662,6 @@ input[type=range]:focus-visible::-moz-range-thumb{box-shadow:var(--ring)}
 .attr-delta.zero{color:var(--dim)}
 .attr-delta.neg{color:var(--amber)}
 
-.exact-budget{
-  margin-top:16px;padding-top:14px;border-top:1px solid var(--line-soft);
-  display:grid;gap:8px;
-}
-.exact-budget>div{display:flex;align-items:baseline;justify-content:space-between;font-size:13px;color:var(--muted)}
-.exact-budget>div b{font-size:19px;font-weight:900;color:var(--text);font-variant-numeric:tabular-nums}
-.exact-budget>span{font-size:11.5px;color:var(--dim)}
-.exact-budget>i{display:block;height:7px;border-radius:4px;background:rgba(255,255,255,.07);overflow:hidden}
-.exact-budget>i em{display:block;height:100%;border-radius:4px;width:0;background:linear-gradient(90deg,var(--blue),var(--cyan))}
-.exact-budget.over>div b,.exact-budget.over>span{color:var(--amber)}
-.exact-budget.over>i em{background:linear-gradient(90deg,var(--amber),var(--red))}
-
 /* 14.7 Badges recommandés */
 .style-badge-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
 .badge-group-label{
@@ -760,6 +748,7 @@ input[type=range]:focus-visible::-moz-range-thumb{box-shadow:var(--ring)}
 .summary-ring small{margin-top:1px;font-size:8px;letter-spacing:.09em;color:var(--muted);font-weight:800;text-transform:uppercase}
 .summary-head b{display:block;font-size:16px;font-weight:800}
 .summary-head p{margin-top:3px;font-size:12.5px;color:var(--muted)}
+.summary-note{margin:-6px 0 14px;font-size:11.5px;line-height:1.45;color:var(--dim)}
 .summary-bars{display:grid;gap:9px;margin-bottom:16px}
 .sbar{display:grid;grid-template-columns:1fr auto;gap:3px 10px;align-items:center;font-size:12.5px}
 .sbar span{color:var(--muted)}

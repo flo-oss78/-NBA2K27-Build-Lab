@@ -189,7 +189,7 @@
   var TABS=[
     {id:'trending',n:'Tendances',d:'Ce qui bouge en ce moment'},
     {id:'latest',  n:'Récents',  d:'Les derniers publiés'},
-    {id:'score',   n:'Mieux notés',d:'Les meilleures notes de build'},
+    {id:'score',   n:'Meilleure moyenne',d:'Les moyennes d’attributs les plus hautes (pas la note du jeu)'},
     {id:'top',     n:'Top',      d:'Les plus aimés et les plus vus'},
     {id:'mine',    n:'Mes builds',d:'Sauvegardés ou publiés depuis cet appareil'}
   ];

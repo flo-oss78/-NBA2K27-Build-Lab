@@ -144,7 +144,6 @@
 
     // Note
     var score=+(el('score')&&el('score').textContent)||0;
-    var grade=(el('buildGrade')&&el('buildGrade').textContent)||'';
     ctx.save();
     ctx.translate(W-190,110);
     ctx.beginPath();ctx.arc(0,0,86,0,Math.PI*2);
@@ -153,7 +152,7 @@
     ctx.lineWidth=14;ctx.strokeStyle='#22D3EE';ctx.lineCap='round';ctx.stroke();
     ctx.textAlign='center';
     ctx.font='900 62px Inter, system-ui, sans-serif';ctx.fillStyle='#fff';ctx.fillText(score,0,16);
-    ctx.font='800 18px Inter, system-ui, sans-serif';ctx.fillStyle='#94A3B6';ctx.fillText('NOTE '+grade,0,48);
+    ctx.font='800 18px Inter, system-ui, sans-serif';ctx.fillStyle='#94A3B6';ctx.fillText('MOYENNE',0,48);
     ctx.restore();
 
     // Nom du build

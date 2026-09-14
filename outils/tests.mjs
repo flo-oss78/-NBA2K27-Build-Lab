@@ -309,16 +309,16 @@ async function testsNavigateur(base) {
       const r = await nav.evaluer(`
         const attendus = Object.values(data).flat().length;
         const curseurs = document.querySelectorAll('#attributeGroups input[type=range]');
-        const coutAvant = document.getElementById('budgetUsed').textContent;
+        const tirVal = () => document.getElementById('shootVal').textContent;
+        const tirAvant = tirVal();
         const tir = [...curseurs].find(x => x.dataset.name === 'Three-Point');
         tir.value = +tir.value > 60 ? 40 : 90;
         tir.dispatchEvent(new Event('input', { bubbles: true }));
         await new Promise(r => setTimeout(r, 300));
-        return { attendus, curseurs: curseurs.length, coutAvant,
-                 coutApres: document.getElementById('budgetUsed').textContent,
+        return { attendus, curseurs: curseurs.length, tirAvant, tirApres: tirVal(),
                  validateur: document.getElementById('validationStatus')?.textContent };`);
       verifier(r.curseurs === r.attendus, `${r.curseurs} curseurs pour ${r.attendus} attributs`);
-      verifier(r.coutApres !== r.coutAvant, 'le coût ne réagit pas au curseur');
+      verifier(r.tirApres !== r.tirAvant, 'la moyenne du tir ne réagit pas au curseur');
       verifier(r.validateur, 'validateur absent');
       sansErreur('après modification d\u2019un curseur');
     });
@@ -396,6 +396,36 @@ async function testsNavigateur(base) {
       if (lu.taille !== build.height) ecarts.push(`taille ${lu.taille} au lieu de ${build.height}`);
       if (lu.style !== build.style) ecarts.push(`style ${lu.style} au lieu de ${build.style}`);
       verifier(!ecarts.length, ecarts.join('\n'));
+    });
+
+    // Build réel du jeu (GNR 96, arrière 1,91 m) : le site le déclarait
+    // « budget dépassé de 20 » et le notait « 70 — B+ », comme une note du jeu.
+    await test('un vrai build du jeu n’est ni jugé sur un budget inventé, ni noté comme dans le jeu', async () => {
+      const build = { position: 'SG', height: 75, weight: 185, wing: 78, style: 'Équilibré', hand: 'Droite',
+        attrs: { 'Close Shot': 48, 'Driving Layup': 53, 'Driving Dunk': 94, 'Standing Dunk': 38, 'Post Control': 42,
+                 'Mid-Range': 88, 'Three-Point': 94, 'Free Throw': 77, 'Pass Accuracy': 75, 'Ball Handle': 86,
+                 'Speed With Ball': 77, 'Interior Defense': 44, 'Perimeter Defense': 91, 'Steal': 84, 'Block': 45,
+                 'Offensive Rebound': 27, 'Defensive Rebound': 51, 'Speed': 87, 'Agility': 85, 'Strength': 52,
+                 'Vertical': 80, 'Stamina': 94 } };
+      const code = Buffer.from(JSON.stringify(build), 'utf8').toString('base64');
+      await nav.ouvrir(`${base}/?build=${encodeURIComponent(code)}`);
+      sansErreur('chargement d’un build du jeu');
+      const r = await nav.evaluer(`
+        document.body.classList.add('mode-expert');
+        await new Promise(r => setTimeout(r, 200));
+        const texte = document.body.innerText;
+        return { budget: (texte.match(/.{0,40}budget.{0,40}/i) || [null])[0],
+                 grade: !!document.getElementById('buildGrade'),
+                 libelle: document.querySelector('.summary-ring small')?.textContent,
+                 avertissement: !!document.querySelector('.summary-note'),
+                 validation: document.getElementById('validationStatus')?.textContent,
+                 aPortee: document.getElementById('badgeReachable')?.textContent };`);
+      verifier(!r.budget, `un budget est encore affiché : « ${r.budget} »`);
+      verifier(!r.grade, 'une lettre de note (B+, A…) est encore attribuée au build');
+      verifier(r.libelle === 'Moyenne', `le chiffre du résumé s’intitule « ${r.libelle} » au lieu de « Moyenne »`);
+      verifier(r.avertissement, 'rien ne précise que la moyenne n’est pas la note du jeu');
+      verifier(r.validation === 'BUILD COHÉRENT', `validation : ${r.validation}`);
+      verifier(+r.aPortee > 0, `badges à portée : ${r.aPortee}`);
     });
 
     await test('« Utiliser ce trio » ouvre le builder avec le bon gabarit', async () => {

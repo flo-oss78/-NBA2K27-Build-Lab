@@ -18,10 +18,10 @@ function validateBuild(r,caps){
   // renderBadges() vient de parcourir les 53 badges pour le même r : on relit son
   // total plutôt que de refaire la boucle badgeTier().
   const badgeCount=unlockedBadgeCount(r);
-  const used=simulatedCost(r), budget=1000;
-  if(used>budget) warnings.push(`Le budget indicatif simulé est dépassé de ${used-budget}.`);
-  warnings.push('Le coût des attributs et les caps sont indicatifs tant que les tables internes complètes de 2K27 ne sont pas publiées.');
-  return {errors,warnings,animFailures,badgeCount,used,budget};
+  // Plus de verdict « budget dépassé » : le budget de 1000 points était une
+  // invention du site, et il déclarait hors limites des builds réels du jeu.
+  warnings.push('Les caps sont indicatifs tant que les tables internes complètes de 2K27 ne sont pas publiées.');
+  return {errors,warnings,animFailures,badgeCount};
 }
 function renderValidation(r,caps){if(!document.getElementById("validationStatus"))return; /* section absente de cette page */
   const v=validateBuild(r,caps), status=document.getElementById('validationStatus'), head=document.getElementById('validationHeadline'), list=document.getElementById('validationErrors');
@@ -33,8 +33,7 @@ function renderValidation(r,caps){if(!document.getElementById("validationStatus"
   document.getElementById('checkCaps').textContent=(v.errors.some(e=>e.includes('dépasse le cap'))?'✕':'✓');
   document.getElementById('checkBadges').textContent=`✓ ${v.badgeCount} accessibles`;
   document.getElementById('checkAnimations').textContent=`✓ ${ANIMATIONS.length-v.animFailures.length}/${ANIMATIONS.length}`;
-  const budgetEl=document.getElementById('checkBudget');budgetEl.textContent=`${v.used>v.budget?'✕':'✓'} ${v.used}/${v.budget}`;
-  ['checkBody','checkCaps','checkBadges','checkAnimations','checkBudget'].forEach(id=>{const el=document.getElementById(id);el.className=(el.textContent.includes('✕')?'fail':(el.textContent.includes('✓')?'pass':'warn'))});
+  ['checkBody','checkCaps','checkBadges','checkAnimations'].forEach(id=>{const el=document.getElementById(id);el.className=(el.textContent.includes('✕')?'fail':(el.textContent.includes('✓')?'pass':'warn'))});
   let html=v.errors.map(e=>`<div class="validation-error">❌ ${e}</div>`).join(''); if(!html) html='<div class="validation-ok">✅ Aucun conflit détecté avec les règles actuellement intégrées.</div>'; list.innerHTML=html;
   if(v.warnings.length) list.insertAdjacentHTML('beforeend',`<div class="validation-error" style="background:rgba(255,190,50,.07);border-color:rgba(255,190,50,.18)">⚠️ ${v.warnings[0]}</div>`);
 }
