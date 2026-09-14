@@ -152,6 +152,30 @@ async function testsStatiques() {
     verifier(A.filter(a => a.jeu).length === S.jeu.animations, 'animations confirmées en jeu manquantes');
   });
 
+  await test('les builds réels sont complets, sourcés et dans des corps autorisés', () => {
+    const ctx = {};
+    vm.createContext(ctx);
+    vm.runInContext(fs.readFileSync('builds-reels.js', 'utf8') +
+      ';this.B=BUILDS_REELS;this.S=BUILDS_SOURCE;this.M=BUDGET_MODELES;this.A=BUILDS_ATTRIBUTS;this.corpsLegal=corpsLegal;this.budgetEstime=budgetEstime;', ctx);
+    const { B, S, M, A } = ctx, problemes = [];
+    verifier(A.length === 21 && A.every(a => ATTRIBUTS.includes(a)), 'ordre des attributs inconnu');
+    if (B.length < 3000) problemes.push(`${B.length} builds seulement`);
+    if (B.filter(b => b[0] === 'bp').length !== 40) problemes.push('les 40 Signature Blueprints manquent');
+    for (const b of B) {
+      const [src, pos, h, w, wing, nom, v] = b, c = ctx.corpsLegal(pos, h);
+      if (!['lc', 'bp'].includes(src) || !nom) problemes.push(`source ou nom manquant : ${JSON.stringify(b).slice(0, 80)}`);
+      if (v.length !== 21 || v.some(n => !(Number.isInteger(n) && n >= 25 && n <= 99))) problemes.push(`${nom} : notes invalides`);
+      if (src === 'lc' && (!c || w < c.poidsMin || w > c.poidsMax || wing < c.envMin || wing > c.envMax)) problemes.push(`${nom} : corps ${pos} ${h}/${w}/${wing} non autorisé`);
+    }
+    verifier(!problemes.length, problemes.slice(0, 10).join('\n'));
+    for (const [cle, m] of Object.entries(M)) verifier(m.marge > 0 && m.marge < 0.5 && m.w.length === 21, `modèle de budget ${cle} incohérent`);
+    verifier(S.sources.every(s => /^https:\/\//.test(s.url)) && /estim/i.test(S.avertissement), 'sources ou avertissement manquants');
+    // Les builds réels à 99 doivent retomber dans la marge de leur modèle, pour la plupart.
+    const parts = B.map(b => { const e = ctx.budgetEstime(b[1], b[2], Object.fromEntries(A.map((a, i) => [a, b[6][i]]))); return Math.abs(e.part - 1) <= e.marge; });
+    const dedans = parts.filter(Boolean).length / parts.length;
+    verifier(dedans > 0.9, `seulement ${(dedans * 100).toFixed(1)} % des builds réels dans leur marge de budget`);
+  });
+
   await test('la page 404 existe, n’est pas indexable et ses liens mènent quelque part', () => {
     verifier(fs.existsSync('404.html'), '404.html absent : Cloudflare servirait le builder en 200 sur toute adresse inconnue');
     const html = fs.readFileSync('404.html', 'utf8');
@@ -481,7 +505,9 @@ async function testsNavigateur(base) {
         document.body.classList.add('mode-expert');
         await new Promise(r => setTimeout(r, 200));
         const texte = document.body.innerText;
-        return { budget: (texte.match(/.{0,40}budget.{0,40}/i) || [null])[0],
+        // Le budget ESTIMÉ, avec sa marge, est légitime ; l'ancien budget inventé
+        // (« Budget indicatif : x / 1000 », « dépassé de ») ne doit pas revenir.
+        return { budget: (texte.match(/.{0,40}(budget indicatif|\\/ ?1 ?000|budget[^.]{0,30}dépassé).{0,40}/i) || [null])[0],
                  grade: !!document.getElementById('buildGrade'),
                  libelle: document.querySelector('.summary-ring small')?.textContent,
                  avertissement: !!document.querySelector('.summary-note'),
@@ -562,6 +588,67 @@ async function testsNavigateur(base) {
       verifier(modifie.pres.max !== 76 && modifie.etat.includes('Gabarit modifié'),
         `plafonds du jeu encore appliqués après changement de taille : ${JSON.stringify(modifie)}`);
       verifier(revenu.taille === 75 && revenu.pres.max === 76 && revenu.dunk.v === 94, `retour au build importé raté : ${JSON.stringify(revenu)}`);
+    });
+
+    await test('le builder estime le budget, respecte les corps du jeu et charge un build réel', async () => {
+      const code = Buffer.from(JSON.stringify(BUILD_JEU), 'utf8').toString('base64');
+      await nav.ouvrir(`${base}/?build=${encodeURIComponent(code)}`);
+      const r = await nav.evaluer(`
+        const el = id => document.getElementById(id), attendre = ms => new Promise(r => setTimeout(r, ms));
+        const curseur = n => [...document.querySelectorAll('#attributeGroups input')].find(x => x.dataset.name === n);
+        const budget = { visible: !el('budgetEstime').hidden, valeur: el('budgetEstimeValeur').textContent, marge: el('budgetEstimeMarge').textContent, texte: el('budgetEstimeTexte').textContent };
+        const cartes = document.querySelectorAll('#buildsProches .build-reel').length;
+        // Monter tous les attributs à fond doit sortir de la zone d'un build à 99.
+        const avant = parseInt(budget.valeur);
+        document.querySelectorAll('#attributeGroups input').forEach(x => { x.value = x.max; x.dispatchEvent(new Event('input', { bubbles: true })); });
+        await attendre(200);
+        const plein = { valeur: parseInt(el('budgetEstimeValeur').textContent), dessus: el('budgetEstime').classList.contains('dessus') };
+        // Charger le premier build réel proposé : ses notes ne doivent pas être rognées.
+        const bouton = document.querySelector('[data-charger-build="0"]');
+        const i = +bouton.dataset.chargerBuild;
+        bouton.click(); await attendre(300);
+        const b = buildsProches(el('position').value, +el('height').value, ratings(), 5);
+        // Un meneur ne peut pas mesurer 7'1" : la taille est ramenée dans la plage du poste.
+        el('position').value = 'PG'; el('height').value = 85;
+        el('height').dispatchEvent(new Event('input', { bubbles: true })); await attendre(200);
+        return { budget, cartes, avant, plein, charge: { taille: +el('height').value }, pgTaille: +el('height').value,
+                 legalPG: corpsLegal('PG', 79), maxPG: Math.max(...Object.keys(CORPS_LEGAUX.PG).map(Number)) };`);
+      sansErreur('budget estimé et builds réels');
+      verifier(r.budget.visible && /\d+ %/.test(r.budget.valeur) && /± \d+ %/.test(r.budget.marge), `budget estimé absent : ${JSON.stringify(r.budget)}`);
+      verifier(r.avant > 70 && r.avant < 130, `ton build réel à 96 estimé à ${r.avant} % du budget`);
+      verifier(r.plein.dessus && r.plein.valeur > r.avant, `tout monter à fond n’est pas signalé au-delà du budget : ${JSON.stringify(r.plein)}`);
+      verifier(r.cartes === 5, `${r.cartes} builds réels proches affichés`);
+      verifier(r.pgTaille === r.maxPG, `un meneur à 7'1" n’est pas ramené à ${r.maxPG} po (taille : ${r.pgTaille})`);
+    });
+
+    await test('un build réel chargé garde exactement ses notes et son corps', async () => {
+      await nav.ouvrir(base + '/');
+      const r = await nav.evaluer(`
+        const el = id => document.getElementById(id), attendre = ms => new Promise(r => setTimeout(r, ms));
+        el('position').value = 'C'; el('position').dispatchEvent(new Event('input', { bubbles: true }));
+        el('height').value = 84; el('height').dispatchEvent(new Event('input', { bubbles: true }));
+        await attendre(200);
+        const bouton = document.querySelector('[data-charger-build="0"]');
+        const attendu = buildsProches(el('position').value, +el('height').value, ratings(), 5)[0].b;
+        bouton.click(); await attendre(300);
+        const curseurs = () => BUILDS_ATTRIBUTS.map(a => [...document.querySelectorAll('#attributeGroups input')].find(x => x.dataset.name === a));
+        const lu = curseurs().map(x => +x.value);
+        const validation = el('validationStatus').textContent;
+        const corps = [el('position').value, +el('height').value, +el('weight').value, +el('wing').value];
+        // Corps des Signature Blueprints : les plafonds publiés sont exacts, chaque curseur doit s'y arrêter.
+        const plafondsFaux = [];
+        for (const b of BUILDS_REELS.filter(b => b[0] === 'bp' && b[7])) {
+          apply({ position: b[1], height: b[2], weight: b[3], wing: b[4], style: el('style').value, attrs: {} });
+          curseurs().forEach((x, i) => { if (+x.max !== b[7][i]) plafondsFaux.push(b[5] + ' / ' + BUILDS_ATTRIBUTS[i] + ' : ' + x.max + ' au lieu de ' + b[7][i]); });
+        }
+        return { attendu, corps, lu, validation, plafondsFaux };`);
+      const [, pos, h, w, wing, nom, v] = r.attendu;
+      const ecarts = v.map((n, i) => n === r.lu[i] ? null : `${i} : ${r.lu[i]} au lieu de ${n}`).filter(Boolean);
+      verifier(JSON.stringify(r.corps) === JSON.stringify([pos, h, w, wing]), `corps ${r.corps} au lieu de ${[pos, h, w, wing]} (${nom})`);
+      verifier(!ecarts.length, `« ${nom} » rogné par les plafonds : ${ecarts.join(', ')}`);
+      verifier(r.validation === 'BUILD COHÉRENT', `validation : ${r.validation}`);
+      verifier(!r.plafondsFaux.length, 'plafonds officiels non appliqués :\n' + r.plafondsFaux.slice(0, 8).join('\n'));
+      sansErreur('chargement d’un build réel');
     });
 
     await test('« Utiliser ce trio » ouvre le builder avec le bon gabarit', async () => {

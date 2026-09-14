@@ -10,7 +10,8 @@ function validateBuild(r,caps){
   const errors=[]; const warnings=[];
   const h=heightInches(), w=+document.getElementById('weight').value, wing=+document.getElementById('wing').value;
   const wingEl=document.getElementById('wing'), wingSliderMax=+wingEl.max, wingSliderMin=+wingEl.min;
-  const minWing=Math.max(wingSliderMin,h+2), maxWing=Math.min(wingSliderMax,h+6);
+  const legal=typeof corpsLegal==='function'?corpsLegal(document.getElementById('position').value,h):null;
+  const minWing=legal?legal.envMin:Math.max(wingSliderMin,h+2), maxWing=legal?legal.envMax:Math.min(wingSliderMax,h+6);
   if(wing<minWing||wing>maxWing) errors.push(`Envergure invalide pour ${heightText(h)} : ${heightText(minWing)} à ${heightText(maxWing)}.`);
   inputs.forEach(x=>{const v=+x.value, cap=+(caps[x.dataset.name]??99); if(v>cap) errors.push(`${x.dataset.name} ${v} dépasse le cap calculé de ${cap}.`);});
   const animFailures=ANIMATIONS.filter(a=>!animationAccessible(a,r,h));

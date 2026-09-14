@@ -79,7 +79,20 @@ function bodyCaps(){
  // BUG CORRIGÉ : quand h+2 dépassait le max du slider, la valeur restait clampée
  // et bodyCaps() se rappelait indéfiniment (dépassement de pile dès 7'1").
  const wingMax=+wingEl.max, wingMin=+wingEl.min;
- const minWing=Math.max(wingMin,Math.min(wingMax,h+2)), maxWing=Math.min(wingMax,h+6);
+ // Corps autorisés par le jeu (builds-reels.js) : la taille dépend du poste, le
+ // poids et l'envergure de la taille. Sans cette table, ancienne règle approchée.
+ const tableCorps=typeof CORPS_LEGAUX!=='undefined'?CORPS_LEGAUX[pos]:null;
+ if(tableCorps&&!tableCorps[h]){
+  const tailles=Object.keys(tableCorps).map(Number), heightEl=document.getElementById('height');
+  const hc=Math.min(Math.max(h,Math.min(...tailles)),Math.max(...tailles));
+  if(hc!==h){heightEl.value=hc;if(+heightEl.value===hc)return bodyCaps()}
+ }
+ const legal=tableCorps?corpsLegal(pos,h):null;
+ if(legal){
+  const weightEl=document.getElementById('weight');
+  if(w<legal.poidsMin||w>legal.poidsMax){weightEl.value=Math.min(Math.max(w,legal.poidsMin),legal.poidsMax);if(+weightEl.value!==w)return bodyCaps()}
+ }
+ const minWing=legal?legal.envMin:Math.max(wingMin,Math.min(wingMax,h+2)), maxWing=legal?legal.envMax:Math.min(wingMax,h+6);
  if(wing<minWing){wingEl.value=minWing; if(+wingEl.value>wing)return bodyCaps()}
  if(wing>maxWing){wingEl.value=maxWing; if(+wingEl.value<wing)return bodyCaps()}
  const size=h-80, wingBonus=Math.max(-3,Math.min(3,(wing-h-2)-2)), weightBonus=(w-210)/35;
@@ -92,6 +105,9 @@ function bodyCaps(){
  const estimes=Object.fromEntries(Object.entries(caps).map(([k,v])=>[k,Math.max(40,Math.min(99,Math.round(v)))]));
  // Plafonds lus dans le jeu : ils priment sur l'estimation, brise-plafonds
  // compris. Appliqués APRÈS le plancher de 40, qu'un vrai Max peut descendre.
+ // Plafonds connus pour ce corps (builds réels et Blueprints officiels).
+ const connus=typeof capsConnus==='function'?capsConnus(h,w,wing):null;
+ if(connus)for(const [k,m] of Object.entries(connus.caps))if(k in estimes)estimes[k]=connus.exacts?m:Math.max(estimes[k],m);
  const jeu=importJeuActif();
  if(jeu)for(const [k,m] of Object.entries(jeu.max))if(k in estimes)estimes[k]=Math.min(99,m+getBreaker(k));
  return estimes;

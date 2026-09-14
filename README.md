@@ -93,6 +93,8 @@ stockés dans le navigateur du visiteur et le statut affiche « Serveur : local 
 | `builder-data.js` | Tables de référence : attributs, 53 badges, takeovers, coûts. **Chargé avant `app.js`** |
 | `validator.js` | Validateur de cohérence (gabarit, caps, badges, animations). **Chargé avant `app.js`** |
 | `app.js` | Moteur : attributs, caps, badges, takeovers, animations, jetons, scouting |
+| `builds-reels.js` | **Généré** par `node outils/importer-builds.mjs` : builds complets réels (LockerCodes, Blueprints 2K), corps autorisés, budget estimé et sa marge. **Chargé avant `app.js`** |
+| `builds-ui.js` | Budget estimé et builds réels proches dans le builder. **Chargé après `app.js`** |
 | `import-jeu.js` | Import d'un build recopié du jeu : plafonds réels et brise-plafonds. **Chargé après `app.js`** |
 | `optimizer.js` | Optimiseur : redistribution des points sans en ajouter (équivalence indicative) |
 | `hub.js` | Build Hub et comparateur. **Chargé après `app.js`, avant `server-client.js`** |

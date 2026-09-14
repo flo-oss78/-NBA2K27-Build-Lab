@@ -566,6 +566,29 @@ body.mode-expert .start-here{display:none}
 }
 .reset-style{width:100%;margin-bottom:12px}
 
+/* Budget estimé et builds réels */
+.budget-estime .exact-card-title>span b{font-size:18px}
+.budget-estime .exact-card-title>span small{color:var(--dim);font-weight:700}
+.budget-jauge{position:relative;height:10px;border-radius:5px;background:rgba(255,255,255,.07);overflow:hidden;margin:4px 0 10px}
+.budget-jauge i{position:absolute;top:0;bottom:0;background:rgba(34,211,238,.18)}
+.budget-jauge em{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.budget-estime.dessus .budget-jauge em{background:linear-gradient(90deg,var(--amber),var(--red))}
+.budget-estime.dessus .exact-card-title>span b{color:var(--amber)}
+.budget-texte{font-size:12.5px;line-height:1.5}
+.budget-note{margin-top:6px;font-size:11px;color:var(--dim);line-height:1.5}
+.builds-proches{display:grid;gap:10px}
+.build-reel{display:grid;gap:6px;padding:11px 12px;background:var(--panel-2);border:1px solid var(--line-soft);border-radius:var(--r-sm)}
+.build-reel-tete{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.build-reel-tete b{font-size:13.5px}
+.build-reel-source{font-size:10px;font-weight:800;white-space:nowrap;color:var(--dim)}
+.build-reel-source.bp{color:var(--cyan)}
+.build-reel small{font-size:11px;color:var(--dim)}
+.build-reel-notes,.build-reel-anims{display:flex;flex-wrap:wrap;gap:5px 10px;font-size:11.5px;color:var(--muted)}
+.build-reel-notes b,.build-reel-anims b{color:var(--text)}
+.build-reel details summary{cursor:pointer;font-size:11.5px;color:var(--muted)}
+.build-reel-anims{margin-top:6px}
+.build-reel button{min-height:32px;padding:4px 12px;font-size:12px;justify-self:start}
+
 /* Import d'un build du jeu */
 .import-jeu-btn{width:100%;margin-bottom:10px}
 .import-jeu-etat{

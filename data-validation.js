@@ -21,7 +21,7 @@
     if(!b || typeof b!=="object"){ return {ok:false,errors:["Payload build invalide."]}; }
     if(!POSITIONS.includes(b.position)) errors.push("Position invalide.");
     if(!finiteInt(b.height,69,88)) errors.push("Taille hors plage Builder.");
-    if(!finiteInt(b.weight,160,300)) errors.push("Poids hors plage Builder.");
+    if(!finiteInt(b.weight,140,300)) errors.push("Poids hors plage Builder.");
     if(!finiteInt(b.wing,69,96)) errors.push("Envergure hors plage Builder.");
     if(typeof b.attributes!=="object" || !b.attributes) errors.push("Attributs manquants.");
     else {

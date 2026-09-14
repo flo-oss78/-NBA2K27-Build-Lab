@@ -48,10 +48,12 @@
 
   function encodeBuild(){
     var w=new Writer();
-    w.push(1,3);                                             // version du format
+    // Format 2 : le poids part de 140 lbs (les meneurs de 5'9" descendent à 145).
+    // Le format 1, qui partait de 160, reste lisible pour les anciens liens.
+    w.push(2,3);                                             // version du format
     w.push(Math.max(0,POS.indexOf(el('position').value)),3);
     w.push(clamp(+el('height').value,69,88)-69,5);
-    w.push(clamp(+el('weight').value,160,300)-160,8);
+    w.push(clamp(+el('weight').value,140,300)-140,8);
     w.push(clamp(+el('wing').value,69,86)-69,5);
     w.push(Math.max(0,HANDS.indexOf(el('dominantHand').value)),1);
     w.push(Math.max(0,STYLES.indexOf(el('style').value)),3);
@@ -64,11 +66,11 @@
   function decodeBuild(code){
     var r=new Reader(code);
     var fmt=r.take(3);
-    if(fmt!==1)throw new Error('Version de code inconnue');
+    if(fmt!==1&&fmt!==2)throw new Error('Version de code inconnue');
     var obj={
       position:POS[r.take(3)]||'SF',
       height:r.take(5)+69,
-      weight:r.take(8)+160,
+      weight:r.take(8)+(fmt===1?160:140),
       wing:r.take(5)+69,
       hand:HANDS[r.take(1)]||'Droite',
       style:STYLES[r.take(3)]||'Équilibré',

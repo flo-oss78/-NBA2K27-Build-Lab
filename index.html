@@ -147,8 +147,8 @@
         </label>
 
         <label for="weight">Poids <output id="weightOut" for="weight">180 lbs (82 kg)</output>
-          <input id="weight" type="range" min="160" max="300" value="180" step="1">
-          <span class="range-scale" aria-hidden="true"><i>160 lbs</i><i>300 lbs</i></span>
+          <input id="weight" type="range" min="140" max="300" value="180" step="1">
+          <span class="range-scale" aria-hidden="true"><i>140 lbs</i><i>300 lbs</i></span>
         </label>
 
         <label for="wing">Envergure <output id="wingOut" for="wing">6'10" (208 cm)</output>
@@ -233,6 +233,20 @@
           </div>
         </div>
         <div id="attributeGroups"></div>
+      </div>
+
+      <!-- Budget ESTIMÉ sur des builds réels : la règle exacte du jeu n'est pas publique. -->
+      <div id="budgetEstime" class="panel exact-card budget-estime" hidden>
+        <div class="exact-card-title"><h2>Budget estimé</h2><span><b id="budgetEstimeValeur">—</b> <small id="budgetEstimeMarge"></small></span></div>
+        <div class="budget-jauge" aria-hidden="true"><i id="budgetEstimeZone"></i><em id="budgetEstimeBarre"></em></div>
+        <p id="budgetEstimeTexte" class="budget-texte"></p>
+        <p class="budget-note">Estimation calibrée sur des builds réels complets à 99. La zone claire est la marge d’erreur mesurée : la règle exacte du jeu dépend des plafonds de chaque corps, qui ne sont pas publics.</p>
+      </div>
+
+      <div class="panel exact-card builds-reels-carte">
+        <div class="exact-card-title"><h2>Builds réels proches</h2><span>même poste, taille ±1</span></div>
+        <p id="buildsSource" class="data-note"></p>
+        <div id="buildsProches" class="builds-proches"></div>
       </div>
 
       <div class="panel exact-card animation-reco-card">
@@ -513,8 +527,10 @@
      - hub.js avant server-client.js, qui remplace likeBuild/openBuildModal. -->
 <script src="/builder-data.js"></script>
 <script src="/validator.js"></script>
+<script src="/builds-reels.js"></script>
 <script src="/app.js"></script>
 <script src="/import-jeu.js"></script>
+<script src="/builds-ui.js"></script>
 <script src="/optimizer.js"></script>
 <script src="/hub.js"></script>
 <script src="/v15-intelligence.js"></script>
