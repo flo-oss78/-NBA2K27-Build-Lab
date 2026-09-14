@@ -69,6 +69,32 @@
     else deplacer(champ,Math.round(((bout<0?+champ.min:+champ.max)-champ.value)/(+champ.step||1)));
   }
 
+  /* ---- Noms des attributs tels qu'affichés par le jeu en français ----
+     La table vient de import-jeu.js (écran « Améliorations d'attribut »). Le nom
+     anglais reste la clé du moteur (data-name) et s'affiche en mode Expert. */
+  // L'endurance n'est pas sur l'écran d'import : on garde le nom que le site lui donne déjà.
+  var NOMS_FR=Object.assign({Stamina:'Endurance'},window.NOMS_ATTRIBUTS_FR||{});
+  builder.querySelectorAll('#attributeGroups .attr').forEach(function(ligne){
+    var curseur=ligne.querySelector('input[type=range]'),bloc=ligne.querySelector('.attr-name');
+    var nom=bloc&&bloc.querySelector('span');
+    if(!curseur||!nom)return;
+    var en=curseur.dataset.name,fr=NOMS_FR[en];
+    if(!fr)return;
+    nom.textContent=fr;
+    var sous=document.createElement('span'),anglais=document.createElement('em');
+    sous.className='attr-sous';
+    anglais.className='attr-en';
+    anglais.textContent=en;
+    sous.appendChild(anglais);
+    var cap=bloc.querySelector('small');
+    if(cap)sous.appendChild(cap);
+    bloc.appendChild(sous);
+    curseur.setAttribute('aria-label',fr);
+    ligne.querySelectorAll('.attr-step').forEach(function(b){
+      b.setAttribute('aria-label',(b.classList.contains('plus')?'Augmenter ':'Diminuer ')+fr);
+    });
+  });
+
   /* ---- Roues ---- */
   var zone=$('hqRoues');
   if(zone){
@@ -219,7 +245,15 @@
 
   /* ---- Sous-onglets ---- */
   var onglets=[].slice.call(builder.querySelectorAll('.hq-onglets [role="tab"]'));
+  var centre=builder.querySelector('.builder-centre');
   function ouvrir(nom,focus){
+    // Changer d'onglet tout en bas d'une longue liste laissait le lecteur au
+    // milieu de nulle part : on remonte au début du panneau, sous l'en-tête.
+    if(centre){
+      var haut=centre.getBoundingClientRect().top;
+      var enTeteH=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h'))||0;
+      if(haut<enTeteH)window.scrollTo({top:window.scrollY+haut-enTeteH,behavior:'auto'});
+    }
     onglets.forEach(function(o){
       var actif=o.dataset.onglet===nom;
       o.setAttribute('aria-selected',String(actif));

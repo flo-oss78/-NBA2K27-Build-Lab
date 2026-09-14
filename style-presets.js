@@ -169,6 +169,9 @@
     var html='',last='';
     plan.forEach(function(row){
       var group=row[0],name=row[1],tier=row[2];
+      // Plans écrits pour 2K26 : on n'affiche que les badges qui existent dans
+      // NBA 2K27 (les 53 relevés dans le jeu en français).
+      if(typeof BADGE_FR!=='undefined'&&!BADGE_FR[name])return;
       if(group!==last){
         html+='<div class="badge-group-label">'+esc(group)+' <span>('+(GROUP_HINT[group]||'recommandés')+')</span></div>';
         last=group;

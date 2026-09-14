@@ -21,6 +21,8 @@
     ['Offensive Rebound','Rebond offensif'],['Defensive Rebound','Rebond défensif'],
     ['Speed','Vitesse'],['Agility','Agilité'],['Strength','Force'],['Vertical','Détente']
   ];
+  // Même libellés pour les rangées d'attributs du builder (hq-builder.js).
+  window.NOMS_ATTRIBUTS_FR=Object.fromEntries(ATTRS_JEU);
   const POSTES=[['PG','Meneur'],['SG','Arrière'],['SF','Ailier'],['PF','Ailier fort'],['C','Pivot']];
   const BRISE_PLAFONDS_MAX=5;
 
