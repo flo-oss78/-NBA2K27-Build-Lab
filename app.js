@@ -274,7 +274,36 @@ function renderSourceAnimations(){
  const s=ANIMATIONS_SOURCE, [lab,lc]=s.sources;
  el.innerHTML=`📚 <b>${s.total.toLocaleString('fr-FR')} animations</b> — source <a href="${escapeHTML(lab.url)}" target="_blank" rel="noopener">${escapeHTML(lab.nom)}</a> (${escapeHTML(lab.mention)}), recoupées ligne par ligne avec <a href="${escapeHTML(lc.url)}" target="_blank" rel="noopener">${escapeHTML(lc.nom)}</a> (${escapeHTML(lc.mention)}) : <b>${s.recoupees}</b> identiques, <b>${s.desaccords}</b> en désaccord, ${s.nba2klabSeul} sans équivalent. ${s.jeu.animations} animations sont en plus <b>confirmées en jeu</b> (${escapeHTML(s.jeu.build)}). ${escapeHTML(s.regleTir)} Données communautaires, pas une publication officielle 2K.`;
 }
-function carteAnimation(a,ok,r,h){
+/* Repère « Conseillée pour ton build » : une règle du site, pas un classement du jeu.
+   Dans chaque catégorie (hors bases de tir du créateur de tir) :
+   - conseil : l'animation la plus exigeante que le build peut équiper à sa taille ;
+   - suivant : parmi les animations plus exigeantes, celle qui demande le moins de points. */
+const ANIM_SANS_CONSEIL=new Set(['Jumper Base']);
+function exigenceAnimation(a){const v=Object.values(a?.req||{});return v.length?Math.max(...v):0}
+function conseilsAnimations(r,h){
+ const par=new Map();
+ for(const a of ANIMATIONS){
+  if(ANIM_SANS_CONSEIL.has(a.category)||h<a.minH||h>a.maxH||animationManques(a,r).length)continue;
+  const c=par.get(a.category)||{conseil:null,suivant:null,manques:null};
+  const ea=exigenceAnimation(a),ec=exigenceAnimation(c.conseil);
+  if(!c.conseil||ea>ec||(ea===ec&&a.name.localeCompare(c.conseil.name,'fr')<0))c.conseil=a;
+  par.set(a.category,c);
+ }
+ for(const a of ANIMATIONS){
+  if(ANIM_SANS_CONSEIL.has(a.category)||h<a.minH||h>a.maxH)continue;
+  const manques=animationManques(a,r); if(!manques.length)continue;
+  const c=par.get(a.category)||{conseil:null,suivant:null,manques:null};
+  if(c.conseil&&exigenceAnimation(a)<=exigenceAnimation(c.conseil)){par.set(a.category,c);continue}
+  const total=manques.reduce((s,[,n])=>s+n,0), avant=c.manques?c.manques.reduce((s,[,n])=>s+n,0):Infinity;
+  if(total<avant||(total===avant&&exigenceAnimation(a)>exigenceAnimation(c.suivant))){c.suivant=a;c.manques=manques}
+  par.set(a.category,c);
+ }
+ return par;
+}
+window.conseilsAnimations=conseilsAnimations;
+function carteAnimation(a,ok,r,h,conseils){
+ const repere=conseils?.get(a.category);
+ const marque=repere?.conseil===a?'<span class="anim-repere conseil">Conseillée pour ton build</span>':repere?.suivant===a?'<span class="anim-repere suivant">À débloquer ensuite</span>':'';
  const heightOK=h>=a.minH&&h<=a.maxH, manques=animationManques(a,r), e=Object.entries(a.req||{});
  const nomA=n=>typeof nomAttribut==='function'?nomAttribut(n):n;
  const m=p=>(p*0.0254).toFixed(2).replace('.',',')+' m';
@@ -286,7 +315,7 @@ function carteAnimation(a,ok,r,h){
  const cat=nomCategorieAnimation(a.category);
  const statut=ok?['ok','Accessible']:!heightOK?['taille','Hors taille']:['bloquee','Bloquée'];
  return `<article class="anim-card ${ok?'ok':''}"><div class="anim-top"><div class="anim-name">${escapeHTML(a.name)}</div><span class="anim-badge ${statut[0]}">${statut[1]}</span></div>`+
-  `<div class="anim-meta"><span>${escapeHTML(cat)}</span>${cat!==a.category?`<i>${escapeHTML(a.category)}</i>`:''}<span class="anim-taille">${m(a.minH)} à ${m(a.maxH)}</span></div>`+
+  `<div class="anim-meta"><span>${escapeHTML(cat)}</span>${cat!==a.category?`<i>${escapeHTML(a.category)}</i>`:''}<span class="anim-taille">${m(a.minH)} à ${m(a.maxH)}</span></div>`+marque+
   `<div class="reqs">${reqs}</div>`+
   `${!heightOK?`<p class="missing">Réservée aux joueurs de ${m(a.minH)} à ${m(a.maxH)}.</p>`:''}`+
   `${manques.length?`<p class="missing">Il te manque : ${manques.map(([k,n])=>`${escapeHTML(String(k).split(' ou ').map(nomA).join(' ou '))} +${n}`).join(' et ')}.</p>`:''}`+
@@ -307,16 +336,18 @@ function renderAnimations(){
   grpBox.innerHTML=`<button type="button" data-groupe="all" aria-pressed="${cat==='all'&&grp==='all'}">Toutes</button>`+
    [...groupes].map(([g,[o,t]])=>`<button type="button" data-groupe="${escapeHTML(g)}" aria-pressed="${actif===g}">${escapeHTML(g)} <b>${o}/${t}</b></button>`).join('');
  }
+ const conseils=conseilsAnimations(r,h);
  let accessibles=0; const retenues=[];
  for(const a of ANIMATIONS){
   if(cat!=='all'){if(a.category!==cat)continue}
   else if(grp!=='all'&&a.group!==grp)continue;
+  if(status==='conseil'&&conseils.get(a.category)?.conseil!==a&&conseils.get(a.category)?.suivant!==a)continue;
   if(q&&!(a.name.toLowerCase().includes(q)||a.category.toLowerCase().includes(q)||nomCategorieAnimation(a.category).toLowerCase().includes(q)))continue;
   const ok=animationAccessible(a,r,h); if(ok)accessibles++;
   if(status==='yes'&&!ok||status==='no'&&ok)continue;
   retenues.push([a,ok]);
  }
- list.innerHTML=retenues.slice(0,animLimite).map(([a,ok])=>carteAnimation(a,ok,r,h)).join('')||'<div class="empty">Aucune animation dans ce filtre.</div>';
+ list.innerHTML=retenues.slice(0,animLimite).map(([a,ok])=>carteAnimation(a,ok,r,h,conseils)).join('')||'<div class="empty">Aucune animation dans ce filtre.</div>';
  const reste=retenues.length-animLimite, plus=document.getElementById('animPlus');
  if(plus){plus.hidden=reste<=0;plus.textContent=`Afficher ${Math.min(ANIM_PAGE,reste)} de plus (${reste} restantes)`}
  texte('animResultats',`${retenues.length.toLocaleString('fr-FR')} résultat${retenues.length>1?'s':''}`);

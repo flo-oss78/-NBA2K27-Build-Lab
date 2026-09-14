@@ -192,9 +192,22 @@
   function renderStyleAnimations(style,r){
     var box=el('styleAnimationRecommendations');
     if(!box)return;
+    var h=typeof heightInches==='function'?heightInches():78;
+    // Conseils calculés sur le build (app.js) : l'animation la plus exigeante équipable par catégorie.
+    if(typeof window.conseilsAnimations==='function'){
+      var CLES=['Dribble Style','Signature Size-Up','Crossover Escape','Behind the Back Escape','Hesitation Escape','Go-To Shot','Dribble Pull-Up','Spin Jumper','Hop Jumper','Layup Style','Pass Style'];
+      var conseils=window.conseilsAnimations(r,h);
+      var nomA=function(n){return typeof nomAttribut==='function'?nomAttribut(n):n};
+      box.innerHTML=CLES.map(function(cat){
+        var c=conseils.get(cat)||{}, libelle=typeof nomCategorieAnimation==='function'?nomCategorieAnimation(cat):cat;
+        if(c.conseil)return '<div class="style-animation-item ok"><b>'+esc(libelle)+'</b><span>'+esc(c.conseil.name)+'</span></div>';
+        var aide=c.suivant?'À débloquer : '+c.suivant.name+' ('+c.manques.map(function(m){return String(m[0]).split(' ou ').map(nomA).join(' ou ')+' +'+m[1]}).join(', ')+')':'Aucune à ta taille';
+        return '<div class="style-animation-item locked"><b>'+esc(libelle)+'</b><span>'+esc(aide)+'</span></div>';
+      }).join('');
+      return;
+    }
     var rows=STYLE_ANIMATIONS[style]||STYLE_ANIMATIONS['Équilibré'];
     var anims=window.ANIMATIONS||[];
-    var h=typeof heightInches==='function'?heightInches():78;
     box.innerHTML=rows.map(function(row){
       var label=row[0],name=row[1],cat=CATEGORIE_PAR_LIBELLE[label]||row[2];
       // Le nom seul (sans catégorie) sert de dernier repli, mais uniquement

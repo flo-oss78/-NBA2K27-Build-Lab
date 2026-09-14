@@ -788,6 +788,45 @@ async function testsNavigateur(base) {
       sansErreur('filtres des animations');
     });
 
+    await test('chaque catégorie propose une animation conseillée, pour n\u2019importe quel corps', async () => {
+      await nav.ouvrir(base + '/');
+      const r = await nav.evaluer(`
+        // 60 builds tirés au hasard (graine fixe) parmi les corps autorisés, notes de 25 à 99.
+        let graine = 27; const hasard = () => (graine = (graine * 16807) % 2147483647) / 2147483647;
+        const corps = []; for (const [p, t] of Object.entries(CORPS_LEGAUX)) for (const h of Object.keys(t)) corps.push(+h);
+        const erreurs = []; let conseils = 0;
+        for (let n = 0; n < 60; n++) {
+          const h = corps[Math.floor(hasard() * corps.length)];
+          const r = Object.fromEntries(BUILDS_ATTRIBUTS.map(a => [a, 25 + Math.floor(hasard() * 75)]));
+          const c = conseilsAnimations(r, h);
+          const parCat = new Map();
+          for (const a of ANIMATIONS) { if (a.category === 'Jumper Base' || h < a.minH || h > a.maxH) continue; const l = parCat.get(a.category) || []; l.push(a); parCat.set(a.category, l); }
+          for (const [cat, l] of parCat) {
+            const acc = l.filter(a => !animationManques(a, r).length), x = c.get(cat) || {};
+            if (acc.length && !x.conseil) erreurs.push(h + ' ' + cat + ' : aucune conseillée alors que ' + acc.length + ' accessibles');
+            if (x.conseil) { conseils++;
+              if (animationManques(x.conseil, r).length) erreurs.push(cat + ' : conseillée non accessible');
+              if (acc.some(a => exigenceAnimation(a) > exigenceAnimation(x.conseil))) erreurs.push(cat + ' : une accessible plus exigeante existe'); }
+            if (x.suivant && !animationManques(x.suivant, r).length) erreurs.push(cat + ' : « à débloquer » déjà accessible');
+          }
+        }
+        return { erreurs: erreurs.slice(0, 8), conseils,
+          builder: [...document.querySelectorAll('#styleAnimationRecommendations .style-animation-item')].length };`);
+      verifier(!r.erreurs.length, 'conseils incorrects : ' + r.erreurs.join(' | '));
+      verifier(r.conseils > 300, `seulement ${r.conseils} conseils sur 60 builds`);
+      verifier(r.builder === 11, `${r.builder} lignes d’animations conseillées dans le builder au lieu de 11`);
+      await nav.ouvrir(base + '/reference/?onglet=animations');
+      const p = await nav.evaluer(`
+        const s = document.getElementById('animStatus'); s.value = 'conseil'; s.dispatchEvent(new Event('change', { bubbles: true }));
+        await new Promise(r => setTimeout(r, 200));
+        const cartes = [...document.querySelectorAll('#animationList .anim-card')];
+        return { cartes: cartes.length, sansRepere: cartes.filter(c => !c.querySelector('.anim-repere')).length,
+          conseil: cartes.filter(c => c.querySelector('.anim-repere.conseil')).length };`);
+      verifier(p.cartes > 0 && p.sansRepere === 0, `filtre « Conseillées » : ${p.cartes} cartes dont ${p.sansRepere} sans repère`);
+      verifier(p.conseil > 0, 'aucune carte « Conseillée pour ton build »');
+      sansErreur('repère des animations conseillées');
+    });
+
     await test('l\u2019onglet Builds réels filtre et ouvre un build réel à l\u2019identique', async () => {
       await nav.ouvrir(base + '/hub/');
       const r = await nav.evaluer(`

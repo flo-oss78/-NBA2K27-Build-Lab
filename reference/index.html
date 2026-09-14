@@ -113,9 +113,10 @@
     <div class="anim-tools">
       <!-- Catégories générées depuis animations.js (app.js) -->
       <select id="animCategory" aria-label="Filtrer par catégorie"><option value="all">Toutes les catégories</option></select>
-      <select id="animStatus" aria-label="Filtrer par accessibilité"><option value="all">Toutes</option><option value="yes">Accessibles</option><option value="no">Non accessibles</option></select>
+      <select id="animStatus" aria-label="Filtrer par accessibilité"><option value="all">Toutes</option><option value="conseil">Conseillées pour ton build</option><option value="yes">Accessibles</option><option value="no">Non accessibles</option></select>
       <input id="animSearch" aria-label="Rechercher une animation" placeholder="Rechercher une animation…">
     </div>
+    <p class="anim-regle"><b>Conseillée pour ton build</b> : dans chaque catégorie, l’animation la plus exigeante que ton build peut équiper à sa taille, souvent la plus complète. <b>À débloquer ensuite</b> : la plus proche au-dessus. C’est une règle du site, pas un classement officiel ni un test de performance (les bases de tir du créateur de tir ne sont pas concernées).</p>
     <p id="animResultats" class="anim-resultats" aria-live="polite"></p>
     <div id="animationList" class="animation-list"></div>
     <button id="animPlus" type="button" class="secondary anim-plus" hidden>Afficher plus</button>
