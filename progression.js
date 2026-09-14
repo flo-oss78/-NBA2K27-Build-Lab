@@ -32,22 +32,25 @@
 
   /* Badges éligibles à la Synergy, par rôle.
      Fuse = badge renforcé en permanence ; Reaction = badge déclenché par une situation. */
-  var FUSE_POOL=['Posterizer','Aerial Wizard','Physical Finisher','Precision Dunker','Slithery',
-    'Limitless Range','Deadeye','Quick Trigger','Set and Fire','Agent 3',
+  // Uniquement des badges de NBA 2K27 : Precision Dunker, Slithery, Agent 3,
+  // Rebound Chaser, Green Machine, Killer Combos et Speed Booster étaient des
+  // badges de 2K26, absents du jeu.
+  var FUSE_POOL=['Posterizer','Aerial Wizard','Physical Finisher',
+    'Limitless Range','Deadeye','Quick Trigger','Set and Fire',
     'Handles for Days','Ankle Assassin','Versatile Visionary','Pace',
     'Challenger','Glove','Interceptor','Pick Dodger','Immovable Enforcer',
-    'Boxout Boss','Rebound Chaser','Brick Wall','Paint Patroller','Wall Up','Rise Up',
-    'Work Horse','Pogo Stick','Green Machine','Killer Combos','Speed Booster'];
-  var REACTION_POOL=['Green Machine','Killer Combos','Speed Booster','Lightning Launch',
+    'Boxout Boss','Brick Wall','Paint Patroller','Wall Up','Rise Up',
+    'Work Horse','Pogo Stick'];
+  var REACTION_POOL=['Lightning Launch',
     'Float Game','Ghost Stepper','Hook Specialist','Post Spin Catalyst','Layup Mixmaster',
     'Paint Prodigy','Post Powerhouse','Arc Cadence','Mini Marksman','Smooth Operator',
     'Static Middy','Post Fade Phenom'];
 
   /* Badges dont NBA2KLab a publié un test. Les autres sont « test en attente » chez eux :
      on le signale au lieu de présenter toutes les valeurs avec la même autorité. */
-  var TESTED=['Deadeye','Limitless Range','Quick Trigger','Set and Fire','Green Machine',
+  var TESTED=['Deadeye','Limitless Range','Quick Trigger','Set and Fire',
     'Challenger','Glove','Interceptor','Pick Dodger','Handles for Days','Ankle Assassin',
-    'Speed Booster','Posterizer','Physical Finisher','Boxout Boss','Immovable Enforcer'];
+    'Posterizer','Physical Finisher','Boxout Boss','Immovable Enforcer'];
 
   function el(id){return document.getElementById(id)}
   var esc=window.escHtml;
@@ -82,7 +85,8 @@
 
   function accessibleBadges(){
     var defs=window.badgeDefs||[];
-    var r=(window.inputs||[]).reduce(function(o,x){o[x.dataset.name]=+x.value;return o},{});
+    // ratings() (app.js) lit les curseurs, ou le dernier build quand la page n'en a pas (/progression/).
+    var r=typeof ratings==='function'?ratings():{};
     return defs.map(function(d){
       var st={level:0,tier:'—',cls:'none'};
       try{st=window.badgeTier?window.badgeTier(d,r):st}catch(e){}
@@ -244,7 +248,8 @@
     if(!root)return;
     var st=takeoverState();
     var defs=window.takeoverDefs||[];
-    var r=(window.inputs||[]).reduce(function(o,x){o[x.dataset.name]=+x.value;return o},{});
+    // ratings() (app.js) lit les curseurs, ou le dernier build quand la page n'en a pas (/progression/).
+    var r=typeof ratings==='function'?ratings():{};
 
     var options=defs.map(function(d){
       return {name:d[0],attr:d[1],need:d[2],ok:(r[d[1]]||0)>=d[2]};

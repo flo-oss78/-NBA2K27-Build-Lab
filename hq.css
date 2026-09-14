@@ -362,7 +362,9 @@ body:not(.mode-expert) .hq-builder .attr .thresholds{display:none}
     grid-template-areas:"gauche centre droite";
   }
 }
-@media (min-width:1440px){
+/* Deux colonnes seulement quand les noms longs (Double-pas en pénétration)
+   tiennent en entier. */
+@media (min-width:1600px){
   .hq-builder #attributeGroups{grid-template-columns:1fr 1fr;align-items:start}
 }
 

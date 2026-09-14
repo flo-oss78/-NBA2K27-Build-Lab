@@ -22,20 +22,20 @@
   /* Les 53 badges de 2K27 rangés par discipline. La catégorie vient de badgeDefs
      quand elle existe, sinon de cette table de repli. */
   var BADGE_DISC={
-    'Posterizer':'Finition','Aerial Wizard':'Finition','Slithery':'Finition','Physical Finisher':'Finition',
-    'Precision Dunker':'Finition','Float Game':'Finition','Ghost Stepper':'Finition','Hook Specialist':'Finition',
+    'Posterizer':'Finition','Aerial Wizard':'Finition','Physical Finisher':'Finition',
+    'Float Game':'Finition','Ghost Stepper':'Finition','Hook Specialist':'Finition',
     'Layup Mixmaster':'Finition','Paint Prodigy':'Finition','Post Powerhouse':'Finition','Post Spin Catalyst':'Finition',
     'Rise Up':'Finition',
     'Limitless Range':'Tir','Deadeye':'Tir','Quick Trigger':'Tir','Set and Fire':'Tir','Arc Cadence':'Tir',
-    'Green Machine':'Tir','Agent 3':'Tir','Mini Marksman':'Tir','Smooth Operator':'Tir','Static Middy':'Tir',
+    'Mini Marksman':'Tir','Smooth Operator':'Tir','Static Middy':'Tir',
     'Post Fade Phenom':'Tir',
     'Handles for Days':'Création','Ankle Assassin':'Création','Lightning Launch':'Création','Versatile Visionary':'Création',
-    'Pace':'Création','Killer Combos':'Création','Speed Booster':'Création','Break Starter':'Création',
-    'Dimer':'Création','Unpluckable':'Création','Strong Handle':'Création','Bailout':'Création',
+    'Pace':'Création','Break Starter':'Création',
+    'Dimer':'Création','Unpluckable':'Création','Strong Handle':'Création','Bail Out':'Création',
     'Challenger':'Défense','Glove':'Défense','Interceptor':'Défense','Pick Dodger':'Défense',
     'Immovable Enforcer':'Défense','Paint Patroller':'Défense','Wall Up':'Défense','Off-Ball Pest':'Défense',
     'High-Flying Denier':'Défense','Post Lockdown':'Défense','Ankle Braces':'Défense','Seatbelt':'Défense',
-    'Boxout Boss':'Rebond','Rebound Chaser':'Rebond','Crasher':'Rebond','Possession Closer':'Rebond',
+    'Boxout Boss':'Rebond','Crasher':'Rebond','Possession Closer':'Rebond',
     'Sync Snatcher':'Rebond','Breaker':'Rebond',
     'Work Horse':'Physique','Pogo Stick':'Physique','Brick Wall':'Physique','Bruiser':'Physique',
     'Flash':'Physique','Slippery Off-Ball':'Physique'
@@ -137,7 +137,7 @@
         '<select id="cbgAttr" aria-label="Attribut à faire monter">'+
           names.map(function(n){
             var room=Math.max(0,(caps[n]||99)-(r[n]||0));
-            return '<option value="'+esc(n)+'">'+esc(n)+' ('+(r[n]||0)+' → cap '+(caps[n]||99)+')</option>';
+            return '<option value="'+esc(n)+'">'+esc(nomAttribut(n))+' ('+(r[n]||0)+' → cap '+(caps[n]||99)+')</option>';
           }).join('')+
         '</select>'+
         '<select id="cbgGain" aria-label="Points gagnés">'+
@@ -149,7 +149,7 @@
         '<ol class="cbg-list">'+plan.map(function(s,i){
           return '<li class="cbg-step">'+
             '<span class="cbg-num">CB #'+(i+1)+'</span>'+
-            '<b>'+esc(s.attr)+'</b>'+
+            '<b>'+esc(nomAttribut(s.attr))+'</b>'+
             '<em>+'+(+s.gain||1)+'</em>'+
             '<span class="cbg-actions">'+
               (i>0?'<button type="button" data-cbg-up="'+i+'" aria-label="Monter">↑</button>':'')+

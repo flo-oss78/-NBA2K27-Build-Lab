@@ -70,10 +70,9 @@
   }
 
   /* ---- Noms des attributs tels qu'affichés par le jeu en français ----
-     La table vient de import-jeu.js (écran « Améliorations d'attribut »). Le nom
-     anglais reste la clé du moteur (data-name) et s'affiche en mode Expert. */
-  // L'endurance n'est pas sur l'écran d'import : on garde le nom que le site lui donne déjà.
-  var NOMS_FR=Object.assign({Stamina:'Endurance'},window.NOMS_ATTRIBUTS_FR||{});
+     La table vient de builder-data.js (NOMS_ATTRIBUTS_FR). Le nom anglais reste
+     la clé du moteur (data-name) et s'affiche en mode Expert. */
+  var NOMS_FR=window.NOMS_ATTRIBUTS_FR||{};
   builder.querySelectorAll('#attributeGroups .attr').forEach(function(ligne){
     var curseur=ligne.querySelector('input[type=range]'),bloc=ligne.querySelector('.attr-name');
     var nom=bloc&&bloc.querySelector('span');

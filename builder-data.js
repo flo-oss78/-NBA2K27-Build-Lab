@@ -9,6 +9,21 @@
    - COST_WEIGHT       coût simulé par point d'attribut (modèle indicatif)
    - BADGE_THRESHOLDS  paliers affichés sous chaque curseur
 */
+/* Noms des attributs tels qu'affichés par le jeu en français (écran
+   « Améliorations d'attribut »). Le nom anglais reste la clé partout. */
+const NOMS_ATTRIBUTS_FR={
+  'Close Shot':'Tirs de près','Driving Layup':'Double-pas en pénétration','Driving Dunk':'Dunk en pénétration',
+  'Standing Dunk':'Dunk sans élan','Post Control':'Contrôle au poste',
+  'Mid-Range':'Tirs à mi-distance','Three-Point':'Tirs à 3 pts','Free Throw':'Lancer franc',
+  'Pass Accuracy':'Précision des passes','Ball Handle':'Contrôle du ballon','Speed With Ball':'Vitesse avec le ballon',
+  'Interior Defense':'Défense intérieure','Perimeter Defense':'Défense extérieure','Steal':'Interception','Block':'Contre',
+  'Offensive Rebound':'Rebond offensif','Defensive Rebound':'Rebond défensif',
+  'Speed':'Vitesse','Agility':'Agilité','Strength':'Force','Vertical':'Détente','Stamina':'Endurance'
+};
+function nomAttribut(n){return NOMS_ATTRIBUTS_FR[n]||n}
+window.NOMS_ATTRIBUTS_FR=NOMS_ATTRIBUTS_FR;
+window.nomAttribut=nomAttribut;
+
 const data={Finition:[['Close Shot',75],['Driving Layup',82],['Driving Dunk',85],['Standing Dunk',55],['Post Control',60]],Tir:[['Mid-Range',82],['Three-Point',88],['Free Throw',78]],Création:[['Pass Accuracy',78],['Ball Handle',86],['Speed With Ball',84]],Défense:[['Interior Defense',55],['Perimeter Defense',85],['Steal',80],['Block',70]],Rebond:[['Offensive Rebound',45],['Defensive Rebound',65]],Physique:[['Speed',84],['Agility',82],['Strength',72],['Vertical',80],['Stamina',94]]};
 const badgeDefs=[
 {name:'Arc Cadence',cat:'Tir',req:[['Three-Point',70,86,91,98]],logic:'AND',minH:69,maxH:83},

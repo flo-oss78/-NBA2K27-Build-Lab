@@ -211,7 +211,7 @@ function renderBreakers(r){if(!document.getElementById("breakerList"))return; /*
  const list=document.getElementById('breakerList');
  list.innerHTML=inputs.map(x=>{
   const id=x.dataset.name.replace(/[^a-z0-9]/gi,''), used=+(getBreaker(x.dataset.name)||0), cap=+x.max;
-  return `<div class="breaker-row"><div><b>${x.dataset.name}</b><small>${r[x.dataset.name]}/${cap}</small></div><button data-b="${id}" data-dir="-">−</button><strong>${used}</strong><button data-b="${id}" data-dir="+">+</button></div>`;
+  return `<div class="breaker-row"><div><b>${nomAttribut(x.dataset.name)}</b><small>${r[x.dataset.name]}/${cap}</small></div><button data-b="${id}" data-dir="-">−</button><strong>${used}</strong><button data-b="${id}" data-dir="+">+</button></div>`;
  }).join('');
  list.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{
   const id=btn.dataset.b;
