@@ -722,6 +722,45 @@ async function testsNavigateur(base) {
       verifier(r.apres === r.avant, 'vider la recherche ne restaure pas la liste');
       verifier(r.onglets > 0, 'onglets du hub absents');
     });
+    await test('le builder dit si les plafonds sont exacts, estimés ou approximatifs', async () => {
+      await nav.ouvrir(base + '/');
+      await nav.evaluer(`localStorage.removeItem(IMPORT_JEU_KEY);`);
+      await nav.ouvrir(base + '/');
+      const r = await nav.evaluer(`
+        const POSTES = ['PG','SG','SF','PF','C'];
+        const poste = (h,w,e) => POSTES.find(p => { const c = corpsLegal(p,h); return c && w>=c.poidsMin && w<=c.poidsMax && e>=c.envMin && e<=c.envMax; });
+        const regler = async (p,h,w,e) => {
+          position.value=p; height.value=h; weight.value=w; wing.value=e;
+          for (const el of [position,height,weight,wing]) el.dispatchEvent(new Event('input',{bubbles:true}));
+          await new Promise(r => setTimeout(r, 400));
+          const el = document.getElementById('hqPlafonds');
+          return { corps: [p,h,w,e].join(' '), niveau: el.dataset.niveau, texte: el.textContent, corpsApplique: [position.value,+height.value,+weight.value,+wing.value].join(' ') };
+        };
+        const res = {};
+        // Corps exact : un corps relevé, autorisé pour un poste ; ses plafonds doivent être repris tels quels.
+        const exact = Object.entries(CAPS_CORPS).map(([k,c]) => [k.split('|').map(Number), c]).find(([[h,w,e],c]) => c[0]===1 && poste(h,w,e));
+        const [[h1,w1,e1],c1] = exact;
+        res.exact = await regler(poste(h1,w1,e1),h1,w1,e1);
+        res.exact.caps = BUILDS_ATTRIBUTS.every((a,i) => document.getElementById('cap'+a.replace(/[^a-z0-9]/gi,'')).textContent === 'CAP '+c1[1][i]);
+        // Corps déduit : à l'intérieur d'un modèle, jamais relevé.
+        let deduit = null;
+        for (const [h,m] of Object.entries(CAPS_MODELES)) { for (let w=m.w[0]; w<=m.w[1] && !deduit; w++) for (let e=m.e[0]; e<=m.e[1] && !deduit; e++) { const c = CAPS_CORPS[h+'|'+w+'|'+e]; if ((!c || c[0]!==1) && poste(+h,w,e)) deduit = [poste(+h,w,e),+h,w,e]; } if (deduit) break; }
+        res.deduit = await regler(...deduit);
+        const attendus = capsDeduits(deduit[1],deduit[2],deduit[3]);
+        res.deduit.caps = BUILDS_ATTRIBUTS.every(a => +document.getElementById('cap'+a.replace(/[^a-z0-9]/gi,'')).textContent.slice(4) >= attendus[a]);
+        // Corps approximatif : taille sans modèle, corps non relevé.
+        let approx = null;
+        for (const p of POSTES) for (const [h,b] of Object.entries(CORPS_LEGAUX[p])) { if (approx || CAPS_MODELES[h]) continue; const c = CAPS_CORPS[h+'|'+b[0]+'|'+b[2]]; if (!c || c[0]!==1) approx = [p,+h,b[0],b[2]]; }
+        res.approx = await regler(...approx);
+        return res;`);
+      verifier(r.exact.niveau === 'exact' && /exacts du jeu/.test(r.exact.texte), `corps relevé ${r.exact.corps} (appliqué ${r.exact.corpsApplique}) affiché « ${r.exact.texte} »`);
+      verifier(r.exact.caps, `plafonds exacts non repris pour ${r.exact.corps}`);
+      verifier(r.deduit.niveau === 'deduit' && /estimés à partir de corps relevés — [0-9]/.test(r.deduit.texte), `corps déduit ${r.deduit.corps} (appliqué ${r.deduit.corpsApplique}) affiché « ${r.deduit.texte} »`);
+      verifier(r.deduit.caps, `plafonds déduits non appliqués pour ${r.deduit.corps}`);
+      verifier(r.approx.niveau === 'approx' && /approximatifs/.test(r.approx.texte), `corps sans relevé ${r.approx.corps} (appliqué ${r.approx.corpsApplique}) affiché « ${r.approx.texte} »`);
+      sansErreur('indicateur de fiabilité des plafonds');
+    });
+
     await test('l\u2019onglet Builds réels filtre et ouvre un build réel à l\u2019identique', async () => {
       await nav.ouvrir(base + '/hub/');
       const r = await nav.evaluer(`

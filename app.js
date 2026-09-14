@@ -106,10 +106,20 @@ function bodyCaps(){
  // Plafonds lus dans le jeu : ils priment sur l'estimation, brise-plafonds
  // compris. Appliqués APRÈS le plancher de 40, qu'un vrai Max peut descendre.
  // Plafonds connus pour ce corps (builds réels et Blueprints officiels).
+ // Niveau de fiabilité affiché dans le builder : exact (corps relevé), déduit
+ // (entre des corps relevés de la même taille, caps-deduits.js) ou approximatif.
  const connus=typeof capsConnus==='function'?capsConnus(h,w,wing):null;
- if(connus)for(const [k,m] of Object.entries(connus.caps))if(k in estimes)estimes[k]=connus.exacts?m:Math.max(estimes[k],m);
+ let niveau='approx';
+ if(connus&&connus.exacts){for(const [k,m] of Object.entries(connus.caps))if(k in estimes)estimes[k]=m;niveau='exact'}
+ else{
+   const deduits=typeof capsDeduits==='function'?capsDeduits(h,w,wing):null;
+   if(deduits){for(const [k,m] of Object.entries(deduits))if(k in estimes)estimes[k]=m;niveau='deduit'}
+   // Un build réel de ce corps garantit un plancher : le plafond est au moins sa note.
+   if(connus)for(const [k,m] of Object.entries(connus.caps))if(k in estimes)estimes[k]=Math.max(estimes[k],m);
+ }
  const jeu=importJeuActif();
- if(jeu)for(const [k,m] of Object.entries(jeu.max))if(k in estimes)estimes[k]=Math.min(99,m+getBreaker(k));
+ if(jeu){for(const [k,m] of Object.entries(jeu.max))if(k in estimes)estimes[k]=Math.min(99,m+getBreaker(k));niveau='import'}
+ window.NBABL_PLAFONDS=niveau;
  return estimes;
 }
 function clampInputsToCaps(caps){inputs.forEach(x=>{let cap=caps[x.dataset.name]??99;x.max=cap;if(+x.value>cap)x.value=cap;let id=x.dataset.name.replace(/[^a-z0-9]/gi,'');document.getElementById('cap'+id).textContent='CAP '+cap})}

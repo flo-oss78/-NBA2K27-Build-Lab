@@ -195,6 +195,20 @@
     ecrire('hqStyle',texte('selectedStyleName'));
     if(h&&w&&wing)ecrire('hqGabarit',metres(+h.value)+' · '+kilos(+w.value)+' · envergure '+metres(+wing.value));
 
+    // Fiabilité des plafonds (calculée par bodyCaps() dans app.js).
+    var fiab=$('hqPlafonds');
+    if(fiab){
+      var niv=window.NBABL_PLAFONDS||'approx', p=typeof CAPS_PRECISION!=='undefined'?CAPS_PRECISION:null;
+      var textes={
+        exact:'Plafonds exacts du jeu (corps relevé)',
+        deduit:'Plafonds estimés à partir de corps relevés'+(p?' — '+String(p.exacts).replace('.',',')+' % exacts, '+String(p.unPoint).replace('.',',')+' % à ±1 point':''),
+        approx:'Plafonds approximatifs : aucun corps relevé assez proche, écart possible de plusieurs points',
+        import:'Plafonds de ton build importé du jeu'
+      };
+      ecrire('hqPlafonds',textes[niv]||textes.approx);
+      if(fiab.dataset.niveau!==niv){fiab.dataset.niveau=niv;fiab.className='hq-plafonds '+niv}
+    }
+
     var budget=$('budgetEstime'),mini=$('hqBudget');
     if(budget&&mini){
       mini.hidden=budget.hidden;
