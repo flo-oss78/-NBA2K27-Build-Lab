@@ -263,6 +263,8 @@ body:not(.mode-expert) .hq-builder .group-head small{display:none}
 .hq-builder .attrhead{min-width:0}
 .hq-builder .attr-name{display:grid;gap:0;min-width:0}
 .hq-builder .attr-name>span{min-width:0}
+/* Sur téléphone, un nom long passe à la ligne plutôt que d'être coupé. */
+.hq-builder .attr-name>span:first-child{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.2;overflow-wrap:anywhere}
 .hq-builder .attr-name .attr-sous{display:flex;gap:8px;align-items:baseline;min-width:0}
 .hq-builder .attr-en{font-style:normal;font-size:10.5px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 body:not(.mode-expert) .hq-builder .attr-en{display:none}
@@ -390,4 +392,50 @@ body:not(.mode-expert) #wizardBanner{display:none}
 .hq-builder .exact-actions button.secondary{
   flex-direction:column;gap:4px;min-height:58px;padding:7px 4px;
   font-size:11.5px;line-height:1.2;text-align:center;
+}
+
+/* =============================================================
+   8. PAGE BUILDS (/hub/) — onglets Builds réels, Trios, Communauté
+   ============================================================= */
+.hq-page-builds{gap:16px}
+.hq-page-tete{padding:6px 0 0}
+.hq-page-tete h1{margin-top:2px}
+.hq-page-tete .sub{margin-top:6px;max-width:68ch}
+.hq-page-builds .section-title h2{font-size:24px}
+.hq-page-builds .eyebrow{margin-bottom:0}
+
+/* Téléphone : un filtre par ligne, sinon « Toutes les tailles » est coupé. */
+.explorateur-outils{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin-bottom:14px}
+.explorateur-liste{display:grid;gap:10px}
+.explorateur-liste .build-reel{min-width:0;align-content:start;background:rgba(255,255,255,.03);border-color:var(--line-soft)}
+.explorateur-liste .build-reel-tete{flex-wrap:wrap}
+.explorateur-liste .build-reel-tete b{font-family:var(--titre);font-size:18px;letter-spacing:.03em;text-transform:uppercase;overflow-wrap:anywhere}
+.build-reel-source.bp{color:var(--turquoise)}
+.build-reel-toutes{display:flex;flex-wrap:wrap;gap:5px 10px;margin-top:6px;font-size:11.5px;color:var(--muted)}
+.build-reel-toutes b{color:var(--text)}
+.build-reel-ouvrir{
+  justify-self:stretch;min-height:40px;margin-top:4px;border-radius:999px;
+  background:rgba(224,25,46,.12);border-color:rgba(255,59,78,.5);color:#fff;font-weight:700;
+}
+.build-reel-ouvrir:hover{background:rgba(224,25,46,.24);border-color:var(--rouge-2)}
+.explorateur-plus{width:100%;margin-top:12px;border-radius:999px}
+
+.hq-page-builds .blueprint-tools,.hq-page-builds .hub-tools{grid-template-columns:minmax(0,1fr)}
+.hq-page-builds .bp-card{background:rgba(255,255,255,.03)}
+.hq-page-builds .bp-top h3{font-size:19px;letter-spacing:.03em}
+.hq-page-builds .bp-apply{border-radius:999px;color:#fff}
+.hq-page-builds .bp-tri span{color:var(--text)}
+.hq-page-builds .compare-panel{margin-top:14px}
+
+@media (min-width:760px){
+  .explorateur-outils{grid-template-columns:1fr 1fr 1fr 1.4fr}
+  .explorateur-outils input{grid-column:auto}
+  .explorateur-liste,.hq-page-builds .blueprint-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hq-page-builds .blueprint-tools{grid-template-columns:1fr 1fr 1.4fr}
+  .hq-page-builds .blueprint-tools input{grid-column:auto}
+  .hq-page-builds .hub-tools{grid-template-columns:1.6fr 1fr auto}
+  .hq-page-builds .hub-tools input,.hq-page-builds .hub-tools #addCurrentBuild{grid-column:auto}
+}
+@media (min-width:1180px){
+  .explorateur-liste,.hq-page-builds .blueprint-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }

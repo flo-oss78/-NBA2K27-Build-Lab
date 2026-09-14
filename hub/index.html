@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#060608">
 <meta name="color-scheme" content="dark">
-<meta name="description" content="Découvre, filtre et compare les builds NBA 2K27 publiés par la communauté. Jusqu’à 3 builds côte à côte.">
-<title>Build Hub NBA 2K27 — builds de la communauté</title>
+<meta name="description" content="Plus de 3 600 builds NBA 2K27 réels à 99, les Signature Blueprints officiels, des trios de joueurs et les builds de la communauté, à ouvrir dans le builder.">
+<title>Builds NBA 2K27 — builds réels, trios et communauté</title>
 
 <link rel="canonical" href="https://nbabuildlab.pages.dev/hub/">
 <link rel="manifest" href="/manifest.webmanifest">
@@ -16,8 +16,8 @@
 <link rel="stylesheet" href="/theme.css">
 <link rel="stylesheet" href="/hq.css">
 
-<meta property="og:title" content="Build Hub NBA 2K27 — builds de la communauté">
-<meta property="og:description" content="Découvre, filtre et compare les builds NBA 2K27 publiés par la communauté. Jusqu’à 3 builds côte à côte.">
+<meta property="og:title" content="Builds NBA 2K27 — builds réels, trios et communauté">
+<meta property="og:description" content="Plus de 3 600 builds NBA 2K27 réels à 99, les Signature Blueprints officiels, des trios de joueurs et les builds de la communauté, à ouvrir dans le builder.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://nbabuildlab.pages.dev/hub/">
 <meta property="og:locale" content="fr_FR">
@@ -28,7 +28,7 @@
 </head>
 
 <body>
-<a class="skip-link" href="#community">Aller au contenu</a>
+<a class="skip-link" href="#main">Aller au contenu</a>
 
 <header class="reference-header">
   <div class="reference-brand">
@@ -37,7 +37,6 @@
   </div>
   <nav class="reference-nav" aria-label="Navigation principale">
     <a href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Builder</a>
-    <a href="/trios/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="3"/><circle cx="5" cy="11" r="2.4"/><circle cx="19" cy="11" r="2.4"/><path d="M7 20c.5-3.5 2.4-5.5 5-5.5s4.5 2 5 5.5M1.5 19c.4-2.2 1.6-3.5 3.5-3.5M22.5 19c-.4-2.2-1.6-3.5-3.5-3.5"/></svg>Trios</a>
     <a href="/hub/" class="active" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Builds</a>
     <a href="/reference/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/></svg>Badges & animations</a>
     <a href="/progression/" data-mode="expert"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h16M6 15l4-4 3 3 6-7"/></svg>Progression</a>
@@ -54,48 +53,117 @@
   </div>
 </header>
 
-<main id="main">
+<main id="main" class="hq-page-builds">
 
-<!-- ============ HUB COMMUNAUTAIRE ============ -->
-<section id="community" class="panel community-hub">
-  <div class="section-title">
-    <div>
-      <p class="eyebrow">Build hub</p>
-      <h2>Découvre, sauvegarde et compare les builds</h2>
-      <p class="sub">Cartes lisibles, filtres, comparaison jusqu'à 3 builds et partage par lien.</p>
+<!-- Page Builds façon NBA 2K HQ : trois onglets, un seul endroit pour trouver
+     un build. Les onglets et l'explorateur sont gérés par builds-page.js. -->
+<div class="hq-page-tete">
+  <p class="eyebrow">Builds</p>
+  <h1>Trouve un build qui marche</h1>
+  <p class="sub">Des builds réels à 99, des trios de joueurs et les builds de la communauté. Ouvre celui qui te plaît directement dans le builder.</p>
+</div>
+
+<div class="hq-onglets hq-onglets-page" role="tablist" aria-label="Types de builds">
+  <button type="button" role="tab" id="ongletReels" data-onglet="reels" aria-controls="panneauReels" aria-selected="true">Builds réels</button>
+  <button type="button" role="tab" id="ongletTrios" data-onglet="trios" aria-controls="panneauTrios" aria-selected="false" tabindex="-1">Trios</button>
+  <button type="button" role="tab" id="ongletCommunaute" data-onglet="communaute" aria-controls="panneauCommunaute" aria-selected="false" tabindex="-1">Communauté</button>
+</div>
+
+<!-- ============ BUILDS RÉELS ============ -->
+<div id="panneauReels" class="hq-panneau" role="tabpanel" aria-labelledby="ongletReels">
+  <section id="buildsReels" class="panel explorateur">
+    <div class="section-title">
+      <div>
+        <h2>Builds réels</h2>
+        <p id="reelsSource" class="sub"></p>
+      </div>
+      <span id="reelsCompte" class="pill" aria-live="polite">0 build</span>
     </div>
-    <span id="serverStatus" class="pill">Serveur : connexion…</span>
-  </div>
-  <div class="hub-tools">
-    <input id="communitySearch" aria-label="Rechercher un build" placeholder="Rechercher un build, un joueur ou un style…">
-    <select id="communityPos" aria-label="Filtrer par poste"><option value="all">Tous les postes</option><option>PG</option><option>SG</option><option>SF</option><option>PF</option><option>C</option></select>
-    <button id="addCurrentBuild" type="button">Publier mon build</button>
-  </div>
-  <div class="advanced-community-filters">
-    <select id="communityStyle" aria-label="Filtrer par style"><option value="all">Tous les styles</option><option>Shooter</option><option>Slasher</option><option>Playmaker</option><option>Lockdown</option><option>Big</option><option>Équilibré</option></select>
-    <label><input id="communityValidated" type="checkbox"> Builds validés seulement</label>
-    <label><input id="communityCapBreakers" type="checkbox"> Avec Cap Breakers</label>
-    <button id="clearCommunityFilters" type="button" class="secondary small-btn">Réinitialiser</button>
-  </div>
-  <div id="playerProfile" class="player-profile"></div>
-  <div id="featuredBuild" class="featured-build" hidden></div>
-  <div class="hub-tabs-wrap">
-    <div id="hubTabs" class="hub-tabs" role="tablist" aria-label="Tri des builds"></div>
-    <p id="hubTabHint" class="hub-tab-hint"></p>
-  </div>
-  <div id="communityList" class="community-list"></div>
-  <p class="hub-note">Les builds publiés sur le serveur sont visibles par toute la communauté. Si le serveur n'est pas encore configuré, le site bascule automatiquement en mode local.</p>
-</section>
+    <div class="explorateur-outils">
+      <select id="reelsPoste" aria-label="Filtrer par poste">
+        <option value="all">Tous les postes</option>
+        <option value="PG">Meneur de jeu</option><option value="SG">Arrière</option><option value="SF">Ailier</option>
+        <option value="PF">Ailier fort</option><option value="C">Pivot</option>
+      </select>
+      <select id="reelsTaille" aria-label="Filtrer par taille"><option value="all">Toutes les tailles</option></select>
+      <select id="reelsOrigine" aria-label="Filtrer par source">
+        <option value="all">Toutes les sources</option>
+        <option value="bp">Modèles officiels 2K</option>
+        <option value="lc">Builds complets à 99</option>
+      </select>
+      <input id="reelsRecherche" type="search" aria-label="Rechercher un build" placeholder="Rechercher un nom de build…">
+    </div>
+    <div id="reelsListe" class="explorateur-liste"></div>
+    <button id="reelsPlus" type="button" class="secondary explorateur-plus" hidden>Afficher plus</button>
+  </section>
+</div>
 
-<!-- ============ COMPARATEUR ============ -->
-<section id="compare" class="panel compare-panel">
-  <div class="section-title">
-    <div><p class="eyebrow">Comparateur</p><h2>Compare jusqu'à 3 builds</h2></div>
-    <button id="clearCompare" type="button" class="secondary small-btn">Effacer</button>
-  </div>
-  <div id="compareSlots" class="compare-slots"></div>
-  <div id="compareTable" class="compare-table-wrap"></div>
-</section>
+<!-- ============ TRIOS (ancienne page /trios/) ============ -->
+<div id="panneauTrios" class="hq-panneau" role="tabpanel" aria-labelledby="ongletTrios" hidden>
+  <section id="blueprints" class="panel blueprint-panel">
+    <div class="section-title">
+      <div>
+        <h2>Trios</h2>
+        <p class="sub">Dans NBA 2K27, les Signature Blueprints façonnent un build à partir de trois joueurs NBA et WNBA. Ici, choisis trois joueurs plutôt que vingt-deux curseurs.</p>
+      </div>
+      <span id="blueprintCount" class="pill">0 trio</span>
+    </div>
+    <div class="blueprint-tools">
+      <select id="blueprintPos" aria-label="Filtrer par poste">
+        <option value="all">Tous les postes</option><option>PG</option><option>SG</option><option>SF</option><option>PF</option><option>C</option>
+      </select>
+      <select id="blueprintDisc" aria-label="Filtrer par discipline">
+        <option value="all">Toutes les disciplines</option>
+        <option>Finition</option><option>Tir</option><option>Création</option>
+        <option>Défense</option><option>Rebond</option><option>Physique</option><option>Équilibré</option>
+      </select>
+      <input id="blueprintSearch" aria-label="Rechercher un trio ou un joueur" placeholder="Rechercher un joueur ou un trio…">
+    </div>
+    <div id="blueprintGrid" class="blueprint-grid"></div>
+    <p class="data-note">Les trios sont un <strong>modèle indicatif</strong> construit à partir des profils publics des joueurs. 2K ne publie pas la table officielle des Signature Blueprints : pour les vrais modèles du jeu, regarde l'onglet Builds réels, source « Modèles officiels 2K ».</p>
+  </section>
+</div>
+
+<!-- ============ COMMUNAUTÉ ============ -->
+<div id="panneauCommunaute" class="hq-panneau" role="tabpanel" aria-labelledby="ongletCommunaute" hidden>
+  <section id="community" class="panel community-hub">
+    <div class="section-title">
+      <div>
+        <h2>Communauté</h2>
+        <p class="sub">Les builds publiés par les joueurs : filtre, compare jusqu'à trois builds et partage-les par lien.</p>
+      </div>
+      <span id="serverStatus" class="pill">Serveur : connexion…</span>
+    </div>
+    <div class="hub-tools">
+      <input id="communitySearch" aria-label="Rechercher un build" placeholder="Rechercher un build…">
+      <select id="communityPos" aria-label="Filtrer par poste"><option value="all">Tous les postes</option><option>PG</option><option>SG</option><option>SF</option><option>PF</option><option>C</option></select>
+      <button id="addCurrentBuild" type="button">Publier mon build</button>
+    </div>
+    <div class="advanced-community-filters">
+      <select id="communityStyle" aria-label="Filtrer par style"><option value="all">Tous les styles</option><option>Shooter</option><option>Slasher</option><option>Playmaker</option><option>Lockdown</option><option>Big</option><option>Équilibré</option></select>
+      <label><input id="communityValidated" type="checkbox"> Builds validés seulement</label>
+      <label><input id="communityCapBreakers" type="checkbox"> Avec Cap Breakers</label>
+      <button id="clearCommunityFilters" type="button" class="secondary small-btn">Réinitialiser</button>
+    </div>
+    <div id="playerProfile" class="player-profile"></div>
+    <div id="featuredBuild" class="featured-build" hidden></div>
+    <div class="hub-tabs-wrap">
+      <div id="hubTabs" class="hub-tabs" role="tablist" aria-label="Tri des builds"></div>
+      <p id="hubTabHint" class="hub-tab-hint"></p>
+    </div>
+    <div id="communityList" class="community-list"></div>
+    <p class="hub-note">Les builds publiés sur le serveur sont visibles par toute la communauté. Si le serveur n'est pas encore configuré, le site bascule automatiquement en mode local.</p>
+  </section>
+
+  <section id="compare" class="panel compare-panel">
+    <div class="section-title">
+      <div><h2>Comparateur</h2><p class="sub">Compare jusqu'à trois builds côte à côte.</p></div>
+      <button id="clearCompare" type="button" class="secondary small-btn">Effacer</button>
+    </div>
+    <div id="compareSlots" class="compare-slots"></div>
+    <div id="compareTable" class="compare-table-wrap"></div>
+  </section>
+</div>
 
 <div id="buildModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Détail du build">
   <div class="modal-backdrop" data-close-modal></div>
@@ -135,6 +203,7 @@
      - hub.js avant server-client.js, qui remplace likeBuild/openBuildModal. -->
 <script src="/builder-data.js"></script>
 <script src="/badge-icones.js"></script>
+<script src="/builds-reels.js"></script>
 <script src="/validator.js"></script>
 <script src="/app.js"></script>
 <script src="/optimizer.js"></script>
@@ -150,5 +219,6 @@
 <script src="/build-sheet.js"></script>
 <script src="/community.js"></script>
 <script src="/ui.js"></script>
+<script src="/builds-page.js"></script>
 </body>
 </html>

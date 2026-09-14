@@ -205,8 +205,11 @@
       var match=anims.find(function(a){return a.name===name&&a.category===cat})||
                 (sameName.length===1?sameName[0]:null);
       var ok=!!match&&animationAccessible(match,r,h);
+      // Libellé du jeu en français quand il est connu (animations.js), sinon celui du plan.
+      var fr=typeof nomCategorieAnimation==='function'?nomCategorieAnimation(cat):cat;
+      var libelle=fr!==cat?fr:label;
       return '<div class="style-animation-item '+(ok?'ok':'locked')+'"'+(match?'':' title="Absente de la base d’animations"')+'>'+
-             '<b>'+esc(label)+'</b><span>'+esc(name)+'</span></div>';
+             '<b>'+esc(libelle)+'</b><span>'+esc(name)+'</span></div>';
     }).join('');
   }
 

@@ -29,7 +29,6 @@ const PROD = process.argv.includes('--prod');
 const URL_PROD = 'https://nba2k27-build-lab.pages.dev';
 const PAGES = [
   { chemin: '/',             fichier: 'index.html',             nav: 'Builder' },
-  { chemin: '/trios/',       fichier: 'trios/index.html',       nav: 'Trios' },
   { chemin: '/hub/',         fichier: 'hub/index.html',         nav: 'Builds' },
   { chemin: '/reference/',   fichier: 'reference/index.html',   nav: 'Badges & animations' },
   { chemin: '/progression/', fichier: 'progression/index.html', nav: 'Progression' }
@@ -346,7 +345,12 @@ async function lancerNavigateur() {
     try { fs.rmSync(profil, { recursive: true, force: true }); } catch { /* verrou Windows passager */ }
   };
 
-  return { ouvrir, evaluer, cliquerEtAttendre, erreurs, fermer };
+  // Taille d'écran : téléphone (mobile = true) ou ordinateur ; sans argument, taille normale.
+  const ecran = (largeur, hauteur, mobile) => largeur
+    ? envoyer('Emulation.setDeviceMetricsOverride', { width: largeur, height: hauteur, deviceScaleFactor: 1, mobile: !!mobile })
+    : envoyer('Emulation.clearDeviceMetricsOverride');
+
+  return { ouvrir, evaluer, cliquerEtAttendre, erreurs, fermer, ecran };
 }
 
 /* ---------------------------------------------------------- tests navigateur */
@@ -685,7 +689,7 @@ async function testsNavigateur(base) {
     });
 
     await test('« Utiliser ce trio » ouvre le builder avec le bon gabarit', async () => {
-      await nav.ouvrir(base + '/trios/');
+      await nav.ouvrir(base + '/hub/?onglet=trios');
       const bp = await nav.evaluer(`
         const cartes = document.querySelectorAll('[data-apply]').length;
         const b = window.NBABL_BLUEPRINTS.list[0];
@@ -717,6 +721,94 @@ async function testsNavigateur(base) {
       verifier(r.filtre === 0, `la recherche laisse ${r.filtre} carte(s) affichée(s)`);
       verifier(r.apres === r.avant, 'vider la recherche ne restaure pas la liste');
       verifier(r.onglets > 0, 'onglets du hub absents');
+    });
+    await test('l\u2019onglet Builds réels filtre et ouvre un build réel à l\u2019identique', async () => {
+      await nav.ouvrir(base + '/hub/');
+      const r = await nav.evaluer(`
+        const cartes = () => [...document.querySelectorAll('#reelsListe .build-reel')];
+        const avant = cartes().length;
+        const actif = document.querySelector('.hq-onglets [aria-selected="true"]')?.dataset.onglet;
+        const poste = document.getElementById('reelsPoste');
+        poste.value = 'C'; poste.dispatchEvent(new Event('change', { bubbles: true }));
+        const pivots = cartes().every(c => c.querySelector('small').textContent.startsWith('Pivot'));
+        const bouton = document.querySelector('[data-ouvrir-reel]');
+        return { avant, actif, pivots, compte: document.getElementById('reelsCompte').textContent,
+                 i: +bouton.dataset.ouvrirReel, build: BUILDS_REELS[+bouton.dataset.ouvrirReel] };`);
+      verifier(r.actif === 'reels', `onglet ouvert par défaut : ${r.actif}`);
+      verifier(r.avant === 24, `${r.avant} cartes affichées au lieu de 24`);
+      verifier(r.pivots, 'le filtre Pivot laisse passer d\u2019autres postes');
+      await nav.cliquerEtAttendre(`document.querySelector('[data-ouvrir-reel="${r.i}"]').click()`);
+      const [, pos, h, w, wing, nom, v] = r.build;
+      const arrivee = await nav.evaluer(`return { chemin: location.pathname,
+        corps: [position.value, +height.value, +weight.value, +wing.value],
+        notes: BUILDS_ATTRIBUTS.map(a => +inputs.find(x => x.dataset.name === a).value) };`);
+      verifier(arrivee.chemin === '/', `arrivée sur ${arrivee.chemin}`);
+      verifier(JSON.stringify(arrivee.corps) === JSON.stringify([pos, h, w, wing]), `corps ${arrivee.corps} au lieu de ${[pos, h, w, wing]} (${nom})`);
+      const ecarts = v.map((n, i) => n === arrivee.notes[i] ? null : `${i} : ${arrivee.notes[i]} au lieu de ${n}`).filter(Boolean);
+      verifier(!ecarts.length, `« ${nom} » modifié à l\u2019ouverture : ${ecarts.join(', ')}`);
+      sansErreur('ouverture d\u2019un build réel depuis /hub/');
+    });
+
+    await test('mise en page sans débordement ni zone masquée, sur téléphone et sur ordinateur', async () => {
+      const problemes = [];
+      for (const [largeur, hauteur, mobile, nomEcran] of [[375, 812, true, 'téléphone'], [1440, 900, false, 'ordinateur']]) {
+        await nav.ecran(largeur, hauteur, mobile);
+        for (const mode of ['simple', 'expert']) {
+          for (const p of PAGES) {
+            await nav.ouvrir(base + p.chemin);
+            await nav.evaluer(`localStorage.setItem('nba2k27_mode_v1', '${mode}');`);
+            await nav.ouvrir(base + p.chemin);
+            const erreurs = erreursReelles();
+            if (erreurs.length) problemes.push(`${nomEcran} ${mode} ${p.chemin} : ${erreurs[0].texte}`);
+            const r = await nav.evaluer(`
+              document.documentElement.style.scrollBehavior = 'auto';
+              const W = innerWidth, trouve = [];
+              const defile = e => { for (let x = e.parentElement; x; x = x.parentElement) {
+                const o = getComputedStyle(x).overflowX; if (o === 'auto' || o === 'scroll' || o === 'hidden') return true; } return false; };
+              const fixe = e => { for (let x = e; x; x = x.parentElement) if (getComputedStyle(x).position === 'fixed') return true; return false; };
+              const verifier = ou => {
+                if (document.documentElement.scrollWidth > W + 1) trouve.push(ou + ' : la page défile horizontalement (' + document.documentElement.scrollWidth + ' px)');
+                for (const e of document.querySelectorAll('main *, header *')) {
+                  const b = e.getBoundingClientRect();
+                  if (b.width && (b.right > W + 1 || b.left < -1) && !defile(e) && !fixe(e) && !e.closest('.exact-hidden-legacy,.hq-cache,.skip-link')) {
+                    trouve.push(ou + ' : ' + (e.id ? '#' + e.id : e.tagName.toLowerCase() + '.' + String(e.className).split(' ')[0]) + ' dépasse (' + Math.round(b.left) + '→' + Math.round(b.right) + ')');
+                    break;
+                  }
+                }
+                for (const e of document.querySelectorAll('.attr-name>span:first-child')) {
+                  if (e.offsetParent && e.scrollWidth > e.clientWidth + 1) { trouve.push(ou + ' : nom coupé « ' + e.textContent + ' »'); break; }
+                }
+                // Menus et champs : un libellé ou un texte d'aide plus large que la case est coupé à l'écran.
+                const toile = document.createElement('canvas').getContext('2d');
+                for (const e of document.querySelectorAll('main select, main input[placeholder]')) {
+                  // Les champs d'origine masqués à l'écran (remplacés par les roues du corps) ne comptent pas.
+                  if (!e.offsetParent || e.type === 'checkbox' || e.type === 'range' || e.closest('.hq-cache') || e.clientWidth < 8) continue;
+                  const st = getComputedStyle(e);
+                  toile.font = st.fontWeight + ' ' + st.fontSize + ' ' + st.fontFamily;
+                  const texte = e.tagName === 'SELECT' ? (e.selectedOptions[0]?.textContent || '') : e.placeholder;
+                  const place = e.clientWidth - parseFloat(st.paddingLeft) - parseFloat(st.paddingRight);
+                  if (toile.measureText(texte).width > place + 1) { trouve.push(ou + ' : texte coupé « ' + texte + ' » (#' + (e.id || e.name || '?') + ')'); break; }
+                }
+              };
+              const onglets = [...document.querySelectorAll('.hq-onglets [role="tab"]')];
+              if (onglets.length) for (const o of onglets) { o.click(); await new Promise(r => setTimeout(r, 150)); verifier('onglet ' + o.textContent.trim()); }
+              else verifier('page');
+              if (onglets.length) onglets[0].click();
+              // Le bas de page ne doit pas rester caché sous les barres fixées.
+              scrollTo(0, document.documentElement.scrollHeight);
+              await new Promise(r => setTimeout(r, 150));
+              const pied = document.querySelector('footer');
+              const barres = [...document.querySelectorAll('body *')].filter(e => getComputedStyle(e).position === 'fixed' && e.offsetHeight && e.getBoundingClientRect().bottom >= innerHeight - 2 && !e.closest('.modal,[hidden]'));
+              const hautBarres = Math.min(innerHeight, ...barres.map(e => e.getBoundingClientRect().top));
+              if (pied && pied.getBoundingClientRect().bottom > hautBarres + 2) trouve.push('bas de page masqué par une barre fixée (' + Math.round(pied.getBoundingClientRect().bottom) + ' > ' + Math.round(hautBarres) + ')');
+              return trouve.slice(0, 3);`);
+            r.forEach(t => problemes.push(`${nomEcran} ${mode} ${p.chemin} — ${t}`));
+          }
+        }
+      }
+      await nav.evaluer(`localStorage.removeItem('nba2k27_mode_v1');`);
+      await nav.ecran();
+      verifier(!problemes.length, problemes.length + ' problème(s) de mise en page :\n' + problemes.slice(0, 15).join('\n'));
     });
   } finally {
     await nav.fermer();
@@ -777,11 +869,11 @@ async function testsProduction() {
     verifier(!absentes.length, 'pages absentes du sitemap : ' + absentes.join(', '));
   });
 
-  await test('l\u2019ancienne adresse /blueprints/ redirige vers /trios/', async () => {
-    for (const ancien of ['/blueprints/', '/blueprints']) {
+  await test('les anciennes adresses /blueprints/ et /trios/ mènent à l\u2019onglet Trios', async () => {
+    for (const ancien of ['/blueprints/', '/blueprints', '/trios/', '/trios']) {
       const r = await fetch(URL_PROD + ancien, { redirect: 'manual' });
       const cible = r.headers.get('location') || '';
-      verifier(r.status === 301 && /\/trios\/$/.test(cible), `${ancien} → HTTP ${r.status} ${cible || '(sans redirection)'}`);
+      verifier(r.status === 301 && /\/hub\/\?onglet=trios$/.test(cible), `${ancien} → HTTP ${r.status} ${cible || '(sans redirection)'}`);
     }
   });
 }

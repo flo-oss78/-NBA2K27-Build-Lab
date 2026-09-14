@@ -15,13 +15,13 @@ function iso(ms){
 
 export async function onRequestGet({request, env}){
   const origin = new URL(request.url).origin;
-  // Les cinq pages du site, chacune indexable pour ce qu'elle contient
-  // (trios, badges et animations sont les pages de contenu réel).
+  // Les quatre pages du site, chacune indexable pour ce qu'elle contient
+  // (builds, badges et animations sont les pages de contenu réel).
+  // /trios/ est devenu un onglet de /hub/ (redirection 301).
   const PAGES = [
     ['/', '1.0'],
-    ['/trios/', '0.9'],
+    ['/hub/', '0.9'],
     ['/reference/', '0.9'],
-    ['/hub/', '0.8'],
     ['/progression/', '0.7']
   ];
   const urls = PAGES.map(([chemin, priorite]) =>

@@ -239,7 +239,7 @@
       '<div class="bm-hq">'+
         '<span class="bm-label">Lien d\u2019import NBA 2K HQ</span>'+
         '<p class="bm-hq-note">NBA 2K27 génère un lien de partage depuis l\u2019app NBA 2K HQ. Colle-le ici : le site en fera un QR scannable qui importe le build <strong>directement en jeu</strong>. Ce site ne peut pas fabriquer ce lien lui-même — seul 2K peut le produire.</p>'+
-        '<input id="bmHq" value="'+esc(m.hq)+'" placeholder="https://nba.2k.com/nba-2k-hq?playerBuildData=…">'+
+        '<input id="bmHq" value="'+esc(m.hq)+'" placeholder="Lien de partage NBA 2K HQ">'+
         '<div id="bmHqQr" class="bm-hq-qr"></div>'+
       '</div>';
 

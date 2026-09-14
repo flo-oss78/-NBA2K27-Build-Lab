@@ -1,5 +1,8 @@
-# Les « Blueprints » s'appellent désormais « Trios » : l'ancienne adresse,
-# déjà indexée et partagée, renvoie définitivement vers la nouvelle.
-/blueprints    /trios/  301
-/blueprints/   /trios/  301
-/blueprints/*  /trios/  301
+# Les Trios (ex-« Blueprints ») sont un onglet de la page Builds. Les anciennes
+# adresses, déjà indexées et partagées, y renvoient définitivement.
+/blueprints    /hub/?onglet=trios  301
+/blueprints/   /hub/?onglet=trios  301
+/blueprints/*  /hub/?onglet=trios  301
+/trios         /hub/?onglet=trios  301
+/trios/        /hub/?onglet=trios  301
+/trios/*       /hub/?onglet=trios  301
