@@ -168,12 +168,31 @@ async function testsStatiques() {
       if (src === 'lc' && (!c || w < c.poidsMin || w > c.poidsMax || wing < c.envMin || wing > c.envMax)) problemes.push(`${nom} : corps ${pos} ${h}/${w}/${wing} non autorisé`);
     }
     verifier(!problemes.length, problemes.slice(0, 10).join('\n'));
-    for (const [cle, m] of Object.entries(M)) verifier(m.marge > 0 && m.marge < 0.5 && m.w.length === 21, `modèle de budget ${cle} incohérent`);
+    // Un modèle par poste : 21 notes, puis taille, poids et envergure.
+    verifier(['PG', 'SG', 'SF', 'PF', 'C'].every(p => M[p]), 'il manque un modèle de budget par poste');
+    for (const [cle, m] of Object.entries(M)) verifier(m.marge > 0 && m.marge < 0.2 && m.w.length === 24, `modèle de budget ${cle} incohérent (marge ${m.marge}, ${m.w.length} coefficients)`);
     verifier(S.sources.every(s => /^https:\/\//.test(s.url)) && /estim/i.test(S.avertissement), 'sources ou avertissement manquants');
     // Les builds réels à 99 doivent retomber dans la marge de leur modèle, pour la plupart.
-    const parts = B.map(b => { const e = ctx.budgetEstime(b[1], b[2], Object.fromEntries(A.map((a, i) => [a, b[6][i]]))); return Math.abs(e.part - 1) <= e.marge; });
+    const parts = B.map(b => { const e = ctx.budgetEstime(b[1], b[2], b[3], b[4], Object.fromEntries(A.map((a, i) => [a, b[6][i]]))); return Math.abs(e.part - 1) <= e.marge; });
     const dedans = parts.filter(Boolean).length / parts.length;
     verifier(dedans > 0.9, `seulement ${(dedans * 100).toFixed(1)} % des builds réels dans leur marge de budget`);
+  });
+
+  await test('les plafonds relevés dans 2K HQ sont cohérents et appliqués', () => {
+    const hq = JSON.parse(fs.readFileSync('donnees/caps-2khq.json', 'utf8'));
+    const ctx = {};
+    vm.createContext(ctx);
+    vm.runInContext(fs.readFileSync('builds-reels.js', 'utf8') + ';this.B=BUILDS_REELS;this.capsConnus=capsConnus;this.A=BUILDS_ATTRIBUTS;', ctx);
+    verifier(hq.ordre.join() === ctx.A.join(), 'ordre des attributs différent de builds-reels.js');
+    const problemes = [];
+    for (const c of hq.corps) {
+      const cle = `${c.h}|${c.w}|${c.wing}`, connus = ctx.capsConnus(c.h, c.w, c.wing);
+      if (!connus || !connus.exacts || ctx.A.some((a, i) => connus.caps[a] !== c.caps[i])) problemes.push(`${cle} : plafonds 2K HQ non repris dans builds-reels.js`);
+      for (const b of ctx.B.filter(b => b[2] === c.h && b[3] === c.w && b[4] === c.wing))
+        b[6].forEach((n, i) => { if (n > c.caps[i]) problemes.push(`${b[5]} (${cle}) : ${ctx.A[i]} ${n} > ${c.caps[i]}`); });
+    }
+    verifier(hq.corps.length >= 25, `${hq.corps.length} corps seulement dans caps-2khq.json`);
+    verifier(!problemes.length, problemes.slice(0, 10).join('\n'));
   });
 
   await test('la page 404 existe, n’est pas indexable et ses liens mènent quelque part', () => {
@@ -599,10 +618,15 @@ async function testsNavigateur(base) {
         const budget = { visible: !el('budgetEstime').hidden, valeur: el('budgetEstimeValeur').textContent, marge: el('budgetEstimeMarge').textContent, texte: el('budgetEstimeTexte').textContent };
         const cartes = document.querySelectorAll('#buildsProches .build-reel').length;
         // Monter tous les attributs à fond doit sortir de la zone d'un build à 99.
+        // Sans import du jeu : le test précédent en laisse un pour ce même corps,
+        // dont les vrais plafonds (build maximum réel) tombent, eux, dans la zone.
         const avant = parseInt(budget.valeur);
+        localStorage.removeItem('nba2k27_import_jeu_v1'); update();
         document.querySelectorAll('#attributeGroups input').forEach(x => { x.value = x.max; x.dispatchEvent(new Event('input', { bubbles: true })); });
         await attendre(200);
-        const plein = { valeur: parseInt(el('budgetEstimeValeur').textContent), dessus: el('budgetEstime').classList.contains('dessus') };
+        const plein = { valeur: parseInt(el('budgetEstimeValeur').textContent), dessus: el('budgetEstime').classList.contains('dessus'),
+                        notes: ratings(), plafonds: Object.fromEntries([...document.querySelectorAll('#attributeGroups input')].map(x => [x.dataset.name, +x.max])),
+                        corps: [el('position').value, +el('height').value, +el('weight').value, +el('wing').value] };
         // Charger le premier build réel proposé : ses notes ne doivent pas être rognées.
         const bouton = document.querySelector('[data-charger-build="0"]');
         const i = +bouton.dataset.chargerBuild;

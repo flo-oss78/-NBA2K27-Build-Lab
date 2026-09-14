@@ -13,10 +13,10 @@
  * - NBA2KLab, 40 Signature Blueprints officiels 2K et table des corps autorisés
  *   par poste et par taille (page myplayer-builder).
  *
- * Modèle : pour un groupe (poste + taille, ou poste seul si moins de 80 builds),
- * coût = Σ w[a] · (exp(k·(note−25)) − 1), ajusté pour que les builds du groupe
- * dépensent tous le même budget. La marge est l'écart que 95 % des builds ne
- * dépassent pas en validation croisée (5 plis, graine fixe).
+ * Modèle : par poste, coût = Σ w[a] · (exp(k·(note−25)) − 1) + termes de taille,
+ * poids et envergure, ajusté pour que les builds du poste dépensent tous le même
+ * budget. La marge est l'écart que 95 % des builds ne dépassent pas sur des
+ * corps jamais vus (validation croisée par corps, 5 plis, graine fixe).
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -118,7 +118,10 @@ console.log(`NBA2KLab : ${blueprints.length} Signature Blueprints, dont ${bluepr
 
 /* ------------------------------------------------------ Budget estimé */
 const tous = [...builds, ...blueprints];
-const f = v => v.map(n => Math.exp(K * (n - 25)) - 1);
+// Variables : les 21 notes (coût croissant), puis le corps. Validé en mettant
+// de côté des corps entiers : taille, poids et envergure divisent l'erreur par
+// trois par rapport à un modèle par poste et par taille sur les seules notes.
+const f = b => [...b.v.map(n => Math.exp(K * (n - 25)) - 1), b.h, b.w / 10, b.wing];
 function resoudre(A, b) {
   const n = b.length, M = A.map((r, i) => [...r, b[i]]);
   for (let c = 0; c < n; c++) {
@@ -130,40 +133,54 @@ function resoudre(A, b) {
   return M.map(r => r[n]);
 }
 // Ajuste w pour que X·w soit constant : données centrées, Trois points fixé à 1.
+// Un point d'attribut ne peut pas « rendre » du budget : les coûts des notes
+// négatifs sont retirés un à un (mis à zéro) jusqu'à ce qu'il n'en reste aucun.
+// Sans cette contrainte, mettre tous les attributs à 99 restait « dans le budget ».
+// Les termes de corps (taille, poids, envergure) restent libres.
 function ajuster(S) {
-  const X = S.map(b => f(b.v)), n = 21, m = X.length, moy = new Array(n).fill(0), REF = 6;
+  const X = S.map(f), n = X[0].length, m = X.length, moy = new Array(n).fill(0), REF = 6;
   X.forEach(x => x.forEach((v, i) => moy[i] += v / m));
-  const idx = [...Array(n).keys()].filter(i => i !== REF);
-  const A = idx.map(() => new Array(idx.length).fill(0)), b = new Array(idx.length).fill(0);
-  for (const x of X) {
-    const c = x.map((v, i) => v - moy[i]);
-    for (let a = 0; a < idx.length; a++) { const ca = c[idx[a]]; if (!ca) continue; b[a] -= ca * c[REF]; for (let q = 0; q < idx.length; q++) A[a][q] += ca * c[idx[q]]; }
+  const actifs = new Set([...Array(n).keys()].filter(i => i !== REF));
+  for (let tour = 0; tour < 30; tour++) {
+    const idx = [...actifs];
+    const A = idx.map(() => new Array(idx.length).fill(0)), b = new Array(idx.length).fill(0);
+    for (const x of X) {
+      const c = x.map((v, i) => v - moy[i]);
+      for (let a = 0; a < idx.length; a++) { const ca = c[idx[a]]; if (!ca) continue; b[a] -= ca * c[REF]; for (let q = 0; q < idx.length; q++) A[a][q] += ca * c[idx[q]]; }
+    }
+    for (let a = 0; a < idx.length; a++) A[a][a] += 1e-3 * m;
+    const s = resoudre(A, b), w = new Array(n).fill(0); w[REF] = 1; idx.forEach((i, a) => w[i] = s[a]);
+    const negatifs = idx.filter(i => i < 21 && w[i] < 0);
+    if (!negatifs.length) {
+      const budget = X.reduce((t, x) => t + x.reduce((u, v, i) => u + v * w[i], 0), 0) / m;
+      return { w, budget };
+    }
+    negatifs.forEach(i => actifs.delete(i));
   }
-  for (let a = 0; a < idx.length; a++) A[a][a] += 1e-3 * m;
-  const s = resoudre(A, b), w = new Array(n).fill(0); w[REF] = 1; idx.forEach((i, a) => w[i] = s[a]);
-  const budget = X.reduce((t, x) => t + x.reduce((u, v, i) => u + v * w[i], 0), 0) / m;
-  return { w, budget };
+  throw new Error('ajustement du budget : pas de solution à coûts positifs');
 }
-const ecart = (b, mod) => f(b.v).reduce((u, v, i) => u + v * mod.w[i], 0) / mod.budget - 1;
+const ecart = (b, mod) => f(b).reduce((u, v, i) => u + v * mod.w[i], 0) / mod.budget - 1;
 let graine = 42; const hasard = () => (graine = (graine * 16807) % 2147483647) / 2147483647;
+// Marge = écart que 95 % des builds ne dépassent pas, sur des CORPS jamais vus :
+// tous les builds d'un même corps tombent dans le même pli.
 function marge(S) {
-  const ordre = S.map((_, i) => i).sort(() => hasard() - 0.5), erreurs = [];
+  const corpsDe = b => `${b.h}|${b.w}|${b.wing}`;
+  const corps = [...new Set(S.map(corpsDe))].sort(() => hasard() - 0.5);
+  const pli = new Map(corps.map((c, i) => [c, i % PLIS])), erreurs = [];
   for (let p = 0; p < PLIS; p++) {
-    const test = new Set(ordre.filter((_, i) => i % PLIS === p));
-    const mod = ajuster(S.filter((_, i) => !test.has(i)));
-    S.forEach((b, i) => { if (test.has(i)) erreurs.push(Math.abs(ecart(b, mod))); });
+    const mod = ajuster(S.filter(b => pli.get(corpsDe(b)) !== p));
+    for (const b of S) if (pli.get(corpsDe(b)) === p) erreurs.push(Math.abs(ecart(b, mod)));
   }
   erreurs.sort((a, b) => a - b);
   return erreurs[Math.floor(erreurs.length * 0.95)];
 }
 const modeles = {};
 const groupes = {};
-for (const b of tous) { (groupes[b.pos] ??= []).push(b); (groupes[`${b.pos} ${b.h}`] ??= []).push(b); }
-for (const [cle, S] of Object.entries(groupes)) {
-  if (!cle.includes(' ') || S.length >= MIN_GROUPE) {
-    const mod = ajuster(S);
-    modeles[cle] = { n: S.length, budget: +mod.budget.toFixed(4), marge: +marge(S).toFixed(4), w: mod.w.map(x => +x.toFixed(5)) };
-  }
+for (const b of tous) (groupes[b.pos] ??= []).push(b);
+for (const [pos, S] of Object.entries(groupes)) {
+  if (S.length < MIN_GROUPE) throw new Error(`${pos} : ${S.length} builds, trop peu pour estimer un budget`);
+  const mod = ajuster(S);
+  modeles[pos] = { n: S.length, budget: +mod.budget.toFixed(4), marge: +marge(S).toFixed(4), w: mod.w.map(x => +x.toFixed(6)) };
 }
 for (const [cle, m] of Object.entries(modeles).sort()) console.log(`budget ${cle.padEnd(6)} n=${String(m.n).padStart(4)} marge ±${(m.marge * 100).toFixed(1)} %`);
 
@@ -179,7 +196,22 @@ for (const b of tous) {
   if (b.caps) { capsCorps[cle] = [1, [...b.caps]]; continue; }
   b.v.forEach((n, i) => { if (n > c[1][i]) c[1][i] = n; });
 }
-console.log(`Plafonds connus : ${Object.keys(capsCorps).length} corps, dont ${Object.values(capsCorps).filter(c => c[0]).length} exacts`);
+// Plafonds officiels relevés dans le builder de l'app 2K HQ (vidéo de
+// l'utilisateur, 14 septembre 2026) : exacts, ils priment sur tout le reste.
+// On refuse le fichier si un build réel dépasse un de ses plafonds : ce serait
+// une erreur de lecture ou de conversion.
+const capsHQ = JSON.parse(fs.readFileSync(path.join(RACINE, 'donnees', 'caps-2khq.json'), 'utf8'));
+if (capsHQ.ordre.join() !== ATTRS.join()) throw new Error('caps-2khq.json : ordre des attributs différent');
+for (const c of capsHQ.corps) {
+  const cle = `${c.h}|${c.w}|${c.wing}`;
+  if (c.caps.length !== 21 || c.caps.some(n => !Number.isInteger(n) || n < 25 || n > 99)) throw new Error(`caps-2khq.json : plafonds invalides pour ${cle}`);
+  for (const b of tous) {
+    if (`${b.h}|${b.w}|${b.wing}` !== cle) continue;
+    b.v.forEach((n, i) => { if (n > c.caps[i]) throw new Error(`caps-2khq.json : « ${b.nom} » a ${ATTRS[i]} ${n} au-dessus du plafond relevé ${c.caps[i]} (${cle})`); });
+  }
+  capsCorps[cle] = [1, [...c.caps]];
+}
+console.log(`Plafonds connus : ${Object.keys(capsCorps).length} corps, dont ${Object.values(capsCorps).filter(c => c[0]).length} exacts (${capsHQ.corps.length} relevés dans 2K HQ)`);
 
 /* ------------------------------------------------------ Écriture */
 const SOURCE = {
@@ -188,7 +220,8 @@ const SOURCE = {
     { nom: 'LockerCodes', url: LC_NOMS, role: 'builds complets à 99 (exemples de noms de build)' },
     { nom: 'NBA2KLab', url: LAB_BLUEPRINTS, role: 'Signature Blueprints officiels 2K' },
     { nom: 'LockerCodes', url: LC_BUILDER, role: 'corps autorisés par poste et par taille (vérifiés dans le jeu)' },
-    { nom: 'NBA2KLab', url: LAB_BUILDER, role: 'recoupement des corps autorisés' }
+    { nom: 'NBA2KLab', url: LAB_BUILDER, role: 'recoupement des corps autorisés' },
+    { nom: 'App NBA 2K HQ', url: 'https://nba.2k.com/2k27/features/myplayer-builder/', role: `plafonds exacts de ${capsHQ.corps.length} corps, relevés dans le builder officiel (donnees/caps-2khq.json)` }
   ],
   ecartsCorps: ecartsCorps.length,
   avertissement: 'Budget estimé à partir de builds réels : la règle exacte du jeu dépend des plafonds de chaque corps, qui ne sont pas publics.'
@@ -201,7 +234,7 @@ const contenu = `/* NBA 2K27 Build Lab — Builds réels, corps autorisés et bu
      source « lc » = exemple complet LockerCodes, « bp » = Signature Blueprint officiel (NBA2KLab)
      notes dans l'ordre de BUILDS_ATTRIBUTS
    CORPS_LEGAUX[poste][taille] = [poids min, poids max, envergure min, envergure max]
-   BUDGET_MODELES[« poste taille » ou « poste »] = { n, budget, marge, w }
+   BUDGET_MODELES[poste] = { n, budget, marge, w } ; w : 21 notes puis taille, poids/10, envergure
    CAPS_CORPS[« taille|poids|envergure »] = [1 exacts (Blueprint) ou 0 minimum observé, 21 plafonds] */
 const BUILDS_SOURCE=${JSON.stringify(SOURCE)};
 const BUILDS_ATTRIBUTS=${JSON.stringify(ATTRS)};
@@ -214,11 +247,14 @@ ${tous.map(ligne).join(',\n')}
 
 /* Budget estimé d'un build : part du budget d'un build réel complet (1 = 100 %),
    avec la marge mesurée du groupe utilisé. null si le poste est inconnu. */
-function budgetEstime(pos,h,notes){
-  const groupe=BUDGET_MODELES[pos+' '+h]?pos+' '+h:pos, m=BUDGET_MODELES[groupe];
-  if(!m)return null;
-  const cout=BUILDS_ATTRIBUTS.reduce((t,a,i)=>t+m.w[i]*(Math.exp(${K}*((notes[a]??25)-25))-1),0);
-  return {part:cout/m.budget,marge:m.marge,groupe,n:m.n};
+function budgetEstime(pos,h,w,wing,notes){
+  const m=BUDGET_MODELES[pos]; if(!m)return null;
+  // Part du budget DÉPENSABLE : 0 % tout à 25, 100 % pour un build complet à 99.
+  // Les termes de corps sont la part fixe ; la marge est ramenée à la même échelle.
+  const corps=m.w[21]*h+m.w[22]*w/10+m.w[23]*wing, dispo=m.budget-corps;
+  if(!(dispo>0))return null;
+  const notesCout=BUILDS_ATTRIBUTS.reduce((t,a,i)=>t+m.w[i]*(Math.exp(${K}*((notes[a]??25)-25))-1),0);
+  return {part:notesCout/dispo,marge:m.marge*m.budget/dispo,groupe:pos,n:m.n};
 }
 /* Plafonds connus pour un corps : exacts (Blueprint officiel) ou minimum garanti
    (note la plus haute vue dans un build réel de ce corps). null si inconnu. */

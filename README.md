@@ -94,6 +94,7 @@ stockés dans le navigateur du visiteur et le statut affiche « Serveur : local 
 | `validator.js` | Validateur de cohérence (gabarit, caps, badges, animations). **Chargé avant `app.js`** |
 | `app.js` | Moteur : attributs, caps, badges, takeovers, animations, jetons, scouting |
 | `builds-reels.js` | **Généré** par `node outils/importer-builds.mjs` : builds complets réels (LockerCodes, Blueprints 2K), corps autorisés, budget estimé et sa marge. **Chargé avant `app.js`** |
+| `donnees/caps-2khq.json` | Plafonds exacts de 30 corps relevés dans le builder officiel de l'app 2K HQ (vidéo du 14/09/2026) ; repris par `importer-builds.mjs`, qui refuse le fichier si un build réel dépasse un plafond |
 | `builds-ui.js` | Budget estimé et builds réels proches dans le builder. **Chargé après `app.js`** |
 | `import-jeu.js` | Import d'un build recopié du jeu : plafonds réels et brise-plafonds. **Chargé après `app.js`** |
 | `optimizer.js` | Optimiseur : redistribution des points sans en ajouter (équivalence indicative) |

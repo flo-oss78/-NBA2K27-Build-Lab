@@ -19,7 +19,7 @@
 
   function renduBudget(){
     const carte=$('budgetEstime'); if(!carte)return;
-    const pos=$('position').value, h=+$('height').value, e=budgetEstime(pos,h,ratings());
+    const pos=$('position').value, h=+$('height').value, e=budgetEstime(pos,h,+$('weight').value,+$('wing').value,ratings());
     if(!e){carte.hidden=true;return}
     carte.hidden=false;
     const pct=Math.round(e.part*100), marge=Math.round(e.marge*100);
