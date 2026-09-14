@@ -276,17 +276,21 @@ function renderSourceAnimations(){
 }
 function carteAnimation(a,ok,r,h){
  const heightOK=h>=a.minH&&h<=a.maxH, manques=animationManques(a,r), e=Object.entries(a.req||{});
- const reqs=!e.length?'<span class="req pass">Aucun attribut requis</span>'
-  :a.ou&&e.length>1?`<span class="req ${manques.length?'fail':'pass'}">${e.map(([k,v])=>`${escapeHTML(k)} ${v}`).join(' ou ')} — toi : ${e.map(([k])=>r[k]??0).join(' / ')}</span>`
-  :e.map(([k,v])=>`<span class="req ${(r[k]??0)>=v?'pass':'fail'}">${escapeHTML(k)} : ${r[k]??0}/${v}</span>`).join('');
+ const nomA=n=>typeof nomAttribut==='function'?nomAttribut(n):n;
+ const m=p=>(p*0.0254).toFixed(2).replace('.',',')+' m';
+ const reqs=!e.length?'<p class="areq-vide">Aucun attribut requis.</p>'
+  :`<div class="areq tete"><span>Attribut</span><span>Toi</span><span>Requis</span></div>`+
+   e.map(([k,v])=>{const t=r[k]??0;return `<div class="areq ${t>=v?'ok':''}"><span>${escapeHTML(nomA(k))}</span><b>${t}</b><i>${v}</i></div>`}).join('')+
+   (a.ou&&e.length>1?'<p class="areq-logique">Un seul de ces attributs suffit.</p>':'');
  const [cls,txt,titre]=ANIM_SOURCE_LIBELLE[a.v]||ANIM_SOURCE_LIBELLE[1];
  const cat=nomCategorieAnimation(a.category);
- return `<article class="anim-card ${ok?'ok':''}"><div class="anim-top"><div class="anim-name">${escapeHTML(a.name)}</div><span class="anim-badge">${ok?'✓ ACCESSIBLE':'🔒 BLOQUÉE'}</span></div>`+
-  `<div class="anim-meta">${escapeHTML(cat)}${cat!==a.category?` <i>${escapeHTML(a.category)}</i>`:''} • ${heightText(a.minH)} – ${heightText(a.maxH)}</div>`+
+ const statut=ok?['ok','Accessible']:!heightOK?['taille','Hors taille']:['bloquee','Bloquée'];
+ return `<article class="anim-card ${ok?'ok':''}"><div class="anim-top"><div class="anim-name">${escapeHTML(a.name)}</div><span class="anim-badge ${statut[0]}">${statut[1]}</span></div>`+
+  `<div class="anim-meta"><span>${escapeHTML(cat)}</span>${cat!==a.category?`<i>${escapeHTML(a.category)}</i>`:''}<span class="anim-taille">${m(a.minH)} à ${m(a.maxH)}</span></div>`+
   `<div class="reqs">${reqs}</div>`+
-  `${!heightOK?`<div class="missing">Taille requise : ${heightText(a.minH)} à ${heightText(a.maxH)}.</div>`:''}`+
-  `${manques.length?`<div class="missing">Il manque : ${manques.map(([k,n])=>`${escapeHTML(k)} ${n} pts`).join(' • ')}</div>`:''}`+
-  `<div class="anim-sources"><span class="anim-source ${cls}" title="${escapeHTML(titre)}">${txt}</span>${a.jeu?'<span class="anim-source jeu" title="Équipée sur un vrai MyPLAYER dont les attributs respectent cette exigence">🎮 Confirmée en jeu</span>':''}</div>`+
+  `${!heightOK?`<p class="missing">Réservée aux joueurs de ${m(a.minH)} à ${m(a.maxH)}.</p>`:''}`+
+  `${manques.length?`<p class="missing">Il te manque : ${manques.map(([k,n])=>`${escapeHTML(String(k).split(' ou ').map(nomA).join(' ou '))} +${n}`).join(' et ')}.</p>`:''}`+
+  `<div class="anim-sources"><span class="anim-source ${cls}" title="${escapeHTML(titre)}">${txt}</span>${a.jeu?'<span class="anim-source jeu" title="Équipée sur un vrai MyPLAYER dont les attributs respectent cette exigence">Confirmée en jeu</span>':''}</div>`+
   `${a.note?`<div class="anim-note">${escapeHTML(a.note)}</div>`:''}</article>`;
 }
 function renderAnimations(){
@@ -294,9 +298,19 @@ function renderAnimations(){
  const list=document.getElementById('animationList'); if(!list)return; /* section absente de cette page */
  const sel=document.getElementById('animCategory'); remplirCategoriesAnimations(sel); renderSourceAnimations();
  const r=ratings(),h=heightInches(),cat=sel.value,status=document.getElementById('animStatus').value,q=document.getElementById('animSearch').value.toLowerCase().trim();
+ // Types d'animation (pastilles) : une catégorie choisie dans la liste prime sur le type.
+ const grpBox=document.getElementById('animGroupes'), grp=grpBox?.dataset.groupe||'all';
+ if(grpBox){
+  const groupes=new Map();
+  for(const a of ANIMATIONS){const g=groupes.get(a.group)||[0,0];g[1]++;if(animationAccessible(a,r,h))g[0]++;groupes.set(a.group,g)}
+  const actif=cat!=='all'?(ANIMATIONS.find(a=>a.category===cat)||{}).group:grp;
+  grpBox.innerHTML=`<button type="button" data-groupe="all" aria-pressed="${cat==='all'&&grp==='all'}">Toutes</button>`+
+   [...groupes].map(([g,[o,t]])=>`<button type="button" data-groupe="${escapeHTML(g)}" aria-pressed="${actif===g}">${escapeHTML(g)} <b>${o}/${t}</b></button>`).join('');
+ }
  let accessibles=0; const retenues=[];
  for(const a of ANIMATIONS){
-  if(cat!=='all'&&a.category!==cat)continue;
+  if(cat!=='all'){if(a.category!==cat)continue}
+  else if(grp!=='all'&&a.group!==grp)continue;
   if(q&&!(a.name.toLowerCase().includes(q)||a.category.toLowerCase().includes(q)||nomCategorieAnimation(a.category).toLowerCase().includes(q)))continue;
   const ok=animationAccessible(a,r,h); if(ok)accessibles++;
   if(status==='yes'&&!ok||status==='no'&&ok)continue;
@@ -311,7 +325,7 @@ function renderAnimations(){
 function handValue(){return document.getElementById('dominantHand')?.value||'Droite'}
 function serialize(){let obj={position:position.value,height:height.value,weight:weight.value,wing:wing.value,style:style.value,hand:handValue(),attrs:Object.fromEntries(inputs.map(x=>[x.dataset.name,x.value]))};return btoa(unescape(encodeURIComponent(JSON.stringify(obj))))}
 function apply(obj){position.value=obj.position||'SF';height.value=obj.height||80;weight.value=obj.weight||210;wing.value=obj.wing||84;style.value=obj.style||'Équilibré';const handEl=document.getElementById('dominantHand');if(handEl&&obj.hand)handEl.value=obj.hand;update();if(obj.attrs)inputs.forEach(x=>{if(obj.attrs[x.dataset.name])x.value=Math.min(+obj.attrs[x.dataset.name],+x.max)});update()}
-inputs.forEach(x=>x.addEventListener('input',update));['position','height','weight','wing','style'].forEach(id=>document.getElementById(id)?.addEventListener('input',update));const animRefiltrer=()=>{animLimite=ANIM_PAGE;renderAnimations()};['animCategory','animStatus'].forEach(id=>document.getElementById(id)?.addEventListener('change',animRefiltrer));document.getElementById('animSearch')?.addEventListener('input',animRefiltrer);document.getElementById('animPlus')?.addEventListener('click',()=>{animLimite+=ANIM_PAGE;renderAnimations()});['badgeFilter'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>renderBadges(ratings())));document.getElementById('badgeCats')?.addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b||!e.currentTarget.contains(b)||b===e.currentTarget)return;e.currentTarget.dataset.cat=b.dataset.cat;renderBadges(ratings())});document.getElementById('badgeSearch')?.addEventListener('input',()=>renderBadges(ratings()));
+inputs.forEach(x=>x.addEventListener('input',update));['position','height','weight','wing','style'].forEach(id=>document.getElementById(id)?.addEventListener('input',update));const animRefiltrer=()=>{animLimite=ANIM_PAGE;renderAnimations()};['animCategory','animStatus'].forEach(id=>document.getElementById(id)?.addEventListener('change',animRefiltrer));document.getElementById('animSearch')?.addEventListener('input',animRefiltrer);document.getElementById('animPlus')?.addEventListener('click',()=>{animLimite+=ANIM_PAGE;renderAnimations()});document.getElementById('animGroupes')?.addEventListener('click',e=>{const b=e.target.closest('[data-groupe]');if(!b||b===e.currentTarget)return;e.currentTarget.dataset.groupe=b.dataset.groupe;const s=document.getElementById('animCategory');if(s)s.value='all';animLimite=ANIM_PAGE;renderAnimations()});['badgeFilter'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>renderBadges(ratings())));document.getElementById('badgeCats')?.addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b||!e.currentTarget.contains(b)||b===e.currentTarget)return;e.currentTarget.dataset.cat=b.dataset.cat;renderBadges(ratings())});document.getElementById('badgeSearch')?.addEventListener('input',()=>renderBadges(ratings()));
 
 /* Ces quatre boutons n'existent que sur la page du builder : liaisons protégées. */
 document.getElementById('reset')?.addEventListener('click',()=>{localStorage.removeItem('nba2k27_build');location.reload()});

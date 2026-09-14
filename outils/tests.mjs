@@ -761,6 +761,33 @@ async function testsNavigateur(base) {
       sansErreur('indicateur de fiabilité des plafonds');
     });
 
+    await test('les types d’animation filtrent la liste et chaque carte dit ce qui manque', async () => {
+      await nav.ouvrir(base + '/reference/?onglet=animations');
+      const r = await nav.evaluer(`
+        const attendre = () => new Promise(r => setTimeout(r, 150));
+        const R = ratings(), H = heightInches();
+        const groupes = [...new Set(ANIMATIONS.map(a => a.group))];
+        const boutons = [...document.querySelectorAll('#animGroupes [data-groupe]')].map(b => b.dataset.groupe);
+        const erreurs = [];
+        for (const g of groupes) {
+          document.querySelector('#animGroupes [data-groupe="' + g.replace(/"/g, '\\"') + '"]').click(); await attendre();
+          const n = ANIMATIONS.filter(a => a.group === g).length;
+          const cartes = document.querySelectorAll('#animationList .anim-card').length;
+          if (cartes !== Math.min(60, n)) erreurs.push(g + ' : ' + cartes + ' cartes pour ' + n);
+        }
+        document.querySelector('#animGroupes [data-groupe="all"]').click(); await attendre();
+        const bloquee = ANIMATIONS.findIndex(a => H >= a.minH && H <= a.maxH && animationManques(a, R).length);
+        const cartes = [...document.querySelectorAll('#animationList .anim-card')];
+        const sansManque = cartes.filter(c => c.querySelector('.anim-badge.bloquee') && !/Il te manque/.test(c.textContent)).length;
+        const onglet = document.querySelector('.hq-onglets [aria-selected="true"]')?.dataset.onglet;
+        return { groupes: groupes.length, boutons: boutons.length, erreurs, sansManque, onglet };`);
+      verifier(r.onglet === 'animations', `?onglet=animations ouvre l’onglet ${r.onglet}`);
+      verifier(r.boutons === r.groupes + 1, `${r.boutons} pastilles pour ${r.groupes} types`);
+      verifier(!r.erreurs.length, 'filtre par type incorrect : ' + r.erreurs.join(' | '));
+      verifier(r.sansManque === 0, `${r.sansManque} animation(s) bloquée(s) sans « Il te manque »`);
+      sansErreur('filtres des animations');
+    });
+
     await test('l\u2019onglet Builds réels filtre et ouvre un build réel à l\u2019identique', async () => {
       await nav.ouvrir(base + '/hub/');
       const r = await nav.evaluer(`
