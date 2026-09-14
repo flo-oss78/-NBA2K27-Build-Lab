@@ -15,7 +15,7 @@ const PAGES=['/','/trios/','/hub/','/reference/','/progression/'];
 const SHELL=[
   ...PAGES,
   './theme.css','./site-config.js','./builder-data.js',
-  './validator.js','./app.js','./optimizer.js','./hub.js','./animations.js',
+  './validator.js','./app.js','./import-jeu.js','./optimizer.js','./hub.js','./animations.js',
   './dna-engine.js','./data-registry.js','./data-validation.js','./players-core.js',
   './v15-intelligence.js','./server-client.js','./style-presets.js','./ui.js',
   './blueprints.js','./progression.js','./qr.js','./share.js','./assist.js',

@@ -59,6 +59,20 @@ function heightText(h){return `${Math.floor(h/12)}'${h%12}"`}
 function cmOf(inches){return Math.round(inches*2.54)}
 function kgOf(lbs){return Math.round(lbs*0.45359237)}
 function updateProfileLabels(){const h=heightInches(),w=+document.getElementById('weight').value,wg=+document.getElementById('wing').value;document.getElementById('heightOut').textContent=`${heightText(h)} (${cmOf(h)} cm)`;document.getElementById('weightOut').textContent=`${w} lbs (${kgOf(w)} kg)`;document.getElementById('wingOut').textContent=`${heightText(wg)} (${cmOf(wg)} cm)`}
+/* Build recopié depuis le jeu (import-jeu.js). Ses plafonds ne valent que pour
+   le gabarit importé : on renvoie null dès que poste, taille, poids ou
+   envergure ont changé. */
+const IMPORT_JEU_KEY='nba2k27_import_jeu_v1';
+function importJeuActif(){
+ if(!document.getElementById('height'))return null;
+ try{
+  const j=JSON.parse(localStorage.getItem(IMPORT_JEU_KEY)||'null');
+  if(!j||!j.max)return null;
+  const v=id=>document.getElementById(id).value;
+  const corps=[v('position'),+v('height'),+v('weight'),+v('wing')].join('|');
+  return corps===j.corps?j:null;
+ }catch(e){return null}
+}
 function bodyCaps(){
  const h=heightInches(),w=+document.getElementById('weight').value,wing=+document.getElementById('wing').value,pos=document.getElementById('position').value;
  const wingEl=document.getElementById('wing');
@@ -75,7 +89,12 @@ function bodyCaps(){
  caps['Three-Point']=Math.round(Math.max(75,99-size*0.8-wingBonus*2)); caps['Mid-Range']=Math.round(Math.max(78,99-size*0.5-wingBonus)); caps['Driving Dunk']=Math.round(Math.max(70,99-size*0.5-wingBonus*1.5)); caps['Driving Layup']=Math.round(Math.max(75,99-size*0.2-wingBonus)); caps['Standing Dunk']=Math.round(Math.max(70,99-Math.max(0,-size)*1.5));
  caps['Perimeter Defense']=Math.round(Math.max(72,99-size*0.5-wingBonus*-1)); caps['Steal']=Math.round(Math.max(70,99-size*0.3-wingBonus*-1)); caps['Block']=Math.round(Math.max(70,99+size*1.1+wingBonus*1.5)); caps['Interior Defense']=Math.round(Math.max(70,99+size*0.7+weightBonus*1.2)); caps['Defensive Rebound']=Math.round(Math.max(70,99+size*0.9+wingBonus*1.5)); caps['Offensive Rebound']=Math.round(Math.max(65,99+size*0.8+weightBonus*1.5)); caps['Strength']=Math.round(Math.max(70,99+weightBonus*5+size*0.6)); caps['Vertical']=Math.round(Math.max(70,99-size*0.9)); caps['Close Shot']=Math.round(Math.max(78,99+size*0.1)); caps['Post Control']=Math.round(Math.max(70,99+size*0.7+weightBonus*1.2));
  if(pos==='PG'){caps['Driving Dunk']-=4;caps['Block']-=8;caps['Interior Defense']-=5} if(pos==='C'){caps['Ball Handle']-=10;caps['Speed With Ball']-=8;caps['Block']+=2;caps['Defensive Rebound']+=2} if(pos==='PF'){caps['Ball Handle']-=4;caps['Three-Point']-=2} if(pos==='SG'){caps['Block']-=3}
- return Object.fromEntries(Object.entries(caps).map(([k,v])=>[k,Math.max(40,Math.min(99,Math.round(v)))]));
+ const estimes=Object.fromEntries(Object.entries(caps).map(([k,v])=>[k,Math.max(40,Math.min(99,Math.round(v)))]));
+ // Plafonds lus dans le jeu : ils priment sur l'estimation, brise-plafonds
+ // compris. Appliqués APRÈS le plancher de 40, qu'un vrai Max peut descendre.
+ const jeu=importJeuActif();
+ if(jeu)for(const [k,m] of Object.entries(jeu.max))if(k in estimes)estimes[k]=Math.min(99,m+getBreaker(k));
+ return estimes;
 }
 function clampInputsToCaps(caps){inputs.forEach(x=>{let cap=caps[x.dataset.name]??99;x.max=cap;if(+x.value>cap)x.value=cap;let id=x.dataset.name.replace(/[^a-z0-9]/gi,'');document.getElementById('cap'+id).textContent='CAP '+cap})}
 function scoreGrade(s){return s>=86?'S':s>=82?'A+':s>=78?'A':s>=74?'A-':s>=70?'B+':s>=66?'B':s>=62?'B-':s>=56?'C':'D'}

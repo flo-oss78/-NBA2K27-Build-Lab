@@ -428,6 +428,75 @@ async function testsNavigateur(base) {
       verifier(+r.aPortee > 0, `badges à portée : ${r.aPortee}`);
     });
 
+    await test('un build recopié du jeu garde ses plafonds et ses brise-plafonds', async () => {
+      // [Max, actuel] lus sur l'écran « Améliorations d'attribut » d'un vrai MyPLAYER.
+      const jeu = { 'Close Shot': [76, 48], 'Driving Layup': [77, 53], 'Driving Dunk': [89, 94], 'Standing Dunk': [38, 38],
+        'Post Control': [42, 42], 'Mid-Range': [88, 88], 'Three-Point': [94, 94], 'Free Throw': [77, 77],
+        'Pass Accuracy': [75, 75], 'Ball Handle': [86, 86], 'Speed With Ball': [77, 77], 'Interior Defense': [44, 44],
+        'Perimeter Defense': [91, 91], 'Steal': [84, 84], 'Block': [45, 45], 'Offensive Rebound': [27, 27],
+        'Defensive Rebound': [51, 51], 'Speed': [87, 87], 'Agility': [85, 85], 'Strength': [52, 52], 'Vertical': [80, 80] };
+      await nav.ouvrir(base + '/');
+      const r = await nav.evaluer(`
+        const jeu = ${JSON.stringify(jeu)};
+        const el = id => document.getElementById(id);
+        const cle = n => n.replace(/[^a-z0-9]/gi, '');
+        const attendre = ms => new Promise(r => setTimeout(r, ms));
+        const curseur = n => [...document.querySelectorAll('#attributeGroups input')].find(x => x.dataset.name === n);
+        const lu = n => ({ v: +curseur(n).value, max: +curseur(n).max, cap: el('cap' + cle(n)).textContent });
+        const remplir = modif => {
+          el('importJeuOuvrir').click();
+          const f = el('importJeuForm');
+          const champs = { position: 'SG', taille: 191, poids: 84, envergure: 198, gnr: 96 };
+          for (const [k, [m, a]] of Object.entries(jeu)) { champs['max-' + cle(k)] = m; champs['act-' + cle(k)] = a; }
+          Object.assign(champs, modif);
+          for (const [n, v] of Object.entries(champs)) f.elements[n].value = v;
+          f.requestSubmit();
+        };
+        const ouverte = () => el('buildModal').classList.contains('open');
+
+        // 1. Saisie impossible : 95 pour un Max de 89, soit 6 brise-plafonds.
+        remplir({ 'act-DrivingDunk': 95 });
+        await attendre(150);
+        const refus = { ouverte: ouverte(), message: el('importJeuErreurs')?.innerText || '',
+                        stocke: localStorage.getItem('nba2k27_import_jeu_v1') };
+        document.querySelector('#buildModal [data-close-modal]').click();
+
+        // 2. Saisie correcte.
+        remplir({});
+        await attendre(300);
+        const importe = { ouverte: ouverte(), taille: +el('height').value, poids: +el('weight').value,
+          envergure: +el('wing').value, poste: el('position').value,
+          pres: lu('Close Shot'), dunk: lu('Driving Dunk'), rebond: lu('Offensive Rebound'),
+          etat: el('importJeuEtat').innerText, note: document.querySelector('.summary-note').textContent,
+          validation: el('validationStatus').textContent };
+
+        // 3. Le gabarit change : les plafonds du jeu ne valent plus.
+        el('height').value = 80; el('height').dispatchEvent(new Event('input', { bubbles: true }));
+        await attendre(200);
+        const modifie = { pres: lu('Close Shot'), etat: el('importJeuEtat').innerText };
+
+        // 4. Retour au build importé.
+        document.querySelector('[data-ij="revenir"]').click();
+        await attendre(200);
+        return { refus, importe, modifie, revenu: { taille: +el('height').value, pres: lu('Close Shot'), dunk: lu('Driving Dunk') } };`);
+      sansErreur('import d’un build du jeu');
+      const { refus, importe, modifie, revenu } = r;
+      verifier(refus.ouverte && refus.message.includes('Dunk en pénétration') && refus.stocke === null,
+        `6 brise-plafonds acceptés : ${JSON.stringify(refus)}`);
+      verifier(!importe.ouverte, 'la fenêtre d’import reste ouverte après une saisie correcte');
+      verifier(importe.taille === 75 && importe.poids === 185 && importe.envergure === 78 && importe.poste === 'SG',
+        `gabarit mal converti : ${importe.poste} ${importe.taille} po, ${importe.poids} lbs, envergure ${importe.envergure} po`);
+      verifier(importe.pres.v === 48 && importe.pres.max === 76, `Tirs de près : ${JSON.stringify(importe.pres)} au lieu de 48 / max 76`);
+      verifier(importe.dunk.v === 94 && importe.dunk.max === 94 && importe.dunk.cap.includes('+5'),
+        `Dunk en pénétration : ${JSON.stringify(importe.dunk)} au lieu de 94, max 89 +5 BP`);
+      verifier(importe.rebond.v === 27 && importe.rebond.max === 27, `Rebond offensif : ${JSON.stringify(importe.rebond)} (le plancher de 40 du site ne doit pas s’appliquer)`);
+      verifier(importe.etat.includes('GNR 96') && importe.note.includes('96'), `GNR absent : « ${importe.etat} » / « ${importe.note} »`);
+      verifier(importe.validation === 'BUILD COHÉRENT', `validation : ${importe.validation}`);
+      verifier(modifie.pres.max !== 76 && modifie.etat.includes('Gabarit modifié'),
+        `plafonds du jeu encore appliqués après changement de taille : ${JSON.stringify(modifie)}`);
+      verifier(revenu.taille === 75 && revenu.pres.max === 76 && revenu.dunk.v === 94, `retour au build importé raté : ${JSON.stringify(revenu)}`);
+    });
+
     await test('« Utiliser ce trio » ouvre le builder avec le bon gabarit', async () => {
       await nav.ouvrir(base + '/trios/');
       const bp = await nav.evaluer(`

@@ -565,6 +565,32 @@ body.mode-expert .start-here{display:none}
   border:1px solid var(--line-soft);border-radius:var(--r-sm);margin-bottom:14px;
 }
 .reset-style{width:100%;margin-bottom:12px}
+
+/* Import d'un build du jeu */
+.import-jeu-btn{width:100%;margin-bottom:10px}
+.import-jeu-etat{
+  display:grid;gap:6px;padding:10px 12px;margin-bottom:12px;font-size:12px;line-height:1.5;
+  background:var(--field);border:1px solid var(--line-soft);border-radius:var(--r-sm);
+}
+.import-jeu-etat.actif{border-color:rgba(34,211,238,.4)}
+.import-jeu-etat.inactif{border-color:rgba(255,190,50,.4)}
+.import-jeu-etat b{font-size:12.5px}
+.import-jeu-etat span{color:var(--muted)}
+.import-jeu-etat div{display:flex;flex-wrap:wrap;gap:8px}
+.import-jeu-etat button{min-height:32px;padding:4px 12px;font-size:12px}
+.ij-form{display:grid;gap:14px;margin-top:12px}
+.ij-corps{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ij-corps label{display:grid;gap:5px;font-size:12px;color:var(--muted)}
+.ij-corps small,.ij-ligne small{font-size:10.5px;color:var(--dim)}
+.ij-table{display:grid;gap:5px}
+.ij-tete,.ij-ligne{display:grid;grid-template-columns:1fr 68px 68px;gap:8px;align-items:center}
+.ij-tete{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.ij-tete span+span{text-align:center}
+.ij-ligne span{display:grid;font-size:12.5px}
+.ij-ligne input{text-align:center;padding:6px 4px}
+.ij-aide{font-size:11.5px;color:var(--dim)}
+.ij-erreurs{padding:10px 12px;font-size:12px;background:rgba(242,69,107,.08);border:1px solid rgba(242,69,107,.35);border-radius:var(--r-sm)}
+.ij-erreurs ul{margin:6px 0 0 18px}
 .exact-actions{display:grid;gap:10px}
 .exact-actions button{display:flex;align-items:center;justify-content:center;gap:9px}
 .exact-actions button svg{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
