@@ -22,8 +22,13 @@ if not exist "functions\api\builds.js" goto mauvais_dossier
 set "NODE=node"
 where node >nul 2>nul || set "NODE=%ProgramFiles%\nodejs\node.exe"
 "%NODE%" --version >nul 2>nul || goto pas_de_node
-set "NPX=npx"
-where npx >nul 2>nul || set "NPX=%ProgramFiles%\nodejs\npx.cmd"
+rem Chemin COMPLET de npx.cmd : appele par son seul nom entre guillemets
+rem ("npx"), cmd.exe perd le dossier du script, et npx.cmd cherche alors ses
+rem fichiers dans le projet (Cannot find module ...\node_modules\npm\bin\npx-cli.js).
+set "NPX="
+for /f "delims=" %%P in ('where npx.cmd 2^>nul') do if not defined NPX set "NPX=%%P"
+if not defined NPX set "NPX=%ProgramFiles%\nodejs\npx.cmd"
+if not exist "%NPX%" goto pas_de_node
 
 echo [1/4] Tests sur les fichiers locaux
 "%NODE%" outils\tests.mjs
