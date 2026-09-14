@@ -1,0 +1,3 @@
+# Les scripts .cmd ont besoin de fins de ligne Windows : avec des LF seuls,
+# cmd.exe peut ne pas trouver les étiquettes des « goto ».
+*.cmd text eol=crlf

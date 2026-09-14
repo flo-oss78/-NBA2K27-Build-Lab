@@ -39,17 +39,33 @@ le code lit via `env.DB`.
 
 ### 3. Déployer
 
-```bash
-npx wrangler login
-npx wrangler pages deploy . --project-name=nbabuildlab
-```
+**Double-clique sur `deployer.cmd`** (ou lance-le depuis un terminal, peu
+importe le dossier courant). Le script :
 
-Vérifie que `functions` apparaît dans la liste des fichiers envoyés.
+1. se place de lui-même dans le dossier du projet, et refuse de continuer s'il
+   n'y trouve pas `wrangler.toml`, `index.html` et `functions/` ;
+2. lance les tests sur les fichiers locaux — **rien n'est publié si un test
+   échoue** ;
+3. signale les modifications non commitées ou non poussées sur GitHub ;
+4. déploie avec Wrangler ;
+5. relance les tests sur la production, dont un qui vérifie que chaque fichier
+   en ligne est identique à celui du dossier.
+
+À la première utilisation, Wrangler demande une connexion : `npx wrangler login`.
+
+La commande manuelle reste possible, **depuis le dossier du projet** :
+
+```bash
+npx.cmd wrangler pages deploy . --project-name=nba2k27-build-lab
+```
 
 ### 4. Contrôler que ça marche
 
+`tester.cmd --prod` vérifie la production sans rien publier. Pour un contrôle
+rapide de l'API seule :
+
 ```bash
-curl https://nbabuildlab.pages.dev/api/builds
+curl https://nba2k27-build-lab.pages.dev/api/builds
 ```
 
 - `{"builds":[]}` → tout fonctionne, le hub est en ligne.
@@ -97,6 +113,33 @@ stockés dans le navigateur du visiteur et le statut affiche « Serveur : local 
 | `schema.sql` | Schéma D1 |
 
 ---
+
+## Tests
+
+`tester.cmd` (double-clic) ou `node outils/tests.mjs` — environ 20 secondes.
+
+Aucune dépendance à installer : les tests pilotent un vrai Chrome (ou Edge)
+invisible via le protocole DevTools, avec un profil vierge à chaque lancement,
+pour voir le site comme un premier visiteur (sans cache ni service worker).
+
+| Vérifié | Pourquoi |
+|---|---|
+| Tous les JS compilent, aucun fichier référencé absent, aucun `id` en double | Erreurs de base qui cassent une page entière |
+| Les 5 pages se chargent **sans aucune erreur console**, lue dès le chargement | Les erreurs de démarrage des sous-pages sont passées inaperçues deux fois |
+| Le builder construit un curseur par attribut et recalcule | Cœur du site |
+| Mode Simple par défaut, Expert révèle tout, le choix suit entre pages | Phase 3 |
+| `/reference/` rend chaque badge, animation et takeover de la table | Tables vides si le contexte de build casse |
+| Un lien de partage restaure le build à l'identique | Le preset de style l'écrasait |
+| « Utiliser ce blueprint » ouvre le builder avec le bon gabarit | Passerelle entre pages |
+| Le hub filtre réellement la liste affichée | Les filtres ont longtemps piloté une liste cachée |
+
+`tester.cmd --prod` ajoute : chaque fichier en ligne est identique au dossier
+local, l'API répond (en lecture seule — les tests n'écrivent jamais en base), et
+le sitemap liste les cinq pages.
+
+Les tests vérifient des invariants plutôt que des chiffres figés (« chaque badge
+de la table est rendu », pas « 53 badges ») : ils ne cassent que si le
+comportement casse.
 
 ## Développement local
 
