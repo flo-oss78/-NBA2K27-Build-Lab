@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#060608">
 <meta name="color-scheme" content="dark">
 <meta name="description" content="Les 53 badges NBA 2K27 avec leurs paliers Bronze, Argent, Or et Hall of Fame, et plus de 2 500 animations avec leur taille et leurs attributs requis.">
-<title>Badges et animations NBA 2K27 — tables de référence</title>
+<title>Badges NBA 2K27 — paliers, exigences et animations</title>
 
 <link rel="canonical" href="https://nbabuildlab.pages.dev/reference/">
 <link rel="manifest" href="/manifest.webmanifest">
@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="/theme.css">
 <link rel="stylesheet" href="/hq.css">
 
-<meta property="og:title" content="Badges et animations NBA 2K27 — tables de référence">
+<meta property="og:title" content="Badges NBA 2K27 — paliers, exigences et animations">
 <meta property="og:description" content="Les 53 badges NBA 2K27 avec leurs paliers Bronze, Argent, Or et Hall of Fame, et plus de 2 500 animations avec leur taille et leurs attributs requis.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://nbabuildlab.pages.dev/reference/">
@@ -28,7 +28,7 @@
 </head>
 
 <body>
-<a class="skip-link" href="#badges">Aller au contenu</a>
+<a class="skip-link" href="#main">Aller au contenu</a>
 
 <header class="reference-header">
   <div class="reference-brand">
@@ -53,47 +53,73 @@
   </div>
 </header>
 
-<main id="main">
+<main id="main" class="hq-page-badges">
 
-<!-- ============ BADGES + TAKEOVER ============ -->
-<div class="dashboard-grid">
-  <section id="badges" class="panel dashboard">
-    <div class="section-title"><div><p class="eyebrow">Badges</p><h2>Ce que ton build débloque</h2></div><span id="badgeUnlocked" class="pill">0 accessibles</span></div>
-    <div class="badge-legend"><span class="lb">● Bronze</span><span class="ls">● Argent</span><span class="lg">● Or</span><span class="lh">● Hall of Fame</span> — la couleur indique le plus haut niveau accessible.</div>
-    <div id="badgeDataSource" class="data-note">Source badges : table publique NBA 2K27. <strong>Vérifié communauté</strong>, ce n'est pas une donnée officielle 2K.</div>
-    <div class="filter-row">
-      <select id="badgeFilter" aria-label="Filtrer les badges"><option value="all">Tous les badges</option><option value="unlocked">Accessibles</option><option value="locked">Non accessibles</option></select>
-      <input id="badgeSearch" aria-label="Rechercher un badge" placeholder="Rechercher un badge…">
+<!-- Page Badges façon NBA 2K HQ : les paliers se calculent sur le dernier build
+     ouvert dans le builder (lireContexte, app.js). Onglets : reference-page.js. -->
+<div class="hq-page-tete">
+  <p class="eyebrow">Badges</p>
+  <h1>Les 53 badges de NBA 2K27</h1>
+  <p class="sub">Chaque badge avec son nom officiel en français, ce qu’il fait, les notes demandées pour chaque palier et ce qu’il te manque pour monter.</p>
+</div>
+
+<div id="badgesContexte" class="badges-contexte" aria-live="polite"></div>
+
+<div class="hq-onglets hq-onglets-page" role="tablist" aria-label="Sections">
+  <button type="button" role="tab" id="ongletBadges" data-onglet="badges" aria-controls="panneauBadges" aria-selected="true">Badges</button>
+  <button type="button" role="tab" id="ongletTakeovers" data-onglet="takeovers" aria-controls="panneauTakeovers" aria-selected="false" tabindex="-1">Takeovers</button>
+  <button type="button" role="tab" id="ongletAnimations" data-onglet="animations" aria-controls="panneauAnimations" aria-selected="false" tabindex="-1">Animations</button>
+</div>
+
+<!-- ============ BADGES ============ -->
+<div id="panneauBadges" class="hq-panneau" role="tabpanel" aria-labelledby="ongletBadges">
+  <section id="badges" class="badges-catalogue">
+    <div class="badges-outils">
+      <div id="badgeCats" class="badge-cats" data-cat="all" role="group" aria-label="Catégories"></div>
+      <div class="badges-filtres">
+        <select id="badgeFilter" aria-label="Filtrer les badges"><option value="all">Tous les badges</option><option value="unlocked">Accessibles</option><option value="locked">Pas encore accessibles</option></select>
+        <input id="badgeSearch" type="search" aria-label="Rechercher un badge" placeholder="Rechercher un badge…">
+        <span id="badgeUnlocked" class="pill">0 accessibles</span>
+      </div>
     </div>
     <div id="badgeList" class="badge-list"></div>
+    <p id="badgeDataSource" class="data-note">Source badges : table publique NBA 2K27. <strong>Vérifié communauté</strong>, ce n'est pas une donnée officielle 2K.</p>
   </section>
+</div>
+
+<!-- ============ TAKEOVERS ============ -->
+<div id="panneauTakeovers" class="hq-panneau" role="tabpanel" aria-labelledby="ongletTakeovers" hidden>
   <section id="takeover" class="panel dashboard">
-    <div class="section-title"><div><p class="eyebrow">Takeover</p><h2>Spécialisation</h2></div><span id="takeoverScore" class="pill">0 / 100</span></div>
+    <div class="section-title">
+      <div><h2>Takeovers</h2><p class="sub">Classés selon ton build : 100 % veut dire que l’attribut déclencheur atteint la note demandée.</p></div>
+      <span id="takeoverScore" class="pill">0 / 100</span>
+    </div>
     <div id="takeoverList" class="takeover-list"></div>
   </section>
 </div>
 
 <!-- ============ ANIMATIONS ============ -->
-<section id="animations" class="animations">
-  <div class="anim-head">
-    <div>
-      <p class="eyebrow">Animations</p>
-      <h2>Animations accessibles</h2>
-      <p class="sub">Le moteur vérifie les attributs et la taille. Chaque carte explique ce qu'il manque.</p>
+<div id="panneauAnimations" class="hq-panneau" role="tabpanel" aria-labelledby="ongletAnimations" hidden>
+  <section id="animations" class="animations">
+    <div class="anim-head">
+      <div>
+        <h2>Animations</h2>
+        <p class="sub">Le moteur vérifie les attributs et la taille. Chaque carte explique ce qu’il manque.</p>
+      </div>
+      <div class="anim-count"><b id="animUnlocked">0</b><span>accessibles</span></div>
     </div>
-    <div class="anim-count"><b id="animUnlocked">0</b><span>accessibles</span></div>
-  </div>
-  <div id="animSource" class="data-note">Base animations : tables publiques NBA 2K27.</div>
-  <div class="anim-tools">
-    <!-- Catégories générées depuis animations.js (app.js) -->
-    <select id="animCategory" aria-label="Filtrer par catégorie"><option value="all">Toutes les catégories</option></select>
-    <select id="animStatus" aria-label="Filtrer par accessibilité"><option value="all">Toutes</option><option value="yes">Accessibles</option><option value="no">Non accessibles</option></select>
-    <input id="animSearch" aria-label="Rechercher une animation" placeholder="Rechercher une animation…">
-  </div>
-  <p id="animResultats" class="anim-resultats" aria-live="polite"></p>
-  <div id="animationList" class="animation-list"></div>
-  <button id="animPlus" type="button" class="secondary anim-plus" hidden>Afficher plus</button>
-</section>
+    <div id="animSource" class="data-note">Base animations : tables publiques NBA 2K27.</div>
+    <div class="anim-tools">
+      <!-- Catégories générées depuis animations.js (app.js) -->
+      <select id="animCategory" aria-label="Filtrer par catégorie"><option value="all">Toutes les catégories</option></select>
+      <select id="animStatus" aria-label="Filtrer par accessibilité"><option value="all">Toutes</option><option value="yes">Accessibles</option><option value="no">Non accessibles</option></select>
+      <input id="animSearch" aria-label="Rechercher une animation" placeholder="Rechercher une animation…">
+    </div>
+    <p id="animResultats" class="anim-resultats" aria-live="polite"></p>
+    <div id="animationList" class="animation-list"></div>
+    <button id="animPlus" type="button" class="secondary anim-plus" hidden>Afficher plus</button>
+  </section>
+</div>
 
 <div id="buildModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Détail du build">
   <div class="modal-backdrop" data-close-modal></div>
@@ -148,5 +174,6 @@
 <script src="/build-sheet.js"></script>
 <script src="/community.js"></script>
 <script src="/ui.js"></script>
+<script src="/reference-page.js"></script>
 </body>
 </html>

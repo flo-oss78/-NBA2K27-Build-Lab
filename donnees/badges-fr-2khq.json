@@ -2,58 +2,377 @@
   "source": "Vidéo 2K HQ (onglet Détails, bulles d'aide des insignes), 14/09/2026",
   "note": "fr = nom officiel lu dans le jeu ; en = correspondance déduite de la description (a confirmer si 'certitude' < 1)",
   "badges": [
-    {"fr":"Bâton sauteur","en":"Pogo Stick","cat":"Physique","desc":"Permet aux joueurs de tenter plus rapidement un deuxième saut que ce soit pour un rebond, un contre ou un tir.","certitude":1},
-    {"fr":"Pro du démarquage","en":"Slippery Off-Ball","cat":"Physique","desc":"Lorsque le joueur essaie de se démarquer après un écran, il contourne plus facilement les autres joueurs.","certitude":1},
-    {"fr":"Bourreau de travail","en":"Work Horse","cat":"Physique","desc":"Augmente l'agilité et la vitesse du joueur lorsqu'il court après un ballon qui traîne.","certitude":1},
-    {"fr":"Mur de briques","en":"Brick Wall","cat":"Physique","desc":"Augmente l'efficacité des écrans.","certitude":1},
-    {"fr":"Costaud","en":"Bruiser","cat":"Physique","desc":"Fatigue davantage l'adversaire lors des contacts.","certitude":1},
-    {"fr":"Crasher","en":"Crasher","cat":"Rebond","desc":"Améliore l'aptitude du joueur à capter des rebonds offensifs.","certitude":1},
-    {"fr":"Briseur de reins","en":"Breaker","cat":"Rebond","desc":"Augmente la réussite des luttes au rebond contre les écrans de retard adverses.","certitude":1},
-    {"fr":"Boss du boxout","en":"Boxout Boss","cat":"Rebond","desc":"Augmente la réussite des écrans de retard posés.","certitude":1},
-    {"fr":"Anticipateur défensif","en":"Sync Snatcher","cat":"Rebond","desc":"Octroie un bonus de détente et de rebond en cas de timing parfait du saut.","certitude":0.9},
-    {"fr":"Clutch en fin de possession","en":"Possession Closer","cat":"Rebond","desc":"Améliore l'aptitude du joueur à capter des rebonds défensifs.","certitude":1},
-    {"fr":"Flash","en":"Flash","cat":"Physique","desc":"Augmente la vitesse de déplacement sans ballon sur les transitions offensives et défensives.","certitude":1},
-    {"fr":"Contreur de haute voltige","en":"High-Flying Denier","cat":"Défense","desc":"Améliore la vitesse et la détente d'un défenseur pour augmenter ses chances de réussir un contre en poursuite.","certitude":1},
-    {"fr":"Pro de l'esquive","en":"Pick Dodger","cat":"Défense","desc":"Améliore la capacité du joueur à contourner et à éviter les écrans en défense.","certitude":1},
-    {"fr":"Chevillères","en":"Ankle Braces","cat":"Défense","desc":"Réduit les risques de subir un cassage de chevilles sur un dribble adverse.","certitude":1},
-    {"fr":"Challenger","en":"Challenger","cat":"Défense","desc":"Améliore l'efficacité des contestations dans le bon timing sur les tirs extérieurs.","certitude":1},
-    {"fr":"Gant","en":"Glove","cat":"Défense","desc":"Améliore l'aptitude du joueur à intercepter le ballon dans les mains du porteur ou à contester les tentatives de double-pas.","certitude":1},
-    {"fr":"Intercepteur","en":"Interceptor","cat":"Défense","desc":"Augmente la fréquence des passes déviées ou interceptées.","certitude":1},
-    {"fr":"Teigne","en":"Off-Ball Pest","cat":"Défense","desc":"Rend les passes des autres joueurs plus difficiles, car vous pouvez attraper et retenir votre adversaire direct en défense loin du ballon.","certitude":1},
-    {"fr":"Ceinture de sécurité","en":"Seatbelt","cat":"Défense","desc":"Augmente l'efficacité de la défense sur le haut du corps afin de cadenasser les porteurs de balle et gêner leurs pénétrations.","certitude":1},
-    {"fr":"Inamovible","en":"Immovable Enforcer","cat":"Défense","desc":"Améliore la force du défenseur et lui permet de mieux repousser les porteurs de balle et les finisseurs qui arrivent droit sur lui.","certitude":1},
-    {"fr":"Patrouilleur dans la raquette","en":"Paint Patroller","cat":"Défense","desc":"Améliore l'aptitude du joueur à contrer ou contester les tirs près du cercle.","certitude":1},
-    {"fr":"Wall Up","en":"Wall Up","cat":"Défense","desc":"Augmente l'efficacité des contestations de tirs lorsque vous levez les bras en défense pour protéger la raquette.","certitude":1},
-    {"fr":"Muraille au poste","en":"Post Lockdown","cat":"Défense","desc":"Renforce la capacité à défendre les mouvements au poste et augmente les chances de forcer une perte de balle.","certitude":1},
-    {"fr":"Altruiste","en":"Dimer","cat":"Création","desc":"Améliore la réussite des coéquipiers démarqués pour les tirs après réception de passe.","certitude":1},
-    {"fr":"Dribbleur infatigable","en":"Handles for Days","cat":"Création","desc":"Le joueur dépense moins d'énergie s'il réalise plusieurs dribbles consécutifs, cela lui permet de faire des enchaînements plus rapides et plus longtemps.","certitude":1},
-    {"fr":"Sauveteur","en":"Bail Out","cat":"Création","desc":"Les passes en cours de double-pas ou de tir en suspension génèrent moins de déchets. Permet également d'exploiter plus facilement les prises à deux par une passe.","certitude":1},
-    {"fr":"Lanceur de contre","en":"Break Starter","cat":"Création","desc":"Après un rebond défensif, les passes de dégagement sont plus précises. Les passes doivent être réalisées juste après le rebond défensif.","certitude":1},
-    {"fr":"Visionnaire polyvalent","en":"Versatile Visionary","cat":"Création","desc":"Améliore l'aptitude du joueur à réussir des passes millimétrées au bon moment, y compris des alley-oops.","certitude":1},
-    {"fr":"Lancement éclair","en":"Lightning Launch","cat":"Création","desc":"Accélère les démarrages sur les pénétrations depuis le périmètre.","certitude":1},
-    {"fr":"Mains fermes","en":"Unpluckable","cat":"Création","desc":"Les défenseurs ont plus de mal à chiper le ballon.","certitude":1},
-    {"fr":"Rythme","en":"Pace","cat":"Création","desc":"Augmente la vitesse du porteur de balle lors des sprints.","certitude":1},
-    {"fr":"Assassin de cheville","en":"Ankle Assassin","cat":"Création","desc":"Améliore l'aptitude du joueur à se débarrasser d'un défenseur.","certitude":1},
-    {"fr":"Excellent dribbleur","en":"Strong Handle","cat":"Création","desc":"Réduit l'impact de la défense lors des dribbles.","certitude":0.9},
-    {"fr":"Mini tireur d'élite","en":"Mini Marksman","cat":"Tir","desc":"Augmente les chances de tirer par-dessus les défenseurs plus grands.","certitude":1},
-    {"fr":"Mitraillette","en":"Arc Cadence","cat":"Tir","desc":"Améliore l'aptitude du joueur à rentrer des tirs à 3 points en mouvement, y compris les hop shots, les tirs en sortie de dribble et les tirs après un dribble renversé.","certitude":0.9},
-    {"fr":"Allumette","en":"Set and Fire","cat":"Tir","desc":"Octroie un bonus aux tirs à 3 points à l'arrêt.","certitude":0.9},
-    {"fr":"Métronome mi-distance","en":"Static Middy","cat":"Tir","desc":"Octroie un bonus aux tirs à mi-distance à l'arrêt.","certitude":1},
-    {"fr":"Portée infinie","en":"Limitless Range","cat":"Tir","desc":"Augmente la portée de tir à 3 points lointain d'un joueur.","certitude":1},
-    {"fr":"Pro des fadeaways au poste","en":"Post Fade Phenom","cat":"Tir","desc":"Améliore l'aptitude du joueur à rentrer ses Hop Shots ou ses fadeaways au poste.","certitude":1},
-    {"fr":"Gâchette","en":"Quick Trigger","cat":"Tir","desc":"Améliore l'aptitude du joueur à rentrer des tirs sans armer.","certitude":0.8},
-    {"fr":"Smooth Operator","en":"Smooth Operator","cat":"Tir","desc":"Améliore l'aptitude du joueur à rentrer des tirs à mi-distance en mouvement, y compris les hop shots, les tirs en sortie de dribble et les tirs après un dribble renversé.","certitude":1},
-    {"fr":"Œil de lynx","en":"Deadeye","cat":"Tir","desc":"Réduit la pénalité infligée lorsqu'un défenseur arrive pour contester un tir.","certitude":1},
-    {"fr":"Roi des airs","en":"Aerial Wizard","cat":"Finition","desc":"Améliore l'aptitude à conclure le alley-oop d'un coéquipier, ou de faire une claquette sur un rebond offensif.","certitude":1},
-    {"fr":"Toupie au poste","en":"Post Spin Catalyst","cat":"Finition","desc":"Les tentatives de dribbles renversés au poste et de pénétrations sont plus efficaces et plus dures à intercepter.","certitude":1},
-    {"fr":"Finisseur physique","en":"Physical Finisher","cat":"Finition","desc":"Améliore l'aptitude du joueur à absorber les contacts et à réussir des doubles-pas après contact.","certitude":1},
-    {"fr":"Détente sèche","en":"Rise Up","cat":"Finition","desc":"Augmente les chances de réussir un dunk ou de postériser un adversaire dans la raquette.","certitude":0.9},
-    {"fr":"Dunker de génie","en":"Posterizer","cat":"Finition","desc":"Augmente les chances de rentrer un dunk sur votre défenseur.","certitude":1},
-    {"fr":"Prodige dans la raquette","en":"Paint Prodigy","cat":"Finition","desc":"Améliore l'aptitude du joueur à marquer rapidement et efficacement sous le panier après une pénétration dans la raquette.","certitude":1},
-    {"fr":"Spécialiste du bras roulé","en":"Hook Specialist","cat":"Finition","desc":"Améliore l'aptitude du joueur à rentrer ses bras roulés au poste.","certitude":1},
-    {"fr":"Machine au poste","en":"Post Powerhouse","cat":"Finition","desc":"Améliore l'aptitude du joueur à enfoncer des défenseurs au panier et avec des drop steps.","certitude":1},
-    {"fr":"Funambule","en":"Ghost Stepper","cat":"Finition","desc":"Augmente l'efficacité des step through et des tirs de près suite à une feinte.","certitude":0.9},
-    {"fr":"Mixeur au double-pas","en":"Layup Mixmaster","cat":"Finition","desc":"Améliore l'aptitude du joueur à réussir des doubles-pas acrobatiques ou spectaculaires.","certitude":1},
-    {"fr":"Flotteur","en":"Float Game","cat":"Finition","desc":"(vu dans la capture de l'écran Amélioration des insignes)","certitude":0.9}
+    {
+      "fr": "Bâton sauteur",
+      "en": "Pogo Stick",
+      "cat": "Physique",
+      "desc": "Permet aux joueurs de tenter plus rapidement un deuxième saut que ce soit pour un rebond, un contre ou un tir.",
+      "certitude": 1
+    },
+    {
+      "fr": "Pro du démarquage",
+      "en": "Slippery Off-Ball",
+      "cat": "Physique",
+      "desc": "Lorsque le joueur essaie de se démarquer après un écran, il contourne plus facilement les autres joueurs.",
+      "certitude": 1
+    },
+    {
+      "fr": "Bourreau de travail",
+      "en": "Work Horse",
+      "cat": "Physique",
+      "desc": "Augmente l'agilité et la vitesse du joueur lorsqu'il court après un ballon qui traîne.",
+      "certitude": 1
+    },
+    {
+      "fr": "Mur de briques",
+      "en": "Brick Wall",
+      "cat": "Physique",
+      "desc": "Augmente l'efficacité des écrans.",
+      "certitude": 1
+    },
+    {
+      "fr": "Costaud",
+      "en": "Bruiser",
+      "cat": "Physique",
+      "desc": "Fatigue davantage l'adversaire lors des contacts.",
+      "certitude": 1
+    },
+    {
+      "fr": "Crasher",
+      "en": "Crasher",
+      "cat": "Rebond",
+      "desc": "Améliore l'aptitude du joueur à capter des rebonds offensifs.",
+      "certitude": 1
+    },
+    {
+      "fr": "Briseur de reins",
+      "en": "Breaker",
+      "cat": "Rebond",
+      "desc": "Augmente la réussite des luttes au rebond contre les écrans de retard adverses.",
+      "certitude": 1
+    },
+    {
+      "fr": "Boss du boxout",
+      "en": "Boxout Boss",
+      "cat": "Rebond",
+      "desc": "Augmente la réussite des écrans de retard posés.",
+      "certitude": 1
+    },
+    {
+      "fr": "Anticipateur défensif",
+      "en": "Sync Snatcher",
+      "cat": "Rebond",
+      "desc": "Octroie un bonus de détente et de rebond en cas de timing parfait du saut.",
+      "certitude": 0.9
+    },
+    {
+      "fr": "Clutch en fin de possession",
+      "en": "Possession Closer",
+      "cat": "Rebond",
+      "desc": "Améliore l'aptitude du joueur à capter des rebonds défensifs.",
+      "certitude": 1
+    },
+    {
+      "fr": "Flash",
+      "en": "Flash",
+      "cat": "Physique",
+      "desc": "Augmente la vitesse de déplacement sans ballon sur les transitions offensives et défensives.",
+      "certitude": 1
+    },
+    {
+      "fr": "Contreur de haute voltige",
+      "en": "High-Flying Denier",
+      "cat": "Défense",
+      "desc": "Améliore la vitesse et la détente d'un défenseur pour augmenter ses chances de réussir un contre en poursuite.",
+      "certitude": 1
+    },
+    {
+      "fr": "Pro de l'esquive",
+      "en": "Pick Dodger",
+      "cat": "Défense",
+      "desc": "Améliore la capacité du joueur à contourner et à éviter les écrans en défense.",
+      "certitude": 1
+    },
+    {
+      "fr": "Chevillères",
+      "en": "Ankle Braces",
+      "cat": "Défense",
+      "desc": "Réduit les risques de subir un cassage de chevilles sur un dribble adverse.",
+      "certitude": 1
+    },
+    {
+      "fr": "Challenger",
+      "en": "Challenger",
+      "cat": "Défense",
+      "desc": "Améliore l'efficacité des contestations dans le bon timing sur les tirs extérieurs.",
+      "certitude": 1
+    },
+    {
+      "fr": "Gant",
+      "en": "Glove",
+      "cat": "Défense",
+      "desc": "Améliore l'aptitude du joueur à intercepter le ballon dans les mains du porteur ou à contester les tentatives de double-pas.",
+      "certitude": 1
+    },
+    {
+      "fr": "Intercepteur",
+      "en": "Interceptor",
+      "cat": "Défense",
+      "desc": "Augmente la fréquence des passes déviées ou interceptées.",
+      "certitude": 1
+    },
+    {
+      "fr": "Teigne",
+      "en": "Off-Ball Pest",
+      "cat": "Défense",
+      "desc": "Rend les passes des autres joueurs plus difficiles, car vous pouvez attraper et retenir votre adversaire direct en défense loin du ballon.",
+      "certitude": 1
+    },
+    {
+      "fr": "Ceinture de sécurité",
+      "en": "Seatbelt",
+      "cat": "Défense",
+      "desc": "Augmente l'efficacité de la défense sur le haut du corps afin de cadenasser les porteurs de balle et gêner leurs pénétrations.",
+      "certitude": 1
+    },
+    {
+      "fr": "Inamovible",
+      "en": "Immovable Enforcer",
+      "cat": "Défense",
+      "desc": "Améliore la force du défenseur et lui permet de mieux repousser les porteurs de balle et les finisseurs qui arrivent droit sur lui.",
+      "certitude": 1
+    },
+    {
+      "fr": "Patrouilleur dans la raquette",
+      "en": "Paint Patroller",
+      "cat": "Défense",
+      "desc": "Améliore l'aptitude du joueur à contrer ou contester les tirs près du cercle.",
+      "certitude": 1
+    },
+    {
+      "fr": "Wall Up",
+      "en": "Wall Up",
+      "cat": "Défense",
+      "desc": "Augmente l'efficacité des contestations de tirs lorsque vous levez les bras en défense pour protéger la raquette.",
+      "certitude": 1
+    },
+    {
+      "fr": "Muraille au poste",
+      "en": "Post Lockdown",
+      "cat": "Défense",
+      "desc": "Renforce la capacité à défendre les mouvements au poste et augmente les chances de forcer une perte de balle.",
+      "certitude": 1
+    },
+    {
+      "fr": "Altruiste",
+      "en": "Dimer",
+      "cat": "Création",
+      "desc": "Améliore la réussite des coéquipiers démarqués pour les tirs après réception de passe.",
+      "certitude": 1
+    },
+    {
+      "fr": "Dribbleur infatigable",
+      "en": "Handles for Days",
+      "cat": "Création",
+      "desc": "Le joueur dépense moins d'énergie s'il réalise plusieurs dribbles consécutifs, cela lui permet de faire des enchaînements plus rapides et plus longtemps.",
+      "certitude": 1
+    },
+    {
+      "fr": "Sauveteur",
+      "en": "Bail Out",
+      "cat": "Création",
+      "desc": "Les passes en cours de double-pas ou de tir en suspension génèrent moins de déchets. Permet également d'exploiter plus facilement les prises à deux par une passe.",
+      "certitude": 1
+    },
+    {
+      "fr": "Lanceur de contre",
+      "en": "Break Starter",
+      "cat": "Création",
+      "desc": "Après un rebond défensif, les passes de dégagement sont plus précises. Les passes doivent être réalisées juste après le rebond défensif.",
+      "certitude": 1
+    },
+    {
+      "fr": "Visionnaire polyvalent",
+      "en": "Versatile Visionary",
+      "cat": "Création",
+      "desc": "Améliore l'aptitude du joueur à réussir des passes millimétrées au bon moment, y compris des alley-oops.",
+      "certitude": 1
+    },
+    {
+      "fr": "Lancement éclair",
+      "en": "Lightning Launch",
+      "cat": "Création",
+      "desc": "Accélère les démarrages sur les pénétrations depuis le périmètre.",
+      "certitude": 1
+    },
+    {
+      "fr": "Mains fermes",
+      "en": "Unpluckable",
+      "cat": "Création",
+      "desc": "Les défenseurs ont plus de mal à chiper le ballon.",
+      "certitude": 1
+    },
+    {
+      "fr": "Rythme",
+      "en": "Pace",
+      "cat": "Création",
+      "desc": "Augmente la vitesse du porteur de balle lors des sprints.",
+      "certitude": 1
+    },
+    {
+      "fr": "Assassin de cheville",
+      "en": "Ankle Assassin",
+      "cat": "Création",
+      "desc": "Améliore l'aptitude du joueur à se débarrasser d'un défenseur.",
+      "certitude": 1
+    },
+    {
+      "fr": "Excellent dribbleur",
+      "en": "Strong Handle",
+      "cat": "Création",
+      "desc": "Réduit l'impact de la défense lors des dribbles.",
+      "certitude": 0.9
+    },
+    {
+      "fr": "Mini tireur d'élite",
+      "en": "Mini Marksman",
+      "cat": "Tir",
+      "desc": "Augmente les chances de tirer par-dessus les défenseurs plus grands.",
+      "certitude": 1
+    },
+    {
+      "fr": "Mitraillette",
+      "en": "Arc Cadence",
+      "cat": "Tir",
+      "desc": "Améliore l'aptitude du joueur à rentrer des tirs à 3 points en mouvement, y compris les hop shots, les tirs en sortie de dribble et les tirs après un dribble renversé.",
+      "certitude": 0.9
+    },
+    {
+      "fr": "Allumette",
+      "en": "Set and Fire",
+      "cat": "Tir",
+      "desc": "Octroie un bonus aux tirs à 3 points à l'arrêt.",
+      "certitude": 0.9
+    },
+    {
+      "fr": "Métronome mi-distance",
+      "en": "Static Middy",
+      "cat": "Tir",
+      "desc": "Octroie un bonus aux tirs à mi-distance à l'arrêt.",
+      "certitude": 1
+    },
+    {
+      "fr": "Portée infinie",
+      "en": "Limitless Range",
+      "cat": "Tir",
+      "desc": "Augmente la portée de tir à 3 points lointain d'un joueur.",
+      "certitude": 1
+    },
+    {
+      "fr": "Pro des fadeaways au poste",
+      "en": "Post Fade Phenom",
+      "cat": "Tir",
+      "desc": "Améliore l'aptitude du joueur à rentrer ses Hop Shots ou ses fadeaways au poste.",
+      "certitude": 1
+    },
+    {
+      "fr": "Gâchette",
+      "en": "Quick Trigger",
+      "cat": "Tir",
+      "desc": "Améliore l'aptitude du joueur à rentrer des tirs sans armer.",
+      "certitude": 0.8
+    },
+    {
+      "fr": "Smooth Operator",
+      "en": "Smooth Operator",
+      "cat": "Tir",
+      "desc": "Améliore l'aptitude du joueur à rentrer des tirs à mi-distance en mouvement, y compris les hop shots, les tirs en sortie de dribble et les tirs après un dribble renversé.",
+      "certitude": 1
+    },
+    {
+      "fr": "Œil de lynx",
+      "en": "Deadeye",
+      "cat": "Tir",
+      "desc": "Réduit la pénalité infligée lorsqu'un défenseur arrive pour contester un tir.",
+      "certitude": 1
+    },
+    {
+      "fr": "Roi des airs",
+      "en": "Aerial Wizard",
+      "cat": "Finition",
+      "desc": "Améliore l'aptitude à conclure le alley-oop d'un coéquipier, ou de faire une claquette sur un rebond offensif.",
+      "certitude": 1
+    },
+    {
+      "fr": "Toupie au poste",
+      "en": "Post Spin Catalyst",
+      "cat": "Finition",
+      "desc": "Les tentatives de dribbles renversés au poste et de pénétrations sont plus efficaces et plus dures à intercepter.",
+      "certitude": 1
+    },
+    {
+      "fr": "Finisseur physique",
+      "en": "Physical Finisher",
+      "cat": "Finition",
+      "desc": "Améliore l'aptitude du joueur à absorber les contacts et à réussir des doubles-pas après contact.",
+      "certitude": 1
+    },
+    {
+      "fr": "Détente sèche",
+      "en": "Rise Up",
+      "cat": "Finition",
+      "desc": "Augmente les chances de réussir un dunk ou de postériser un adversaire dans la raquette.",
+      "certitude": 0.9
+    },
+    {
+      "fr": "Dunker de génie",
+      "en": "Posterizer",
+      "cat": "Finition",
+      "desc": "Augmente les chances de rentrer un dunk sur votre défenseur.",
+      "certitude": 1
+    },
+    {
+      "fr": "Prodige dans la raquette",
+      "en": "Paint Prodigy",
+      "cat": "Finition",
+      "desc": "Améliore l'aptitude du joueur à marquer rapidement et efficacement sous le panier après une pénétration dans la raquette.",
+      "certitude": 1
+    },
+    {
+      "fr": "Spécialiste du bras roulé",
+      "en": "Hook Specialist",
+      "cat": "Finition",
+      "desc": "Améliore l'aptitude du joueur à rentrer ses bras roulés au poste.",
+      "certitude": 1
+    },
+    {
+      "fr": "Machine au poste",
+      "en": "Post Powerhouse",
+      "cat": "Finition",
+      "desc": "Améliore l'aptitude du joueur à enfoncer des défenseurs au panier et avec des drop steps.",
+      "certitude": 1
+    },
+    {
+      "fr": "Funambule",
+      "en": "Ghost Stepper",
+      "cat": "Finition",
+      "desc": "Augmente l'efficacité des step through et des tirs de près suite à une feinte.",
+      "certitude": 0.9
+    },
+    {
+      "fr": "Mixeur au double-pas",
+      "en": "Layup Mixmaster",
+      "cat": "Finition",
+      "desc": "Améliore l'aptitude du joueur à réussir des doubles-pas acrobatiques ou spectaculaires.",
+      "certitude": 1
+    },
+    {
+      "fr": "Flotteur",
+      "en": "Float Game",
+      "cat": "Finition",
+      "desc": "",
+      "certitude": 0.9,
+      "descManquante": "la bulle d’aide de ce badge n’a pas été filmée ; ancienne valeur erronée : note de relevé"
+    }
   ]
 }

@@ -186,22 +186,44 @@ function renderBadges(r){if(!document.getElementById("badgeList"))return; /* sec
    sourceEl.innerHTML=`📚 Source badges : <a href="${source.sourceUrl}" target="_blank" rel="noopener noreferrer">${source.source}</a> · <strong>${label}</strong> · ${badgeDefs.length}/53 badges intégrés. Noms et descriptions officiels du jeu en français (relevés dans l’app NBA 2K HQ), nom anglais sous chacun.`;
  }
 
- let list=document.getElementById('badgeList'),unlocked=0,html='';
- badgeDefs.forEach(def=>{
+ const CATS=['Finition','Tir','Création','Défense','Rebond','Physique'];
+ const CAT_CLS={Finition:'finish',Tir:'shoot',Création:'play',Défense:'defense',Rebond:'rebound',Physique:'physical'};
+ const PALIERS=['Bronze','Argent','Or','Hall of Fame'], PAL_CLS=['bronze','silver','gold','hof'];
+ const catBox=document.getElementById('badgeCats'), cat=catBox?.dataset.cat||'all';
+ const m=p=>(p*0.0254).toFixed(2).replace('.',',')+' m';
+ const nomA=n=>typeof nomAttribut==='function'?nomAttribut(n):n;
+ let list=document.getElementById('badgeList'),unlocked=0,html='',groupe='';
+ const parCat={};CATS.forEach(c=>parCat[c]=[0,0]);
+ badgeDefs.forEach(def=>{const ok=badgeTier(def,r).level>0;if(parCat[def.cat]){parCat[def.cat][1]++;if(ok)parCat[def.cat][0]++}});
+ if(catBox)catBox.innerHTML=`<button type="button" data-cat="all" aria-pressed="${cat==='all'}">Toutes</button>`+
+   CATS.map(c=>`<button type="button" class="cat-${CAT_CLS[c]}" data-cat="${c}" aria-pressed="${cat===c}">${c} <b>${parCat[c][0]}/${parCat[c][1]}</b></button>`).join('');
+ const h=heightInches();
+ [...badgeDefs].sort((a,b)=>CATS.indexOf(a.cat)-CATS.indexOf(b.cat)).forEach(def=>{
   const st=badgeTier(def,r), ok=st.level>0; if(ok)unlocked++;
-  if((filter==='unlocked'&&!ok)||(filter==='locked'&&ok)||(search&&!badgeCorrespond(def.name,search)))return;
-  const reqText=def.req.map(q=>`${q[0]} ${q[1]} / ${q[2]} / ${q[3]} / ${q[4]??'—'}`).join(def.logic==='OR'?'  OU  ':'  +  ');
-  const next=st.level<4 ? def.req.map(q=>q[st.level+1]??'—').join(' / ') : 'MAX';
-  html+=`<article class="badge-card ${st.cls} ${ok?'unlocked':''}">
-   <div class="badge-photo ${st.cls}" role="img" aria-label="${nomBadge(def.name)} (${def.name}) — ${st.tier}">${typeof iconeBadge==='function'?iconeBadge(def.name,def.cat,st.level):`<span aria-hidden="true">${badgeIcon(def.cat)}</span>`}${st.level===0?'<i class="badge-lock" aria-hidden="true">🔒</i>':''}</div>
-   <div class="badge-main"><div class="badge-title"><div class="badge-names">${nomBadgeHTML(def.name)}</div><span class="badge-category">${def.cat}</span></div>
-   ${BADGE_DESC_FR[def.name]?`<p class="badge-desc">${escapeHTML(BADGE_DESC_FR[def.name])}</p>`:''}
-   <div class="badge-tier ${st.cls}">${st.tier}</div>
-   <div class="badge-levels"><span class="bronze">Bronze</span><span class="silver">Argent</span><span class="gold">Or</span><span class="hof">HOF</span></div>
-   <small>${st.level?`Tu peux l'équiper en <strong>${st.tier}</strong>.`:'Tu ne peux pas encore l’équiper.'} • ${def.logic==='OR'?'un des critères':'tous les critères'} requis</small>
-   <div class="badge-req">${reqText}</div>
-   ${st.level<4&&st.level>0?`<div class="badge-next">Prochain palier : <b>${next}</b></div>`:''}
-   </div></article>`;
+  if((filter==='unlocked'&&!ok)||(filter==='locked'&&ok)||(cat!=='all'&&def.cat!==cat)||(search&&!badgeCorrespond(def.name,search)))return;
+  if(cat==='all'&&!search&&def.cat!==groupe){groupe=def.cat;html+=`<h2 class="badge-groupe cat-${CAT_CLS[def.cat]}">${def.cat}</h2>`}
+  const horsTaille=h<def.minH||h>def.maxH;
+  const lignes=def.req.map(q=>{const v=r[q[0]]||0;
+    return `<div class="req-ligne"><span>${escapeHTML(nomA(q[0]))}</span><b>${v}</b>${[1,2,3,4].map(i=>q[i]==null?'<i class="vide">—</i>':`<i class="${v>=q[i]?'ok':''}">${q[i]}</i>`).join('')}</div>`}).join('');
+  let suite='';
+  if(horsTaille)suite=`Réservé aux joueurs de ${m(def.minH)} à ${m(def.maxH)}.`;
+  else if(st.level>=4)suite='Palier maximal atteint.';
+  else{
+   const idx=st.level+1, manques=def.req.filter(q=>q[idx]!=null).map(q=>[q[0],q[idx]-(r[q[0]]||0)]).filter(x=>x[1]>0);
+   if(!def.req.some(q=>q[idx]!=null))suite='Palier maximal pour ce badge.';
+   else if(def.logic==='OR'){const x=manques.sort((a,b)=>a[1]-b[1])[0];suite=x?`Pour ${PALIERS[st.level]} : ${escapeHTML(nomA(x[0]))} +${x[1]}.`:''}
+   else suite=manques.length?`Pour ${PALIERS[st.level]} : `+manques.map(x=>`${escapeHTML(nomA(x[0]))} +${x[1]}`).join(' et ')+'.':'';
+  }
+  html+=`<article class="badge-card cat-${CAT_CLS[def.cat]||'none'} ${st.cls} ${ok?'unlocked':''}">
+   <div class="badge-photo ${st.cls}" role="img" aria-label="${nomBadge(def.name)} (${def.name}) — ${st.tier}">${typeof iconeBadge==='function'?iconeBadge(def.name,def.cat,st.level):`<span aria-hidden="true">${badgeIcon(def.cat)}</span>`}</div>
+   <div class="badge-titre"><div class="badge-names">${nomBadgeHTML(def.name)}</div><span class="badge-category">${def.cat}</span></div>
+   <span class="badge-tier ${st.cls}">${horsTaille?'Hors taille':ok?st.tier:'Pas encore'}</span>
+   ${BADGE_DESC_FR[def.name]?`<p class="badge-desc">${escapeHTML(BADGE_DESC_FR[def.name])}</p>`:`<p class="badge-desc manquante">Description du jeu pas encore relevée.</p>`}
+   <div class="badge-paliers" aria-label="Palier atteint : ${ok?st.tier:'aucun'}">${PALIERS.map((p,i)=>`<span class="${PAL_CLS[i]} ${st.level>i?'atteint':''}">${i===3?'HOF':p}</span>`).join('')}</div>
+   <div class="badge-reqs"><div class="req-ligne req-tete"><span>Attribut</span><span>Toi</span><i>B</i><i>A</i><i>O</i><i>HOF</i></div>${lignes}
+   ${def.req.length>1?`<p class="req-logique">${def.logic==='OR'?'Un seul de ces attributs suffit.':'Tous ces attributs sont requis.'}</p>`:''}</div>
+   ${suite?`<p class="badge-next">${suite}</p>`:''}
+   </article>`;
  });
  list.innerHTML=html||'<div class="empty">Aucun badge dans ce filtre.</div>';
  texte('badgeUnlocked',unlocked+' accessibles'); texte('badgeTotal',badgeDefs.length);
@@ -289,7 +311,7 @@ function renderAnimations(){
 function handValue(){return document.getElementById('dominantHand')?.value||'Droite'}
 function serialize(){let obj={position:position.value,height:height.value,weight:weight.value,wing:wing.value,style:style.value,hand:handValue(),attrs:Object.fromEntries(inputs.map(x=>[x.dataset.name,x.value]))};return btoa(unescape(encodeURIComponent(JSON.stringify(obj))))}
 function apply(obj){position.value=obj.position||'SF';height.value=obj.height||80;weight.value=obj.weight||210;wing.value=obj.wing||84;style.value=obj.style||'Équilibré';const handEl=document.getElementById('dominantHand');if(handEl&&obj.hand)handEl.value=obj.hand;update();if(obj.attrs)inputs.forEach(x=>{if(obj.attrs[x.dataset.name])x.value=Math.min(+obj.attrs[x.dataset.name],+x.max)});update()}
-inputs.forEach(x=>x.addEventListener('input',update));['position','height','weight','wing','style'].forEach(id=>document.getElementById(id)?.addEventListener('input',update));const animRefiltrer=()=>{animLimite=ANIM_PAGE;renderAnimations()};['animCategory','animStatus'].forEach(id=>document.getElementById(id)?.addEventListener('change',animRefiltrer));document.getElementById('animSearch')?.addEventListener('input',animRefiltrer);document.getElementById('animPlus')?.addEventListener('click',()=>{animLimite+=ANIM_PAGE;renderAnimations()});['badgeFilter'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>renderBadges(ratings())));document.getElementById('badgeSearch')?.addEventListener('input',()=>renderBadges(ratings()));
+inputs.forEach(x=>x.addEventListener('input',update));['position','height','weight','wing','style'].forEach(id=>document.getElementById(id)?.addEventListener('input',update));const animRefiltrer=()=>{animLimite=ANIM_PAGE;renderAnimations()};['animCategory','animStatus'].forEach(id=>document.getElementById(id)?.addEventListener('change',animRefiltrer));document.getElementById('animSearch')?.addEventListener('input',animRefiltrer);document.getElementById('animPlus')?.addEventListener('click',()=>{animLimite+=ANIM_PAGE;renderAnimations()});['badgeFilter'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>renderBadges(ratings())));document.getElementById('badgeCats')?.addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b||!e.currentTarget.contains(b)||b===e.currentTarget)return;e.currentTarget.dataset.cat=b.dataset.cat;renderBadges(ratings())});document.getElementById('badgeSearch')?.addEventListener('input',()=>renderBadges(ratings()));
 
 /* Ces quatre boutons n'existent que sur la page du builder : liaisons protégées. */
 document.getElementById('reset')?.addEventListener('click',()=>{localStorage.removeItem('nba2k27_build');location.reload()});
