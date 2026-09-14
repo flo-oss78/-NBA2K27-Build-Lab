@@ -37,10 +37,10 @@
   }
   function renderUnlocks(r){
     const arr=candidateUnlocks(r); $('v15UnlockCount').textContent=`${arr.length} objectif${arr.length>1?'s':''} proche${arr.length>1?'s':''}`;
-    $('v15Unlocks').innerHTML=arr.length?arr.map((x,i)=>`<button class="v15-unlock ${CATS[x.cat]||''}" data-next-attr="${esc(x.attr)}"><div><b>${esc(x.name)}</b><small>${esc(x.cat)} • niveau ${['','Bronze','Argent','Or','HOF'][x.tier]||x.tier}</small></div><strong>+${x.delta}</strong><span>${esc(x.attr)} → ${x.need}</span></button>`).join(''):'<div class="v15-empty">Aucun palier à 1 seul attribut n’est actuellement identifié.</div>';
+    $('v15Unlocks').innerHTML=arr.length?arr.map((x,i)=>`<button class="v15-unlock ${CATS[x.cat]||''}" data-next-attr="${esc(x.attr)}"><div><b>${esc(nomBadge(x.name))}</b><small>${esc(x.name)} • ${esc(x.cat)} • niveau ${['','Bronze','Argent','Or','HOF'][x.tier]||x.tier}</small></div><strong>+${x.delta}</strong><span>${esc(x.attr)} → ${x.need}</span></button>`).join(''):'<div class="v15-empty">Aucun palier à 1 seul attribut n’est actuellement identifié.</div>';
     $('v15Unlocks').querySelectorAll('[data-next-attr]').forEach(b=>b.onclick=()=>jumpToAttribute(b.dataset.nextAttr));
     lastNext=arr[0]||null;
-    $('v15NextTitle').textContent=lastNext?`${lastNext.name} — ${lastNext.attr}`:'Aucun objectif proche';
+    $('v15NextTitle').textContent=lastNext?`${nomBadge(lastNext.name)} — ${lastNext.attr}`:'Aucun objectif proche';
     $('v15NextText').textContent=lastNext?`Il te manque ${lastNext.delta} point${lastNext.delta>1?'s':''} sur ${lastNext.attr} pour le prochain niveau intégré.`:'Monte un attribut ou change ton profil pour générer de nouveaux objectifs.';
     $('v15JumpNext').disabled=!lastNext; $('v15JumpNext').onclick=()=>lastNext&&jumpToAttribute(lastNext.attr);
   }

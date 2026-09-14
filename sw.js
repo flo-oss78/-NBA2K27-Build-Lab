@@ -5,12 +5,12 @@
    - /api/ : jamais mis en cache
    - install : addAll tolérant aux 404 (un fichier manquant ne casse plus l'installation)
 */
-const VERSION='v25.0.2';
+const VERSION='v25.1.0';
 const SHELL_CACHE='nbabl-shell-'+VERSION;
 const RUNTIME_CACHE='nbabl-runtime-'+VERSION;
 
 // Les cinq pages du site. Chacune est mise en cache pour être servie hors ligne.
-const PAGES=['/','/blueprints/','/hub/','/reference/','/progression/'];
+const PAGES=['/','/trios/','/hub/','/reference/','/progression/'];
 
 const SHELL=[
   ...PAGES,

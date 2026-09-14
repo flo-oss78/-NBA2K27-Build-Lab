@@ -28,7 +28,7 @@ const PROD = process.argv.includes('--prod');
 const URL_PROD = 'https://nba2k27-build-lab.pages.dev';
 const PAGES = [
   { chemin: '/',             fichier: 'index.html',             nav: 'Builder' },
-  { chemin: '/blueprints/',  fichier: 'blueprints/index.html',  nav: 'Blueprints' },
+  { chemin: '/trios/',       fichier: 'trios/index.html',       nav: 'Trios' },
   { chemin: '/hub/',         fichier: 'hub/index.html',         nav: 'Builds' },
   { chemin: '/reference/',   fichier: 'reference/index.html',   nav: 'Badges & animations' },
   { chemin: '/progression/', fichier: 'progression/index.html', nav: 'Progression' }
@@ -349,6 +349,27 @@ async function testsNavigateur(base) {
       }
     });
 
+    await test('chaque badge porte son nom français et son nom officiel du jeu', async () => {
+      await nav.ouvrir(base + '/reference/');
+      const r = await nav.evaluer(`
+        const cartes = [...document.querySelectorAll('#badgeList .badge-card')];
+        const sansTraduction = badgeDefs.filter(d => !BADGE_FR[d.name]).map(d => d.name);
+        const malAffiches = cartes.filter(c => {
+          const fr = c.querySelector('.badge-fr')?.textContent, en = c.querySelector('.badge-en')?.textContent;
+          return !fr || !en || fr === en || BADGE_FR[en] !== fr;
+        }).length;
+        // Recherche par nom français, sans accent : « eclair » doit trouver « Éclair » (Flash).
+        const s = document.getElementById('badgeSearch');
+        s.value = 'eclair'; s.dispatchEvent(new Event('input', { bubbles: true }));
+        await new Promise(r => setTimeout(r, 200));
+        const trouves = [...document.querySelectorAll('#badgeList .badge-en')].map(e => e.textContent);
+        s.value = ''; s.dispatchEvent(new Event('input', { bubbles: true }));
+        return { cartes: cartes.length, sansTraduction, malAffiches, trouves };`);
+      verifier(!r.sansTraduction.length, 'badges sans traduction : ' + r.sansTraduction.join(', '));
+      verifier(r.malAffiches === 0, `${r.malAffiches} carte(s) sans nom français ou sans nom officiel`);
+      verifier(r.trouves.includes('Flash'), `la recherche « eclair » ne trouve pas Flash (trouvé : ${r.trouves.join(', ') || 'rien'})`);
+    });
+
     await test('un lien de partage restaure le build à l\u2019identique', async () => {
       const build = { position: 'PG', height: '76', weight: '180', wing: '82', style: 'Slasher', hand: 'Droite',
         attrs: { 'Close Shot': '88', 'Driving Layup': '93', 'Driving Dunk': '94', 'Mid-Range': '50',
@@ -366,20 +387,20 @@ async function testsNavigateur(base) {
       verifier(!ecarts.length, ecarts.join('\n'));
     });
 
-    await test('« Utiliser ce blueprint » ouvre le builder avec le bon gabarit', async () => {
-      await nav.ouvrir(base + '/blueprints/');
+    await test('« Utiliser ce trio » ouvre le builder avec le bon gabarit', async () => {
+      await nav.ouvrir(base + '/trios/');
       const bp = await nav.evaluer(`
         const cartes = document.querySelectorAll('[data-apply]').length;
         const b = window.NBABL_BLUEPRINTS.list[0];
         return { cartes, total: window.NBABL_BLUEPRINTS.list.length, id: b.id, pos: b.pos, h: String(b.h) };`);
-      verifier(bp.cartes === bp.total, `${bp.cartes} cartes pour ${bp.total} blueprints`);
+      verifier(bp.cartes === bp.total, `${bp.cartes} cartes pour ${bp.total} trios`);
       await nav.cliquerEtAttendre(`document.querySelector('[data-apply="${bp.id}"]').click()`);
       const arrivee = await nav.evaluer(`return { chemin: location.pathname,
         poste: document.getElementById('position')?.value, taille: document.getElementById('height')?.value };`);
       verifier(arrivee.chemin === '/', `arrivée sur ${arrivee.chemin} au lieu de /`);
       verifier(arrivee.poste === bp.pos && arrivee.taille === bp.h,
         `gabarit ${arrivee.poste} / ${arrivee.taille} au lieu de ${bp.pos} / ${bp.h}`);
-      sansErreur('après la passerelle blueprint');
+      sansErreur('après la passerelle trio');
     });
 
     await test('le hub filtre la liste affichée', async () => {
@@ -441,6 +462,14 @@ async function testsProduction() {
     const sitemap = await (await fetch(`${URL_PROD}/sitemap.xml`)).text();
     const absentes = PAGES.filter(p => !sitemap.includes(`${p.chemin}</loc>`)).map(p => p.chemin);
     verifier(!absentes.length, 'pages absentes du sitemap : ' + absentes.join(', '));
+  });
+
+  await test('l\u2019ancienne adresse /blueprints/ redirige vers /trios/', async () => {
+    for (const ancien of ['/blueprints/', '/blueprints']) {
+      const r = await fetch(URL_PROD + ancien, { redirect: 'manual' });
+      const cible = r.headers.get('location') || '';
+      verifier(r.status === 301 && /\/trios\/$/.test(cible), `${ancien} → HTTP ${r.status} ${cible || '(sans redirection)'}`);
+    }
   });
 }
 

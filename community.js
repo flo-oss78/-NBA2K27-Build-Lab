@@ -15,7 +15,7 @@
   var XP_EVENTS={
     build_saved:{xp:15,label:'Build sauvegardé'},
     build_published:{xp:60,label:'Build publié'},
-    blueprint_used:{xp:10,label:'Blueprint appliqué'},
+    blueprint_used:{xp:10,label:'Trio appliqué'},
     loadout_created:{xp:20,label:'Loadout créé'},
     synergy_filled:{xp:25,label:'Synergy planifiée'},
     quest_done:{xp:8,label:'Quête cochée'},
@@ -41,7 +41,7 @@
 
   var ACHIEVEMENTS=[
     {id:'first_build', n:'Premier pas',        d:'Sauvegarder un build',                    icon:'◆'},
-    {id:'architect',   n:'Architecte',         d:'Appliquer 5 blueprints différents',       icon:'◈'},
+    {id:'architect',   n:'Architecte',         d:'Appliquer 5 trios différents',       icon:'◈'},
     {id:'tactician',   n:'Tacticien',          d:'Créer 3 loadouts de badges',              icon:'▦'},
     {id:'fusionist',   n:'Fusionniste',        d:'Remplir 8 slots de Synergy',              icon:'⚡'},
     {id:'specialist',  n:'Spécialiste',        d:'Terminer une piste de spécialisation',    icon:'★'},

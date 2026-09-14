@@ -186,7 +186,7 @@
     body.innerHTML=
       '<div class="modal-kicker">Assistant</div>'+
       '<h2>Trois builds pour toi</h2>'+
-      '<p class="sub">Chaque blueprint mélange trois joueurs réels. Choisis-en un : tous les attributs, badges et animations sont réglés automatiquement, et tu peux tout ajuster ensuite.</p>'+
+      '<p class="sub">Chaque trio mélange trois joueurs réels. Choisis-en un : tous les attributs, badges et animations sont réglés automatiquement, et tu peux tout ajuster ensuite.</p>'+
       '<div class="wiz-picks">'+picks.map(function(b){
         return '<button type="button" class="wiz-pick" data-bp="'+esc(b.id)+'">'+
           '<b>'+esc(b.n)+'</b>'+

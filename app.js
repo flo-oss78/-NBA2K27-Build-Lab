@@ -136,18 +136,18 @@ function renderBadges(r){if(!document.getElementById("badgeList"))return; /* sec
  const sourceEl=document.getElementById('badgeDataSource');
  if(sourceEl&&source){
    const label=dataQualityLabel?.('badges')||source.confidence;
-   sourceEl.innerHTML=`📚 Source badges : <a href="${source.sourceUrl}" target="_blank" rel="noopener noreferrer">${source.source}</a> · <strong>${label}</strong> · ${badgeDefs.length}/53 badges intégrés.`;
+   sourceEl.innerHTML=`📚 Source badges : <a href="${source.sourceUrl}" target="_blank" rel="noopener noreferrer">${source.source}</a> · <strong>${label}</strong> · ${badgeDefs.length}/53 badges intégrés. Noms français traduits par Build Lab — le nom officiel du jeu figure sous chacun.`;
  }
 
  let list=document.getElementById('badgeList'),unlocked=0,html='';
  badgeDefs.forEach(def=>{
   const st=badgeTier(def,r), ok=st.level>0; if(ok)unlocked++;
-  if((filter==='unlocked'&&!ok)||(filter==='locked'&&ok)||(search&&!def.name.toLowerCase().includes(search)))return;
+  if((filter==='unlocked'&&!ok)||(filter==='locked'&&ok)||(search&&!badgeCorrespond(def.name,search)))return;
   const reqText=def.req.map(q=>`${q[0]} ${q[1]} / ${q[2]} / ${q[3]} / ${q[4]??'—'}`).join(def.logic==='OR'?'  OU  ':'  +  ');
   const next=st.level<4 ? def.req.map(q=>q[st.level+1]??'—').join(' / ') : 'MAX';
   html+=`<article class="badge-card ${st.cls} ${ok?'unlocked':''}">
-   <div class="badge-photo ${st.cls}" role="img" aria-label="${def.name} — ${st.tier}"><span aria-hidden="true">${badgeIcon(def.cat)}</span>${st.level===0?'<i class="badge-lock" aria-hidden="true">🔒</i>':''}</div>
-   <div class="badge-main"><div class="badge-title"><b>${def.name}</b><span class="badge-category">${def.cat}</span></div>
+   <div class="badge-photo ${st.cls}" role="img" aria-label="${nomBadge(def.name)} (${def.name}) — ${st.tier}"><span aria-hidden="true">${badgeIcon(def.cat)}</span>${st.level===0?'<i class="badge-lock" aria-hidden="true">🔒</i>':''}</div>
+   <div class="badge-main"><div class="badge-title"><div class="badge-names">${nomBadgeHTML(def.name)}</div><span class="badge-category">${def.cat}</span></div>
    <div class="badge-tier ${st.cls}">${st.tier}</div>
    <div class="badge-levels"><span class="bronze">Bronze</span><span class="silver">Argent</span><span class="gold">Or</span><span class="hof">HOF</span></div>
    <small>${st.level?`Tu peux l'équiper en <strong>${st.tier}</strong>.`:'Tu ne peux pas encore l’équiper.'} • ${def.logic==='OR'?'un des critères':'tous les critères'} requis</small>

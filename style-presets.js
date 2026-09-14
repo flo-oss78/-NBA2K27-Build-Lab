@@ -168,7 +168,7 @@
       var cls=TIER_CLASS[tier]||'none';
       var glyph=BADGE_GLYPH[name]||'✦';
       html+='<div class="style-badge-item"><div class="style-badge-icon '+cls+'" aria-hidden="true">'+glyph+'</div>'+
-            '<b>'+esc(name)+'</b><small>'+esc(tier)+'</small></div>';
+            '<b>'+nomBadgeHTML(name)+'</b><small>'+esc(tier)+'</small></div>';
     });
     box.innerHTML=html;
   }

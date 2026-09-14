@@ -97,9 +97,9 @@
         '<div class="bg-items">'+items.map(function(i){
           var locked=i.st.level===0;
           return '<div class="bg-item '+i.st.cls+(locked?' locked':'')+'" '+
-                 'title="'+esc(i.def.name)+' — '+esc(locked?'non accessible':i.st.tier)+'">'+
+                 'title="'+esc(nomBadge(i.def.name))+' ('+esc(i.def.name)+') — '+esc(locked?'non accessible':i.st.tier)+'">'+
                  '<span class="bg-shield" aria-hidden="true"></span>'+
-                 '<b>'+esc(i.def.name)+'</b>'+
+                 '<b>'+nomBadgeHTML(i.def.name)+'</b>'+
                  '<small>'+esc(locked?'✕':i.st.tier)+'</small>'+
                  '</div>';
         }).join('')+'</div>'+

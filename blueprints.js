@@ -155,9 +155,9 @@
     if(!grid)return;
     var list=visible();
     var count=el('blueprintCount');
-    if(count)count.textContent=list.length+' blueprint'+(list.length>1?'s':'');
+    if(count)count.textContent=list.length+' trio'+(list.length>1?'s':'');
     if(!list.length){
-      grid.innerHTML='<div class="empty">Aucun blueprint avec ces filtres. Élargis la recherche.</div>';
+      grid.innerHTML='<div class="empty">Aucun trio avec ces filtres. Élargis la recherche.</div>';
       return;
     }
     grid.innerHTML=list.map(function(b){
@@ -169,7 +169,7 @@
         '<p class="bp-desc">'+esc(b.d)+'</p>'+
         '<div class="bp-meta"><span>'+heightText(b.h)+'</span><span>'+b.w+' lbs</span>'+
         '<span>'+heightText(b.wing)+'</span><span class="bp-disc bp-'+discClass(b.disc)+'">'+esc(b.disc)+'</span></div>'+
-        '<button type="button" class="bp-apply" data-apply="'+b.id+'">Utiliser ce blueprint</button>'+
+        '<button type="button" class="bp-apply" data-apply="'+b.id+'">Utiliser ce trio</button>'+
       '</article>';
     }).join('');
     grid.querySelectorAll('[data-apply]').forEach(function(btn){
@@ -193,7 +193,7 @@
     return style;
   }
 
-  /* Sur la page /blueprints/, le builder n'est pas dans le DOM : on encode le
+  /* Sur la page /trios/, le builder n'est pas dans le DOM : on encode le
      blueprint dans l'URL et on laisse app.js l'appliquer à l'arrivée (il sait
      déjà lire ?build=, c'est le format des liens de partage). */
   function ouvrirDansLeBuilder(bp){
@@ -231,7 +231,7 @@
     if(badge){
       badge.hidden=false;
       badge.innerHTML='<b>'+esc(bp.n)+'</b><span>'+b3(bp.tri)+'</span>'+
-        '<button type="button" id="clearBlueprint" aria-label="Retirer le blueprint">×</button>';
+        '<button type="button" id="clearBlueprint" aria-label="Retirer le trio">×</button>';
       el('clearBlueprint').addEventListener('click',function(){badge.hidden=true});
     }
     var builder=el('builder');

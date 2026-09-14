@@ -16,10 +16,10 @@ function iso(ms){
 export async function onRequestGet({request, env}){
   const origin = new URL(request.url).origin;
   // Les cinq pages du site, chacune indexable pour ce qu'elle contient
-  // (blueprints, badges et animations sont les pages de contenu réel).
+  // (trios, badges et animations sont les pages de contenu réel).
   const PAGES = [
     ['/', '1.0'],
-    ['/blueprints/', '0.9'],
+    ['/trios/', '0.9'],
     ['/reference/', '0.9'],
     ['/hub/', '0.8'],
     ['/progression/', '0.7']

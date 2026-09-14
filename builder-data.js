@@ -73,3 +73,59 @@ const COST_WEIGHT={
  'Interior Defense':0.95,'Perimeter Defense':1.15,'Steal':1.10,'Block':1.10,'Offensive Rebound':0.80,'Defensive Rebound':0.90,
  'Speed':1.15,'Agility':1.10,'Strength':0.95,'Vertical':1.00,'Stamina':0.55};
 const BADGE_THRESHOLDS=[60,70,80,90,95];
+
+/* Noms français des badges.
+   2K ne publie aucune traduction officielle : même en français, le jeu et la
+   communauté emploient les noms anglais. Ces traductions sont donc celles du
+   site, et le nom officiel reste toujours affiché à côté pour que le joueur
+   retrouve le badge dans le jeu.
+   Le nom anglais demeure la clé partout (loadouts enregistrés, Build DNA,
+   recommandations) : ce dictionnaire ne sert qu'à l'affichage. */
+const BADGE_FR={
+  // Tir
+  'Arc Cadence':'Cadence de tir', 'Deadeye':'Œil de lynx', 'Limitless Range':'Portée illimitée',
+  'Mini Marksman':'Petit sniper', 'Post Fade Phenom':'Fadeaway au poste', 'Quick Trigger':'Gâchette rapide',
+  'Set and Fire':'Pieds posés', 'Smooth Operator':'Toucher soyeux', 'Static Middy':'Mi-distance à l’arrêt',
+  'Green Machine':'Tir parfait en série', 'Agent 3':'Agent 3 points',
+  // Création
+  'Ankle Assassin':'Casseur de chevilles', 'Bail Out':'Passe de secours', 'Bailout':'Passe de secours',
+  'Break Starter':'Relanceur', 'Dimer':'Passeur décisif', 'Handles for Days':'Dribble inépuisable',
+  'Lightning Launch':'Départ éclair', 'Pace':'Changement de rythme', 'Strong Handle':'Dribble costaud',
+  'Unpluckable':'Inarrachable', 'Versatile Visionary':'Visionnaire', 'Killer Combos':'Combos mortels',
+  'Speed Booster':'Accélérateur',
+  // Finition
+  'Aerial Wizard':'Magicien aérien', 'Float Game':'Floater', 'Ghost Stepper':'Pas fantôme',
+  'Hook Specialist':'Spécialiste du bras roulé', 'Layup Mixmaster':'Maître du lay-up',
+  'Paint Prodigy':'Prodige de la raquette', 'Physical Finisher':'Finisseur physique',
+  'Post Powerhouse':'Force au poste', 'Post Spin Catalyst':'Spin au poste', 'Posterizer':'Faiseur de posters',
+  'Rise Up':'Envol sous le cercle', 'Slithery':'Anguille', 'Precision Dunker':'Dunkeur précis',
+  // Défense
+  'Ankle Braces':'Chevilles d’acier', 'Challenger':'Contesteur', 'Glove':'Gant',
+  'High-Flying Denier':'Contreur aérien', 'Immovable Enforcer':'Mur inébranlable', 'Interceptor':'Intercepteur',
+  'Off-Ball Pest':'Poison sans ballon', 'Paint Patroller':'Gardien de la raquette', 'Pick Dodger':'Esquive d’écran',
+  'Post Lockdown':'Verrou au poste', 'Seatbelt':'Marquage collant', 'Wall Up':'Mur vertical',
+  // Rebond
+  'Boxout Boss':'Patron du box-out', 'Breaker':'Perce-muraille', 'Crasher':'Fonceur au rebond',
+  'Possession Closer':'Finisseur de possession', 'Sync Snatcher':'Rebond au bon timing',
+  'Rebound Chaser':'Chasseur de rebonds',
+  // Physique
+  'Brick Wall':'Mur de briques', 'Bruiser':'Cogneur', 'Flash':'Éclair', 'Pogo Stick':'Ressort',
+  'Slippery Off-Ball':'Insaisissable sans ballon', 'Work Horse':'Bourreau de travail'
+};
+
+/* Nom affiché d'un badge : sa traduction, ou le nom officiel s'il n'en a pas. */
+function nomBadge(nom){return BADGE_FR[nom]||nom}
+
+/* Nom français suivi du nom officiel du jeu, pour les listes et les cartes. */
+function nomBadgeHTML(nom){
+  const e=window.escHtml||String, fr=BADGE_FR[nom];
+  return fr ? `<span class="badge-fr">${e(fr)}</span><small class="badge-en">${e(nom)}</small>`
+            : `<span class="badge-fr">${e(nom)}</span>`;
+}
+
+/* Recherche tolérante : nom anglais ou français, sans tenir compte des accents. */
+function badgeCorrespond(nom,recherche){
+  const plat=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const q=plat(recherche).trim();
+  return !q || plat(nom).includes(q) || plat(BADGE_FR[nom]).includes(q);
+}

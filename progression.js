@@ -111,7 +111,7 @@
       var tested=TESTED.indexOf(b.name)>=0;
       return '<button type="button" class="lo-chip '+b.cls+(on?' on':'')+'" data-badge="'+esc(b.name)+'"'+
              ' aria-pressed="'+(on?'true':'false')+'">'+
-             '<span>'+esc(b.name)+'</span><small>'+esc(b.tier)+'</small>'+
+             '<span>'+nomBadgeHTML(b.name)+'</span><small>'+esc(b.tier)+'</small>'+
              (tested?'<i class="lo-tested" title="Testé par NBA2KLab">✓</i>':'<i class="lo-untested" title="Test NBA2KLab en attente">·</i>')+
              '</button>';
     }).join(''):'<div class="empty">Aucun badge accessible avec ce build. Monte des attributs pour débloquer des badges.</div>';
@@ -198,8 +198,8 @@
           : 'Déclenché par une situation de jeu, jusqu\u2019au tier Legend.')+'</p>'+
         (available.length?available.map(function(n){
           var on=list.indexOf(n)>=0;
-          return '<button type="button" class="syn-chip'+(on?' on':'')+'" data-syn="'+kind+'" data-name="'+esc(n)+'"'+
-                 ' aria-pressed="'+(on?'true':'false')+'">'+esc(n)+'</button>';
+          return '<button type="button" class="syn-chip'+(on?' on':'')+'" data-syn="'+kind+'" data-name="'+esc(n)+'" title="'+esc(n)+'"'+
+                 ' aria-pressed="'+(on?'true':'false')+'">'+esc(nomBadge(n))+'</button>';
         }).join(''):'<div class="empty">Équipe d\u2019abord des badges dans ton loadout.</div>')+
       '</div>';
     }

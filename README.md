@@ -85,7 +85,7 @@ stockés dans le navigateur du visiteur et le statut affiche « Serveur : local 
 |---|---|
 | `index.html` | Page du builder (`/`) : corps, attributs, validateur, fiche, Cap Breakers |
 | — | *Mode **Simple** par défaut : builder, scouting et validateur. Le mode **Expert** ajoute les neuf panneaux de méta-jeu et la page Progression. Le choix est mémorisé pour tout le site.* |
-| `blueprints/index.html` | `/blueprints/` — les 40 Signature Blueprints |
+| `trios/index.html` | `/trios/` — les 40 Trios (Signature Blueprints dans le jeu) ; `/blueprints/` y redirige |
 | `hub/index.html` | `/hub/` — builds de la communauté et comparateur |
 | `reference/index.html` | `/reference/` — tables des badges et animations |
 | `progression/index.html` | `/progression/` — loadouts, synergy, takeovers, quêtes |
@@ -130,7 +130,7 @@ pour voir le site comme un premier visiteur (sans cache ni service worker).
 | Mode Simple par défaut, Expert révèle tout, le choix suit entre pages | Phase 3 |
 | `/reference/` rend chaque badge, animation et takeover de la table | Tables vides si le contexte de build casse |
 | Un lien de partage restaure le build à l'identique | Le preset de style l'écrasait |
-| « Utiliser ce blueprint » ouvre le builder avec le bon gabarit | Passerelle entre pages |
+| « Utiliser ce trio » ouvre le builder avec le bon gabarit | Passerelle entre pages |
 | Le hub filtre réellement la liste affichée | Les filtres ont longtemps piloté une liste cachée |
 
 `tester.cmd --prod` ajoute : chaque fichier en ligne est identique au dossier

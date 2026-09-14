@@ -198,7 +198,7 @@
     try{badges=(window.NBABL_PROGRESSION.activeLoadout().badges||[]).slice(0,6)}catch(e){}
     if(!badges.length){
       badges=Array.prototype.slice.call(document.querySelectorAll('#styleBadgeRecommendations .style-badge-item b'))
-        .slice(0,6).map(function(n){return n.textContent});
+        .slice(0,6).map(function(n){return (n.querySelector('.badge-fr')||n).textContent});
     }
     if(badges.length){
       y+=10;
@@ -208,7 +208,7 @@
       var bx=64;
       badges.forEach(function(n){
         ctx.font='700 24px Inter, system-ui, sans-serif';
-        var w=ctx.measureText(n).width+36;
+        n=nomBadge(n);var w=ctx.measureText(n).width+36;
         if(bx+w>W-64){bx=64;y+=56}
         ctx.fillStyle='rgba(29,139,255,.14)';
         roundRect(ctx,bx,y-30,w,44,22);ctx.fill();

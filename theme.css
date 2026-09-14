@@ -1394,6 +1394,10 @@ footer{
 }
 .build-card-link{margin-left:auto;font-weight:700;font-size:11.5px}
 
+/* Nom français d'un badge, suivi du nom officiel du jeu en plus petit. */
+.badge-fr{font-weight:800}
+.badge-en{display:block;font-size:.72em;font-weight:600;color:var(--dim);letter-spacing:.01em;margin-top:1px;white-space:normal}
+
 /* ---- Étiquettes de build ---- */
 .build-tag-preview{display:flex;flex-wrap:wrap;gap:7px}
 .build-tag-preview[hidden]{display:none}

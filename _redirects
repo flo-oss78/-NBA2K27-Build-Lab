@@ -1,0 +1,5 @@
+# Les « Blueprints » s'appellent désormais « Trios » : l'ancienne adresse,
+# déjà indexée et partagée, renvoie définitivement vers la nouvelle.
+/blueprints    /trios/  301
+/blueprints/   /trios/  301
+/blueprints/*  /trios/  301
