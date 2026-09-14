@@ -41,13 +41,13 @@ const DATA_PROVENANCE = Object.freeze({
     notes: "53 badge definitions and tier thresholds are aligned with the public 2KFR table. This is an independent community source, not an official 2K publication; values can change with patches and should not be presented as official in-game verification."
   },
   animations: {
-    confidence: "PROBABLE",
-    source: "Public NBA 2K27 animation tables; source-by-entry verification pending",
-    sourceUrl: "",
-    checkedAt: "2026-09-12",
+    confidence: "VERIFIED_COMMUNITY",
+    source: "NBA2KLab (table complète), recoupée ligne par ligne avec LockerCodes",
+    sourceUrl: "https://www.nba2klab.com/animation-requirements",
+    checkedAt: "2026-09-14",
     gameVersion: "NBA 2K27",
-    patch: "Launch",
-    notes: "Embedded list is not presented as the complete animation catalog."
+    patch: "LockerCodes : vérifié sur la version du jeu du 3 septembre 2026",
+    notes: "Généré par outils/importer-animations.mjs. Données © NBA2KLab, reprises avec citation. Chaque entrée indique son recoupement (animations.js : v, note, jeu) ; ANIMATIONS_SOURCE donne les totaux."
   },
   takeovers: {
     confidence: "ESTIMATED",

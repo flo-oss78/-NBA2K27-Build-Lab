@@ -13,7 +13,7 @@ function validateBuild(r,caps){
   const minWing=Math.max(wingSliderMin,h+2), maxWing=Math.min(wingSliderMax,h+6);
   if(wing<minWing||wing>maxWing) errors.push(`Envergure invalide pour ${heightText(h)} : ${heightText(minWing)} à ${heightText(maxWing)}.`);
   inputs.forEach(x=>{const v=+x.value, cap=+(caps[x.dataset.name]??99); if(v>cap) errors.push(`${x.dataset.name} ${v} dépasse le cap calculé de ${cap}.`);});
-  const animFailures=[]; ANIMATIONS.forEach(a=>{const heightOK=h>=a.minH&&h<=a.maxH; const fails=Object.entries(a.req).filter(([k,v])=>(r[k]??0)<v); if(!heightOK||fails.length) animFailures.push(a)});
+  const animFailures=ANIMATIONS.filter(a=>!animationAccessible(a,r,h));
   // Badge engine itself is the source of truth for the embedded badge table: no impossible tier is displayed.
   // renderBadges() vient de parcourir les 53 badges pour le même r : on relit son
   // total plutôt que de refaire la boucle badgeTier().

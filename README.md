@@ -103,7 +103,7 @@ stockés dans le navigateur du visiteur et le statut affiche « Serveur : local 
 | `share.js` | Code de build compact, QR, carte PNG téléchargeable |
 | `assist.js` | Assistant 3 questions, annuler/rétablir, build de la semaine |
 | `ui.js` | Navigation, panneau de réglages, installation PWA, service worker |
-| `animations.js` | Base d'animations (227 entrées) |
+| `animations.js` | **Généré** par `node outils/importer-animations.mjs` : exigences NBA2KLab recoupées avec LockerCodes, règles d'accès (`animationAccessible`) |
 | `dna-engine.js` | Build DNA — génération depuis une description en français |
 | `v15-intelligence.js` | Identité de build et joueurs similaires |
 | `server-client.js` | Client API communauté avec repli local |

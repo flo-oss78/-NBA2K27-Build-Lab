@@ -123,6 +123,14 @@
     'Équilibré':[['Dribble Style','Devin Booker','Dribble Style'],['Signature Size-Up','Devin Booker','Signature Size-Up'],['Jumpshot • Base','Pro','Jumpshot • Base'],['Go-To Shot','Devin Booker','Shooting • Go-To Shot'],['Dribble Pull-Up','Devin Booker','Shooting • Dribble Pull-Up'],['Escape Moves','Kyrie Irving','Dribble • Behind the Back'],['Moving Crossover','Pro','Dribble • Behind the Back'],['Layup Package','Pro','Layup Style'],['Dunk Packages','Zach LaVine','Alley-Oops / Contact'],['Motion Style','Pro','Motion Style']]
   };
 
+  /* Emplacement du jeu → catégorie de la base d'animations (NBA2KLab). */
+  var CATEGORIE_PAR_LIBELLE={
+    'Escape Moves':'Behind the Back Escape','Moving Crossover':'Crossover','Moving Behind the Back':'Behind the Back',
+    'Moving Spin':'Spin','Moving Hesitation':'Hesitation','Triple Threat Style':'Triple Threat Style',
+    'Dunk Packages':'Signature Dunks - Players','Layup Package':'Layup Style','Jumpshot • Base':'Jumper Base',
+    'Go-To Shot':'Go-To Shot','Dribble Pull-Up':'Dribble Pull-Up'
+  };
+
   var STYLE_TAKEOVERS={
     'Shooter':['Sharpshooter','Shot Creator'],
     'Slasher':['Slasher','Ball Handler'],
@@ -181,7 +189,7 @@
     var anims=window.ANIMATIONS||[];
     var h=typeof heightInches==='function'?heightInches():78;
     box.innerHTML=rows.map(function(row){
-      var label=row[0],name=row[1],cat=row[2];
+      var label=row[0],name=row[1],cat=CATEGORIE_PAR_LIBELLE[label]||row[2];
       // Le nom seul (sans catégorie) sert de dernier repli, mais uniquement
       // s'il n'existe qu'une seule entrée sous ce nom dans ANIMATIONS — sinon
       // la catégorie voulue prime pour éviter d'afficher les mauvaises
@@ -189,12 +197,8 @@
       var sameName=anims.filter(function(a){return a.name===name});
       var match=anims.find(function(a){return a.name===name&&a.category===cat})||
                 (sameName.length===1?sameName[0]:null);
-      var ok=false;
-      if(match){
-        ok=Object.keys(match.req||{}).every(function(k){return (r[k]||0)>=match.req[k]})&&
-           h>=match.minH&&h<=match.maxH;
-      }
-      return '<div class="style-animation-item '+(ok?'ok':'locked')+'">'+
+      var ok=!!match&&animationAccessible(match,r,h);
+      return '<div class="style-animation-item '+(ok?'ok':'locked')+'"'+(match?'':' title="Absente de la base d’animations"')+'>'+
              '<b>'+esc(label)+'</b><span>'+esc(name)+'</span></div>';
     }).join('');
   }

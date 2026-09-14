@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050A12">
 <meta name="color-scheme" content="dark">
-<meta name="description" content="Les 53 badges NBA 2K27 avec leurs paliers Bronze, Argent, Or et Hall of Fame, et 227 animations avec leurs attributs requis.">
+<meta name="description" content="Les 53 badges NBA 2K27 avec leurs paliers Bronze, Argent, Or et Hall of Fame, et plus de 2 500 animations avec leur taille et leurs attributs requis.">
 <title>Badges et animations NBA 2K27 — tables de référence</title>
 
 <link rel="canonical" href="https://nbabuildlab.pages.dev/reference/">
@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="/theme.css">
 
 <meta property="og:title" content="Badges et animations NBA 2K27 — tables de référence">
-<meta property="og:description" content="Les 53 badges NBA 2K27 avec leurs paliers Bronze, Argent, Or et Hall of Fame, et 227 animations avec leurs attributs requis.">
+<meta property="og:description" content="Les 53 badges NBA 2K27 avec leurs paliers Bronze, Argent, Or et Hall of Fame, et plus de 2 500 animations avec leur taille et leurs attributs requis.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://nbabuildlab.pages.dev/reference/">
 <meta property="og:locale" content="fr_FR">
@@ -82,13 +82,16 @@
     </div>
     <div class="anim-count"><b id="animUnlocked">0</b><span>accessibles</span></div>
   </div>
-  <div class="data-note">Base animations : données publiques NBA 2K27. Le fichier embarqué contient uniquement les packages publiquement structurés que nous avons intégrés — le site n'affirme pas être exhaustif.</div>
+  <div id="animSource" class="data-note">Base animations : tables publiques NBA 2K27.</div>
   <div class="anim-tools">
-    <select id="animCategory" aria-label="Filtrer par catégorie"><option value="all">Toutes les catégories</option><option>Alley-Oops / Contact</option><option>Layup Style</option><option>Dribble • Behind the Back</option><option>Pass Style</option><option>Shooting • Dribble Pull-Up</option><option>Shooting • Go-To Shot</option><option>Jumpshot • Base</option><option>Motion Style</option><option>Signature Size-Up</option><option>Dribble Style</option><option>Dribble</option><option>Shooting</option><option>Jumpshot</option></select>
+    <!-- Catégories générées depuis animations.js (app.js) -->
+    <select id="animCategory" aria-label="Filtrer par catégorie"><option value="all">Toutes les catégories</option></select>
     <select id="animStatus" aria-label="Filtrer par accessibilité"><option value="all">Toutes</option><option value="yes">Accessibles</option><option value="no">Non accessibles</option></select>
     <input id="animSearch" aria-label="Rechercher une animation" placeholder="Rechercher une animation…">
   </div>
+  <p id="animResultats" class="anim-resultats" aria-live="polite"></p>
   <div id="animationList" class="animation-list"></div>
+  <button id="animPlus" type="button" class="secondary anim-plus" hidden>Afficher plus</button>
 </section>
 
 <div id="buildModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Détail du build">

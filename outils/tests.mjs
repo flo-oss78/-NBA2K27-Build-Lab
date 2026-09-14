@@ -18,6 +18,7 @@ import os from 'node:os';
 import path from 'node:path';
 import http from 'node:http';
 import crypto from 'node:crypto';
+import vm from 'node:vm';
 import { spawn, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
@@ -33,6 +34,15 @@ const PAGES = [
   { chemin: '/reference/',   fichier: 'reference/index.html',   nav: 'Badges & animations' },
   { chemin: '/progression/', fichier: 'progression/index.html', nav: 'Progression' }
 ];
+
+// Build réel recopié du jeu (arrière 1,91 m, GNR 96) : sert de témoin.
+const BUILD_JEU = { position: 'SG', height: 75, weight: 185, wing: 78, style: 'Équilibré', hand: 'Droite',
+  attrs: { 'Close Shot': 48, 'Driving Layup': 53, 'Driving Dunk': 94, 'Standing Dunk': 38, 'Post Control': 42,
+           'Mid-Range': 88, 'Three-Point': 94, 'Free Throw': 77, 'Pass Accuracy': 75, 'Ball Handle': 86,
+           'Speed With Ball': 77, 'Interior Defense': 44, 'Perimeter Defense': 91, 'Steal': 84, 'Block': 45,
+           'Offensive Rebound': 27, 'Defensive Rebound': 51, 'Speed': 87, 'Agility': 85, 'Strength': 52,
+           'Vertical': 80, 'Stamina': 94 } };
+const ATTRIBUTS = Object.keys(BUILD_JEU.attrs);
 
 const pause = ms => new Promise(r => setTimeout(r, ms));
 
@@ -117,6 +127,29 @@ async function testsStatiques() {
     for (const s of scripts) if (!sw.includes(`'./${s}'`)) absents.push(s);
     for (const [, f] of sw.matchAll(/'\.\/([^']+)'/g)) if (!fs.existsSync(f)) absents.push(`${f} (listé mais absent du dossier)`);
     verifier(!absents.length, 'absents de la coquille : ' + absents.join(', '));
+  });
+
+  await test('la base d’animations est complète, sourcée et cohérente', () => {
+    const ctx = {};
+    vm.createContext(ctx);
+    vm.runInContext(fs.readFileSync('animations.js', 'utf8') + ';this.A=ANIMATIONS;this.S=ANIMATIONS_SOURCE;', ctx);
+    const { A, S } = ctx, problemes = [], ids = new Set();
+    if (A.length < 2500) problemes.push(`${A.length} animations seulement`);
+    for (const a of A) {
+      const id = `${a.category} / ${a.name}`;
+      if (ids.has(id)) problemes.push(`${id} : en double`);
+      ids.add(id);
+      if (!(a.minH >= 69 && a.maxH <= 88 && a.minH <= a.maxH)) problemes.push(`${id} : tailles ${a.minH}-${a.maxH}`);
+      for (const [k, v] of Object.entries(a.req)) if (!ATTRIBUTS.includes(k) || !(Number.isInteger(v) && v >= 1 && v <= 99)) problemes.push(`${id} : ${k} ${v}`);
+      if (![0, 1, 2].includes(a.v)) problemes.push(`${id} : recoupement « ${a.v} »`);
+      if (a.v === 0 && !a.note) problemes.push(`${id} : désaccord sans explication`);
+      if (!a.group) problemes.push(`${id} : sans groupe`);
+    }
+    verifier(!problemes.length, problemes.slice(0, 12).join('\n'));
+    verifier(S.total === A.length && S.recoupees + S.nba2klabSeul + S.desaccords === A.length, 'totaux de ANIMATIONS_SOURCE faux');
+    verifier(S.sources.length >= 2 && S.sources.every(s => /^https:\/\//.test(s.url) && s.date), 'sources non documentées');
+    verifier(S.recoupees / A.length > 0.5, `seulement ${S.recoupees} animations recoupées sur ${A.length}`);
+    verifier(A.filter(a => a.jeu).length === S.jeu.animations, 'animations confirmées en jeu manquantes');
   });
 
   await test('la page 404 existe, n’est pas indexable et ses liens mènent quelque part', () => {
@@ -349,15 +382,55 @@ async function testsNavigateur(base) {
       await nav.evaluer(`document.getElementById('modeSimple').click();`);
     });
 
-    await test('/reference/ rend chaque badge, animation et takeover', async () => {
+    await test('/reference/ rend chaque badge et takeover, et donne accès à chaque animation', async () => {
       await nav.ouvrir(base + '/reference/');
-      const r = await nav.evaluer(`return {
-        badges: [document.querySelectorAll('#badgeList .badge-card').length, badgeDefs.length],
-        animations: [document.querySelectorAll('#animationList .anim-card').length, ANIMATIONS.length],
-        takeovers: [document.querySelectorAll('#takeoverList .takeover').length, takeoverDefs.length] };`);
-      for (const [nom, [rendus, table]] of Object.entries(r)) {
+      const r = await nav.evaluer(`
+        const attendre = () => new Promise(r => setTimeout(r, 150));
+        const cartes = () => document.querySelectorAll('#animationList .anim-card').length;
+        const sel = document.getElementById('animCategory');
+        const avant = cartes();
+        document.getElementById('animPlus').click(); await attendre();
+        const apres = cartes();
+        const options = [...sel.querySelectorAll('option')].map(o => o.value).filter(v => v !== 'all');
+        const categories = [...new Set(ANIMATIONS.map(a => a.category))];
+        // Chaque catégorie, parcourue jusqu'au bout avec « Afficher plus », montre toutes ses animations.
+        const incompletes = [];
+        for (const c of categories) {
+          sel.value = c; sel.dispatchEvent(new Event('change', { bubbles: true }));
+          let garde = 100;
+          while (!document.getElementById('animPlus').hidden && garde--) document.getElementById('animPlus').click();
+          const n = ANIMATIONS.filter(a => a.category === c).length;
+          if (cartes() !== n) incompletes.push(c + ' : ' + cartes() + '/' + n);
+        }
+        return {
+          badges: [document.querySelectorAll('#badgeList .badge-card').length, badgeDefs.length],
+          takeovers: [document.querySelectorAll('#takeoverList .takeover').length, takeoverDefs.length],
+          avant, apres, manquantes: categories.filter(c => !options.includes(c)), incompletes,
+          source: document.getElementById('animSource').innerText };`);
+      for (const nom of ['badges', 'takeovers']) {
+        const [rendus, table] = r[nom];
         verifier(table > 0 && rendus === table, `${nom} : ${rendus} rendus sur ${table}`);
       }
+      verifier(r.avant === 60 && r.apres === 120, `pagination des animations : ${r.avant} puis ${r.apres} cartes`);
+      verifier(!r.manquantes.length, 'catégories absentes du filtre : ' + r.manquantes.join(', '));
+      verifier(!r.incompletes.length, 'catégories incomplètes : ' + r.incompletes.join(', '));
+      verifier(/NBA2KLab/.test(r.source) && /LockerCodes/.test(r.source), `sources non citées : « ${r.source} »`);
+    });
+
+    await test('les animations équipées dans le jeu sont accessibles avec ce build', async () => {
+      const code = Buffer.from(JSON.stringify(BUILD_JEU), 'utf8').toString('base64');
+      await nav.ouvrir(`${base}/?build=${encodeURIComponent(code)}`);
+      const r = await nav.evaluer(`
+        const R = ratings(), H = heightInches(), jeu = ANIMATIONS.filter(a => a.jeu);
+        const kyrie = ANIMATIONS.find(a => a.category === 'Spin Jumper' && a.name === 'Kyrie Irving');
+        return { n: jeu.length, H,
+          bloquees: jeu.filter(a => !animationAccessible(a, R, H)).map(a => a.category + ' / ' + a.name + ' ' + JSON.stringify(animationManques(a, R))),
+          kyrie: kyrie && animationAccessible(kyrie, R, H), kyrieReq: kyrie && kyrie.req };`);
+      verifier(r.n > 0, 'aucune animation marquée comme confirmée en jeu');
+      verifier(!r.bloquees.length, 'animations équipées en jeu déclarées bloquées :\n' + r.bloquees.join('\n'));
+      // 88 à mi-distance, 94 à 3 pts : le jeu accepte ce Spin Jumper à 90.
+      verifier(r.kyrie, `Spin Jumper Kyrie Irving ${JSON.stringify(r.kyrieReq)} refusé : la règle « mi-distance OU 3 pts » n’est pas appliquée`);
+      sansErreur('builder avec la nouvelle base d’animations');
     });
 
     await test('chaque badge porte son nom français et son nom officiel du jeu', async () => {
@@ -401,13 +474,7 @@ async function testsNavigateur(base) {
     // Build réel du jeu (GNR 96, arrière 1,91 m) : le site le déclarait
     // « budget dépassé de 20 » et le notait « 70 — B+ », comme une note du jeu.
     await test('un vrai build du jeu n’est ni jugé sur un budget inventé, ni noté comme dans le jeu', async () => {
-      const build = { position: 'SG', height: 75, weight: 185, wing: 78, style: 'Équilibré', hand: 'Droite',
-        attrs: { 'Close Shot': 48, 'Driving Layup': 53, 'Driving Dunk': 94, 'Standing Dunk': 38, 'Post Control': 42,
-                 'Mid-Range': 88, 'Three-Point': 94, 'Free Throw': 77, 'Pass Accuracy': 75, 'Ball Handle': 86,
-                 'Speed With Ball': 77, 'Interior Defense': 44, 'Perimeter Defense': 91, 'Steal': 84, 'Block': 45,
-                 'Offensive Rebound': 27, 'Defensive Rebound': 51, 'Speed': 87, 'Agility': 85, 'Strength': 52,
-                 'Vertical': 80, 'Stamina': 94 } };
-      const code = Buffer.from(JSON.stringify(build), 'utf8').toString('base64');
+      const code = Buffer.from(JSON.stringify(BUILD_JEU), 'utf8').toString('base64');
       await nav.ouvrir(`${base}/?build=${encodeURIComponent(code)}`);
       sansErreur('chargement d’un build du jeu');
       const r = await nav.evaluer(`

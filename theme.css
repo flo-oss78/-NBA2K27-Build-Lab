@@ -921,6 +921,15 @@ input[type=range]:focus-visible::-moz-range-thumb{box-shadow:var(--ring)}
 .req.fail{color:var(--red);background:rgba(242,69,107,.08);border-color:rgba(242,69,107,.22)}
 .missing{margin-top:7px;font-size:11.5px;color:var(--amber)}
 .anim-card>small{display:block;margin-top:7px;font-size:11px;color:var(--dim)}
+.anim-meta i{font-style:normal;opacity:.7}
+.anim-resultats{margin:-4px 0 8px;font-size:11.5px;color:var(--dim)}
+.anim-sources{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.anim-source{font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;border:1px solid var(--line-soft);color:var(--dim)}
+.anim-source.ok{color:var(--green);border-color:rgba(34,224,138,.3)}
+.anim-source.conflit{color:var(--amber);border-color:rgba(255,190,50,.35)}
+.anim-source.jeu{color:var(--cyan);border-color:rgba(34,211,238,.35)}
+.anim-note{margin-top:6px;font-size:11px;color:var(--amber)}
+.anim-plus{width:100%;margin-top:10px}
 
 /* ---------- 19. Cap breakers ---------- */
 .breaker-list{display:grid;gap:7px;max-height:520px;overflow-y:auto;padding-right:4px}

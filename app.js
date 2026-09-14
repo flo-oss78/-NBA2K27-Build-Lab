@@ -209,11 +209,60 @@ function renderBreakers(r){if(!document.getElementById("breakerList"))return; /*
  const total=inputs.reduce((s,x)=>s+ +(getBreaker(x.dataset.name)||0),0);
  document.getElementById('breakerTotal').textContent=total;
 }
-function renderAnimations(){if(!document.getElementById("animationList"))return; /* section absente de cette page */const r=ratings(),h=heightInches(),cat=document.getElementById('animCategory').value,status=document.getElementById('animStatus').value,search=document.getElementById('animSearch').value.toLowerCase().trim();let all=ANIMATIONS.filter(a=>(cat==='all'||a.category===cat)&&(!search||a.name.toLowerCase().includes(search)||a.category.toLowerCase().includes(search))),unlocked=0,list=document.getElementById('animationList');list.innerHTML='';all.forEach(a=>{const heightOK=h>=a.minH&&h<=a.maxH,fails=Object.entries(a.req).filter(([k,v])=>(r[k]??0)<v),ok=heightOK&&!fails.length;if(ok)unlocked++;if(status==='yes'&&!ok||status==='no'&&ok)return;const reqHtml=Object.entries(a.req).map(([k,v])=>`<span class="req ${r[k]>=v?'pass':'fail'}">${k}: ${r[k]??0}/${v}</span>`).join('');list.insertAdjacentHTML('beforeend',`<article class="anim-card ${ok?'ok':''}"><div class="anim-top"><div class="anim-name">${a.name}</div><span class="anim-badge">${ok?'✓ ACCESSIBLE':'🔒 BLOQUÉE'}</span></div><div class="anim-meta">${a.category} • ${heightText(a.minH)} – ${heightText(a.maxH)}</div><div class="reqs">${reqHtml||'<span class="req pass">Aucun attribut requis</span>'}</div>${!heightOK?`<div class="missing">Taille requise : ${heightText(a.minH)} à ${heightText(a.maxH)}.</div>`:''}${fails.length?`<div class="missing">Il manque : ${fails.map(([k,v])=>`${k} ${v-(r[k]??0)} pts`).join(' • ')}</div>`:''}<small>${ok?'Équipable avec ce build.':'Modifie le build pour débloquer cette animation.'}</small></article>`)});texte('animUnlocked',unlocked);texte('animTotal',ANIMATIONS.length)}
+/* ---------- Animations (page Référence) ----------
+   Plus de 2 500 animations : on n'affiche que ANIM_PAGE cartes à la fois. */
+const ANIM_PAGE=60; let animLimite=ANIM_PAGE;
+const ANIM_SOURCE_LIBELLE={2:['ok','✓ 2 sources','Mêmes exigences chez NBA2KLab et LockerCodes'],1:['seule','NBA2KLab seul','Pas de ligne correspondante chez LockerCodes'],0:['conflit','⚠ Sources en désaccord','NBA2KLab et LockerCodes diffèrent : valeur NBA2KLab affichée']};
+function remplirCategoriesAnimations(sel){
+ if(!sel||sel.dataset.rempli)return; sel.dataset.rempli='1';
+ const groupes=new Map(); ANIMATIONS.forEach(a=>{if(!groupes.has(a.group))groupes.set(a.group,new Set());groupes.get(a.group).add(a.category)});
+ const libelle=c=>{const fr=nomCategorieAnimation(c);return fr===c?c:`${fr} (${c})`};
+ sel.innerHTML='<option value="all">Toutes les catégories</option>'+[...groupes].map(([g,cats])=>
+  `<optgroup label="${escapeHTML(g)}">${[...cats].sort((x,y)=>libelle(x).localeCompare(libelle(y),'fr')).map(c=>`<option value="${escapeHTML(c)}">${escapeHTML(libelle(c))}</option>`).join('')}</optgroup>`).join('');
+}
+function renderSourceAnimations(){
+ const el=document.getElementById('animSource'); if(!el||el.dataset.rempli||typeof ANIMATIONS_SOURCE==='undefined')return; el.dataset.rempli='1';
+ const s=ANIMATIONS_SOURCE, [lab,lc]=s.sources;
+ el.innerHTML=`📚 <b>${s.total.toLocaleString('fr-FR')} animations</b> — source <a href="${escapeHTML(lab.url)}" target="_blank" rel="noopener">${escapeHTML(lab.nom)}</a> (${escapeHTML(lab.mention)}), recoupées ligne par ligne avec <a href="${escapeHTML(lc.url)}" target="_blank" rel="noopener">${escapeHTML(lc.nom)}</a> (${escapeHTML(lc.mention)}) : <b>${s.recoupees}</b> identiques, <b>${s.desaccords}</b> en désaccord, ${s.nba2klabSeul} sans équivalent. ${s.jeu.animations} animations sont en plus <b>confirmées en jeu</b> (${escapeHTML(s.jeu.build)}). ${escapeHTML(s.regleTir)} Données communautaires, pas une publication officielle 2K.`;
+}
+function carteAnimation(a,ok,r,h){
+ const heightOK=h>=a.minH&&h<=a.maxH, manques=animationManques(a,r), e=Object.entries(a.req||{});
+ const reqs=!e.length?'<span class="req pass">Aucun attribut requis</span>'
+  :a.ou&&e.length>1?`<span class="req ${manques.length?'fail':'pass'}">${e.map(([k,v])=>`${escapeHTML(k)} ${v}`).join(' ou ')} — toi : ${e.map(([k])=>r[k]??0).join(' / ')}</span>`
+  :e.map(([k,v])=>`<span class="req ${(r[k]??0)>=v?'pass':'fail'}">${escapeHTML(k)} : ${r[k]??0}/${v}</span>`).join('');
+ const [cls,txt,titre]=ANIM_SOURCE_LIBELLE[a.v]||ANIM_SOURCE_LIBELLE[1];
+ const cat=nomCategorieAnimation(a.category);
+ return `<article class="anim-card ${ok?'ok':''}"><div class="anim-top"><div class="anim-name">${escapeHTML(a.name)}</div><span class="anim-badge">${ok?'✓ ACCESSIBLE':'🔒 BLOQUÉE'}</span></div>`+
+  `<div class="anim-meta">${escapeHTML(cat)}${cat!==a.category?` <i>${escapeHTML(a.category)}</i>`:''} • ${heightText(a.minH)} – ${heightText(a.maxH)}</div>`+
+  `<div class="reqs">${reqs}</div>`+
+  `${!heightOK?`<div class="missing">Taille requise : ${heightText(a.minH)} à ${heightText(a.maxH)}.</div>`:''}`+
+  `${manques.length?`<div class="missing">Il manque : ${manques.map(([k,n])=>`${escapeHTML(k)} ${n} pts`).join(' • ')}</div>`:''}`+
+  `<div class="anim-sources"><span class="anim-source ${cls}" title="${escapeHTML(titre)}">${txt}</span>${a.jeu?'<span class="anim-source jeu" title="Équipée sur un vrai MyPLAYER dont les attributs respectent cette exigence">🎮 Confirmée en jeu</span>':''}</div>`+
+  `${a.note?`<div class="anim-note">${escapeHTML(a.note)}</div>`:''}</article>`;
+}
+function renderAnimations(){
+ texte('animTotal',ANIMATIONS.length); /* compteur du builder, même sans la liste */
+ const list=document.getElementById('animationList'); if(!list)return; /* section absente de cette page */
+ const sel=document.getElementById('animCategory'); remplirCategoriesAnimations(sel); renderSourceAnimations();
+ const r=ratings(),h=heightInches(),cat=sel.value,status=document.getElementById('animStatus').value,q=document.getElementById('animSearch').value.toLowerCase().trim();
+ let accessibles=0; const retenues=[];
+ for(const a of ANIMATIONS){
+  if(cat!=='all'&&a.category!==cat)continue;
+  if(q&&!(a.name.toLowerCase().includes(q)||a.category.toLowerCase().includes(q)||nomCategorieAnimation(a.category).toLowerCase().includes(q)))continue;
+  const ok=animationAccessible(a,r,h); if(ok)accessibles++;
+  if(status==='yes'&&!ok||status==='no'&&ok)continue;
+  retenues.push([a,ok]);
+ }
+ list.innerHTML=retenues.slice(0,animLimite).map(([a,ok])=>carteAnimation(a,ok,r,h)).join('')||'<div class="empty">Aucune animation dans ce filtre.</div>';
+ const reste=retenues.length-animLimite, plus=document.getElementById('animPlus');
+ if(plus){plus.hidden=reste<=0;plus.textContent=`Afficher ${Math.min(ANIM_PAGE,reste)} de plus (${reste} restantes)`}
+ texte('animResultats',`${retenues.length.toLocaleString('fr-FR')} résultat${retenues.length>1?'s':''}`);
+ texte('animUnlocked',accessibles);
+}
 function handValue(){return document.getElementById('dominantHand')?.value||'Droite'}
 function serialize(){let obj={position:position.value,height:height.value,weight:weight.value,wing:wing.value,style:style.value,hand:handValue(),attrs:Object.fromEntries(inputs.map(x=>[x.dataset.name,x.value]))};return btoa(unescape(encodeURIComponent(JSON.stringify(obj))))}
 function apply(obj){position.value=obj.position||'SF';height.value=obj.height||80;weight.value=obj.weight||210;wing.value=obj.wing||84;style.value=obj.style||'Équilibré';const handEl=document.getElementById('dominantHand');if(handEl&&obj.hand)handEl.value=obj.hand;update();if(obj.attrs)inputs.forEach(x=>{if(obj.attrs[x.dataset.name])x.value=Math.min(+obj.attrs[x.dataset.name],+x.max)});update()}
-inputs.forEach(x=>x.addEventListener('input',update));['position','height','weight','wing','style'].forEach(id=>document.getElementById(id)?.addEventListener('input',update));['animCategory','animStatus'].forEach(id=>document.getElementById(id)?.addEventListener('change',renderAnimations));document.getElementById('animSearch')?.addEventListener('input',renderAnimations);['badgeFilter'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>renderBadges(ratings())));document.getElementById('badgeSearch')?.addEventListener('input',()=>renderBadges(ratings()));
+inputs.forEach(x=>x.addEventListener('input',update));['position','height','weight','wing','style'].forEach(id=>document.getElementById(id)?.addEventListener('input',update));const animRefiltrer=()=>{animLimite=ANIM_PAGE;renderAnimations()};['animCategory','animStatus'].forEach(id=>document.getElementById(id)?.addEventListener('change',animRefiltrer));document.getElementById('animSearch')?.addEventListener('input',animRefiltrer);document.getElementById('animPlus')?.addEventListener('click',()=>{animLimite+=ANIM_PAGE;renderAnimations()});['badgeFilter'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>renderBadges(ratings())));document.getElementById('badgeSearch')?.addEventListener('input',()=>renderBadges(ratings()));
 
 /* Ces quatre boutons n'existent que sur la page du builder : liaisons protégées. */
 document.getElementById('reset')?.addEventListener('click',()=>{localStorage.removeItem('nba2k27_build');location.reload()});
@@ -245,8 +294,7 @@ function unlockedBadgeCount(r){
 function unlockedAnimationCount(r){
   const notes=r||ratings(), h=heightInches(); let n=0;
   for(const a of (window.ANIMATIONS||[])){
-    if(h<a.minH||h>a.maxH) continue;
-    if(Object.entries(a.req||{}).every(([k,v])=>(notes[k]??0)>=v)) n++;
+    if(animationAccessible(a,notes,h)) n++;
   }
   return n;
 }
