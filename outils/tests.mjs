@@ -118,6 +118,17 @@ async function testsStatiques() {
     for (const [, f] of sw.matchAll(/'\.\/([^']+)'/g)) if (!fs.existsSync(f)) absents.push(`${f} (listé mais absent du dossier)`);
     verifier(!absents.length, 'absents de la coquille : ' + absents.join(', '));
   });
+
+  await test('la page 404 existe, n’est pas indexable et ses liens mènent quelque part', () => {
+    verifier(fs.existsSync('404.html'), '404.html absent : Cloudflare servirait le builder en 200 sur toute adresse inconnue');
+    const html = fs.readFileSync('404.html', 'utf8');
+    verifier(/<meta name="robots" content="noindex">/.test(html), 'balise noindex absente');
+    const morts = [...html.matchAll(/(?:src|href)="(\/[^"#?]*)"/g)].map(m => m[1]).filter(ref => {
+      const cible = ref === '/' ? 'index.html' : ref.endsWith('/') ? ref.slice(1) + 'index.html' : ref.slice(1);
+      return !fs.existsSync(cible);
+    });
+    verifier(!morts.length, 'liens morts : ' + morts.join(', '));
+  });
 }
 
 /* ------------------------------------------------------------ serveur local */
@@ -429,6 +440,22 @@ async function testsNavigateur(base) {
 /* --------------------------------------------------------- tests production */
 async function testsProduction() {
   section('Production — le déploiement est-il bien en ligne ?');
+
+  await test('une adresse inconnue renvoie un vrai 404, avec la page d’erreur du site', async () => {
+    // Sans 404.html, Cloudflare Pages servait la page du builder avec un code 200 :
+    // chaque faute de frappe devenait une « page » indexable par les moteurs.
+    const attendu = fs.readFileSync('404.html');
+    const empreinte = b => crypto.createHash('sha256').update(b).digest('hex');
+    let r, corps;
+    for (let essai = 1; essai <= 12; essai++) {
+      r = await fetch(`${URL_PROD}/adresse-qui-n-existe-pas-${Date.now()}/`);
+      corps = Buffer.from(await r.arrayBuffer());
+      if (r.status === 404 && empreinte(corps) === empreinte(attendu)) break;
+      if (essai < 12) await pause(5000);
+    }
+    verifier(r.status === 404, `HTTP ${r.status} au lieu de 404`);
+    verifier(empreinte(corps) === empreinte(attendu), 'le 404 servi n’est pas la page 404.html de ce dossier');
+  });
 
   await test('la production sert exactement les fichiers de ce dossier', async () => {
     const fichiers = [...fs.readdirSync('.').filter(f => f.endsWith('.js') || f.endsWith('.css')),

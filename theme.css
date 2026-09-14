@@ -1396,6 +1396,10 @@ footer{
 
 /* Nom français d'un badge, suivi du nom officiel du jeu en plus petit. */
 .badge-fr{font-weight:800}
+
+/* Page 404 */
+.page-404{max-width:640px;margin:48px auto;display:flex;flex-direction:column;gap:10px}
+.page-404 .start-here-actions{margin-top:10px}
 .badge-en{display:block;font-size:.72em;font-weight:600;color:var(--dim);letter-spacing:.01em;margin-top:1px;white-space:normal}
 
 /* ---- Étiquettes de build ---- */
