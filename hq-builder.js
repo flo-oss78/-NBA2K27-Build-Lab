@@ -1,0 +1,243 @@
+/* NBA 2K27 Build Lab — Builder façon NBA 2K HQ
+   Surcouche d'ergonomie posée sur le builder, sans toucher au moteur :
+   - sélecteur de corps en roues (poste, taille, poids, envergure) ;
+   - en-tête du build (hexagone, nom, gabarit en mètres et kilos, budget) ;
+   - sous-onglets Attributs / Badges / Animations.
+   Les champs d'origine (#position, #height, #weight, #wing) restent la seule
+   source de vérité : une roue ne fait que changer leur valeur et émettre
+   l'événement « input » que app.js écoute déjà. L'en-tête ne calcule rien, il
+   recopie ce que app.js vient d'afficher. */
+(function(){
+  'use strict';
+
+  var $=function(id){return document.getElementById(id)};
+
+  /* L'en-tête du site change de hauteur entre mobile et ordinateur : les
+     sous-onglets collants s'alignent sur sa hauteur réelle. */
+  var enTete=document.querySelector('.reference-header');
+  function mesurerEnTete(){
+    if(enTete)document.documentElement.style.setProperty('--header-h',enTete.offsetHeight+'px');
+  }
+  mesurerEnTete();
+  window.addEventListener('resize',mesurerEnTete);
+
+  var builder=$('builder');
+  if(!builder||!$('height'))return;
+
+  /* ---- Unités du jeu en français ---- */
+  var POSTES={PG:['MJ','Meneur de jeu'],SG:['A','Arrière'],SF:['AI','Ailier'],PF:['AF','Ailier fort'],C:['P','Pivot']};
+  function virgule(n,d){return n.toFixed(d).replace('.',',')}
+  function metres(pouces){return virgule(pouces*0.0254,2)+' m'}
+  // Le jeu convertit les kilos en livres par kg × 2,2 arrondi : on refait le chemin inverse.
+  function kilos(lbs){return virgule(lbs/2.2,1)+' kg'}
+  function posteCourt(v){return (POSTES[v]||[v])[0]}
+  function posteLong(v){return (POSTES[v]||[v,v])[1]}
+
+  var ROUES=[
+    {cle:'position',nom:'Poste',texte:posteCourt,parole:posteLong,px:26},
+    {cle:'height',nom:'Taille',texte:metres,px:16},
+    {cle:'weight',nom:'Poids',texte:kilos,px:8},
+    {cle:'wing',nom:'Envergure',texte:metres,px:16}
+  ];
+
+  /* ---- Lecture et écriture des champs d'origine ---- */
+  function voisin(champ,pas){
+    if(champ.tagName==='SELECT'){
+      var i=champ.selectedIndex+pas;
+      return i>=0&&i<champ.options.length?champ.options[i].value:null;
+    }
+    var v=+champ.value+pas*(+champ.step||1);
+    return v>=+champ.min&&v<=+champ.max?v:null;
+  }
+
+  function deplacer(champ,n){
+    if(!n)return;
+    var avant=champ.value;
+    if(champ.tagName==='SELECT'){
+      champ.selectedIndex=Math.max(0,Math.min(champ.options.length-1,champ.selectedIndex+n));
+    }else{
+      champ.value=Math.max(+champ.min,Math.min(+champ.max,+champ.value+n*(+champ.step||1)));
+    }
+    if(champ.value===avant)return;
+    champ.dispatchEvent(new Event('input',{bubbles:true}));
+    champ.dispatchEvent(new Event('change',{bubbles:true}));
+    rafraichir();
+  }
+
+  function aller(champ,bout){
+    if(champ.tagName==='SELECT')deplacer(champ,bout<0?-champ.selectedIndex:champ.options.length-1-champ.selectedIndex);
+    else deplacer(champ,Math.round(((bout<0?+champ.min:+champ.max)-champ.value)/(+champ.step||1)));
+  }
+
+  /* ---- Roues ---- */
+  var zone=$('hqRoues');
+  if(zone){
+    zone.innerHTML=ROUES.map(function(r){
+      return '<div class="roue" data-roue="'+r.cle+'">'+
+        '<span class="roue-nom" id="roue-'+r.cle+'">'+r.nom+'</span>'+
+        '<div class="cadran" role="spinbutton" tabindex="0" aria-labelledby="roue-'+r.cle+'">'+
+          '<button type="button" class="roue-voisin" data-pas="-1" tabindex="-1" aria-hidden="true"></button>'+
+          '<strong></strong>'+
+          '<button type="button" class="roue-voisin" data-pas="1" tabindex="-1" aria-hidden="true"></button>'+
+        '</div></div>';
+    }).join('');
+
+    // Les curseurs d'origine sont masqués à l'écran : on les sort aussi de la
+    // tabulation pour ne pas faire passer deux fois par le même réglage.
+    ROUES.forEach(function(r){var c=$(r.cle);if(c)c.tabIndex=-1});
+
+    ROUES.forEach(function(r){
+      var roue=zone.querySelector('[data-roue="'+r.cle+'"]');
+      var cadran=roue.querySelector('.cadran');
+      var champ=$(r.cle);
+      if(!champ)return;
+
+      cadran.addEventListener('keydown',function(e){
+        var n={ArrowUp:1,ArrowRight:1,ArrowDown:-1,ArrowLeft:-1,PageUp:5,PageDown:-5}[e.key];
+        if(n){e.preventDefault();deplacer(champ,n);return}
+        if(e.key==='Home'||e.key==='End'){e.preventDefault();aller(champ,e.key==='Home'?-1:1)}
+      });
+
+      // Glisser vers le haut fait défiler vers les valeurs plus grandes, comme
+      // une liste qu'on pousse ; un simple appui sur une valeur voisine la choisit.
+      cadran.addEventListener('pointerdown',function(e){
+        if(e.button!==0)return;
+        var y0=e.clientY,faits=0,glisse=false;
+        var cible=e.target.closest('.roue-voisin');
+        cadran.classList.add('actif');
+        try{cadran.setPointerCapture(e.pointerId)}catch(err){}
+        function bouge(ev){
+          var dy=y0-ev.clientY;
+          if(Math.abs(dy)>5)glisse=true;
+          if(!glisse)return;
+          var n=Math.trunc(dy/r.px);
+          if(n!==faits){deplacer(champ,n-faits);faits=n}
+        }
+        function fin(){
+          cadran.removeEventListener('pointermove',bouge);
+          cadran.removeEventListener('pointerup',fin);
+          cadran.removeEventListener('pointercancel',fin);
+          cadran.classList.remove('actif');
+          if(!glisse&&cible&&!cible.disabled)deplacer(champ,+cible.dataset.pas);
+        }
+        cadran.addEventListener('pointermove',bouge);
+        cadran.addEventListener('pointerup',fin);
+        cadran.addEventListener('pointercancel',fin);
+      });
+
+      var cumul=0;
+      cadran.addEventListener('wheel',function(e){
+        e.preventDefault();
+        cumul+=e.deltaY;
+        if(Math.abs(cumul)<40)return;
+        deplacer(champ,cumul>0?1:-1);
+        cumul=0;
+      },{passive:false});
+    });
+  }
+
+  function texte(id){var el=$(id);return el?el.textContent.trim():''}
+  function ecrire(id,valeur){var el=$(id);if(el&&el.textContent!==valeur)el.textContent=valeur}
+
+  function rafraichir(){
+    if(zone)ROUES.forEach(function(r){
+      var champ=$(r.cle),roue=zone.querySelector('[data-roue="'+r.cle+'"]');
+      if(!champ||!roue)return;
+      var cadran=roue.querySelector('.cadran'),voisins=roue.querySelectorAll('.roue-voisin');
+      roue.querySelector('strong').textContent=r.texte(champ.value);
+      [-1,1].forEach(function(pas,i){
+        var v=voisin(champ,pas);
+        voisins[i].textContent=v===null?'':r.texte(v);
+        voisins[i].disabled=v===null;
+      });
+      if(champ.tagName==='SELECT'){
+        cadran.setAttribute('aria-valuemin',0);
+        cadran.setAttribute('aria-valuemax',champ.options.length-1);
+        cadran.setAttribute('aria-valuenow',champ.selectedIndex);
+      }else{
+        cadran.setAttribute('aria-valuemin',champ.min);
+        cadran.setAttribute('aria-valuemax',champ.max);
+        cadran.setAttribute('aria-valuenow',champ.value);
+      }
+      cadran.setAttribute('aria-valuetext',(r.parole||r.texte)(champ.value));
+    });
+
+    // En-tête du build
+    var pos=$('position'),h=$('height'),w=$('weight'),wing=$('wing');
+    ecrire('hqNote',texte('score')||'—');
+    ecrire('hqNom',texte('buildname')||'Mon build');
+    ecrire('hqPoste',pos?posteLong(pos.value):'');
+    ecrire('hqStyle',texte('selectedStyleName'));
+    if(h&&w&&wing)ecrire('hqGabarit',metres(+h.value)+' · '+kilos(+w.value)+' · envergure '+metres(+wing.value));
+
+    var budget=$('budgetEstime'),mini=$('hqBudget');
+    if(budget&&mini){
+      mini.hidden=budget.hidden;
+      if(!budget.hidden){
+        ecrire('hqBudgetValeur',texte('budgetEstimeValeur'));
+        ecrire('hqBudgetMarge',texte('budgetEstimeMarge'));
+        mini.classList.toggle('dessus',budget.classList.contains('dessus'));
+        [['budgetEstimeBarre','hqBudgetBarre'],['budgetEstimeZone','hqBudgetZone']].forEach(function(p){
+          var a=$(p[0]),b=$(p[1]);
+          if(a&&b&&b.style.cssText!==a.style.cssText)b.style.cssText=a.style.cssText;
+        });
+      }
+    }
+  }
+
+  /* app.js remet à jour le résumé à chaque recalcul (curseur, import, build
+     chargé depuis un lien…) : on se cale sur ces éléments plutôt que sur une
+     liste d'événements qu'il faudrait tenir à jour. */
+  var prevu=false;
+  function planifier(){
+    if(prevu)return;
+    prevu=true;
+    requestAnimationFrame(function(){prevu=false;rafraichir()});
+  }
+  if('MutationObserver' in window){
+    var obs=new MutationObserver(planifier);
+    ['buildMeta','score','buildname','selectedStyleName','budgetEstime','heightOut','weightOut','wingOut'].forEach(function(id){
+      var el=$(id);
+      if(el)obs.observe(el,{childList:true,characterData:true,subtree:true,attributes:true});
+    });
+  }
+  document.addEventListener('input',planifier,true);
+  document.addEventListener('change',planifier,true);
+  rafraichir();
+
+  /* ---- Boutons relais (en-tête, barre du corps) ---- */
+  builder.addEventListener('click',function(e){
+    var relais=e.target.closest('[data-hq-clic]');
+    if(!relais)return;
+    var cible=$(relais.dataset.hqClic);
+    if(cible)cible.click();
+  });
+
+  // « Voir tous les badges » visait une section qui vit désormais sur /reference/.
+  var tousBadges=$('viewAllStyleBadges');
+  if(tousBadges&&!$('badges'))tousBadges.addEventListener('click',function(){location.href='/reference/'});
+
+  /* ---- Sous-onglets ---- */
+  var onglets=[].slice.call(builder.querySelectorAll('.hq-onglets [role="tab"]'));
+  function ouvrir(nom,focus){
+    onglets.forEach(function(o){
+      var actif=o.dataset.onglet===nom;
+      o.setAttribute('aria-selected',String(actif));
+      o.tabIndex=actif?0:-1;
+      var panneau=$(o.getAttribute('aria-controls'));
+      if(panneau)panneau.hidden=!actif;
+      if(actif&&focus)o.focus();
+    });
+  }
+  onglets.forEach(function(o,i){
+    o.addEventListener('click',function(){ouvrir(o.dataset.onglet,false)});
+    o.addEventListener('keydown',function(e){
+      var j={ArrowRight:i+1,ArrowLeft:i-1,Home:0,End:onglets.length-1}[e.key];
+      if(j===undefined)return;
+      e.preventDefault();
+      ouvrir(onglets[(j+onglets.length)%onglets.length].dataset.onglet,true);
+    });
+  });
+
+  document.body.classList.add('avec-roues');
+})();

@@ -1,0 +1,10 @@
+Polices auto-hébergées (la CSP du site interdit Google Fonts : font-src 'self').
+
+- Barlow Condensed 600, 700, 800 — Copyright 2017 The Barlow Project Authors
+  (https://github.com/jpt/barlow)
+- Inter, axe de graisse 400 à 700 — Copyright 2016 The Inter Project Authors
+  (https://github.com/rsms/inter)
+
+Les deux familles sont distribuées sous SIL Open Font License 1.1 :
+https://openfontlicense.org
+Fichiers d'origine : Google Fonts, sous-ensemble latin (français compris).

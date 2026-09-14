@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#050A12">
+<meta name="theme-color" content="#060608">
 <meta name="color-scheme" content="dark">
 <meta name="description" content="Builder MyPLAYER NBA 2K27 : attributs, caps dynamiques, badges, Cap Breakers, validateur et fiche de build.">
 <title>NBA 2K27 Build Lab — Builder MyPLAYER</title>
@@ -12,7 +12,9 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="preload" href="/fonts/BarlowCondensed-800.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/theme.css">
+<link rel="stylesheet" href="/hq.css">
 
 <meta property="og:title" content="NBA 2K27 Build Lab — Builder MyPLAYER">
 <meta property="og:description" content="Builder MyPLAYER NBA 2K27 : attributs, caps dynamiques, badges, Cap Breakers, validateur et fiche de build.">
@@ -30,15 +32,15 @@
 
 <header class="reference-header">
   <div class="reference-brand">
-    <div>NBA <b>2K27</b></div>
-    <small>BUILD LAB</small>
+    <div>BUILD <b>LAB</b></div>
+    <small>NBA 2K27</small>
   </div>
   <nav class="reference-nav" aria-label="Navigation principale">
-    <a href="/" class="active" aria-current="page">Builder</a>
-    <a href="/trios/">Trios</a>
-    <a href="/hub/">Builds</a>
-    <a href="/reference/">Badges & animations</a>
-    <a href="/progression/" data-mode="expert">Progression</a>
+    <a href="/" class="active" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Builder</a>
+    <a href="/trios/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="3"/><circle cx="5" cy="11" r="2.4"/><circle cx="19" cy="11" r="2.4"/><path d="M7 20c.5-3.5 2.4-5.5 5-5.5s4.5 2 5 5.5M1.5 19c.4-2.2 1.6-3.5 3.5-3.5M22.5 19c-.4-2.2-1.6-3.5-3.5-3.5"/></svg>Trios</a>
+    <a href="/hub/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Builds</a>
+    <a href="/reference/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/></svg>Badges & animations</a>
+    <a href="/progression/" data-mode="expert"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h16M6 15l4-4 3 3 6-7"/></svg>Progression</a>
   </nav>
   <div class="mode-switch header-mode" role="group" aria-label="Niveau d'affichage">
     <button id="modeSimple" type="button" class="mode-btn" aria-pressed="true">Simple</button>
@@ -69,7 +71,7 @@
 </div>
 
 <!-- ============ BUILDER (écran principal) ============ -->
-<section id="builder" class="builder-exact" aria-label="Builder NBA 2K27">
+<section id="builder" class="builder-exact hq-builder" aria-label="Builder NBA 2K27">
 
   <div id="wizardBanner" class="wizard-banner" hidden>
     <div><b>Première fois ?</b><span>Réponds à 3 questions, on te propose 3 builds prêts à jouer.</span></div>
@@ -80,6 +82,29 @@
   </div>
 
   <div id="activeBlueprint" class="active-blueprint" hidden></div>
+
+  <!-- En-tête du build façon 2K HQ. Il ne calcule rien : hq-builder.js y
+       recopie ce que app.js affiche (moyenne, nom, gabarit, budget). -->
+  <div class="hq-tete">
+    <div class="hq-hexa" aria-hidden="true">
+      <svg viewBox="0 0 88 96"><path d="M44 3 84 25v46L44 93 4 71V25z"/></svg>
+      <div><b id="hqNote">—</b><small>Moyenne</small></div>
+    </div>
+    <div class="hq-tete-texte">
+      <p class="hq-surtitre"><span id="hqPoste">Meneur de jeu</span> · <span id="hqStyle">Slasher</span></p>
+      <h1 id="hqNom">Mon build</h1>
+      <p id="hqGabarit" class="hq-gabarit">—</p>
+      <div id="hqBudget" class="hq-budget" hidden>
+        <div class="hq-jauge" aria-hidden="true"><i id="hqBudgetZone"></i><em id="hqBudgetBarre"></em></div>
+        <span>Budget estimé <b id="hqBudgetValeur"></b> <small id="hqBudgetMarge"></small></span>
+      </div>
+    </div>
+    <div class="hq-tete-actions">
+      <button type="button" class="hq-pilule hq-pilule-forte" data-hq-clic="importJeuOuvrir">Importer mon build du jeu</button>
+      <button type="button" class="hq-pilule" data-hq-clic="share">Copier le lien</button>
+      <button type="button" class="hq-pilule" data-hq-clic="printCard">Fiche build</button>
+    </div>
+  </div>
 
   <div class="style-strip" role="tablist" aria-label="Styles de build">
     <button class="style-card" type="button" data-style-preset="Équilibré" role="tab" aria-selected="false">
@@ -130,42 +155,93 @@
   <div id="buildTagPreview" class="build-tag-preview" hidden></div>
 
   <div class="builder-exact-grid">
-    <div class="builder-left">
+
+    <div class="builder-centre">
+      <div class="hq-onglets" role="tablist" aria-label="Sections du build">
+        <button type="button" role="tab" id="ongletAttributs" data-onglet="attributs" aria-controls="panneauAttributs" aria-selected="true">Attributs</button>
+        <button type="button" role="tab" id="ongletBadges" data-onglet="badges" aria-controls="panneauBadges" aria-selected="false" tabindex="-1">Badges</button>
+        <button type="button" role="tab" id="ongletAnimations" data-onglet="animations" aria-controls="panneauAnimations" aria-selected="false" tabindex="-1">Animations</button>
+      </div>
+
+      <div id="panneauAttributs" class="hq-panneau" role="tabpanel" aria-labelledby="ongletAttributs">
+        <div class="panel exact-card attributes-exact-card">
+          <div class="exact-card-title">
+            <h2>Attributs <span id="selectedStyleAttrTitle">(optimisés Slasher)</span></h2>
+            <div class="attr-tools">
+              <button type="button" id="undoBtn" class="small-btn" aria-label="Annuler" title="Annuler (Ctrl+Z)" disabled>↶</button>
+              <button type="button" id="redoBtn" class="small-btn" aria-label="Rétablir" title="Rétablir (Ctrl+Maj+Z)" disabled>↷</button>
+              <span id="capStatus">0 / 22 au cap</span>
+            </div>
+          </div>
+          <div id="attributeGroups"></div>
+        </div>
+      </div>
+
+      <div id="panneauBadges" class="hq-panneau" role="tabpanel" aria-labelledby="ongletBadges" hidden>
+        <div class="panel exact-card badge-reco-card">
+          <div class="exact-card-title">
+            <h2>Meilleurs badges</h2>
+            <button class="view-all-btn" type="button" id="viewAllStyleBadges">Voir tous les badges</button>
+          </div>
+          <div id="styleBadgeRecommendations" class="style-badge-grid"></div>
+        </div>
+        <div class="panel exact-card takeover-reco-card">
+          <div class="exact-card-title"><h2>Takeovers conseillés</h2></div>
+          <div id="styleTakeoverRecommendations" class="style-takeover-grid"></div>
+        </div>
+      </div>
+
+      <div id="panneauAnimations" class="hq-panneau" role="tabpanel" aria-labelledby="ongletAnimations" hidden>
+        <div class="panel exact-card animation-reco-card">
+          <div class="exact-card-title"><h2>Animations recommandées</h2><span>Compatibles avec ce build</span></div>
+          <div id="styleAnimationRecommendations" class="style-animation-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="builder-left" aria-label="Corps du joueur et résumé">
 
       <div class="panel exact-card body-card">
-        <div class="exact-card-title"><h2>1. Corps du joueur</h2><span>Caps dynamiques</span></div>
+        <div class="exact-card-title"><h2>Corps du joueur</h2><span>Plafonds selon le gabarit</span></div>
 
-        <label for="position">Poste
+        <!-- Sélecteur en roues (hq-builder.js). Sur mobile, cette barre reste
+             fixée en bas de l'écran, comme dans 2K HQ. -->
+        <div class="hq-barre-corps">
+          <div id="hqRoues" class="hq-roues"></div>
+          <button type="button" class="hq-enregistrer" data-hq-clic="save">Enregistrer le build</button>
+        </div>
+
+        <!-- Champs d'origine : masqués à l'écran, ils restent la source de vérité du moteur. -->
+        <label for="position" class="hq-cache">Poste
           <select id="position">
             <option selected>PG</option><option>SG</option><option>SF</option><option>PF</option><option>C</option>
           </select>
         </label>
 
-        <label for="height">Taille <output id="heightOut" for="height">6'6" (198 cm)</output>
+        <label for="height" class="hq-cache">Taille <output id="heightOut" for="height">6'6" (198 cm)</output>
           <input id="height" type="range" min="69" max="88" value="78" step="1">
-          <span class="range-scale" aria-hidden="true"><i>5'9"</i><i>7'4"</i></span>
         </label>
 
-        <label for="weight">Poids <output id="weightOut" for="weight">180 lbs (82 kg)</output>
+        <label for="weight" class="hq-cache">Poids <output id="weightOut" for="weight">180 lbs (82 kg)</output>
           <input id="weight" type="range" min="140" max="300" value="180" step="1">
-          <span class="range-scale" aria-hidden="true"><i>140 lbs</i><i>300 lbs</i></span>
         </label>
 
-        <label for="wing">Envergure <output id="wingOut" for="wing">6'10" (208 cm)</output>
+        <label for="wing" class="hq-cache">Envergure <output id="wingOut" for="wing">6'10" (208 cm)</output>
           <input id="wing" type="range" min="69" max="96" value="82" step="1">
-          <span class="range-scale" aria-hidden="true"><i>5'9"</i><i>8'0"</i></span>
         </label>
 
-        <label for="dominantHand">Main forte
-          <select id="dominantHand"><option value="Droite" selected>Droite</option><option value="Gauche">Gauche</option></select>
-        </label>
+        <div class="hq-selects">
+          <label for="dominantHand">Main forte
+            <select id="dominantHand"><option value="Droite" selected>Droite</option><option value="Gauche">Gauche</option></select>
+          </label>
 
-        <label for="style">Archétype
-          <select id="style">
-            <option>Équilibré</option><option>Shooter</option><option selected>Slasher</option>
-            <option>Playmaker</option><option>Lockdown</option><option>Big</option>
-          </select>
-        </label>
+          <label for="style">Archétype
+            <select id="style">
+              <option>Équilibré</option><option>Shooter</option><option selected>Slasher</option>
+              <option>Playmaker</option><option>Lockdown</option><option>Big</option>
+            </select>
+          </label>
+        </div>
 
         <div class="exact-hint" id="bodyHint">Les dimensions modifient les plafonds d'attributs. Les caps affichés simulent le builder 2K27&nbsp;: modèle indicatif, non officiel.</div>
 
@@ -180,14 +256,6 @@
           <button id="share" type="button" class="secondary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>Copier le lien</button>
           <button id="printCard" type="button" class="secondary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>Fiche build</button>
         </div>
-      </div>
-
-      <div class="panel exact-card badge-reco-card">
-        <div class="exact-card-title">
-          <h2>3. Meilleurs badges</h2>
-          <button class="view-all-btn" type="button" id="viewAllStyleBadges">Voir tous les badges</button>
-        </div>
-        <div id="styleBadgeRecommendations" class="style-badge-grid"></div>
       </div>
 
       <div class="panel exact-card summary-card">
@@ -219,21 +287,9 @@
         </div>
       </div>
 
-    </div>
+    </aside>
 
     <div class="builder-right">
-
-      <div class="panel exact-card attributes-exact-card">
-        <div class="exact-card-title">
-          <h2>2. Attributs <span id="selectedStyleAttrTitle">(optimisés Slasher)</span></h2>
-          <div class="attr-tools">
-            <button type="button" id="undoBtn" class="small-btn" aria-label="Annuler" title="Annuler (Ctrl+Z)" disabled>↶</button>
-            <button type="button" id="redoBtn" class="small-btn" aria-label="Rétablir" title="Rétablir (Ctrl+Maj+Z)" disabled>↷</button>
-            <span id="capStatus">0 / 22 au cap</span>
-          </div>
-        </div>
-        <div id="attributeGroups"></div>
-      </div>
 
       <!-- Budget ESTIMÉ sur des builds réels : la règle exacte du jeu n'est pas publique. -->
       <div id="budgetEstime" class="panel exact-card budget-estime" hidden>
@@ -247,16 +303,6 @@
         <div class="exact-card-title"><h2>Builds réels proches</h2><span>même poste, taille ±1</span></div>
         <p id="buildsSource" class="data-note"></p>
         <div id="buildsProches" class="builds-proches"></div>
-      </div>
-
-      <div class="panel exact-card animation-reco-card">
-        <div class="exact-card-title"><h2>4. Animations recommandées</h2><span>Compatibles avec ce build</span></div>
-        <div id="styleAnimationRecommendations" class="style-animation-list"></div>
-      </div>
-
-      <div class="panel exact-card takeover-reco-card">
-        <div class="exact-card-title"><h2>5. Takeovers conseillés</h2></div>
-        <div id="styleTakeoverRecommendations" class="style-takeover-grid"></div>
       </div>
 
     </div>
@@ -545,5 +591,6 @@
 <script src="/build-sheet.js"></script>
 <script src="/community.js"></script>
 <script src="/ui.js"></script>
+<script src="/hq-builder.js"></script>
 </body>
 </html>

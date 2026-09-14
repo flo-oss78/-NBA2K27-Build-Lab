@@ -1,0 +1,378 @@
+/* =============================================================
+   NBA 2K27 BUILD LAB — THÈME « HQ »
+   Chargé après theme.css sur toutes les pages. Il redéfinit les tokens
+   (noir, rouge, turquoise), les polices, l'en-tête et la navigation, puis
+   restructure l'écran du builder (hq-builder.js).
+   Inspiré de l'ergonomie de l'app NBA 2K HQ ; aucun visuel de 2K n'est repris.
+   ============================================================= */
+
+/* ---------- 1. Polices auto-hébergées (la CSP interdit Google Fonts) ---------- */
+@font-face{font-family:"Barlow Condensed";font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/BarlowCondensed-600.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/BarlowCondensed-700.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-style:normal;font-weight:800;font-display:swap;src:url(/fonts/BarlowCondensed-800.woff2) format("woff2")}
+@font-face{font-family:"Inter";font-style:normal;font-weight:400 700;font-display:swap;src:url(/fonts/Inter-400-700.woff2) format("woff2")}
+
+/* ---------- 2. Tokens ---------- */
+:root{
+  --bg:#060608;
+  --bg-2:#0A0A0D;
+  --panel:#111115;
+  --panel-2:#18181D;
+  --field:#0D0D11;
+  --line:#27272F;
+  --line-soft:#1D1D24;
+
+  --text:#F2F2F4;
+  --muted:#A5A5B0;
+  --dim:#7A7A86;
+
+  --blue:#E0192E;
+  --blue-deep:#A80F20;
+  --cyan:#19E6C1;
+  --rouge:#E0192E;
+  --rouge-2:#FF3B4E;
+  --turquoise:#19E6C1;
+
+  --r:14px;
+  --ring:0 0 0 3px rgba(255,59,78,.4);
+  --maxw:1440px;
+  --header-h:56px;
+
+  --titre:"Barlow Condensed","Arial Narrow","Roboto Condensed",system-ui,sans-serif;
+}
+@media (min-width:760px){:root{--header-h:62px}}
+
+body{
+  font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:
+    radial-gradient(120% 60% at 50% -10%,rgba(160,14,30,.42),transparent 60%),
+    radial-gradient(80% 50% at 100% 100%,rgba(120,10,24,.24),transparent 60%),
+    var(--bg);
+  background-attachment:fixed;
+}
+a{color:var(--turquoise)}
+:focus-visible{outline-color:var(--rouge-2)}
+
+h1,h2,h3{font-family:var(--titre);font-weight:800;letter-spacing:.02em;text-transform:uppercase;line-height:1.05}
+h1{font-size:clamp(30px,6.4vw,48px)}
+h2{font-size:clamp(20px,3.8vw,26px)}
+h3{font-size:17px}
+.eyebrow{color:var(--rouge-2);font-family:var(--titre);font-size:13px;font-weight:700;letter-spacing:.16em}
+
+/* ---------- 3. Contrôles ---------- */
+button{border-radius:10px}
+button:hover{background:#202027;border-color:#34343E}
+button:active{background:#141418}
+input:focus,select:focus,textarea:focus{border-color:var(--rouge-2)}
+.panel{background:rgba(17,17,21,.86);border-color:var(--line)}
+.pill{border-radius:999px}
+
+/* Bouton principal : pilule rouge */
+#save,#optimize,.start-here-actions .primary,.cta,#pwaInstallBtn,#pwaUpdateBtn,.hq-enregistrer{
+  background:linear-gradient(180deg,var(--rouge-2),var(--rouge));
+  border:0;border-radius:999px;color:#fff;
+  font-family:var(--titre);font-weight:800;font-size:17px;letter-spacing:.05em;text-transform:uppercase;
+  box-shadow:0 6px 22px rgba(224,25,46,.32);
+}
+#save:hover,#optimize:hover,.start-here-actions .primary:hover,.cta:hover,#pwaInstallBtn:hover,#pwaUpdateBtn:hover,.hq-enregistrer:hover{
+  background:linear-gradient(180deg,var(--rouge-2),var(--rouge));filter:brightness(1.08);
+}
+.mode-switch{background:rgba(255,255,255,.04);border-color:var(--line)}
+.mode-btn{border-radius:999px}
+.mode-btn.active,.mode-btn.active:hover{background:#fff;color:#0A0A0D}
+
+/* ---------- 4. En-tête et navigation ---------- */
+.reference-header{
+  background:rgba(6,6,8,.9);
+  border-bottom-color:var(--line);
+  grid-template-columns:auto minmax(0,1fr) auto auto;
+  grid-template-areas:"brand nav mode actions";
+  gap:8px 16px;
+  padding:9px 18px;
+  padding-top:calc(9px + env(safe-area-inset-top));
+}
+.reference-brand>div{font-family:var(--titre);font-weight:800;font-size:23px;letter-spacing:.03em;text-transform:uppercase}
+.reference-brand>div b{color:var(--rouge-2)}
+.reference-brand small{margin-top:2px;font-size:9.5px;letter-spacing:.32em}
+.header-mode{grid-area:mode;margin-left:0}
+.reference-actions>span{border-radius:999px;background:transparent}
+
+.reference-nav{gap:2px;margin:0;padding:0;align-items:center;overflow:visible}
+.reference-nav a{
+  display:flex;align-items:center;gap:7px;
+  font-family:var(--titre);font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase;
+  padding:8px 12px;border-radius:8px;color:var(--muted);
+}
+.reference-nav a svg{display:none;width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.reference-nav a:hover{color:#fff;background:rgba(255,255,255,.04)}
+.reference-nav a.active{color:#fff;background:rgba(255,255,255,.07)}
+.reference-nav a.active::after{left:12px;right:12px;bottom:-10px;height:3px;background:var(--rouge-2);box-shadow:0 0 10px rgba(255,59,78,.6)}
+
+/* Mobile : barre d'onglets fixée en bas, comme dans l'app */
+@media (max-width:979.98px){
+  .reference-header{
+    grid-template-columns:minmax(0,1fr) auto auto;
+    grid-template-areas:"brand mode actions";
+    padding:8px 12px;padding-top:calc(8px + env(safe-area-inset-top));
+    /* backdrop-filter créerait un bloc conteneur : la barre du bas, fixée,
+       se collerait à l'en-tête au lieu du bas de l'écran. */
+    backdrop-filter:none;-webkit-backdrop-filter:none;
+    background:rgba(6,6,8,.97);
+  }
+  .reference-brand>div{font-size:20px}
+  #referenceVersion{display:none}
+  .mode-btn{min-height:32px;padding:4px 11px;font-size:12px}
+  .reference-actions button{min-height:34px;width:34px}
+
+  .reference-nav{
+    position:fixed;left:0;right:0;bottom:0;z-index:960;
+    display:flex;gap:0;align-items:stretch;
+    height:calc(62px + env(safe-area-inset-bottom));
+    padding:0 0 env(safe-area-inset-bottom);
+    background:#0A0A0D;border-top:1px solid var(--line);
+  }
+  .reference-nav a{
+    flex:1 1 0;min-width:0;flex-direction:column;justify-content:center;gap:3px;
+    padding:6px 2px;border-radius:0;
+    font-family:"Inter",system-ui,sans-serif;font-size:10px;font-weight:600;letter-spacing:0;text-transform:none;
+    text-align:center;white-space:normal;line-height:1.15;
+  }
+  .reference-nav a svg{display:block}
+  .reference-nav a:hover,.reference-nav a.active{background:none}
+  .reference-nav a.active svg{stroke:var(--rouge-2)}
+  .reference-nav a.active::after{top:0;bottom:auto;left:28%;right:28%;height:3px;border-radius:0 0 3px 3px}
+
+  body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+  .pwa-install{bottom:calc(72px + env(safe-area-inset-bottom))}
+}
+
+/* ---------- 5. Bandeau « Par où commencer » ---------- */
+.start-here{background:linear-gradient(90deg,rgba(224,25,46,.14),rgba(17,17,21,.86) 60%);border-color:var(--line);border-left:3px solid var(--rouge-2)}
+.start-here b{font-family:var(--titre);font-size:19px;letter-spacing:.03em;text-transform:uppercase}
+.start-here-actions a,.start-here-actions button{border-radius:999px;background:rgba(255,255,255,.05)}
+.start-here-actions .primary{font-size:15px;min-height:40px}
+
+/* =============================================================
+   6. BUILDER
+   ============================================================= */
+.hq-builder{gap:16px}
+.hq-builder .exact-card-title h2{font-size:21px}
+.hq-builder .exact-card-title h2 span{font-family:"Inter",system-ui,sans-serif;text-transform:none;letter-spacing:0;font-size:13px}
+
+/* 6.1 En-tête du build */
+.hq-tete{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px 16px;align-items:center;padding:4px 0 0}
+.hq-hexa{position:relative;width:86px;height:94px;display:grid;place-items:center;text-align:center}
+.hq-hexa svg{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 0 14px rgba(25,230,193,.5))}
+.hq-hexa path{fill:rgba(8,38,34,.9);stroke:var(--turquoise);stroke-width:3}
+.hq-hexa div{position:relative}
+.hq-hexa b{display:block;font-family:var(--titre);font-weight:800;font-size:38px;line-height:1;color:var(--turquoise)}
+.hq-hexa small{display:block;margin-top:1px;font-family:var(--titre);font-weight:700;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#CFFFF6}
+.hq-surtitre{font-family:var(--titre);font-weight:700;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--rouge-2)}
+.hq-tete h1{margin-top:2px;font-size:clamp(28px,6vw,44px);overflow-wrap:anywhere}
+.hq-gabarit{margin-top:4px;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.hq-budget{margin-top:9px;max-width:440px}
+.hq-jauge{position:relative;height:6px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden}
+.hq-jauge i{position:absolute;top:0;bottom:0;background:rgba(25,230,193,.2)}
+.hq-jauge em{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:linear-gradient(90deg,#128C77,var(--turquoise))}
+.hq-budget.dessus .hq-jauge em{background:linear-gradient(90deg,var(--amber),var(--rouge-2))}
+.hq-budget>span{display:block;margin-top:5px;font-size:12px;color:var(--muted)}
+.hq-budget b{color:#fff}
+.hq-budget.dessus b{color:var(--amber)}
+.hq-tete-actions{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px}
+.hq-pilule{min-height:36px;padding:6px 15px;border-radius:999px;font-size:12.5px;font-weight:650;background:rgba(255,255,255,.05);border:1px solid var(--line)}
+.hq-pilule-forte{border-color:rgba(25,230,193,.45);color:#BFFBEF}
+
+/* 6.2 Styles en pastilles défilantes */
+.hq-builder .style-strip{
+  display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;
+  margin:0 -14px;padding:2px 14px;
+}
+.hq-builder .style-strip::-webkit-scrollbar{display:none}
+.hq-builder .style-card{
+  flex:none;display:flex;align-items:center;gap:7px;
+  min-height:40px;padding:6px 15px 6px 11px;border-radius:999px;
+  background:rgba(255,255,255,.04);border-color:var(--line);text-align:left;
+}
+.hq-builder .style-card small{display:none}
+.hq-builder .style-card .style-icon{height:auto}
+.hq-builder .style-card .style-icon svg{width:19px;height:19px}
+.hq-builder .style-card strong{font-family:var(--titre);font-size:16px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.hq-builder .style-card[aria-selected="true"],.hq-builder .style-card.active{
+  border-color:var(--rouge-2);background:rgba(224,25,46,.18);box-shadow:none;
+}
+.hq-builder .style-card.active .style-icon{color:var(--rouge-2)}
+.hq-builder .selected-style-panel{display:block;padding:0;border:0;background:none}
+.hq-builder .style-kicker,.hq-builder .selected-style-title,.hq-builder .style-checks,.hq-builder .change-style-btn{display:none}
+.hq-builder .selected-style-copy>p{font-size:13px;color:var(--muted)}
+
+/* 6.3 Grille : centre (onglets), corps + résumé, budget + builds réels */
+.hq-builder .builder-exact-grid{display:flex;flex-direction:column;gap:16px}
+.builder-centre{display:grid;gap:14px;min-width:0;order:1}
+.hq-builder .builder-right{order:2}
+.hq-builder .builder-left{order:3}
+.hq-panneau{display:grid;gap:14px}
+.hq-panneau[hidden]{display:none}
+
+/* 6.4 Sous-onglets */
+.hq-onglets{
+  position:sticky;top:var(--header-h);z-index:50;
+  display:flex;justify-content:center;gap:2px;
+  margin:0 -14px;padding:0 14px;
+  background:rgba(6,6,8,.94);border-bottom:1px solid var(--line);
+}
+.hq-onglets button{
+  position:relative;min-height:48px;padding:10px 16px;
+  background:none;border:0;border-radius:0;
+  font-family:var(--titre);font-weight:700;font-size:18px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);
+}
+.hq-onglets button:hover{background:none;color:#fff}
+.hq-onglets button[aria-selected="true"]{color:#fff}
+.hq-onglets button[aria-selected="true"]::after{
+  content:"";position:absolute;left:12px;right:12px;bottom:-1px;height:3px;border-radius:3px;
+  background:#fff;box-shadow:0 0 12px rgba(255,255,255,.55);
+}
+
+/* 6.5 Attributs en rangées façon HQ */
+.hq-builder .attributes-exact-card{background:none;border:0;padding:0}
+.hq-builder .attr-tools{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.hq-builder #attributeGroups{gap:14px}
+.hq-builder .attr-group{
+  --c:var(--cat-finish);
+  gap:0;overflow:hidden;
+  background:rgba(17,17,21,.86);border:1px solid var(--line);border-radius:var(--r);
+}
+.hq-builder .group-shoot{--c:var(--cat-shoot)}
+.hq-builder .group-play{--c:var(--cat-play)}
+.hq-builder .group-defense{--c:var(--cat-defense)}
+.hq-builder .group-rebound{--c:var(--cat-rebound)}
+.hq-builder .group-physical{--c:var(--cat-physical)}
+.hq-builder .group-head{
+  margin:0;padding:9px 14px;border-bottom:1px solid var(--line);
+  background:linear-gradient(90deg,rgba(255,255,255,.07),transparent 72%);
+  background:linear-gradient(90deg,color-mix(in srgb,var(--c) 42%,transparent),transparent 72%);
+}
+.hq-builder .group-icon{background:rgba(0,0,0,.28);color:#fff}
+.hq-builder .group-head h3{font-size:19px;letter-spacing:.06em}
+.hq-builder .group-avg{font-family:var(--titre);font-size:24px;font-weight:800;color:#fff}
+body:not(.mode-expert) .hq-builder .group-head small{display:none}
+
+.hq-builder .attr{padding:9px 14px 7px;border-bottom:1px dashed rgba(255,255,255,.06)}
+.hq-builder .attr:last-child{border-bottom:0}
+.hq-builder .attr-name>span{font-size:12.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--text)}
+.hq-builder .attr-name small{color:var(--dim)}
+.hq-builder .attr-controls{gap:5px}
+.hq-builder .attr-step{
+  width:32px;height:32px;min-height:32px;border:0;border-radius:8px;
+  background:rgba(255,255,255,.07);color:#fff;
+}
+.hq-builder .attr-step:hover{background:rgba(255,255,255,.15)}
+.hq-builder .attr-rating{font-family:var(--titre);font-weight:800;font-size:25px;min-width:32px;color:#fff}
+.hq-builder .attr input[type=range]{height:18px;margin-top:2px}
+.hq-builder .attr input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px}
+.hq-builder .attr input[type=range]::-moz-range-track{height:6px;border-radius:3px}
+.hq-builder .attr input[type=range]::-webkit-slider-thumb{width:16px;height:16px;margin-top:-5px;border:0;background:#fff;box-shadow:0 0 0 3px rgba(0,0,0,.45)}
+.hq-builder .attr input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;background:#fff;box-shadow:0 0 0 3px rgba(0,0,0,.45)}
+body:not(.mode-expert) .hq-builder .attr .thresholds{display:none}
+
+/* 6.6 Corps du joueur : roues */
+.hq-roues{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.roue{min-width:0;text-align:center}
+.roue-nom{display:block;margin-bottom:4px;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.cadran{
+  display:grid;padding:2px 0;border-radius:10px;
+  background:rgba(255,255,255,.05);border:1px solid transparent;
+  touch-action:none;user-select:none;-webkit-user-select:none;cursor:ns-resize;
+}
+.cadran:focus-visible,.cadran.actif{outline:none;border-color:#fff;background:rgba(255,255,255,.1)}
+.cadran strong{font-family:var(--titre);font-weight:800;font-size:21px;line-height:1.2;white-space:nowrap}
+.roue-voisin{
+  min-height:0;height:21px;padding:0;border:0;border-radius:0;background:none;
+  font-size:11px;font-weight:500;color:var(--dim);white-space:nowrap;overflow:hidden;cursor:inherit;
+}
+.roue-voisin:hover{background:none;color:var(--text)}
+.roue-voisin:disabled{opacity:1;cursor:inherit}
+.hq-enregistrer{display:none}
+.body-card .hq-cache{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.hq-barre-corps{margin-bottom:16px}
+.hq-selects{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hq-selects label{margin-bottom:14px}
+
+@media (max-width:979.98px){
+  .hq-barre-corps{
+    position:fixed;left:0;right:0;z-index:955;margin:0;
+    bottom:calc(62px + env(safe-area-inset-bottom));
+    padding:7px 12px 9px;
+    background:linear-gradient(180deg,rgba(14,14,17,.95),rgba(6,6,8,.99));
+    border-top:1px solid var(--line);
+    box-shadow:0 -10px 30px rgba(0,0,0,.5);
+  }
+  .hq-roues{max-width:640px;margin:0 auto}
+  .roue-nom{margin-bottom:2px;font-size:9.5px}
+  .roue-voisin{height:17px;font-size:10.5px}
+  .cadran strong{font-size:19px}
+  .hq-enregistrer{display:block;width:100%;max-width:420px;min-height:40px;margin:7px auto 0;font-size:16px}
+  body.avec-roues{padding-bottom:calc(212px + env(safe-area-inset-bottom))}
+  body.avec-roues .pwa-install{bottom:calc(218px + env(safe-area-inset-bottom))}
+}
+
+/* 6.7 Résumé, budget, builds réels */
+.hq-builder .summary-ring{background:conic-gradient(var(--turquoise) 0 var(--score-pct,76%),rgba(255,255,255,.07) var(--score-pct,76%) 100%)}
+.hq-builder .summary-ring strong,.hq-builder .summary-counts b{font-family:var(--titre);font-weight:800;font-size:26px}
+.hq-builder .summary-head b{font-family:var(--titre);font-size:20px;letter-spacing:.03em;text-transform:uppercase}
+.hq-builder .budget-jauge em{background:linear-gradient(90deg,#128C77,var(--turquoise))}
+.hq-builder .budget-estime .exact-card-title>span b{font-family:var(--titre);font-size:24px}
+.hq-builder .build-reel{background:rgba(255,255,255,.03);border-color:var(--line-soft)}
+.hq-builder .build-reel-tete b{font-family:var(--titre);font-size:17px;letter-spacing:.03em;text-transform:uppercase}
+.hq-builder .style-animation-item{background:rgba(255,255,255,.03)}
+.hq-builder .style-animation-item span{text-transform:uppercase;font-size:12px}
+
+/* 6.8 Grands écrans */
+@media (min-width:980px){
+  .hq-builder .builder-exact-grid{
+    display:grid;align-items:start;gap:18px;
+    grid-template-columns:300px minmax(0,1fr);
+    grid-template-areas:"gauche centre" "gauche droite";
+  }
+  .hq-builder .builder-left{grid-area:gauche}
+  .builder-centre{grid-area:centre}
+  .hq-builder .builder-right{grid-area:droite}
+  .hq-onglets{justify-content:flex-start;margin:0;padding:0}
+  .hq-roues{grid-template-columns:1fr 1fr}
+  .hq-tete{grid-template-columns:auto minmax(0,1fr) auto}
+  .hq-tete-actions{grid-column:auto;justify-content:flex-end;max-width:330px}
+  .hq-builder .style-strip{margin:0;padding:2px 0}
+}
+@media (min-width:1280px){
+  .hq-builder .builder-exact-grid{
+    grid-template-columns:280px minmax(0,1fr) 330px;
+    grid-template-areas:"gauche centre droite";
+  }
+}
+@media (min-width:1440px){
+  .hq-builder #attributeGroups{grid-template-columns:1fr 1fr;align-items:start}
+}
+
+/* ---------- 7. Restes de l'ancien thème bleu ---------- */
+#startWizard,#shareCopy,#dnaRun,#addCurrentBuild{
+  background:linear-gradient(180deg,var(--rouge-2),var(--rouge));
+  border:0;border-radius:999px;color:#fff;font-weight:800;
+}
+#startWizard:hover,#shareCopy:hover,#dnaRun:hover,#addCurrentBuild:hover{
+  background:linear-gradient(180deg,var(--rouge-2),var(--rouge));filter:brightness(1.08);
+}
+.budget-jauge em,.pp-bar em{background:linear-gradient(90deg,#128C77,var(--turquoise))}
+.pp-level{background:linear-gradient(160deg,#128C77,var(--turquoise));color:#03140F}
+
+/* Le bandeau « Par où commencer » propose déjà l'assistant en mode Simple :
+   on n'affiche pas une seconde invitation juste en dessous. */
+body:not(.mode-expert) #wizardBanner{display:none}
+
+/* Actions du build : Sauvegarder en pleine largeur, les trois autres en
+   petites tuiles, lisibles même dans la colonne étroite de gauche. */
+.hq-builder .exact-actions{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.hq-builder .exact-actions #save{grid-column:1/-1}
+.hq-builder .exact-actions button.secondary{
+  flex-direction:column;gap:4px;min-height:58px;padding:7px 4px;
+  font-size:11.5px;line-height:1.2;text-align:center;
+}
