@@ -51,7 +51,11 @@ if not "%AVANCE%"=="0" echo  Attention : %AVANCE% commit^(s^) pas encore pousse^
 
 echo.
 echo [3/4] Deploiement sur Cloudflare Pages
-call "%NPX%" wrangler pages deploy . --project-name=nba2k27-build-lab --commit-dirty=true
+rem --yes : npx installe sans demander confirmation une nouvelle version de
+rem wrangler (sinon le script s'arrete sur « Ok to proceed? (y) »).
+rem wrangler@4 : version explicite, pour que npx ignore une installation
+rem globale de wrangler incomplete (AppData\Roaming\npm) qui plante au lancement.
+call "%NPX%" --yes wrangler@4 pages deploy . --project-name=nba2k27-build-lab --commit-dirty=true
 if errorlevel 1 goto deploiement_ko
 
 echo.
