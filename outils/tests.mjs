@@ -673,10 +673,13 @@ async function testsNavigateur(base) {
         const validation = el('validationStatus').textContent;
         const corps = [el('position').value, +el('height').value, +el('weight').value, +el('wing').value];
         // Corps des Signature Blueprints : les plafonds publiés sont exacts, chaque curseur doit s'y arrêter.
+        // Exception : un plafond relevé dans le jeu prime (Clamps, défense extérieure 95 dans le jeu, 96 publié).
+        const releves = ${JSON.stringify(Object.fromEntries(JSON.parse(fs.readFileSync(path.join(RACINE, 'donnees', 'caps-2khq.json'), 'utf8')).corps.map(c => [c.h + '|' + c.w + '|' + c.wing, c.caps])))};
         const plafondsFaux = [];
         for (const b of BUILDS_REELS.filter(b => b[0] === 'bp' && b[7])) {
           apply({ position: b[1], height: b[2], weight: b[3], wing: b[4], style: el('style').value, attrs: {} });
-          curseurs().forEach((x, i) => { if (+x.max !== b[7][i]) plafondsFaux.push(b[5] + ' / ' + BUILDS_ATTRIBUTS[i] + ' : ' + x.max + ' au lieu de ' + b[7][i]); });
+          const attendus = releves[b[2] + '|' + b[3] + '|' + b[4]] || b[7];
+          curseurs().forEach((x, i) => { if (+x.max !== attendus[i]) plafondsFaux.push(b[5] + ' / ' + BUILDS_ATTRIBUTS[i] + ' : ' + x.max + ' au lieu de ' + attendus[i]); });
         }
         return { attendu, corps, lu, validation, plafondsFaux };`);
       const [, pos, h, w, wing, nom, v] = r.attendu;
@@ -750,14 +753,15 @@ async function testsNavigateur(base) {
         res.deduit.caps = BUILDS_ATTRIBUTS.every(a => +document.getElementById('cap'+a.replace(/[^a-z0-9]/gi,'')).textContent.slice(4) >= attendus[a]);
         // Corps approximatif : taille sans modèle, corps non relevé.
         let approx = null;
-        for (const p of POSTES) for (const [h,b] of Object.entries(CORPS_LEGAUX[p])) { if (approx || CAPS_MODELES[h]) continue; for (let w=b[0]; w<=b[1] && !approx; w++) for (let e=b[2]; e<=b[3] && !approx; e++) { const c = CAPS_CORPS[h+'|'+w+'|'+e]; if (!c || c[0]!==1) approx = [p,+h,w,e]; } }
-        res.approx = await regler(...approx);
+        for (const p of POSTES) for (const [h,b] of Object.entries(CORPS_LEGAUX[p])) { if (approx) continue; for (let w=b[0]; w<=b[1] && !approx; w++) for (let e=b[2]; e<=b[3] && !approx; e++) { const c = CAPS_CORPS[h+'|'+w+'|'+e]; if ((!c || c[0]!==1) && !capsDeduits(+h,w,e)) approx = [p,+h,w,e]; } }
+        // Quand chaque corps autorisé est relevé ou estimé, il n'y a plus de cas approximatif à tester.
+        res.approx = approx ? await regler(...approx) : null;
         return res;`);
       verifier(r.exact.niveau === 'exact' && /exacts du jeu/.test(r.exact.texte), `corps relevé ${r.exact.corps} (appliqué ${r.exact.corpsApplique}) affiché « ${r.exact.texte} »`);
       verifier(r.exact.caps, `plafonds exacts non repris pour ${r.exact.corps}`);
       verifier(r.deduit.niveau === 'deduit' && /estimés à partir de corps relevés — [0-9]/.test(r.deduit.texte), `corps déduit ${r.deduit.corps} (appliqué ${r.deduit.corpsApplique}) affiché « ${r.deduit.texte} »`);
       verifier(r.deduit.caps, `plafonds déduits non appliqués pour ${r.deduit.corps}`);
-      verifier(r.approx.niveau === 'approx' && /approximatifs/.test(r.approx.texte), `corps sans relevé ${r.approx.corps} (appliqué ${r.approx.corpsApplique}) affiché « ${r.approx.texte} »`);
+      if (r.approx) verifier(r.approx.niveau === 'approx' && /approximatifs/.test(r.approx.texte), `corps sans relevé ${r.approx.corps} (appliqué ${r.approx.corpsApplique}) affiché « ${r.approx.texte} »`);
       sansErreur('indicateur de fiabilité des plafonds');
     });
 
