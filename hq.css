@@ -628,6 +628,10 @@ body:not(.mode-expert) #wizardBanner{display:none}
 .discipline-card>div:first-child{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .discipline-card>div:first-child span{font-variant-numeric:tabular-nums;color:var(--muted)}
 
+/* Build intelligence : « Stephen Curry98% » — nom et ressemblance séparés. */
+.v15-player-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;min-width:0}
+.v15-player-top span{flex:none;font-weight:800;color:var(--turquoise);font-variant-numeric:tabular-nums}
+
 /* Page « Mon build » (/mon-build/) */
 .hq-page-monbuild{gap:16px}
 .hq-page-monbuild .section-title h2{font-size:24px}
