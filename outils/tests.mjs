@@ -522,6 +522,27 @@ async function testsNavigateur(base) {
       sansErreur('mention des exigences non confirmées');
     });
 
+    // Le builder « Créer » rouvre le dernier build ; « Repartir de zéro » (?nouveau=1) repart d'un build vierge.
+    await test('le builder rouvre le dernier build, et « Repartir de zéro » repart d’un build vierge', async () => {
+      const code = Buffer.from(JSON.stringify(BUILD_JEU), 'utf8').toString('base64');
+      await nav.ouvrir(`${base}/?build=${encodeURIComponent(code)}`);
+      const attendu = await nav.evaluer(`return { corps: [position.value, +height.value, +weight.value, +wing.value],
+        notes: Object.fromEntries(inputs.map(x => [x.dataset.name, +x.value])) };`);
+      await nav.ouvrir(base + '/');
+      sansErreur('réouverture du dernier build');
+      const r = await nav.evaluer(`return { corps: [position.value, +height.value, +weight.value, +wing.value],
+        notes: Object.fromEntries(inputs.map(x => [x.dataset.name, +x.value])),
+        bandeau: !!document.getElementById('buildRouvert').offsetParent };`);
+      verifier(JSON.stringify(r.corps) === JSON.stringify(attendu.corps), `corps rouvert ${r.corps} au lieu de ${attendu.corps}`);
+      const ecarts = Object.keys(attendu.notes).filter(k => attendu.notes[k] !== r.notes[k]);
+      verifier(!ecarts.length, 'notes modifiées à la réouverture : ' + ecarts.join(', '));
+      verifier(r.bandeau, 'rien ne signale que le dernier build a été rouvert');
+      await nav.ouvrir(base + '/?nouveau=1');
+      const v = await nav.evaluer(`return { position: position.value, bandeau: !!document.getElementById('buildRouvert').offsetParent };`);
+      verifier(v.position !== attendu.corps[0] && !v.bandeau, `« Repartir de zéro » : poste ${v.position}, bandeau visible ${v.bandeau}`);
+      sansErreur('repartir de zéro');
+    });
+
     await test('/reference/ rend chaque badge et takeover, et donne accès à chaque animation', async () => {
       await nav.ouvrir(base + '/reference/');
       const r = await nav.evaluer(`

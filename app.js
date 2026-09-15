@@ -377,10 +377,16 @@ document.querySelectorAll('[data-close-modal]').forEach(el=>el.addEventListener(
    en espaces par l'URL : on les restaure pour que ces liens fonctionnent aussi. */
 function buildDepuisURL(){const q=new URLSearchParams(location.search).get('build');return q?q.replace(/ /g,'+'):null}
 const codeURL=buildDepuisURL();
-// Page « Mon build » : le moteur caché reprend le build en cours au lieu des valeurs par défaut.
-const ctxMonBuild=!codeURL&&document.getElementById('moteurBuild')?lireContexte():null;
+// Sans lien de partage, le builder et la page « Mon build » rouvrent le build en cours
+// au lieu des valeurs par défaut. Dans le builder, ?nouveau=1 repart d'un build vierge.
+// (Au chargement, style-presets.js n'affiche que le style : il ne réécrit pas les attributs.)
+const nouveauBuild=/[?&]nouveau=1(&|$)/.test(location.search);
+const ctxMonBuild=BUILDER_PRESENT&&!codeURL&&!nouveauBuild?lireContexte():null;
 if(codeURL){try{apply(JSON.parse(decodeURIComponent(escape(atob(codeURL)))))}catch(e){update()}}
-else if(ctxMonBuild)apply({position:ctxMonBuild.position,height:ctxMonBuild.height,weight:ctxMonBuild.weight,wing:ctxMonBuild.wing,style:ctxMonBuild.style,hand:ctxMonBuild.hand,attrs:ctxMonBuild.attrs});
+else if(ctxMonBuild){
+  apply({position:ctxMonBuild.position,height:ctxMonBuild.height,weight:ctxMonBuild.weight,wing:ctxMonBuild.wing,style:ctxMonBuild.style,hand:ctxMonBuild.hand,attrs:ctxMonBuild.attrs});
+  const rouvert=document.getElementById('buildRouvert'); if(rouvert)rouvert.hidden=false;
+}
 else update();
 
 

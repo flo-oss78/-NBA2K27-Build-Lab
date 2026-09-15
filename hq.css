@@ -381,6 +381,11 @@ body:not(.mode-expert) .hq-builder .attr .thresholds{display:none}
 .hq-builder .builder-exact-grid[class]{display:block;width:100%;max-width:980px;margin:0 auto}
 .hq-builder #attributeGroups{grid-template-columns:minmax(0,1fr)}
 body:not(.mode-expert) .hq-builder .hq-tete-actions{display:none}
+/* « Ton dernier build a été rouvert » : [hidden] explicite, display:flex passerait par-dessus. */
+.build-rouvert{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;margin:0;font-size:13px;color:var(--muted)}
+.build-rouvert[hidden]{display:none}
+.build-rouvert a{color:var(--turquoise);font-weight:700;text-decoration:none}
+.build-rouvert a:hover{text-decoration:underline}
 
 .hq-etapes{justify-content:flex-start;overflow-x:auto;scrollbar-width:none;scroll-behavior:smooth}
 .hq-etapes::-webkit-scrollbar{display:none}
