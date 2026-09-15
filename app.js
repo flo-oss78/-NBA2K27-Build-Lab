@@ -22,9 +22,15 @@ if(BUILDER_PRESENT)Object.entries(data).forEach(([group,arr])=>{const ui=CATEGOR
    et n'existent pas sur les autres pages : leur écriture ne doit pas planter. */
 function texte(id,v){const el=document.getElementById(id);if(el)el.textContent=v}
 const CTX_KEY='nba2k27_ctx_v1';
+// touche:false = build par défaut jamais modifié : ce n'est le build de personne.
+// Les contextes enregistrés avant ce drapeau (sans « touche ») restent de vrais builds.
 function lireContexte(){
-  try{const c=JSON.parse(localStorage.getItem(CTX_KEY)||'null');return c&&c.attrs?c:null}catch(e){return null}
+  try{const c=JSON.parse(localStorage.getItem(CTX_KEY)||'null');return c&&c.attrs&&c.touche!==false?c:null}catch(e){return null}
 }
+/* Le build devient le tien quand tu ouvres un lien de build, que tu reprends ton build
+   en cours, ou que tu modifies quelque chose (voir plus bas). « Repartir de zéro » le remet à zéro. */
+let buildTouche=!/[?&]nouveau=1(&|$)/.test(location.search)&&(/[?&]build=/.test(location.search)||!!lireContexte());
+let chargementFini=false;
 /* Page « Mon build » sans build en cours : le moteur caché y tourne sur les
    valeurs par défaut, qu'il ne doit pas faire passer pour le build de quelqu'un. */
 const MON_BUILD_VIDE=!!document.getElementById('moteurBuild')&&!lireContexte();
@@ -43,7 +49,8 @@ function ecrireContexte(){
       score:+document.getElementById('score')?.textContent||0,
       badges:unlockedBadgeCount(),
       animations:unlockedAnimationCount(),
-      capBreakers:breakerTotalValue()
+      capBreakers:breakerTotalValue(),
+      touche:buildTouche
     }));
   }catch(e){/* stockage plein ou refusé : sans conséquence */}
 }
@@ -361,8 +368,15 @@ function renderAnimations(){
 }
 function handValue(){return document.getElementById('dominantHand')?.value||'Droite'}
 function serialize(){let obj={position:position.value,height:height.value,weight:weight.value,wing:wing.value,style:style.value,hand:handValue(),attrs:Object.fromEntries(inputs.map(x=>[x.dataset.name,x.value]))};return btoa(unescape(encodeURIComponent(JSON.stringify(obj))))}
-function apply(obj){position.value=obj.position||'SF';height.value=obj.height||80;weight.value=obj.weight||210;wing.value=obj.wing||84;style.value=obj.style||'Équilibré';const handEl=document.getElementById('dominantHand');if(handEl&&obj.hand)handEl.value=obj.hand;update();if(obj.attrs)inputs.forEach(x=>{if(obj.attrs[x.dataset.name])x.value=Math.min(+obj.attrs[x.dataset.name],+x.max)});update()}
+function apply(obj){if(chargementFini)buildTouche=true;position.value=obj.position||'SF';height.value=obj.height||80;weight.value=obj.weight||210;wing.value=obj.wing||84;style.value=obj.style||'Équilibré';const handEl=document.getElementById('dominantHand');if(handEl&&obj.hand)handEl.value=obj.hand;update();if(obj.attrs)inputs.forEach(x=>{if(obj.attrs[x.dataset.name])x.value=Math.min(+obj.attrs[x.dataset.name],+x.max)});update()}
 inputs.forEach(x=>x.addEventListener('input',update));['position','height','weight','wing','style'].forEach(id=>document.getElementById(id)?.addEventListener('input',update));const animRefiltrer=()=>{animLimite=ANIM_PAGE;renderAnimations()};['animCategory','animStatus'].forEach(id=>document.getElementById(id)?.addEventListener('change',animRefiltrer));document.getElementById('animSearch')?.addEventListener('input',animRefiltrer);document.getElementById('animPlus')?.addEventListener('click',()=>{animLimite+=ANIM_PAGE;renderAnimations()});document.getElementById('animGroupes')?.addEventListener('click',e=>{const b=e.target.closest('[data-groupe]');if(!b||b===e.currentTarget)return;e.currentTarget.dataset.groupe=b.dataset.groupe;const s=document.getElementById('animCategory');if(s)s.value='all';animLimite=ANIM_PAGE;renderAnimations()});['badgeFilter'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>renderBadges(ratings())));document.getElementById('badgeCats')?.addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b||!e.currentTarget.contains(b)||b===e.currentTarget)return;e.currentTarget.dataset.cat=b.dataset.cat;renderBadges(ratings())});document.getElementById('badgeSearch')?.addEventListener('input',()=>renderBadges(ratings()));
+
+/* Un geste réel sur le corps, les attributs, le style ou l'import rend le build « touché ». */
+if(BUILDER_PRESENT){
+  const ZONES_BUILD='.hq-roues,#attributeGroups,.style-strip,.hq-selects,#optimize,#buildModal,#load,#resetStylePreset';
+  const toucher=e=>{if(!e.isTrusted||buildTouche||!e.target.closest||!e.target.closest(ZONES_BUILD))return;buildTouche=true;ecrireContexte()};
+  ['input','change','pointerdown','keydown','wheel'].forEach(t=>document.addEventListener(t,toucher,{capture:true,passive:true}));
+}
 
 /* Ces quatre boutons n'existent que sur la page du builder : liaisons protégées. */
 document.getElementById('reset')?.addEventListener('click',()=>{localStorage.removeItem('nba2k27_build');location.reload()});
@@ -533,3 +547,5 @@ if(!BUILDER_PRESENT){
   renderAnimations();
 }
 // Les onglets du hub (community.js) redemandent un rendu de la liste.
+// Chargement terminé : tout apply() suivant vient d'un geste (charger, importer…).
+chargementFini=true;

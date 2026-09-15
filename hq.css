@@ -212,10 +212,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--rouge-2)}
 
 /* 6.3 Grille : centre (onglets), corps + résumé, budget + builds réels */
 .hq-builder .builder-exact-grid{display:flex;flex-direction:column;gap:16px}
-.builder-centre{display:grid;gap:14px;min-width:0;order:1}
+/* minmax(0,1fr) : sans colonne imposée, la grille prenait la largeur de son contenu
+   le plus large (roues du corps, bande des styles) et la page s'élargissait à 772 px
+   sur un téléphone de 375 px. */
+.builder-centre{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;min-width:0;order:1}
 .hq-builder .builder-right{order:2}
 .hq-builder .builder-left{order:3}
-.hq-panneau{display:grid;gap:14px}
+.hq-panneau{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+.hq-panneau>*{min-width:0}
 .hq-panneau[hidden]{display:none}
 
 /* 6.4 Sous-onglets */

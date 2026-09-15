@@ -166,6 +166,14 @@
     var isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.MSStream;
     var standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone;
     var dismissed=localStorage.getItem(DISMISS)==='1';
+    // Une visite = une session du navigateur. Dès la 1re, le bandeau couvrait le bas
+    // de l'écran avant même que le visiteur découvre le site : on attend la 2e.
+    var visites=0;
+    try{
+      visites=+(localStorage.getItem('nba2k27_visites')||0);
+      if(!sessionStorage.getItem('nba2k27_session')){visites++;localStorage.setItem('nba2k27_visites',String(visites));sessionStorage.setItem('nba2k27_session','1')}
+    }catch(e){}
+    if(visites<2)dismissed=true;
 
     if(box&&isIOS&&!standalone&&!dismissed&&txt&&btn){
       txt.textContent='Sur iPhone : Partager, puis « Sur l’écran d’accueil » pour installer Build Lab.';

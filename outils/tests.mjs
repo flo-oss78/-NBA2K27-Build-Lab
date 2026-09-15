@@ -526,6 +526,13 @@ async function testsNavigateur(base) {
 
     // Le builder « Créer » rouvre le dernier build ; « Repartir de zéro » (?nouveau=1) repart d'un build vierge.
     await test('le builder rouvre le dernier build, et « Repartir de zéro » repart d’un build vierge', async () => {
+      // Visiteur qui n'a rien modifié : aucun build « rouvert », aucun build en cours.
+      await nav.ouvrir(base + '/');
+      await nav.evaluer(`localStorage.removeItem('nba2k27_ctx_v1');`);
+      await nav.ouvrir(base + '/');
+      await nav.ouvrir(base + '/');
+      const vierge = await nav.evaluer(`return { bandeau: !!document.getElementById('buildRouvert').offsetParent, ctx: lireContexte() };`);
+      verifier(!vierge.bandeau && vierge.ctx === null, `visiteur sans build : bandeau ${vierge.bandeau}, build en cours ${JSON.stringify(vierge.ctx)}`);
       const code = Buffer.from(JSON.stringify(BUILD_JEU), 'utf8').toString('base64');
       await nav.ouvrir(`${base}/?build=${encodeURIComponent(code)}`);
       const attendu = await nav.evaluer(`return { corps: [position.value, +height.value, +weight.value, +wing.value],
@@ -994,7 +1001,7 @@ async function testsNavigateur(base) {
             if (erreurs.length) problemes.push(`${nomEcran} ${mode} ${p.chemin} : ${erreurs[0].texte}`);
             const r = await nav.evaluer(`
               document.documentElement.style.scrollBehavior = 'auto';
-              const W = innerWidth, trouve = [];
+              const W = ${largeur}, trouve = [];
               const defile = e => { for (let x = e.parentElement; x; x = x.parentElement) {
                 const o = getComputedStyle(x).overflowX; if (o === 'auto' || o === 'scroll' || o === 'hidden') return true; } return false; };
               const fixe = e => { for (let x = e; x; x = x.parentElement) if (getComputedStyle(x).position === 'fixed') return true; return false; };
