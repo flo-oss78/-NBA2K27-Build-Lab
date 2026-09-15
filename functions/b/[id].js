@@ -18,7 +18,7 @@ const GROUPS=[
   ['Création',['Pass Accuracy','Ball Handle','Speed With Ball']],
   ['Défense',['Interior Defense','Perimeter Defense','Steal','Block']],
   ['Rebond',['Offensive Rebound','Defensive Rebound']],
-  ['Physique',['Speed','Agility','Strength','Vertical','Stamina']]
+  ['Physique',['Speed','Agility','Strength','Vertical']]
 ];
 
 export async function onRequestGet({params,env,request}){

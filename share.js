@@ -9,7 +9,10 @@
   var ATTRS=['Close Shot','Driving Layup','Driving Dunk','Standing Dunk','Post Control',
     'Mid-Range','Three-Point','Free Throw','Pass Accuracy','Ball Handle','Speed With Ball',
     'Interior Defense','Perimeter Defense','Steal','Block','Offensive Rebound','Defensive Rebound',
-    'Speed','Agility','Strength','Vertical','Stamina'];
+    'Speed','Agility','Strength','Vertical',
+    // L'endurance n'existe pas dans NBA 2K27 : sa case reste dans le code pour que
+    // les codes déjà partagés se relisent. Elle vaut 25 et n'est jamais appliquée.
+    'Stamina'];
   var POS=['PG','SG','SF','PF','C'];
   var STYLES=['Équilibré','Shooter','Slasher','Playmaker','Lockdown','Big'];
   var HANDS=['Droite','Gauche'];
@@ -98,7 +101,7 @@
       Création:['Pass Accuracy','Ball Handle','Speed With Ball'],
       Défense:['Interior Defense','Perimeter Defense','Steal','Block'],
       Rebond:['Offensive Rebound','Defensive Rebound'],
-      Physique:['Speed','Agility','Strength','Vertical','Stamina']
+      Physique:['Speed','Agility','Strength','Vertical']
     };
     var map={};
     (window.inputs||[]).forEach(function(x){map[x.dataset.name]=+x.value});

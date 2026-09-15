@@ -125,7 +125,7 @@
       Création:['Pass Accuracy','Ball Handle','Speed With Ball'],
       Défense:['Interior Defense','Perimeter Defense','Steal','Block'],
       Rebond:['Offensive Rebound','Defensive Rebound'],
-      Physique:['Speed','Agility','Strength','Vertical','Stamina']
+      Physique:['Speed','Agility','Strength','Vertical']
     };
     var allAbove=Object.keys(cats).every(function(g){
       var vals=cats[g].map(function(k){return r[k]||0});
@@ -277,7 +277,7 @@
     'Driving Dunk':'DNK','Standing Dunk':'SDNK','Post Control':'POST','Free Throw':'FT',
     'Pass Accuracy':'PASS','Ball Handle':'BALL','Speed With Ball':'SPWB','Interior Defense':'IDEF',
     'Perimeter Defense':'PDEF','Steal':'STL','Block':'BLK','Offensive Rebound':'OREB',
-    'Defensive Rebound':'DREB','Speed':'SPD','Agility':'AGI','Strength':'STR','Vertical':'VERT','Stamina':'STA'};
+    'Defensive Rebound':'DREB','Speed':'SPD','Agility':'AGI','Strength':'STR','Vertical':'VERT'};
   function shortAttr(k){return SHORT[k]||k.slice(0,4).toUpperCase()}
 
   /* ================= 5. Amorçage ================= */

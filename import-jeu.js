@@ -11,7 +11,7 @@
   if(!BUILDER_PRESENT)return;
 
   // Ordre et libellés de l'écran « Améliorations d'attribut » du jeu en français.
-  // L'endurance n'y figure pas : elle garde sa valeur dans le site.
+  // Ce sont les 21 attributs du builder : l'endurance n'existe pas dans NBA 2K27.
   const ATTRS_JEU=[
     ['Close Shot','Tirs de près'],['Driving Layup','Double-pas en pénétration'],['Driving Dunk','Dunk en pénétration'],
     ['Standing Dunk','Dunk sans élan'],['Post Control','Contrôle au poste'],
@@ -58,7 +58,7 @@
             <input name="max-${cle(k)}" type="number" inputmode="numeric" min="25" max="99" value="${valeur(k,'max')}" aria-label="${fr} : Max">
             <input name="act-${cle(k)}" type="number" inputmode="numeric" min="25" max="99" value="${valeur(k,'actuel')}" aria-label="${fr} : actuel"></div>`).join('')}
         </div>
-        <p class="ij-aide">Une valeur actuelle au-dessus du Max vient des brise-plafonds : ${BRISE_PLAFONDS_MAX} au plus par attribut. L’endurance n’apparaît pas sur cet écran, elle garde sa valeur.</p>
+        <p class="ij-aide">Une valeur actuelle au-dessus du Max vient des brise-plafonds : ${BRISE_PLAFONDS_MAX} au plus par attribut.</p>
         <div class="modal-actions"><button type="submit">Importer ce build</button><button type="button" class="secondary" data-ij-fermer>Annuler</button></div>
       </form>`;
   }

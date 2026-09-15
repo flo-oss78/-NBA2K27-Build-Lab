@@ -19,27 +19,27 @@
   var PRESETS={
     'Équilibré':{
       text:"Polyvalent, aucune faiblesse majeure, prêt à jouer dans plusieurs rôles.",
-      targets:{'Close Shot':78,'Driving Layup':84,'Driving Dunk':85,'Standing Dunk':45,'Post Control':55,'Mid-Range':52,'Three-Point':85,'Free Throw':76,'Pass Accuracy':82,'Ball Handle':84,'Speed With Ball':45,'Interior Defense':62,'Perimeter Defense':45,'Steal':45,'Block':45,'Offensive Rebound':52,'Defensive Rebound':66,'Speed':84,'Agility':84,'Strength':75,'Vertical':78,'Stamina':92}
+      targets:{'Close Shot':78,'Driving Layup':84,'Driving Dunk':85,'Standing Dunk':45,'Post Control':55,'Mid-Range':52,'Three-Point':85,'Free Throw':76,'Pass Accuracy':82,'Ball Handle':84,'Speed With Ball':45,'Interior Defense':62,'Perimeter Defense':45,'Steal':45,'Block':45,'Offensive Rebound':52,'Defensive Rebound':66,'Speed':84,'Agility':84,'Strength':75,'Vertical':78}
     },
     'Shooter':{
       text:"Tir à 3 points prioritaire, création secondaire et assez de mobilité pour rester dangereux.",
-      targets:{'Close Shot':74,'Driving Layup':78,'Driving Dunk':45,'Standing Dunk':45,'Post Control':45,'Mid-Range':88,'Three-Point':93,'Free Throw':82,'Pass Accuracy':78,'Ball Handle':86,'Speed With Ball':46,'Interior Defense':45,'Perimeter Defense':80,'Steal':74,'Block':45,'Offensive Rebound':45,'Defensive Rebound':58,'Speed':84,'Agility':84,'Strength':62,'Vertical':70,'Stamina':90}
+      targets:{'Close Shot':74,'Driving Layup':78,'Driving Dunk':45,'Standing Dunk':45,'Post Control':45,'Mid-Range':88,'Three-Point':93,'Free Throw':82,'Pass Accuracy':78,'Ball Handle':86,'Speed With Ball':46,'Interior Defense':45,'Perimeter Defense':80,'Steal':74,'Block':45,'Offensive Rebound':45,'Defensive Rebound':58,'Speed':84,'Agility':84,'Strength':62,'Vertical':70}
     },
     'Slasher':{
       text:"Attaque le cercle, finition élite, crée de l'espace et peut finir en force.",
-      targets:{'Close Shot':88,'Driving Layup':93,'Driving Dunk':94,'Standing Dunk':45,'Post Control':52,'Mid-Range':50,'Three-Point':45,'Free Throw':70,'Pass Accuracy':78,'Ball Handle':86,'Speed With Ball':88,'Interior Defense':60,'Perimeter Defense':45,'Steal':73,'Block':45,'Offensive Rebound':50,'Defensive Rebound':60,'Speed':45,'Agility':84,'Strength':73,'Vertical':85,'Stamina':90}
+      targets:{'Close Shot':88,'Driving Layup':93,'Driving Dunk':94,'Standing Dunk':45,'Post Control':52,'Mid-Range':50,'Three-Point':45,'Free Throw':70,'Pass Accuracy':78,'Ball Handle':86,'Speed With Ball':88,'Interior Defense':60,'Perimeter Defense':45,'Steal':73,'Block':45,'Offensive Rebound':50,'Defensive Rebound':60,'Speed':45,'Agility':84,'Strength':73,'Vertical':85}
     },
     'Playmaker':{
       text:"Création de jeu prioritaire : gros handle, vitesse balle en main et passe de haut niveau.",
-      targets:{'Close Shot':76,'Driving Layup':84,'Driving Dunk':45,'Standing Dunk':45,'Post Control':45,'Mid-Range':80,'Three-Point':45,'Free Throw':76,'Pass Accuracy':90,'Ball Handle':93,'Speed With Ball':88,'Interior Defense':45,'Perimeter Defense':59,'Steal':80,'Block':45,'Offensive Rebound':45,'Defensive Rebound':56,'Speed':90,'Agility':88,'Strength':62,'Vertical':74,'Stamina':92}
+      targets:{'Close Shot':76,'Driving Layup':84,'Driving Dunk':45,'Standing Dunk':45,'Post Control':45,'Mid-Range':80,'Three-Point':45,'Free Throw':76,'Pass Accuracy':90,'Ball Handle':93,'Speed With Ball':88,'Interior Defense':45,'Perimeter Defense':59,'Steal':80,'Block':45,'Offensive Rebound':45,'Defensive Rebound':56,'Speed':90,'Agility':88,'Strength':62,'Vertical':74}
     },
     'Lockdown':{
       text:"Défense extérieure prioritaire : interception, mobilité et résistance physique.",
-      targets:{'Close Shot':74,'Driving Layup':80,'Driving Dunk':82,'Standing Dunk':45,'Post Control':45,'Mid-Range':45,'Three-Point':45,'Free Throw':72,'Pass Accuracy':72,'Ball Handle':45,'Speed With Ball':45,'Interior Defense':70,'Perimeter Defense':92,'Steal':93,'Block':61,'Offensive Rebound':50,'Defensive Rebound':70,'Speed':88,'Agility':89,'Strength':82,'Vertical':74,'Stamina':92}
+      targets:{'Close Shot':74,'Driving Layup':80,'Driving Dunk':82,'Standing Dunk':45,'Post Control':45,'Mid-Range':45,'Three-Point':45,'Free Throw':72,'Pass Accuracy':72,'Ball Handle':45,'Speed With Ball':45,'Interior Defense':70,'Perimeter Defense':92,'Steal':93,'Block':61,'Offensive Rebound':50,'Defensive Rebound':70,'Speed':88,'Agility':89,'Strength':82,'Vertical':74}
     },
     'Big':{
       text:"Intérieur dominant : protection du cercle, rebond, force et finition près du panier.",
-      targets:{'Close Shot':88,'Driving Layup':70,'Driving Dunk':45,'Standing Dunk':90,'Post Control':85,'Mid-Range':66,'Three-Point':45,'Free Throw':66,'Pass Accuracy':66,'Ball Handle':45,'Speed With Ball':45,'Interior Defense':85,'Perimeter Defense':45,'Steal':52,'Block':93,'Offensive Rebound':82,'Defensive Rebound':90,'Speed':52,'Agility':66,'Strength':90,'Vertical':80,'Stamina':88}
+      targets:{'Close Shot':88,'Driving Layup':70,'Driving Dunk':45,'Standing Dunk':90,'Post Control':85,'Mid-Range':66,'Three-Point':45,'Free Throw':66,'Pass Accuracy':66,'Ball Handle':45,'Speed With Ball':45,'Interior Defense':85,'Perimeter Defense':45,'Steal':52,'Block':93,'Offensive Rebound':82,'Defensive Rebound':90,'Speed':52,'Agility':66,'Strength':90,'Vertical':80}
     }
   };
 

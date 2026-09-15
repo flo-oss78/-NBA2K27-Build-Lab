@@ -7,7 +7,7 @@
     "Close Shot","Driving Layup","Driving Dunk","Standing Dunk","Post Control",
     "Mid-Range","Three-Point","Free Throw","Pass Accuracy","Ball Handle","Speed With Ball",
     "Interior Defense","Perimeter Defense","Steal","Block","Offensive Rebound","Defensive Rebound",
-    "Speed","Agility","Strength","Vertical","Stamina"
+    "Speed","Agility","Strength","Vertical"
   ];
   const POSITIONS = ["PG","SG","SF","PF","C"];
 

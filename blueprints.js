@@ -17,15 +17,15 @@
      a = attributs clés ; les autres sont dérivés du profil de discipline. */
   var BLUEPRINTS=[
     // ---- Meneurs ----
-    {id:'orbit',n:'Orbit Sniper',pos:'PG',tri:['Stephen Curry','Sabrina Ionescu','Damian Lillard'],h:75,w:185,wing:77,d:'Tir de très loin, sortie de dribble rapide, création en mouvement.',disc:'Tir',a:{'Three-Point':95,'Mid-Range':88,'Ball Handle':92,'Speed With Ball':88,'Pass Accuracy':84,'Close Shot':76,'Driving Layup':84,'Free Throw':88,'Speed':86,'Agility':88,'Stamina':92,'Perimeter Defense':72,'Steal':74}},
-    {id:'metronome',n:'Metronome',pos:'PG',tri:['Chris Paul','Courtney Vandersloot','Tyrese Haliburton'],h:74,w:180,wing:76,d:'Contrôle du tempo, passe chirurgicale, mi-distance fiable.',disc:'Création',a:{'Pass Accuracy':95,'Ball Handle':92,'Mid-Range':88,'Three-Point':85,'Speed With Ball':84,'Steal':82,'Perimeter Defense':78,'Free Throw':86,'Agility':84,'Stamina':92}},
+    {id:'orbit',n:'Orbit Sniper',pos:'PG',tri:['Stephen Curry','Sabrina Ionescu','Damian Lillard'],h:75,w:185,wing:77,d:'Tir de très loin, sortie de dribble rapide, création en mouvement.',disc:'Tir',a:{'Three-Point':95,'Mid-Range':88,'Ball Handle':92,'Speed With Ball':88,'Pass Accuracy':84,'Close Shot':76,'Driving Layup':84,'Free Throw':88,'Speed':86,'Agility':88,'Perimeter Defense':72,'Steal':74}},
+    {id:'metronome',n:'Metronome',pos:'PG',tri:['Chris Paul','Courtney Vandersloot','Tyrese Haliburton'],h:74,w:180,wing:76,d:'Contrôle du tempo, passe chirurgicale, mi-distance fiable.',disc:'Création',a:{'Pass Accuracy':95,'Ball Handle':92,'Mid-Range':88,'Three-Point':85,'Speed With Ball':84,'Steal':82,'Perimeter Defense':78,'Free Throw':86,'Agility':84}},
     {id:'blur',n:'Blur',pos:'PG',tri:["De'Aaron Fox",'Ja Morant','Jewell Loyd'],h:76,w:185,wing:80,d:'Vitesse pure balle en main, finition acrobatique au cercle.',disc:'Finition',a:{'Speed With Ball':94,'Speed':95,'Agility':92,'Driving Layup':92,'Driving Dunk':88,'Ball Handle':90,'Close Shot':84,'Pass Accuracy':78,'Three-Point':78,'Vertical':86}},
     {id:'conductor',n:'Conductor',pos:'PG',tri:['LaMelo Ball','Nikola Jokic','Alyssa Thomas'],h:79,w:200,wing:82,d:'Grand meneur, vision panoramique, rebond offensif surprise.',disc:'Création',a:{'Pass Accuracy':94,'Ball Handle':90,'Defensive Rebound':80,'Three-Point':84,'Mid-Range':82,'Speed With Ball':82,'Close Shot':80,'Steal':78,'Perimeter Defense':76}},
     {id:'pickpocket',n:'Pickpocket',pos:'PG',tri:['Marcus Smart','Gabby Williams','Jrue Holiday'],h:76,w:205,wing:81,d:'Défense de meneur agressive, interception, physique au-dessus du poste.',disc:'Défense',a:{'Steal':94,'Perimeter Defense':92,'Strength':84,'Agility':88,'Speed':86,'Ball Handle':82,'Three-Point':80,'Pass Accuracy':80,'Block':66}},
     {id:'downhill',n:'Downhill Engine',pos:'PG',tri:['Shai Gilgeous-Alexander','Kelsey Plum','Jalen Brunson'],h:77,w:195,wing:83,d:'Attaque au mi-poste, floaters, création de fautes.',disc:'Finition',a:{'Close Shot':92,'Driving Layup':94,'Mid-Range':92,'Ball Handle':92,'Pass Accuracy':88,'Free Throw':88,'Three-Point':80,'Agility':86,'Speed':84}},
 
     // ---- Arrières ----
-    {id:'flamethrower',n:'Flamethrower',pos:'SG',tri:['Klay Thompson','Arike Ogunbowale','Buddy Hield'],h:78,w:200,wing:82,d:'Catch and shoot pur, déplacement sans ballon, spacing maximal.',disc:'Tir',a:{'Three-Point':96,'Mid-Range':90,'Free Throw':88,'Close Shot':80,'Speed':82,'Agility':84,'Stamina':92,'Perimeter Defense':78,'Ball Handle':76,'Pass Accuracy':72}},
+    {id:'flamethrower',n:'Flamethrower',pos:'SG',tri:['Klay Thompson','Arike Ogunbowale','Buddy Hield'],h:78,w:200,wing:82,d:'Catch and shoot pur, déplacement sans ballon, spacing maximal.',disc:'Tir',a:{'Three-Point':96,'Mid-Range':90,'Free Throw':88,'Close Shot':80,'Speed':82,'Agility':84,'Perimeter Defense':78,'Ball Handle':76,'Pass Accuracy':72}},
     {id:'twoway-wing',n:'Two-Way Wing',pos:'SG',tri:['Anthony Edwards','Napheesa Collier','Devin Booker'],h:78,w:215,wing:83,d:'Scoring complet et défense périmétrique solide. Le couteau suisse.',disc:'Équilibré',a:{'Three-Point':86,'Mid-Range':86,'Driving Dunk':90,'Driving Layup':88,'Close Shot':84,'Ball Handle':84,'Perimeter Defense':86,'Steal':78,'Speed':86,'Vertical':88,'Strength':78}},
     {id:'contact-artist',n:'Contact Artist',pos:'SG',tri:['Zach LaVine','Ja Morant','Aaliyah Edwards'],h:78,w:205,wing:84,d:'Dunk en pénétration, alley-oops, verticalité explosive.',disc:'Finition',a:{'Driving Dunk':96,'Vertical':94,'Driving Layup':90,'Close Shot':86,'Speed':88,'Agility':88,'Ball Handle':84,'Three-Point':78,'Strength':76}},
     {id:'iso-sniper',n:'Iso Sniper',pos:'SG',tri:['Kyrie Irving','Jewell Loyd','Devin Booker'],h:76,w:195,wing:80,d:'Création isolée, handle élite, tir en sortie de dribble.',disc:'Création',a:{'Ball Handle':96,'Three-Point':88,'Mid-Range':90,'Driving Layup':92,'Speed With Ball':90,'Close Shot':86,'Agility':90,'Pass Accuracy':78,'Free Throw':86}},
@@ -60,8 +60,8 @@
     // ---- Profils hybrides ----
     {id:'combo',n:'Combo Guard',pos:'SG',tri:['Damian Lillard','Kelsey Plum','Jalen Brunson'],h:75,w:195,wing:79,d:'Scoreur et meneur à parts égales, tir très loin.',disc:'Équilibré',a:{'Three-Point':92,'Ball Handle':90,'Pass Accuracy':86,'Mid-Range':88,'Driving Layup':88,'Speed With Ball':88,'Close Shot':82,'Free Throw':88,'Agility':86}},
     {id:'slash-sniper',n:'Slashing Sniper',pos:'SF',tri:['Paul George','Breanna Stewart','Anthony Edwards'],h:80,w:215,wing:85,d:'Tir extérieur et pénétration, avec une vraie défense.',disc:'Équilibré',a:{'Three-Point':88,'Driving Dunk':88,'Driving Layup':88,'Perimeter Defense':86,'Mid-Range':84,'Ball Handle':84,'Steal':80,'Speed':84,'Vertical':86}},
-    {id:'grinder',n:'Grinder',pos:'SF',tri:['Josh Hart','Alyssa Thomas','Jimmy Butler'],h:78,w:220,wing:84,d:'Rebond depuis l\u2019extérieur, transition, défense sans relâche.',disc:'Rebond',a:{'Defensive Rebound':90,'Offensive Rebound':84,'Perimeter Defense':86,'Steal':82,'Strength':86,'Close Shot':84,'Driving Layup':86,'Stamina':96,'Speed':84}},
-    {id:'floor-general',n:'Floor General',pos:'PG',tri:['Tyrese Haliburton','Courtney Vandersloot','Chris Paul'],h:77,w:190,wing:80,d:'Le build de passeur pur : assists, spacing, zéro perte.',disc:'Création',a:{'Pass Accuracy':97,'Ball Handle':90,'Three-Point':88,'Speed With Ball':84,'Mid-Range':82,'Close Shot':78,'Free Throw':86,'Perimeter Defense':76,'Stamina':92}},
+    {id:'grinder',n:'Grinder',pos:'SF',tri:['Josh Hart','Alyssa Thomas','Jimmy Butler'],h:78,w:220,wing:84,d:'Rebond depuis l\u2019extérieur, transition, défense sans relâche.',disc:'Rebond',a:{'Defensive Rebound':90,'Offensive Rebound':84,'Perimeter Defense':86,'Steal':82,'Strength':86,'Close Shot':84,'Driving Layup':86,'Speed':84}},
+    {id:'floor-general',n:'Floor General',pos:'PG',tri:['Tyrese Haliburton','Courtney Vandersloot','Chris Paul'],h:77,w:190,wing:80,d:'Le build de passeur pur : assists, spacing, zéro perte.',disc:'Création',a:{'Pass Accuracy':97,'Ball Handle':90,'Three-Point':88,'Speed With Ball':84,'Mid-Range':82,'Close Shot':78,'Free Throw':86,'Perimeter Defense':76}},
     {id:'energy',n:'Energy Big',pos:'PF',tri:['Aaron Gordon','Aaliyah Edwards','Jarrett Allen'],h:82,w:240,wing:86,d:'Intérieur de transition : lobs, rebond offensif, contres.',disc:'Physique',a:{'Vertical':94,'Standing Dunk':92,'Offensive Rebound':88,'Defensive Rebound':86,'Block':84,'Speed':84,'Strength':86,'Close Shot':86,'Driving Dunk':86}},
     {id:'shot-creator',n:'Shot Creator',pos:'SG',tri:['Devin Booker','Arike Ogunbowale','Kyrie Irving'],h:78,w:200,wing:81,d:'Création de son propre tir en toutes situations.',disc:'Tir',a:{'Mid-Range':94,'Three-Point':88,'Ball Handle':92,'Close Shot':86,'Driving Layup':88,'Speed With Ball':86,'Free Throw':88,'Pass Accuracy':80}},
     {id:'wall',n:'The Wall',pos:'C',tri:['Rudy Gobert','Brittney Griner','Bam Adebayo'],h:85,w:270,wing:86,d:'Écrans indéplaçables et défense intérieure maximale.',disc:'Physique',a:{'Strength':96,'Interior Defense':92,'Block':90,'Defensive Rebound':92,'Standing Dunk':88,'Offensive Rebound':86,'Close Shot':84}},
@@ -83,12 +83,12 @@
   var ALL_ATTRS=['Close Shot','Driving Layup','Driving Dunk','Standing Dunk','Post Control',
     'Mid-Range','Three-Point','Free Throw','Pass Accuracy','Ball Handle','Speed With Ball',
     'Interior Defense','Perimeter Defense','Steal','Block','Offensive Rebound','Defensive Rebound',
-    'Speed','Agility','Strength','Vertical','Stamina'];
+    'Speed','Agility','Strength','Vertical'];
 
   var COST_W={'Close Shot':1.00,'Driving Layup':1.05,'Driving Dunk':1.35,'Standing Dunk':1.15,'Post Control':1.05,
     'Mid-Range':1.10,'Three-Point':1.35,'Free Throw':0.55,'Pass Accuracy':0.95,'Ball Handle':1.30,'Speed With Ball':1.20,
     'Interior Defense':0.95,'Perimeter Defense':1.15,'Steal':1.10,'Block':1.10,'Offensive Rebound':0.80,'Defensive Rebound':0.90,
-    'Speed':1.15,'Agility':1.10,'Strength':0.95,'Vertical':1.00,'Stamina':0.55};
+    'Speed':1.15,'Agility':1.10,'Strength':0.95,'Vertical':1.00};
 
   /* Le style de build le plus proche, pour réutiliser badges et animations. */
   var DISC_TO_STYLE={'Tir':'Shooter','Finition':'Slasher','Création':'Playmaker',
@@ -102,7 +102,6 @@
     ALL_ATTRS.forEach(function(k){
       t[k]=bp.a[k]!=null?bp.a[k]:(bp.disc==='Physique'?fill.def:fill.low);
     });
-    t['Stamina']=Math.max(t['Stamina'],88);
     t['Free Throw']=Math.max(t['Free Throw'],70);
     return fitBudget(t,bp);
   }

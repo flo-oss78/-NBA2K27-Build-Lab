@@ -48,7 +48,7 @@ export const ATTRIBUTE_NAMES = Object.freeze([
   'Close Shot','Driving Layup','Driving Dunk','Standing Dunk','Post Control',
   'Mid-Range','Three-Point','Free Throw','Pass Accuracy','Ball Handle','Speed With Ball',
   'Interior Defense','Perimeter Defense','Steal','Block','Offensive Rebound','Defensive Rebound',
-  'Speed','Agility','Strength','Vertical','Stamina'
+  'Speed','Agility','Strength','Vertical'
 ]);
 
 export function finiteInt(v,min,max){
@@ -65,6 +65,8 @@ export function validateBuildInput(b){
   if(!finiteInt(b.wing,69,96)) errors.push('Wingspan out of Builder range.');
   if(!b.attributes || typeof b.attributes!=='object' || Array.isArray(b.attributes)) errors.push('Attributes object required.');
   else{
+    // L'endurance n'existe pas dans NBA 2K27 : ignorée si une ancienne version du site l'envoie.
+    delete b.attributes.Stamina;
     const keys=Object.keys(b.attributes);
     const unknown=keys.filter(k=>!ATTRIBUTE_NAMES.includes(k));
     if(unknown.length) errors.push('Unknown attributes: '+unknown.slice(0,3).join(', '));

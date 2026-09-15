@@ -18,13 +18,13 @@ const NOMS_ATTRIBUTS_FR={
   'Pass Accuracy':'Précision des passes','Ball Handle':'Contrôle du ballon','Speed With Ball':'Vitesse avec le ballon',
   'Interior Defense':'Défense intérieure','Perimeter Defense':'Défense extérieure','Steal':'Interception','Block':'Contre',
   'Offensive Rebound':'Rebond offensif','Defensive Rebound':'Rebond défensif',
-  'Speed':'Vitesse','Agility':'Agilité','Strength':'Force','Vertical':'Détente','Stamina':'Endurance'
+  'Speed':'Vitesse','Agility':'Agilité','Strength':'Force','Vertical':'Détente'
 };
 function nomAttribut(n){return NOMS_ATTRIBUTS_FR[n]||n}
 window.NOMS_ATTRIBUTS_FR=NOMS_ATTRIBUTS_FR;
 window.nomAttribut=nomAttribut;
 
-const data={Finition:[['Close Shot',75],['Driving Layup',82],['Driving Dunk',85],['Standing Dunk',55],['Post Control',60]],Tir:[['Mid-Range',82],['Three-Point',88],['Free Throw',78]],Création:[['Pass Accuracy',78],['Ball Handle',86],['Speed With Ball',84]],Défense:[['Interior Defense',55],['Perimeter Defense',85],['Steal',80],['Block',70]],Rebond:[['Offensive Rebound',45],['Defensive Rebound',65]],Physique:[['Speed',84],['Agility',82],['Strength',72],['Vertical',80],['Stamina',94]]};
+const data={Finition:[['Close Shot',75],['Driving Layup',82],['Driving Dunk',85],['Standing Dunk',55],['Post Control',60]],Tir:[['Mid-Range',82],['Three-Point',88],['Free Throw',78]],Création:[['Pass Accuracy',78],['Ball Handle',86],['Speed With Ball',84]],Défense:[['Interior Defense',55],['Perimeter Defense',85],['Steal',80],['Block',70]],Rebond:[['Offensive Rebound',45],['Defensive Rebound',65]],Physique:[['Speed',84],['Agility',82],['Strength',72],['Vertical',80]]};
 const badgeDefs=[
 {name:'Arc Cadence',cat:'Tir',req:[['Three-Point',70,86,91,98]],logic:'AND',minH:69,maxH:83},
 {name:'Deadeye',cat:'Tir',req:[['Mid-Range',65,85,92,99],['Three-Point',65,85,92,99]],logic:'OR',minH:69,maxH:88},
@@ -86,7 +86,7 @@ const COST_WEIGHT={
  'Close Shot':1.00,'Driving Layup':1.05,'Driving Dunk':1.35,'Standing Dunk':1.15,'Post Control':1.05,
  'Mid-Range':1.10,'Three-Point':1.35,'Free Throw':0.55,'Pass Accuracy':0.95,'Ball Handle':1.30,'Speed With Ball':1.20,
  'Interior Defense':0.95,'Perimeter Defense':1.15,'Steal':1.10,'Block':1.10,'Offensive Rebound':0.80,'Defensive Rebound':0.90,
- 'Speed':1.15,'Agility':1.10,'Strength':0.95,'Vertical':1.00,'Stamina':0.55};
+ 'Speed':1.15,'Agility':1.10,'Strength':0.95,'Vertical':1.00};
 const BADGE_THRESHOLDS=[60,70,80,90,95];
 
 /* Noms français OFFICIELS des badges, tels qu'affichés par NBA 2K27 en français

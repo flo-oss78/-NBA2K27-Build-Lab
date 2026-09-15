@@ -44,11 +44,20 @@
     $('v15NextText').textContent=lastNext?`Il te manque ${lastNext.delta} point${lastNext.delta>1?'s':''} sur ${lastNext.attr} pour le prochain niveau intégré.`:'Monte un attribut ou change ton profil pour générer de nouveaux objectifs.';
     $('v15JumpNext').disabled=!lastNext; $('v15JumpNext').onclick=()=>lastNext&&jumpToAttribute(lastNext.attr);
   }
+  /* Axe d'un joueur réel. Le « Physique » publié par 2KRatings compte l'endurance
+     des joueurs NBA, qui n'existe pas dans le builder MyPLAYER : on le recalcule
+     avec les quatre mêmes attributs que le build (vitesse, agilité, force, détente). */
+  const PHYSIQUE_JEU=['Speed','Agility','Strength','Vertical'];
+  function axeJoueur(p,k){
+    const a=p.attributes||{};
+    if(k==='Physique'&&PHYSIQUE_JEU.every(x=>a[x]!=null))return Math.round(PHYSIQUE_JEU.reduce((s,x)=>s+a[x],0)/PHYSIQUE_JEU.length);
+    return p.axes[k];
+  }
   function playerSimilarity(build,p){
     const keys=['Finition','Tir','Création','Défense','Physique'];
     let sum=0,weight=0;
     const weights={Finition:1.15,Tir:1.15,Création:1.1,Défense:1,Physique:.9};
-    keys.forEach(k=>{sum+=(100-Math.abs(build.vals[k]-p.axes[k]))*weights[k];weight+=100*weights[k]});
+    keys.forEach(k=>{sum+=(100-Math.abs(build.vals[k]-axeJoueur(p,k)))*weights[k];weight+=100*weights[k]});
     const body=100-(Math.abs(build.h-p.height)*3+Math.abs(build.w-p.weight)*.08+Math.abs(build.wing-p.wingspan)*2);
     let score=(sum/weight)*85+Math.max(0,body)*.15;
     if(p.positions.includes(build.pos))score+=4;
@@ -57,7 +66,7 @@
   function renderPlayers(build){
     const ranked=PLAYERS_DATA.map(p=>({...p,match:playerSimilarity(build,p)})).sort((a,b)=>b.match-a.match).slice(0,5);
     $('v15Players').innerHTML=ranked.map((p,i)=>{
-      const diff=Object.entries(build.vals).map(([k,v])=>({k,d:Math.abs(v-p.axes[k])})).sort((a,b)=>b.d-a.d)[0];
+      const diff=Object.entries(build.vals).filter(([k])=>p.axes[k]!=null).map(([k,v])=>({k,d:Math.abs(v-axeJoueur(p,k))})).sort((a,b)=>b.d-a.d)[0];
       return `<article class="v15-player"><div class="v15-rank">${i+1}</div><div class="v15-player-main"><div class="v15-player-top"><b>${esc(p.name)}</b><span>${p.match}%</span></div><small>${esc(p.team)} • ${p.positions.join('/')} • ${heightText(p.height)} • ${p.ovr} OVR</small><div class="v15-player-bar"><i style="width:${p.match}%"></i></div><p><b>Profil proche :</b> ${esc(p.archetype)}. <b>Plus gros écart :</b> ${LABELS[diff.k]} (${diff.d} pts).</p></div></article>`;
     }).join('');
     $('v15Why').innerHTML=ranked.slice(0,3).map(p=>`<div><b>${esc(p.name)}</b> — ${p.match}% : comparaison pondérée des 5 axes, du gabarit et d’un bonus de poste compatible.</div>`).join('');

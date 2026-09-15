@@ -40,7 +40,7 @@ const BUILD_JEU = { position: 'SG', height: 75, weight: 185, wing: 78, style: '�
            'Mid-Range': 88, 'Three-Point': 94, 'Free Throw': 77, 'Pass Accuracy': 75, 'Ball Handle': 86,
            'Speed With Ball': 77, 'Interior Defense': 44, 'Perimeter Defense': 91, 'Steal': 84, 'Block': 45,
            'Offensive Rebound': 27, 'Defensive Rebound': 51, 'Speed': 87, 'Agility': 85, 'Strength': 52,
-           'Vertical': 80, 'Stamina': 94 } };
+           'Vertical': 80 } };
 const ATTRIBUTS = Object.keys(BUILD_JEU.attrs);
 
 const pause = ms => new Promise(r => setTimeout(r, ms));
@@ -482,7 +482,7 @@ async function testsNavigateur(base) {
       const ecarts = Object.keys(attendu.notes).filter(k => attendu.notes[k] !== r.notes[k]);
       verifier(!ecarts.length, 'notes modifiées sur Mon build : ' + ecarts.join(', '));
       verifier(r.onglets === 'apercu brise badges progression', 'onglets : ' + r.onglets);
-      verifier(r.lignesBP === 22 && r.apres === r.avant + 1, `brise-plafonds : ${r.lignesBP} lignes, total ${r.avant} → ${r.apres}`);
+      verifier(r.lignesBP === 21 && r.apres === r.avant + 1, `brise-plafonds : ${r.lignesBP} lignes, total ${r.avant} → ${r.apres}`);
       verifier(r.grille === 53 && r.loadouts && r.quetes === 6, `badges ${r.grille}, loadouts ${r.loadouts}, quêtes ${r.quetes}`);
       verifier(/^\/\?build=.+&etape=attributs$/.test(r.modifier), 'lien Modifier : ' + r.modifier);
       verifier(r.actif === 'Mon build', 'lien actif : ' + r.actif);
