@@ -342,6 +342,10 @@ body:not(.mode-expert) .hq-builder .attr .thresholds{display:none}
 
 /* 6.7 Résumé, budget, builds réels */
 .hq-builder .summary-ring{background:conic-gradient(var(--turquoise) 0 var(--score-pct,76%),rgba(255,255,255,.07) var(--score-pct,76%) 100%)}
+/* Anneau évidé : le dégradé remplissait tout le disque, « Moyenne » en gris était
+   illisible sur le turquoise. Un disque sombre au centre porte le chiffre et le mot. */
+.summary-ring{position:relative;isolation:isolate}
+.summary-ring::before{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--panel);z-index:-1}
 .hq-builder .summary-ring strong,.hq-builder .summary-counts b{font-family:var(--titre);font-weight:800;font-size:26px}
 .hq-builder .summary-head b{font-family:var(--titre);font-size:20px;letter-spacing:.03em;text-transform:uppercase}
 .hq-builder .budget-jauge em{background:linear-gradient(90deg,#128C77,var(--turquoise))}
@@ -617,6 +621,13 @@ body:not(.mode-expert) #wizardBanner{display:none}
 /* =============================================================
    8. PAGE BUILDS (/hub/) — onglets Builds réels, Trios, Communauté
    ============================================================= */
+/* [hidden] explicite : display:grid de theme.css passait par-dessus, une case vide
+   s'affichait sous le texte d'aide de l'étape Corps. */
+.import-jeu-etat[hidden]{display:none}
+/* Jetons de badges : le nom et le compte (« Finition 0/20 ») étaient collés. */
+.discipline-card>div:first-child{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.discipline-card>div:first-child span{font-variant-numeric:tabular-nums;color:var(--muted)}
+
 /* Page « Mon build » (/mon-build/) */
 .hq-page-monbuild{gap:16px}
 .hq-page-monbuild .section-title h2{font-size:24px}
