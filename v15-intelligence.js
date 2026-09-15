@@ -2,7 +2,7 @@
 (function(){
   const CATS={Finition:'finish',Tir:'shoot',Création:'play',Défense:'defense',Rebond:'rebound',Physique:'physical'};
   const LABELS={Finition:'Finition',Tir:'Tir',Création:'Organisation',Défense:'Défense',Rebond:'Rebond',Physique:'Physique'};
-  let simple=true,lastNext=null;
+  let lastNext=null;
   const $=id=>document.getElementById(id);
   const esc=window.escHtml;
   function current(){
@@ -80,10 +80,9 @@
   }
   function jumpToAttribute(name){
     const id='i'+name.replace(/[^a-z0-9]/gi,''); const el=$(id); if(!el)return;
-    el.scrollIntoView({behavior:simple?'smooth':'auto',block:'center'}); el.focus({preventScroll:true});
+    el.scrollIntoView({behavior:'smooth',block:'center'}); el.focus({preventScroll:true});
     const row=el.closest('.attr'); if(row){row.classList.add('v15-focus');setTimeout(()=>row.classList.remove('v15-focus'),1300)}
   }
-  function setMode(isSimple){simple=isSimple; $('beginnerMode').classList.toggle('active',simple);$('expertMode').classList.toggle('active',!simple);document.body.classList.toggle('v15-expert',!simple);render();}
   // Un slider glissé déclenche 'input' à chaque pixel : render() (boucle sur les
   // 53 badges + tri des 5 joueurs) n'a besoin de tourner qu'une fois par frame.
   var renderQueued=false;
@@ -96,8 +95,6 @@
     if(typeof PLAYERS_DATA==='undefined')return;
     // La section n'est présente que sur la page du builder.
     if(!$('v15IdentityName'))return;
-    $('beginnerMode')?.addEventListener('click',()=>setMode(true));
-    $('expertMode')?.addEventListener('click',()=>setMode(false));
     document.querySelectorAll('#attributeGroups input').forEach(x=>x.addEventListener('input',renderThrottled));
     ['position','height','weight','wing'].forEach(id=>$(id)?.addEventListener('input',renderThrottled));
     render();

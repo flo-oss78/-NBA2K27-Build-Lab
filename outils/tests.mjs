@@ -475,6 +475,7 @@ async function testsNavigateur(base) {
           grille: document.querySelectorAll('#badgeDisciplineGrid .bg-item').length,
           loadouts: !!document.querySelector('#loadoutPanel .lo-tabs'),
           quetes: document.querySelectorAll('#questTracks .quest-track').length,
+          jetons: document.querySelectorAll('#disciplineGrid .discipline-card').length,
           modifier: document.getElementById('monBuildModifier').getAttribute('href'),
           actif: document.querySelector('.reference-nav a.active')?.textContent };`);
       verifier(!r.vide, 'Mon build affiche « aucun build » alors qu’un build est en cours');
@@ -484,6 +485,7 @@ async function testsNavigateur(base) {
       verifier(r.onglets === 'apercu brise badges progression', 'onglets : ' + r.onglets);
       verifier(r.lignesBP === 21 && r.apres === r.avant + 1, `brise-plafonds : ${r.lignesBP} lignes, total ${r.avant} → ${r.apres}`);
       verifier(r.grille === 53 && r.loadouts && r.quetes === 6, `badges ${r.grille}, loadouts ${r.loadouts}, quêtes ${r.quetes}`);
+      verifier(r.jetons === 6, `${r.jetons} disciplines dans la répartition des 20 emplacements au lieu de 6`);
       verifier(/^\/\?build=.+&etape=attributs$/.test(r.modifier), 'lien Modifier : ' + r.modifier);
       verifier(r.actif === 'Mon build', 'lien actif : ' + r.actif);
 

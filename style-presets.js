@@ -46,26 +46,26 @@
   /* Badges recommandés par style — libellé, groupe et palier visé. */
   var STYLE_BADGE_PLAN={
     'Slasher':[
-      ['Finition','Posterizer','HOF'],['Finition','Aerial Wizard','HOF'],['Finition','Slithery','Gold'],
-      ['Finition','Physical Finisher','HOF'],['Finition','Precision Dunker','Gold'],
-      ['Création / Tir','Handles for Days','Gold'],['Création / Tir','Speed Booster','Gold'],['Création / Tir','Killer Combos','Gold'],
-      ['Création / Tir','Agent 3','Silver'],['Création / Tir','Green Machine','Silver'],
+      ['Finition','Posterizer','HOF'],['Finition','Aerial Wizard','HOF'],
+      ['Finition','Physical Finisher','HOF'],
+      ['Création / Tir','Handles for Days','Gold'],
+      
       ['Défense','Glove','Silver'],['Défense','Interceptor','Silver'],['Défense','Challenger','Silver'],
       ['Défense','Immovable Enforcer','Silver'],['Défense','Pick Dodger','Silver']
     ],
     'Shooter':[
       ['Tir','Limitless Range','HOF'],['Tir','Deadeye','HOF'],['Tir','Quick Trigger','Gold'],
       ['Tir','Set and Fire','Gold'],['Tir','Arc Cadence','Gold'],
-      ['Création / Finition','Handles for Days','Gold'],['Création / Finition','Ankle Assassin','Silver'],['Création / Finition','Slithery','Silver'],
-      ['Création / Finition','Pace','Silver'],['Création / Finition','Green Machine','Gold'],
+      ['Création / Finition','Handles for Days','Gold'],['Création / Finition','Ankle Assassin','Silver'],
+      ['Création / Finition','Pace','Silver'],
       ['Défense','Challenger','Silver'],['Défense','Pick Dodger','Silver'],['Défense','Interceptor','Bronze'],
       ['Défense','Glove','Bronze'],['Défense','Work Horse','Bronze']
     ],
     'Playmaker':[
       ['Création','Handles for Days','HOF'],['Création','Ankle Assassin','HOF'],['Création','Lightning Launch','Gold'],
       ['Création','Versatile Visionary','Gold'],['Création','Pace','Gold'],
-      ['Tir / Finition','Agent 3','Gold'],['Tir / Finition','Deadeye','Silver'],['Tir / Finition','Slithery','Gold'],
-      ['Tir / Finition','Float Game','Silver'],['Tir / Finition','Green Machine','Silver'],
+      ['Tir / Finition','Deadeye','Silver'],
+      ['Tir / Finition','Float Game','Silver'],
       ['Défense','Interceptor','Gold'],['Défense','Glove','Silver'],['Défense','Challenger','Silver'],
       ['Défense','Pick Dodger','Silver'],['Défense','Work Horse','Bronze']
     ],
@@ -73,23 +73,23 @@
       ['Défense','Challenger','HOF'],['Défense','Glove','HOF'],['Défense','Interceptor','Gold'],
       ['Défense','Pick Dodger','Gold'],['Défense','Immovable Enforcer','Gold'],
       ['Physique / Rebond','Work Horse','Gold'],['Physique / Rebond','Boxout Boss','Silver'],['Physique / Rebond','Brick Wall','Silver'],
-      ['Physique / Rebond','Pogo Stick','Silver'],['Physique / Rebond','Rebound Chaser','Silver'],
-      ['Attaque','Agent 3','Silver'],['Attaque','Handles for Days','Silver'],['Attaque','Physical Finisher','Silver'],
-      ['Attaque','Deadeye','Bronze'],['Attaque','Slithery','Bronze']
+      ['Physique / Rebond','Pogo Stick','Silver'],
+      ['Attaque','Handles for Days','Silver'],['Attaque','Physical Finisher','Silver'],
+      ['Attaque','Deadeye','Bronze']
     ],
     'Big':[
       ['Intérieur','Paint Patroller','HOF'],['Intérieur','Wall Up','HOF'],['Intérieur','Post Powerhouse','Gold'],
       ['Intérieur','Rise Up','Gold'],['Intérieur','Physical Finisher','Gold'],
-      ['Rebond','Boxout Boss','Gold'],['Rebond','Rebound Chaser','Gold'],['Rebond','Brick Wall','Gold'],
+      ['Rebond','Boxout Boss','Gold'],['Rebond','Brick Wall','Gold'],
       ['Rebond','Work Horse','Silver'],['Rebond','Pogo Stick','Silver'],
-      ['Attaque','Post Fade Phenom','Silver'],['Attaque','Hook Specialist','Silver'],['Attaque','Precision Dunker','Silver'],
+      ['Attaque','Post Fade Phenom','Silver'],['Attaque','Hook Specialist','Silver'],
       ['Attaque','Deadeye','Bronze'],['Attaque','Handles for Days','Bronze']
     ],
     'Équilibré':[
-      ['Attaque','Deadeye','Gold'],['Attaque','Physical Finisher','Gold'],['Attaque','Slithery','Gold'],
-      ['Attaque','Agent 3','Gold'],['Attaque','Precision Dunker','Silver'],
-      ['Création','Handles for Days','Gold'],['Création','Pace','Silver'],['Création','Killer Combos','Silver'],
-      ['Création','Versatile Visionary','Silver'],['Création','Green Machine','Silver'],
+      ['Attaque','Deadeye','Gold'],['Attaque','Physical Finisher','Gold'],
+      
+      ['Création','Handles for Days','Gold'],['Création','Pace','Silver'],
+      ['Création','Versatile Visionary','Silver'],
       ['Défense','Challenger','Gold'],['Défense','Interceptor','Silver'],['Défense','Glove','Silver'],
       ['Défense','Pick Dodger','Silver'],['Défense','Work Horse','Silver']
     ]
@@ -103,32 +103,14 @@
   };
 
   var BADGE_GLYPH={
-    'Posterizer':'◤','Aerial Wizard':'◬','Slithery':'◇','Physical Finisher':'✦','Precision Dunker':'◈',
-    'Handles for Days':'⌁','Speed Booster':'↯','Killer Combos':'◉','Agent 3':'A3','Green Machine':'✓',
+    'Posterizer':'◤','Aerial Wizard':'◬','Physical Finisher':'✦',
+    'Handles for Days':'⌁',
     'Glove':'◆','Interceptor':'◇','Challenger':'◈','Immovable Enforcer':'⬟','Pick Dodger':'✕',
     'Limitless Range':'◎','Deadeye':'◉','Quick Trigger':'↯','Set and Fire':'✦','Arc Cadence':'◠',
     'Ankle Assassin':'⌁','Lightning Launch':'↯','Versatile Visionary':'◈','Pace':'▷','Float Game':'◌',
-    'Work Horse':'⬟','Boxout Boss':'▣','Brick Wall':'▤','Pogo Stick':'↥','Rebound Chaser':'◍',
+    'Work Horse':'⬟','Boxout Boss':'▣','Brick Wall':'▤','Pogo Stick':'↥',
     'Paint Patroller':'▩','Wall Up':'▦','Post Powerhouse':'▬','Rise Up':'↥','Post Fade Phenom':'◐',
     'Hook Specialist':'◑'
-  };
-
-  /* Animations recommandées, par style. */
-  var STYLE_ANIMATIONS={
-    'Slasher':[["Dribble Style","De'Aaron Fox",'Dribble Style'],['Signature Size-Up','Ja Morant','Signature Size-Up'],['Escape Moves','Kyrie Irving','Dribble • Behind the Back'],['Moving Crossover','Ja Morant','Dribble • Behind the Back'],['Moving Behind the Back','Devin Booker','Dribble • Behind the Back'],['Moving Spin','LaMelo Ball','Dribble Style'],['Moving Hesitation','Zach LaVine','Dribble Style'],['Triple Threat Style','Ja Morant','Dribble Style'],['Dunk Packages','Ja Morant + Zach LaVine','Alley-Oops / Contact'],['Layup Package',"De'Aaron Fox",'Layup Style']],
-    'Shooter':[['Jumpshot • Base','Stephen Curry','Jumpshot • Base'],['Go-To Shot','Klay Thompson','Shooting • Go-To Shot'],['Dribble Pull-Up','Devin Booker','Shooting • Dribble Pull-Up'],['Dribble Style','Stephen Curry','Dribble Style'],['Signature Size-Up','Devin Booker','Signature Size-Up'],['Escape Moves','Kyrie Irving','Dribble • Behind the Back'],['Moving Crossover','Stephen Curry','Dribble • Behind the Back'],['Motion Style','Pro','Motion Style'],['Layup Package','Kyrie Irving','Layup Style'],['Pass Style','Pro','Pass Style']],
-    'Playmaker':[['Dribble Style','Kyrie Irving','Dribble Style'],['Signature Size-Up','LaMelo Ball','Signature Size-Up'],['Escape Moves','Kyrie Irving','Dribble • Behind the Back'],['Moving Crossover','LaMelo Ball','Dribble • Behind the Back'],['Moving Behind the Back','Kyrie Irving','Dribble • Behind the Back'],['Moving Spin','LaMelo Ball','Dribble Style'],['Pass Style','LaMelo Ball','Pass Style'],['Triple Threat Style','Kyrie Irving','Dribble Style'],['Layup Package','Kyrie Irving','Layup Style'],['Jumpshot • Base','Pro','Jumpshot • Base']],
-    'Lockdown':[['Motion Style','Pro','Motion Style'],['Dribble Style','Devin Booker','Dribble Style'],['Jumpshot • Base','Pro','Jumpshot • Base'],['Go-To Shot','Devin Booker','Shooting • Go-To Shot'],['Signature Size-Up','Devin Booker','Signature Size-Up'],['Escape Moves','Kyrie Irving','Dribble • Behind the Back'],['Layup Package','Pro','Layup Style'],['Dunk Packages','Zach LaVine','Alley-Oops / Contact'],['Pass Style','Pro','Pass Style'],['Triple Threat Style','Pro','Dribble Style']],
-    'Big':[['Dunk Packages','Pro','Alley-Oops / Contact'],['Layup Package','Pro','Layup Style'],['Jumpshot • Base','Pro','Jumpshot • Base'],['Go-To Shot','Pro','Shooting • Go-To Shot'],['Motion Style','Pro','Motion Style'],['Pass Style','Pro','Pass Style'],['Dribble Style','Pro','Dribble Style'],['Triple Threat Style','Pro','Dribble Style'],['Signature Size-Up','Pro','Signature Size-Up'],['Moving Spin','Pro','Dribble Style']],
-    'Équilibré':[['Dribble Style','Devin Booker','Dribble Style'],['Signature Size-Up','Devin Booker','Signature Size-Up'],['Jumpshot • Base','Pro','Jumpshot • Base'],['Go-To Shot','Devin Booker','Shooting • Go-To Shot'],['Dribble Pull-Up','Devin Booker','Shooting • Dribble Pull-Up'],['Escape Moves','Kyrie Irving','Dribble • Behind the Back'],['Moving Crossover','Pro','Dribble • Behind the Back'],['Layup Package','Pro','Layup Style'],['Dunk Packages','Zach LaVine','Alley-Oops / Contact'],['Motion Style','Pro','Motion Style']]
-  };
-
-  /* Emplacement du jeu → catégorie de la base d'animations (NBA2KLab). */
-  var CATEGORIE_PAR_LIBELLE={
-    'Escape Moves':'Behind the Back Escape','Moving Crossover':'Crossover','Moving Behind the Back':'Behind the Back',
-    'Moving Spin':'Spin','Moving Hesitation':'Hesitation','Triple Threat Style':'Triple Threat Style',
-    'Dunk Packages':'Signature Dunks - Players','Layup Package':'Layup Style','Jumpshot • Base':'Jumper Base',
-    'Go-To Shot':'Go-To Shot','Dribble Pull-Up':'Dribble Pull-Up'
   };
 
   var STYLE_TAKEOVERS={
@@ -244,24 +226,6 @@
       box.innerHTML=html;
       return;
     }
-    var rows=STYLE_ANIMATIONS[style]||STYLE_ANIMATIONS['Équilibré'];
-    var anims=window.ANIMATIONS||[];
-    box.innerHTML=rows.map(function(row){
-      var label=row[0],name=row[1],cat=CATEGORIE_PAR_LIBELLE[label]||row[2];
-      // Le nom seul (sans catégorie) sert de dernier repli, mais uniquement
-      // s'il n'existe qu'une seule entrée sous ce nom dans ANIMATIONS — sinon
-      // la catégorie voulue prime pour éviter d'afficher les mauvaises
-      // exigences (ex. plusieurs "Pro" dans des catégories différentes).
-      var sameName=anims.filter(function(a){return a.name===name});
-      var match=anims.find(function(a){return a.name===name&&a.category===cat})||
-                (sameName.length===1?sameName[0]:null);
-      var ok=!!match&&animationAccessible(match,r,h);
-      // Libellé du jeu en français quand il est connu (animations.js), sinon celui du plan.
-      var fr=typeof nomCategorieAnimation==='function'?nomCategorieAnimation(cat):cat;
-      var libelle=fr!==cat?fr:label;
-      return '<div class="style-animation-item '+(ok?'ok':'locked')+'"'+(match?'':' title="Absente de la base d’animations"')+'>'+
-             '<b>'+esc(libelle)+'</b><span>'+esc(name)+'</span></div>';
-    }).join('');
   }
 
   /* ---------- Takeovers ---------- */

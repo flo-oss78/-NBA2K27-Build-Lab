@@ -479,22 +479,12 @@ function renderTokens(){
  root.querySelectorAll('input').forEach(i=>i.oninput=()=>{plan[i.dataset.disc]=+i.value;const total=Object.values(plan).reduce((a,b)=>a+b,0);if(total>20){i.value=Math.max(0,+i.value-(total-20));plan[i.dataset.disc]=+i.value}localStorage.setItem(tokenStorageKey(),JSON.stringify(plan));renderTokens()});
  const total=Object.values(plan).reduce((a,b)=>a+b,0);document.getElementById('tokenUsed').textContent=total;
 }
-function renderSynergy(){
- const r=ratings();const badgeCount=unlockedBadgeCount();const score=Math.min(100,Math.round((badgeCount/53)*55 + (Object.values(r).filter(v=>v>=85).length/21)*45));
- const sScore=document.getElementById('synergyScore');if(!sScore)return;sScore.textContent=score+'%';const sBar=document.getElementById('synergyBar');if(sBar)sBar.style.width=score+'%';
- const items=[['Finition',r['Driving Dunk']>=85||r['Driving Layup']>=90],['Tir',r['Three-Point']>=88||r['Mid-Range']>=90],['Création',r['Ball Handle']>=88||r['Pass Accuracy']>=90],['Défense',r['Perimeter Defense']>=88||r['Block']>=88],['Rebond',r['Defensive Rebound']>=88||r['Offensive Rebound']>=88],['Physique',r['Speed']>=88||r['Strength']>=88]];
- const sList=document.getElementById('synergyList');if(sList)sList.innerHTML=items.map(([n,ok])=>`<div><span>${n}</span><b class="${ok?'ready':''}">${ok?'Potentiel élevé':'À développer'}</b></div>`).join('');
-}
-let selectedTakeovers=[];
-function renderTakeoverLoadout(){
- const r=ratings(),root=document.getElementById('takeoverSlots');if(!root)return;
- const options=takeoverDefs.map(([name,attr,need])=>({name,attr,need,ok:(r[attr]||0)>=need}));
- root.innerHTML=`<div class="takeover-option-row">${options.map(o=>`<button class="loadout-option ${o.ok?'ready':''} ${selectedTakeovers.includes(o.name)?'chosen':''}" data-to="${o.name}"><span>${o.name}</span><small>${o.attr} ${o.need}</small></button>`).join('')}</div><div class="selected-takeovers">${[0,1,2,3,4].map((_,i)=>`<div class="take-slot"><span>Slot ${i+1}</span><b>${selectedTakeovers[i]||'Libre'}</b></div>`).join('')}</div>`;
- root.querySelectorAll('[data-to]').forEach(b=>b.onclick=()=>{const n=b.dataset.to;if(selectedTakeovers.includes(n))selectedTakeovers=selectedTakeovers.filter(x=>x!==n);else if(selectedTakeovers.length<5)selectedTakeovers.push(n);renderTakeoverLoadout()});
-}
 function printBuildCard(){window.print()}
 document.getElementById('printCard')?.addEventListener('click',printBuildCard);
-const oldUpdate=update; update=function(){oldUpdate();renderSynergy();renderTakeoverLoadout()};
+// Jetons de badges (page « Mon build ») : redessinés à chaque recalcul.
+const oldUpdate=update; update=function(){oldUpdate();renderTokens()};
+// Le premier rendu a eu lieu plus haut, avant ce branchement : on dessine les jetons une fois.
+renderTokens();
 document.getElementById('cbStage')?.addEventListener('change',renderCBProgression);
 document.getElementById('cbAutoPlan')?.addEventListener('click',autoPlanCB);
 document.getElementById('cbClearPlan')?.addEventListener('click',clearCBPlan);
@@ -527,6 +517,7 @@ window.serializeBuild=serialize;
 window.applyBuild=apply;
 window.NBABL_BASE_ATTRIBUTES=(function(){var o={};Object.keys(data).forEach(function(g){data[g].forEach(function(p){o[p[0]]=p[1]})});return o})();
 window.heightInches=heightInches;
+window.tokenStorageKey=tokenStorageKey;
 window.setAttributeBaseline=setAttributeBaseline;
 window.appUpdate=function(){update()};
 // Contexte du dernier build composé, lu par hub.js quand le builder est absent.

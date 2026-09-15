@@ -55,14 +55,9 @@
   /* ---------- 1. Grille de badges par discipline ---------- */
   function tokenPlan(){
     try{
-      var raw=localStorage.getItem('nba2k27_tokens_'+
-        [el('position').value,el('height').value,el('weight').value,el('wing').value].join('_'));
+      // Même clé que le planificateur de jetons d'app.js : les emplacements dépendent du corps.
+      var raw=window.tokenStorageKey?localStorage.getItem(window.tokenStorageKey()):null;
       if(raw)return JSON.parse(raw);
-    }catch(e){}
-    try{
-      // Repli : ancienne clé du planificateur de jetons
-      var keys=Object.keys(localStorage).filter(function(k){return k.indexOf('nba2k27_tokens')===0});
-      if(keys.length)return JSON.parse(localStorage.getItem(keys[0])||'{}');
     }catch(e){}
     return {};
   }
