@@ -200,10 +200,10 @@
     if(fiab){
       var niv=window.NBABL_PLAFONDS||'approx', p=typeof CAPS_PRECISION!=='undefined'?CAPS_PRECISION:null;
       var textes={
-        exact:'Plafonds exacts du jeu (corps relevé)',
-        deduit:'Plafonds estimés à partir de corps relevés'+(p?' — '+String(p.exacts).replace('.',',')+' % exacts, '+String(p.unPoint).replace('.',',')+' % à ±1 point':''),
-        approx:'Plafonds approximatifs : aucun corps relevé assez proche, écart possible de plusieurs points',
-        import:'Plafonds de ton build importé du jeu'
+        exact:'Maximums des attributs exacts du jeu (corps relevé)',
+        deduit:'Maximums des attributs estimés'+(p?' : justes à '+Math.round(p.exacts)+' %, sinon '+(p.pire>1?'1 à '+p.pire+' points':'1 point')+' d’écart':' d’après des corps relevés'),
+        approx:'Maximums des attributs approximatifs : aucun corps assez proche relevé, écart possible de plusieurs points',
+        import:'Maximums des attributs de ton build importé du jeu'
       };
       ecrire('hqPlafonds',textes[niv]||textes.approx);
       if(fiab.dataset.niveau!==niv){fiab.dataset.niveau=niv;fiab.className='hq-plafonds '+niv}

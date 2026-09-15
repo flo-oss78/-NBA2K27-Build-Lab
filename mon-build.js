@@ -81,10 +81,10 @@
 
   var niv=window.NBABL_PLAFONDS||'approx', p=typeof CAPS_PRECISION!=='undefined'?CAPS_PRECISION:null;
   var fiab={
-    exact:'Plafonds exacts du jeu (corps relevé)',
-    deduit:'Plafonds estimés à partir de corps relevés'+(p?' — '+String(p.exacts).replace('.',',')+' % exacts':''),
-    approx:'Plafonds approximatifs : écart possible de plusieurs points',
-    import:'Plafonds de ton build importé du jeu'
+    exact:'Maximums des attributs exacts du jeu (corps relevé)',
+    deduit:'Maximums des attributs estimés'+(p?' : justes à '+Math.round(p.exacts)+' %':' d’après des corps relevés'),
+    approx:'Maximums des attributs approximatifs : écart possible de plusieurs points',
+    import:'Maximums des attributs de ton build importé du jeu'
   };
   var plaf=$('monBuildPlafonds');
   plaf.textContent=fiab[niv]||fiab.approx;

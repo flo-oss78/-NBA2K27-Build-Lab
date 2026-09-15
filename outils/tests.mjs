@@ -888,7 +888,7 @@ async function testsNavigateur(base) {
         return res;`);
       verifier(r.exact.niveau === 'exact' && /exacts du jeu/.test(r.exact.texte), `corps relevé ${r.exact.corps} (appliqué ${r.exact.corpsApplique}) affiché « ${r.exact.texte} »`);
       verifier(r.exact.caps, `plafonds exacts non repris pour ${r.exact.corps}`);
-      verifier(r.deduit.niveau === 'deduit' && /estimés à partir de corps relevés — [0-9]/.test(r.deduit.texte), `corps déduit ${r.deduit.corps} (appliqué ${r.deduit.corpsApplique}) affiché « ${r.deduit.texte} »`);
+      verifier(r.deduit.niveau === 'deduit' && /Maximums des attributs estimés[^0-9]*[0-9]/.test(r.deduit.texte), `corps déduit ${r.deduit.corps} (appliqué ${r.deduit.corpsApplique}) affiché « ${r.deduit.texte} »`);
       verifier(r.deduit.caps, `plafonds déduits non appliqués pour ${r.deduit.corps}`);
       if (r.approx) verifier(r.approx.niveau === 'approx' && /approximatifs/.test(r.approx.texte), `corps sans relevé ${r.approx.corps} (appliqué ${r.approx.corpsApplique}) affiché « ${r.approx.texte} »`);
       sansErreur('indicateur de fiabilité des plafonds');

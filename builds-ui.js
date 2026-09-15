@@ -26,15 +26,16 @@
     const zone=pct>100+marge?'dessus':pct<100-marge?'dessous':'dans';
     carte.className='panel exact-card budget-estime '+zone;
     $('budgetEstimeValeur').textContent=pct+' %';
-    $('budgetEstimeMarge').textContent='± '+marge+' %';
+    $('budgetEstimeMarge').textContent='du maximum (marge d’erreur ± '+marge+' %)';
     $('budgetEstimeBarre').style.width=Math.min(100,pct/1.3)+'%';
     $('budgetEstimeZone').style.left=((100-marge)/1.3)+'%';
     $('budgetEstimeZone').style.width=(2*marge/1.3)+'%';
-    const groupe=e.groupe.includes(' ')?`des ${e.n} builds réels ${pos} de ${heightText(h)}`:`des ${e.n} builds réels ${pos}`;
+    const POSTE={PG:'meneur',SG:'arrière',SF:'ailier',PF:'ailier fort',C:'pivot'}[pos]||pos;
+    const groupe=`${e.n} vrais builds de ${POSTE}${e.groupe.includes(' ')?' de '+heightText(h):''} montés au maximum`;
     $('budgetEstimeTexte').textContent=
-      zone==='dessous'?`Ton build dépense environ ${pct} % du budget ${groupe} à 99. Tu peux sans doute encore monter des attributs.`
-     :zone==='dans'?`Dans la zone d’un build complet à 99 (${groupe}) : pour monter un attribut, il faudra probablement en baisser un autre.`
-     :`Au-delà de ce que dépensent les builds réels à 99 (${groupe}) : le jeu refuserait probablement ce build. Baisse des attributs.`;
+      zone==='dessous'?`Tu utilises environ ${pct} % des points d’attributs d’un build complet (comparé à ${groupe}). Il te reste sans doute des points : tu peux encore monter des attributs.`
+     :zone==='dans'?`Tu es autour du maximum de points d’attributs (comparé à ${groupe}) : pour monter un attribut, il faudra probablement en baisser un autre.`
+     :`Tu dépasses les points d’attributs d’un build complet (comparé à ${groupe}) : le jeu refuserait probablement ce build. Baisse des attributs.`;
   }
 
   function renduProches(){

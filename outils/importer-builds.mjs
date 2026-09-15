@@ -224,7 +224,7 @@ const SOURCE = {
     { nom: 'App NBA 2K HQ', url: 'https://nba.2k.com/2k27/features/myplayer-builder/', role: `plafonds exacts de ${capsHQ.corps.length} corps, relevés dans le builder officiel (donnees/caps-2khq.json)` }
   ],
   ecartsCorps: ecartsCorps.length,
-  avertissement: 'Budget estimé à partir de builds réels : la règle exacte du jeu dépend des plafonds de chaque corps, qui ne sont pas publics.'
+  avertissement: 'Points d’attributs estimés en comparant ton build à ces builds réels : le jeu ne publie pas son calcul exact.'
 };
 const ligne = b => JSON.stringify([b.s, b.pos, b.h, b.w, b.wing, b.nom, b.v, ...(b.caps ? [b.caps] : [])]);
 const contenu = `/* NBA 2K27 Build Lab — Builds réels, corps autorisés et budget estimé

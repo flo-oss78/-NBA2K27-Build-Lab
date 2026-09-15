@@ -100,7 +100,7 @@
       <p id="hqPlafonds" class="hq-plafonds approx" role="status"></p>
       <div id="hqBudget" class="hq-budget" hidden>
         <div class="hq-jauge" aria-hidden="true"><i id="hqBudgetZone"></i><em id="hqBudgetBarre"></em></div>
-        <span>Budget estimé <b id="hqBudgetValeur"></b> <small id="hqBudgetMarge"></small></span>
+        <span>Points d’attributs utilisés : <b id="hqBudgetValeur"></b> <small id="hqBudgetMarge"></small></span>
       </div>
     </div>
     <div class="hq-tete-actions">
@@ -126,7 +126,7 @@
       <!-- Étape 1 : corps et style de jeu -->
       <div id="panneauCorps" class="hq-panneau" role="tabpanel" aria-labelledby="ongletCorps">
         <div class="panel exact-card body-card">
-          <div class="exact-card-title"><h2>Corps du joueur</h2><span>Plafonds selon le gabarit</span></div>
+          <div class="exact-card-title"><h2>Corps du joueur</h2><span>Maximums selon le gabarit</span></div>
 
           <!-- Sélecteur en roues (hq-builder.js). À l'étape Attributs, la barre
                passe au-dessus des curseurs, fixée en bas de l'écran sur mobile. -->
@@ -300,10 +300,10 @@
 
         <!-- Budget ESTIMÉ sur des builds réels : la règle exacte du jeu n'est pas publique. -->
         <div id="budgetEstime" class="panel exact-card budget-estime" hidden>
-          <div class="exact-card-title"><h2>Budget estimé</h2><span><b id="budgetEstimeValeur">—</b> <small id="budgetEstimeMarge"></small></span></div>
+          <div class="exact-card-title"><h2>Points d’attributs utilisés</h2><span><b id="budgetEstimeValeur">—</b> <small id="budgetEstimeMarge"></small></span></div>
           <div class="budget-jauge" aria-hidden="true"><i id="budgetEstimeZone"></i><em id="budgetEstimeBarre"></em></div>
           <p id="budgetEstimeTexte" class="budget-texte"></p>
-          <p class="budget-note">Estimation calibrée sur des builds réels complets à 99. La zone claire est la marge d’erreur mesurée : la règle exacte du jeu dépend des plafonds de chaque corps, qui ne sont pas publics.</p>
+          <p class="budget-note">Le jeu n’affiche pas combien de points d’attributs il te reste. On l’estime en comparant ton build à de vrais builds montés au maximum (99) ; la zone claire montre la marge d’erreur.</p>
         </div>
 
         <div class="panel exact-card recap-garder">
