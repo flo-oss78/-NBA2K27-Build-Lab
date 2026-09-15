@@ -504,6 +504,24 @@ async function testsNavigateur(base) {
       sansErreur('Mon build sans build en cours');
     });
 
+    // Une animation sans exigence connue ne doit pas passer pour libre : le jeu peut en demander.
+    await test('les animations sans exigence connue sont signalées « non confirmées »', async () => {
+      await nav.ouvrir(base + '/reference/?onglet=animations');
+      const r = await nav.evaluer(`
+        document.querySelector('#animGroupes [data-groupe="Poste"]').click();
+        await new Promise(r => setTimeout(r, 250));
+        const cartes = [...document.querySelectorAll('#animationList .anim-card')];
+        const vides = cartes.filter(c => c.querySelector('.areq-vide'));
+        return { cartes: cartes.length, vides: vides.length,
+          sansMention: vides.filter(c => !/non confirmées/.test(c.querySelector('.areq-vide').textContent)).length,
+          aucunLibre: !/Aucun attribut requis/.test(document.getElementById('animationList').textContent),
+          dribblesSansExigence: ANIMATIONS.filter(a => a.group === 'Dribble' && !Object.keys(a.req || {}).length).length };`);
+      verifier(r.cartes > 0 && r.vides > 0, `animations de poste : ${r.cartes} cartes, ${r.vides} sans exigence`);
+      verifier(r.sansMention === 0 && r.aucunLibre, `${r.sansMention} carte(s) sans exigence présentée(s) comme libre(s)`);
+      verifier(r.dribblesSansExigence === 0, `${r.dribblesSansExigence} dribble(s) sans exigence d’attribut dans la base`);
+      sansErreur('mention des exigences non confirmées');
+    });
+
     await test('/reference/ rend chaque badge et takeover, et donne accès à chaque animation', async () => {
       await nav.ouvrir(base + '/reference/');
       const r = await nav.evaluer(`

@@ -208,6 +208,7 @@
           .sort(function(a,b){return exige(b)-exige(a)||a.name.localeCompare(b.name,'fr')}).slice(0,c.suivant?2:3)
           .map(function(a){return esc(a.name)});
         var sugg=autres.length?'<span>Aussi : '+autres.join(' · ')+'</span>':'';
+        if(c.conseil&&!Object.keys(c.conseil.req||{}).length)sugg+='<span class="nonconfirme">Exigences non confirmées dans le jeu</span>';
         if(c.suivant)sugg+='<span class="ensuite">Ensuite : '+esc(c.suivant.name)+' ('+c.manques.map(function(m){return String(m[0]).split(' ou ').map(nomA).join(' ou ')+' +'+m[1]}).join(', ')+')</span>';
         return '<li class="anim-slot '+(c.conseil?'ok':'locked')+'"><small>'+esc(libelle)+'</small><b>'+esc(c.conseil?c.conseil.name:'Aucune accessible')+'</b>'+(sugg?'<p>'+sugg+'</p>':'')+'</li>';
       };

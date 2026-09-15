@@ -311,7 +311,9 @@ function carteAnimation(a,ok,r,h,conseils){
  const heightOK=h>=a.minH&&h<=a.maxH, manques=animationManques(a,r), e=Object.entries(a.req||{});
  const nomA=n=>typeof nomAttribut==='function'?nomAttribut(n):n;
  const m=p=>(p*0.0254).toFixed(2).replace('.',',')+' m';
- const reqs=!e.length?'<p class="areq-vide">Aucun attribut requis.</p>'
+ // Nos sources n'indiquent aucun attribut requis (surtout les animations de poste) :
+ // ce n'est pas la preuve que le jeu n'en demande aucun, on le dit.
+ const reqs=!e.length?'<p class="areq-vide nonconfirme">Exigences non confirmées : nos sources n’indiquent aucun attribut requis, le jeu peut en demander.</p>'
   :`<div class="areq tete"><span>Attribut</span><span>Toi</span><span>Requis</span></div>`+
    e.map(([k,v])=>{const t=r[k]??0;return `<div class="areq ${t>=v?'ok':''}"><span>${escapeHTML(nomA(k))}</span><b>${t}</b><i>${v}</i></div>`}).join('')+
    (a.ou&&e.length>1?'<p class="areq-logique">Un seul de ces attributs suffit.</p>':'');

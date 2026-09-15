@@ -593,6 +593,8 @@ body:not(.mode-expert) #wizardBanner{display:none}
 .anim-slot p{margin:2px 0 0;display:grid;gap:1px;font-size:11.5px;line-height:1.4;color:var(--muted)}
 .anim-slot p span{overflow-wrap:anywhere}
 .anim-slot .ensuite{color:var(--dim)}
+/* Animations dont les exigences d'attributs ne sont pas confirmées (surtout au poste). */
+.anim-slot .nonconfirme,.areq-vide.nonconfirme{color:var(--amber)}
 /* Deux colonnes lues de haut en bas, comme la liste du jeu (une grille se lirait en zigzag). */
 @media (min-width:1100px){.anim-ecran ul{columns:2;column-gap:28px}.anim-slot{break-inside:avoid}}
 .hq-page-badges .anim-sources{margin:0}
