@@ -14,17 +14,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
+import { predire, reglerTous } from './caps-modele.mjs';
 
 const RACINE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const sortie = process.argv[2] || path.join(RACINE, 'liste-precision.md');
 const NOMBRE = +(process.argv[3] || 36);
 
-// Même réglage que deduire-caps.mjs : on reprend son code, sans écrire de fichier.
-const src = fs.readFileSync(path.join(RACINE, 'outils', 'deduire-caps.mjs'), 'utf8');
-const coeur = src.slice(src.indexOf('const iv ='), src.indexOf('const MODELES = {}'));
+// Même formule que deduire-caps.mjs (caps-modele.mjs), réglée sur tous les cœurs.
 const hq = JSON.parse(fs.readFileSync(path.join(RACINE, 'donnees', 'caps-2khq.json'), 'utf8'));
 const A = hq.ordre;
-const { modele, predire } = new Function('A', 'hq', coeur + ';return {modele,predire};')(A, hq);
 
 const ctx = {};
 vm.createContext(ctx);
@@ -46,12 +44,13 @@ const parH = {};
 for (const c of hq.corps) (parH[c.h] ??= []).push(c);
 
 const candidats = [];
-const tailles = [...new Set(POSTES.flatMap(p => Object.keys(ctx.L[p]).map(Number)))].sort((a, b) => a - b);
+// Taille non modélisée (moins de 8 corps) : liste-a-filmer.mjs s'en charge.
+const tailles = [...new Set(POSTES.flatMap(p => Object.keys(ctx.L[p]).map(Number)))].sort((a, b) => a - b)
+  .filter(h => (parH[h] || []).length >= 8);
+const regles = await reglerTous(Object.fromEntries(tailles.map(h => [h, parH[h]])), A);
 for (const h of tailles) {
-  const corps = parH[h] || [];
-  if (corps.length < 8) continue; // taille non modélisée : liste-a-filmer.mjs s'en charge
-  const comite = corps.map(cache => modele(corps.filter(c => c !== cache)));
-  comite.push(modele(corps));
+  const corps = parH[h];
+  const comite = [...regles[h].sans, regles[h].complet];
   const bornes = POSTES.map(p => ctx.L[p][h]).filter(Boolean);
   const w0 = Math.min(...bornes.map(b => b[0])), w1 = Math.max(...bornes.map(b => b[1]));
   const e0 = Math.min(...bornes.map(b => b[2])), e1 = Math.max(...bornes.map(b => b[3]));
