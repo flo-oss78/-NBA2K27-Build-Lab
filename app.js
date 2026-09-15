@@ -398,8 +398,11 @@ function breakerTotalValue(){return inputs.reduce((s,x)=>s+ +(getBreaker(x.datas
 
 function renderProDashboard(){if(!document.getElementById("proQualityScore"))return; /* section absente de cette page */
  const caps=bodyCaps(), r=ratings(), v=validateBuild(r,caps);
- const badgeCount=+document.getElementById('badgeTotal').textContent||0;
- const animCount=+document.getElementById('animTotal').textContent||0;
+ // badgeTotal n'est rempli que par la page Badges : sur le builder il restait à 0,
+ // d'où « 0 badges en base » et un faux « À corriger ». Les comptes sont calculés ici.
+ texte('badgeTotal',badgeDefs.length);
+ const badgeCount=unlockedBadgeCount(r);
+ const animCount=unlockedAnimationCount();
  const bodyOK=v.errors.filter(e=>e.includes('Envergure')).length===0;
  const capOK=v.errors.filter(e=>e.includes('dépasse le cap')).length===0;
  const badgeOK=badgeCount>0;

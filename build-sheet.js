@@ -92,7 +92,7 @@
           '<i aria-hidden="true">'+DISC_ICON[d]+'</i>'+
           '<b>'+esc(d)+'</b>'+
           '<span class="bg-count">'+reachable+'/'+items.length+'</span>'+
-          '<em class="bg-slots" title="Emplacements planifiés">'+slots+' slot'+(slots>1?'s':'')+'</em>'+
+          (slots?'<em class="bg-slots" title="Emplacements planifiés">'+slots+' emplacement'+(slots>1?'s':'')+'</em>':'')+
         '</div>'+
         '<div class="bg-items">'+items.map(function(i){
           var locked=i.st.level===0;

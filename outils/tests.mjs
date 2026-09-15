@@ -544,13 +544,19 @@ async function testsNavigateur(base) {
                  libelle: document.querySelector('.summary-ring small')?.textContent,
                  avertissement: !!document.querySelector('.summary-note'),
                  validation: document.getElementById('validationStatus')?.textContent,
-                 aPortee: document.getElementById('badgeReachable')?.textContent };`);
+                 aPortee: document.getElementById('badgeReachable')?.textContent,
+                 // Le builder affichait « 0 badges en base » et « À corriger » alors que 29 badges étaient accessibles.
+                 badgesEnBase: document.getElementById('badgeTotal')?.textContent,
+                 aCorriger: /À corriger/.test(texte), emplacementsVides: /\\b0 slot/.test(texte) };`);
       verifier(!r.budget, `un budget est encore affiché : « ${r.budget} »`);
       verifier(!r.grade, 'une lettre de note (B+, A…) est encore attribuée au build');
       verifier(r.libelle === 'Moyenne', `le chiffre du résumé s’intitule « ${r.libelle} » au lieu de « Moyenne »`);
       verifier(r.avertissement, 'rien ne précise que la moyenne n’est pas la note du jeu');
       verifier(r.validation === 'BUILD COHÉRENT', `validation : ${r.validation}`);
       verifier(+r.aPortee > 0, `badges à portée : ${r.aPortee}`);
+      verifier(+r.badgesEnBase > 0, `« ${r.badgesEnBase} badges en base » dans le résumé`);
+      verifier(!r.aCorriger, 'le tableau de bord dit « À corriger » pour un build cohérent');
+      verifier(!r.emplacementsVides, '« 0 slot » affiché dans les badges par discipline');
     });
 
     await test('un build recopié du jeu garde ses plafonds et ses brise-plafonds', async () => {
