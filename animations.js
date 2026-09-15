@@ -2614,7 +2614,18 @@ const ANIMATION_CATEGORIES_FR={
   'Crossover Escape':'Crossover (dégagement)','Hesitation Escape':'Hésitation (dégagement)',
   'Between Legs Escape':'Dégagement entre les jambes','Behind the Back Escape':'Dégagement dans le dos',
   'Dribble Pull-Up':'Dribble plus tir en suspension','Spin Jumper':'Tir après un dribble renversé',
-  'Hop Jumper':'Hop Jumper','Go-To Shot':'Tir signature','Jumper Base':'Tir en suspension (base)'
+  'Hop Jumper':'Hop Jumper','Go-To Shot':'Tir signature','Jumper Base':'Tir en suspension (base)',
+  // Capture du 15 septembre 2026 (le jeu garde certains noms en anglais : on les garde aussi).
+  'Misdirection Hesitation':'Feinte d’hésitation','Misdirection Crossover':'Feinte de crossover',
+  'Misdirection Behind Back':'Feinte derrière le dos','Combo Move':'Mouvement combo',
+  'Hesitation Crossover Combo':'Combo Crossover hésitation','Double Crossover Combo':'Combo double crossover',
+  'Behind the Back':'Dans le dos','Behind the Back Launch':'Passe dans le dos','Cross Spin':'Cross Spin',
+  'In and Out':'In-and-out','Hesitation':'Hésitation','Lateral Hesitation':'Hésitation latérale',
+  'Stepback':'Step Back','Crossover Stepback':'Crossover Step Back','Lateral Stepback':'Step Back latéral',
+  'Triple Threat Style':'Style Triple menace','Triple Threat Breakdown':'Breakdown Triple menace',
+  'Triple Threat Jab Steps':'Jab Steps Triple menace','Post Fade':'Fadeaway au poste','Post Hook':'Bras roulé au poste',
+  'Post Hop Shot':'Hop Shot au poste','Post Go-To Shot':'Tir signature au poste','Motion Style':'Style de mouvement',
+  'Layup Style':'Double-pas','Signature Dunks - Players':'Style de dunk'
 };
 function nomCategorieAnimation(c){return ANIMATION_CATEGORIES_FR[c]||c}
 

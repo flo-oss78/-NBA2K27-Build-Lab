@@ -821,10 +821,11 @@ async function testsNavigateur(base) {
           }
         }
         return { erreurs: erreurs.slice(0, 8), conseils,
-          builder: [...document.querySelectorAll('#styleAnimationRecommendations .style-animation-item')].length };`);
+          builder: [...document.querySelectorAll('#styleAnimationRecommendations .anim-ecran')].map(s => s.querySelector('h3').textContent + ':' + s.querySelectorAll('.anim-slot').length).join(' ') };`);
       verifier(!r.erreurs.length, 'conseils incorrects : ' + r.erreurs.join(' | '));
       verifier(r.conseils > 300, `seulement ${r.conseils} conseils sur 60 builds`);
-      verifier(r.builder === 11, `${r.builder} lignes d’animations conseillées dans le builder au lieu de 11`);
+      // Onglet Animations du builder : les emplacements de l'écran du jeu, dans son ordre (13 Points, 31 Organisation).
+      verifier(/^Points:13 Organisation:31 Autres animations:\d+$/.test(r.builder), `emplacements d’animations du builder : ${r.builder}`);
       await nav.ouvrir(base + '/reference/?onglet=animations');
       const p = await nav.evaluer(`
         const s = document.getElementById('animStatus'); s.value = 'conseil'; s.dispatchEvent(new Event('change', { bubbles: true }));

@@ -193,17 +193,54 @@
     var box=el('styleAnimationRecommendations');
     if(!box)return;
     var h=typeof heightInches==='function'?heightInches():78;
-    // Conseils calculés sur le build (app.js) : l'animation la plus exigeante équipable par catégorie.
+    // Même ordre et mêmes libellés que l'écran « Animations en match » du jeu (captures du 15/09/2026).
+    // Pour chaque emplacement : l'animation conseillée, puis jusqu'à 3 suggestions en petit.
     if(typeof window.conseilsAnimations==='function'){
-      var CLES=['Dribble Style','Signature Size-Up','Crossover Escape','Behind the Back Escape','Hesitation Escape','Go-To Shot','Dribble Pull-Up','Spin Jumper','Hop Jumper','Layup Style','Pass Style'];
       var conseils=window.conseilsAnimations(r,h);
       var nomA=function(n){return typeof nomAttribut==='function'?nomAttribut(n):n};
-      box.innerHTML=CLES.map(function(cat){
-        var c=conseils.get(cat)||{}, libelle=typeof nomCategorieAnimation==='function'?nomCategorieAnimation(cat):cat;
-        if(c.conseil)return '<div class="style-animation-item ok"><b>'+esc(libelle)+'</b><span>'+esc(c.conseil.name)+'</span></div>';
-        var aide=c.suivant?'À débloquer : '+c.suivant.name+' ('+c.manques.map(function(m){return String(m[0]).split(' ou ').map(nomA).join(' ou ')+' +'+m[1]}).join(', ')+')':'Aucune à ta taille';
-        return '<div class="style-animation-item locked"><b>'+esc(libelle)+'</b><span>'+esc(aide)+'</span></div>';
-      }).join('');
+      var exige=function(a){var v=Object.values(a.req||{});return v.length?Math.max.apply(null,v):0};
+      var utilisees={};
+      var ligne=function(libelle,cat,note){
+        if(cat)utilisees[cat]=1;
+        if(!cat)return '<li class="anim-slot vide"><small>'+esc(libelle)+'</small><b>'+esc(note||'Pas encore dans notre base')+'</b></li>';
+        var c=conseils.get(cat)||{};
+        var autres=(window.ANIMATIONS||[]).filter(function(a){return a.category===cat&&a!==c.conseil&&h>=a.minH&&h<=a.maxH&&!animationManques(a,r).length})
+          .sort(function(a,b){return exige(b)-exige(a)||a.name.localeCompare(b.name,'fr')}).slice(0,c.suivant?2:3)
+          .map(function(a){return esc(a.name)});
+        var sugg=autres.length?'<span>Aussi : '+autres.join(' · ')+'</span>':'';
+        if(c.suivant)sugg+='<span class="ensuite">Ensuite : '+esc(c.suivant.name)+' ('+c.manques.map(function(m){return String(m[0]).split(' ou ').map(nomA).join(' ou ')+' +'+m[1]}).join(', ')+')</span>';
+        return '<li class="anim-slot '+(c.conseil?'ok':'locked')+'"><small>'+esc(libelle)+'</small><b>'+esc(c.conseil?c.conseil.name:'Aucune accessible')+'</b>'+(sugg?'<p>'+sugg+'</p>':'')+'</li>';
+      };
+      var section=function(titre,lignes){return '<section class="anim-ecran"><h3>'+esc(titre)+'</h3><ul>'+lignes.join('')+'</ul></section>'};
+      var html=section('Points',[
+        ligne('Tir en suspension',null,'Se règle dans le créateur de tirs'),ligne('Lancer franc',null),
+        ligne('Tir signature','Go-To Shot'),ligne('Dribble plus tir en suspension','Dribble Pull-Up'),
+        ligne('Tir après un dribble renversé','Spin Jumper'),ligne('Hop Jumper','Hop Jumper'),
+        ligne('Style de dunk','Signature Dunks - Players'),
+        ligne('Double-pas (normal, inversé, Floater, Scoop rapide, Eurostep, Hop Step, renversé)','Layup Style'),
+        ligne('Fadeaway au poste','Post Fade'),ligne('Bras roulé au poste','Post Hook'),
+        ligne('Hop Shot au poste','Post Hop Shot'),ligne('Tir signature au poste','Post Go-To Shot'),
+        ligne('Style de mouvement','Motion Style')])+
+      section('Organisation',[
+        ligne('Style de passes','Pass Style'),ligne('Style de dribbles','Dribble Style'),ligne('Crossover','Crossover'),
+        ligne('Crossover entre les jambes','Between Legs Cross'),ligne('Sizeup personnalisé','Signature Size-Up'),
+        ligne('Combo Breakdown','Breakdown Combo'),ligne('Combo Breakdown en mouvement','Breakdown Moving Combo'),
+        ligne('Crossover (dégagement)','Crossover Escape'),ligne('Hésitation (dégagement)','Hesitation Escape'),
+        ligne('Dégagement entre les jambes','Between Legs Escape'),ligne('Dégagement dans le dos','Behind the Back Escape'),
+        ligne('Feinte d’hésitation','Misdirection Hesitation'),ligne('Feinte de crossover','Misdirection Crossover'),
+        ligne('Feinte derrière le dos','Misdirection Behind Back'),ligne('Mouvement combo','Combo Move'),
+        ligne('Combo Crossover hésitation','Hesitation Crossover Combo'),ligne('Combo double crossover','Double Crossover Combo'),
+        ligne('Dans le dos','Behind the Back'),ligne('Passe dans le dos','Behind the Back Launch'),
+        ligne('Cross Spin','Cross Spin'),ligne('In-and-out','In and Out'),ligne('Hésitation','Hesitation'),
+        ligne('Hésitation latérale','Lateral Hesitation'),ligne('Step Back','Stepback'),
+        ligne('Crossover Step Back','Crossover Stepback'),ligne('Step Back latéral','Lateral Stepback'),
+        ligne('Style Triple menace','Triple Threat Style'),ligne('Breakdown Triple menace','Triple Threat Breakdown'),
+        ligne('Jab Steps Triple menace','Triple Threat Jab Steps'),ligne('Step Overs Triple menace',null),
+        ligne('Passes spectaculaires Playground',null)]);
+      // Catégories de notre base absentes de cet écran (créateur de dunks, spin…), rangées à la fin.
+      var reste=[];(window.ANIMATIONS||[]).forEach(function(a){if(a.category!=='Jumper Base'&&!utilisees[a.category]&&reste.indexOf(a.category)<0)reste.push(a.category)});
+      if(reste.length)html+=section('Autres animations',reste.sort().map(function(cat){return ligne(typeof nomCategorieAnimation==='function'?nomCategorieAnimation(cat):cat,cat)}));
+      box.innerHTML=html;
       return;
     }
     var rows=STYLE_ANIMATIONS[style]||STYLE_ANIMATIONS['Équilibré'];
