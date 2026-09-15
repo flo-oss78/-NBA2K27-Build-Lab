@@ -104,6 +104,26 @@ async function testsStatiques() {
     verifier(!manquants.length, manquants.join('\n'));
   });
 
+  await test('une seule adresse de site partout, et les commentaires restent fermés', () => {
+    // L'ancienne adresse sert une vieille version : liens de partage et QR codes y menaient.
+    const ancienne = 'nbabuild' + 'lab.pages.dev';
+    const fautifs = [];
+    const parcourir = dossier => {
+      for (const e of fs.readdirSync(dossier, { withFileTypes: true })) {
+        if (e.name.startsWith('.') || ['node_modules', 'outils', 'donnees'].includes(e.name)) continue;
+        const chemin = path.join(dossier, e.name);
+        if (e.isDirectory()) parcourir(chemin);
+        else if (/\.(js|mjs|html|txt|json|webmanifest|xml)$/.test(e.name) && fs.readFileSync(chemin, 'utf8').includes(ancienne)) fautifs.push(chemin);
+      }
+    };
+    parcourir('.');
+    verifier(!fautifs.length, 'ancienne adresse encore présente : ' + fautifs.join(', '));
+    const config = fs.readFileSync('site-config.js', 'utf8');
+    verifier(config.includes("siteUrl:'https://nba2k27-build-lab.pages.dev'"), 'siteUrl ne pointe pas vers le site en production');
+    verifier(/COMMENTAIRES_OUVERTS = false/.test(fs.readFileSync('functions/api/builds/[id]/comments.js', 'utf8')), 'les commentaires ont été rouverts sans modération');
+    verifier(!fs.readFileSync('server-client.js', 'utf8').includes('serverCommentForm'), 'le formulaire de commentaire est revenu');
+  });
+
   await test('aucun id en double ni ancre morte', () => {
     const problemes = [];
     for (const p of PAGES) {

@@ -8,7 +8,12 @@ export async function onRequestGet({params,env}){
  const {results}=await env.DB.prepare('SELECT id,nickname,body,created_at FROM comments WHERE build_id=? ORDER BY created_at DESC LIMIT 100').bind(params.id).all();
  return json({comments:results});
 }
+/* Commentaires coupés pour le lancement (décision du 15/09/2026) : sans signalement ni
+   suppression, un commentaire public ne pouvait pas être modéré. Le code d'écriture reste
+   ci-dessous pour le jour où la modération existera (retirer ce retour anticipé). */
+const COMMENTAIRES_OUVERTS = false;
 export async function onRequestPost({params,env,request}){
+ if(!COMMENTAIRES_OUVERTS)return json({error:'Les commentaires sont fermés.'},403);
  if(!env.DB)return json({error:'D1 database is not configured.'},503);
  const throttle=await rateLimit(env,request,'comment',10);
  if(!throttle.ok)return json({error:'Trop de commentaires. Réessaie dans une minute.'},429,{'retry-after':'60'});

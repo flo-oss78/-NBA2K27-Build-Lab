@@ -1,5 +1,5 @@
 window.NBABL_SITE_CONFIG=Object.freeze({
-  siteUrl:'https://nbabuildlab.pages.dev',
+  siteUrl:'https://nba2k27-build-lab.pages.dev',
   apiBase:'/api',
   appName:'NBA 2K27 Build Lab',
   version:'24.1.0',
