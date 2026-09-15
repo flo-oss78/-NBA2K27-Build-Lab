@@ -35,15 +35,21 @@ for (const h of tailles) {
   const w0 = Math.min(...bornes.map(b => b[0])), w1 = Math.max(...bornes.map(b => b[1]));
   const e0 = Math.min(...bornes.map(b => b[2])), e1 = Math.max(...bornes.map(b => b[3]));
   const wm = Math.round((w0 + w1) / 2), em = Math.round((e0 + e1) / 2);
-  const cibles = [[w0, e0, 'poids min, envergure min'], [w0, e1, 'poids min, envergure max'], [w1, e0, 'poids max, envergure min'], [w1, e1, 'poids max, envergure max'], [wm, em, 'milieu']];
+  // Coins, puis milieux des bords et centre : la grille 3 × 3 poids × envergure.
+  // Les coins bornent la formule ; les milieux la corrigent là où elle devine.
+  const cibles = [[w0, e0, 'poids min, envergure min'], [w0, e1, 'poids min, envergure max'], [w1, e0, 'poids max, envergure min'], [w1, e1, 'poids max, envergure max'],
+    [wm, em, 'milieu'], [wm, e0, 'poids moyen, envergure min'], [wm, e1, 'poids moyen, envergure max'], [w0, em, 'poids min, envergure moyenne'], [w1, em, 'poids max, envergure moyenne']];
   const vus = new Set();
-  for (const [w, e, role] of cibles) {
+  for (let [w, e, role] of cibles) {
     const cle = `${h}|${w}|${e}`;
     if (vus.has(cle)) continue;
     vus.add(cle);
     if (releve.has(cle)) { dejaFaits++; continue; }
     // Le corps milieu doit exister pour au moins un poste ; sinon on le décale vers un poste qui l'autorise.
-    let poste = POSTES.find(p => autorise(p, h, w, e));
+    // Un corps écarté (relevé contradictoire) est à refaire sous un autre poste que la première fois.
+    const ecarte = (hq.ecartes || []).find(c => `${c.h}|${c.w}|${c.wing}` === cle);
+    let poste = POSTES.find(p => autorise(p, h, w, e) && !(ecarte && ecarte.poste === p)) || POSTES.find(p => autorise(p, h, w, e));
+    if (ecarte && poste) role += ` — à refaire en ${NOM[poste]} (relevé précédent contradictoire)`;
     let ww = w, ee = e;
     if (!poste) {
       for (const p of POSTES) { const b = ctx.L[p][h]; if (!b) continue; ww = Math.min(b[1], Math.max(b[0], w)); ee = Math.min(b[3], Math.max(b[2], e)); if (!releve.has(`${h}|${ww}|${ee}`)) { poste = p; break; } }
