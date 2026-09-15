@@ -513,7 +513,7 @@ async function testsNavigateur(base) {
     await test('un lien de partage restaure le build à l\u2019identique', async () => {
       const build = { position: 'PG', height: '76', weight: '180', wing: '82', style: 'Slasher', hand: 'Droite',
         attrs: { 'Close Shot': '88', 'Driving Layup': '93', 'Driving Dunk': '94', 'Mid-Range': '50',
-                 'Three-Point': '91', 'Steal': '73', 'Agility': '84' } };
+                 'Three-Point': '86', 'Steal': '73', 'Agility': '84' } };
       const code = Buffer.from(JSON.stringify(build), 'utf8').toString('base64');
       await nav.ouvrir(`${base}/?build=${encodeURIComponent(code)}`);
       const lu = await nav.evaluer(`
@@ -750,7 +750,7 @@ async function testsNavigateur(base) {
         res.deduit.caps = BUILDS_ATTRIBUTS.every(a => +document.getElementById('cap'+a.replace(/[^a-z0-9]/gi,'')).textContent.slice(4) >= attendus[a]);
         // Corps approximatif : taille sans modèle, corps non relevé.
         let approx = null;
-        for (const p of POSTES) for (const [h,b] of Object.entries(CORPS_LEGAUX[p])) { if (approx || CAPS_MODELES[h]) continue; const c = CAPS_CORPS[h+'|'+b[0]+'|'+b[2]]; if (!c || c[0]!==1) approx = [p,+h,b[0],b[2]]; }
+        for (const p of POSTES) for (const [h,b] of Object.entries(CORPS_LEGAUX[p])) { if (approx || CAPS_MODELES[h]) continue; for (let w=b[0]; w<=b[1] && !approx; w++) for (let e=b[2]; e<=b[3] && !approx; e++) { const c = CAPS_CORPS[h+'|'+w+'|'+e]; if (!c || c[0]!==1) approx = [p,+h,w,e]; } }
         res.approx = await regler(...approx);
         return res;`);
       verifier(r.exact.niveau === 'exact' && /exacts du jeu/.test(r.exact.texte), `corps relevé ${r.exact.corps} (appliqué ${r.exact.corpsApplique}) affiché « ${r.exact.texte} »`);
