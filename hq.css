@@ -344,7 +344,7 @@ body:not(.mode-expert) .hq-builder .attr .thresholds{display:none}
 .hq-builder .summary-ring{background:conic-gradient(var(--turquoise) 0 var(--score-pct,76%),rgba(255,255,255,.07) var(--score-pct,76%) 100%)}
 /* Anneau évidé : le dégradé remplissait tout le disque, « Moyenne » en gris était
    illisible sur le turquoise. Un disque sombre au centre porte le chiffre et le mot. */
-.summary-ring{position:relative;isolation:isolate}
+.summary-ring{position:relative;isolation:isolate;box-shadow:none}
 .summary-ring::before{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--panel);z-index:-1}
 .hq-builder .summary-ring strong,.hq-builder .summary-counts b{font-family:var(--titre);font-weight:800;font-size:26px}
 .hq-builder .summary-head b{font-family:var(--titre);font-size:20px;letter-spacing:.03em;text-transform:uppercase}
