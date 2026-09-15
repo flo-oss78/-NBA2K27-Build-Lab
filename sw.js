@@ -5,12 +5,12 @@
    - /api/ : jamais mis en cache
    - install : addAll tolérant aux 404 (un fichier manquant ne casse plus l'installation)
 */
-const VERSION='v26.5.0';
+const VERSION='v26.6.0';
 const SHELL_CACHE='nbabl-shell-'+VERSION;
 const RUNTIME_CACHE='nbabl-runtime-'+VERSION;
 
 // Les quatre pages du site. Chacune est mise en cache pour être servie hors ligne.
-const PAGES=['/','/hub/','/reference/','/progression/'];
+const PAGES=['/','/hub/','/reference/','/mon-build/'];
 
 const SHELL=[
   ...PAGES,
@@ -20,7 +20,7 @@ const SHELL=[
   './dna-engine.js','./data-registry.js','./data-validation.js','./players-core.js',
   './v15-intelligence.js','./server-client.js','./style-presets.js','./ui.js',
   './blueprints.js','./progression.js','./qr.js','./share.js','./assist.js',
-  './build-sheet.js','./community.js',
+  './build-sheet.js','./community.js','./mon-build.js',
   './manifest.webmanifest','./favicon.svg','./icon-192.png','./icon-512.png'
 ];
 

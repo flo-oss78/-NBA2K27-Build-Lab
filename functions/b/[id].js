@@ -90,7 +90,7 @@ export async function onRequestGet({params,env,request}){
 <body class="build-page">
 <header class="reference-header">
   <div class="reference-brand"><div>NBA <b>2K27</b></div><small>BUILD LAB</small></div>
-  <nav class="reference-nav" aria-label="Navigation"><a href="/hub/">Builds</a><a href="/">Builder</a><a href="/trios/">Trios</a></nav>
+  <nav class="reference-nav" aria-label="Navigation"><a href="/">Créer</a><a href="/hub/">Builds</a><a href="/mon-build/">Mon build</a></nav>
   <div class="reference-actions"><a class="pill" href="/">Ouvrir le builder</a></div>
 </header>
 <main>

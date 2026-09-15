@@ -315,8 +315,12 @@
     else{var s=$('save');if(s)s.click()}
   });
   if(precedent)precedent.addEventListener('click',function(){if(courant>0)ouvrir(onglets[courant-1].dataset.onglet,false)});
-  // Un build ouvert depuis un lien de partage est déjà fait : on montre son récapitulatif.
-  if(onglets.length)ouvrir(/[?&]build=/.test(location.search)?'recap':onglets[0].dataset.onglet,false);
+  // ?etape=attributs (lien « Modifier » de la page Mon build) ouvre cette étape.
+  // Sinon, un build ouvert depuis un lien de partage est déjà fait : on montre son récapitulatif.
+  var etapeDemandee=null;
+  try{etapeDemandee=new URLSearchParams(location.search).get('etape')}catch(e){}
+  var etapeConnue=onglets.some(function(o){return o.dataset.onglet===etapeDemandee});
+  if(onglets.length)ouvrir(etapeConnue?etapeDemandee:(/[?&]build=/.test(location.search)?'recap':onglets[0].dataset.onglet),false);
 
   document.body.classList.add('avec-roues');
 })();

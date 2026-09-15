@@ -162,4 +162,6 @@
   // ne mettrait pas l'encart à jour, et chaque curseur effacerait « MAX … BP ».
   [...inputs,...['position','height','weight','wing'].map($)].forEach(x=>x?.addEventListener('input',rendu));
   rendu(); // le premier rendu d'app.js a eu lieu avant le chargement de ce fichier
+  // Lien « Importer mon build du jeu » de la page Mon build (?import=1).
+  if(/[?&]import=1(&|$)/.test(location.search))ouvrir();
 })();

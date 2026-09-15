@@ -606,6 +606,37 @@ body:not(.mode-expert) #wizardBanner{display:none}
 /* =============================================================
    8. PAGE BUILDS (/hub/) — onglets Builds réels, Trios, Communauté
    ============================================================= */
+/* Page « Mon build » (/mon-build/) */
+.hq-page-monbuild{gap:16px}
+.hq-page-monbuild .section-title h2{font-size:24px}
+.hq-page-monbuild.sans-build .hq-onglets,.hq-page-monbuild.sans-build .hq-panneau{display:none}
+/* Quatre onglets : sur téléphone ils défilent au lieu de sortir de l'écran. */
+.hq-page-monbuild .hq-onglets{justify-content:flex-start;overflow-x:auto;scrollbar-width:none}
+.hq-page-monbuild .hq-onglets::-webkit-scrollbar{display:none}
+.hq-page-monbuild .hq-onglets button{flex:none}
+@media (max-width:979.98px){.hq-page-monbuild .hq-onglets button{padding:10px 11px;font-size:16px}}
+.monbuild-vide{display:grid;gap:8px}
+/* display:grid passerait par-dessus l'attribut hidden : l'encart s'affichait avec un build ouvert. */
+.monbuild-vide[hidden]{display:none}
+.monbuild-vide>b{font-family:var(--titre);font-size:22px;font-weight:800;letter-spacing:.03em;text-transform:uppercase}
+.monbuild-vide>span{font-size:13.5px;color:var(--muted)}
+.monbuild-carte{display:grid;gap:12px}
+.monbuild-tete{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center}
+.monbuild-id{display:grid;gap:2px;min-width:0}
+.monbuild-id b{font-family:var(--titre);font-size:clamp(24px,5vw,34px);font-weight:800;letter-spacing:.03em;text-transform:uppercase;line-height:1.05;overflow-wrap:anywhere}
+.monbuild-id small{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.monbuild-carte .hq-plafonds{justify-self:start;margin:0}
+.monbuild-carte .summary-ring{background:conic-gradient(var(--turquoise) 0 var(--score-pct,76%),rgba(255,255,255,.07) var(--score-pct,76%) 100%)}
+.monbuild-carte .summary-ring strong,.monbuild-carte .summary-counts b{font-family:var(--titre);font-weight:800;font-size:26px}
+.monbuild-carte .summary-counts{grid-template-columns:repeat(3,minmax(0,1fr))}
+.monbuild-actions{display:flex;flex-wrap:wrap;gap:8px}
+.monbuild-actions a,.monbuild-actions button{
+  display:inline-flex;align-items:center;min-height:42px;padding:8px 18px;border-radius:999px;
+  font-weight:700;font-size:14px;text-decoration:none;color:var(--text);background:rgba(255,255,255,.05);border:1px solid var(--line);
+}
+.monbuild-actions .primary{background:linear-gradient(180deg,var(--rouge-2),var(--rouge));border:0;color:#fff}
+.moteur-cache{display:none!important}
+
 .hq-page-builds{gap:16px}
 .hq-page-tete{padding:6px 0 0}
 .hq-page-tete h1{margin-top:2px}

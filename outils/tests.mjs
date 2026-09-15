@@ -28,10 +28,10 @@ process.chdir(RACINE);
 const PROD = process.argv.includes('--prod');
 const URL_PROD = 'https://nba2k27-build-lab.pages.dev';
 const PAGES = [
-  { chemin: '/',             fichier: 'index.html',             nav: 'Builder' },
+  { chemin: '/',             fichier: 'index.html',             nav: 'Créer' },
   { chemin: '/hub/',         fichier: 'hub/index.html',         nav: 'Builds' },
-  { chemin: '/reference/',   fichier: 'reference/index.html',   nav: 'Badges & animations' },
-  { chemin: '/progression/', fichier: 'progression/index.html', nav: 'Progression' }
+  { chemin: '/reference/',   fichier: 'reference/index.html',   nav: 'Badges' },
+  { chemin: '/mon-build/',   fichier: 'mon-build/index.html',   nav: 'Mon build' }
 ];
 
 // Build réel recopié du jeu (arrière 1,91 m, GNR 96) : sert de témoin.
@@ -451,6 +451,57 @@ async function testsNavigateur(base) {
       verifier(r.retour === 'animations', `Retour depuis le récap mène à « ${r.retour} »`);
       verifier(!r.avancesVisibles, `sections avancées visibles en mode Simple : ${r.avancesVisibles}`);
       sansErreur('parcours des étapes du builder');
+    });
+
+    // Étape 5 : la page « Mon build » reprend le build composé dans le builder.
+    await test('« Mon build » reprend le build en cours : fiche, brise-plafonds, badges et progression', async () => {
+      const code = Buffer.from(JSON.stringify(BUILD_JEU), 'utf8').toString('base64');
+      await nav.ouvrir(`${base}/?build=${encodeURIComponent(code)}`);
+      const attendu = await nav.evaluer(`return { nom: document.getElementById('buildname').textContent, score: document.getElementById('score').textContent,
+        notes: Object.fromEntries(inputs.map(x => [x.dataset.name, +x.value])) };`);
+      await nav.ouvrir(base + '/mon-build/');
+      sansErreur('ouverture de Mon build');
+      const r = await nav.evaluer(`
+        const pause = () => new Promise(r => setTimeout(r, 150));
+        const onglets = [...document.querySelectorAll('.hq-onglets [role="tab"]')].map(o => o.dataset.onglet).join(' ');
+        const avant = +document.getElementById('breakerTotal').textContent;
+        document.querySelector('#breakerList button[data-dir="+"]').click(); await pause();
+        const apres = +document.getElementById('breakerTotal').textContent;
+        document.querySelector('#breakerList button[data-dir="-"]').click(); await pause();
+        return { nom: document.getElementById('buildname').textContent, score: document.getElementById('score').textContent,
+          notes: Object.fromEntries(inputs.map(x => [x.dataset.name, +x.value])),
+          vide: !!document.getElementById('monBuildVide').offsetParent, onglets, avant, apres,
+          lignesBP: document.querySelectorAll('#breakerList .breaker-row').length,
+          grille: document.querySelectorAll('#badgeDisciplineGrid .bg-item').length,
+          loadouts: !!document.querySelector('#loadoutPanel .lo-tabs'),
+          quetes: document.querySelectorAll('#questTracks .quest-track').length,
+          modifier: document.getElementById('monBuildModifier').getAttribute('href'),
+          actif: document.querySelector('.reference-nav a.active')?.textContent };`);
+      verifier(!r.vide, 'Mon build affiche « aucun build » alors qu’un build est en cours');
+      verifier(r.nom === attendu.nom && r.score === attendu.score, `build affiché « ${r.nom} » ${r.score} au lieu de « ${attendu.nom} » ${attendu.score}`);
+      const ecarts = Object.keys(attendu.notes).filter(k => attendu.notes[k] !== r.notes[k]);
+      verifier(!ecarts.length, 'notes modifiées sur Mon build : ' + ecarts.join(', '));
+      verifier(r.onglets === 'apercu brise badges progression', 'onglets : ' + r.onglets);
+      verifier(r.lignesBP === 22 && r.apres === r.avant + 1, `brise-plafonds : ${r.lignesBP} lignes, total ${r.avant} → ${r.apres}`);
+      verifier(r.grille === 53 && r.loadouts && r.quetes === 6, `badges ${r.grille}, loadouts ${r.loadouts}, quêtes ${r.quetes}`);
+      verifier(/^\/\?build=.+&etape=attributs$/.test(r.modifier), 'lien Modifier : ' + r.modifier);
+      verifier(r.actif === 'Mon build', 'lien actif : ' + r.actif);
+
+      // Le lien « Modifier » rouvre le même build, à l'étape Attributs.
+      await nav.ouvrir(base + r.modifier);
+      const retour = await nav.evaluer(`return { etape: document.querySelector('.hq-etapes [aria-selected="true"]')?.dataset.onglet,
+        notes: Object.fromEntries(inputs.map(x => [x.dataset.name, +x.value])) };`);
+      verifier(retour.etape === 'attributs', 'Modifier ouvre l’étape ' + retour.etape);
+      const ecartsRetour = Object.keys(attendu.notes).filter(k => attendu.notes[k] !== retour.notes[k]);
+      verifier(!ecartsRetour.length, 'notes modifiées au retour dans le builder : ' + ecartsRetour.join(', '));
+
+      // Sans build en cours : un état vide, et le moteur caché ne crée pas de faux build.
+      await nav.evaluer(`localStorage.removeItem('nba2k27_ctx_v1');`);
+      await nav.ouvrir(base + '/mon-build/');
+      const v = await nav.evaluer(`return { vide: !!document.getElementById('monBuildVide').offsetParent, ctx: localStorage.getItem('nba2k27_ctx_v1') };`);
+      verifier(v.vide, 'sans build en cours, Mon build n’affiche pas l’état vide');
+      verifier(v.ctx === null, 'le moteur caché de Mon build a créé un faux build en cours');
+      sansErreur('Mon build sans build en cours');
     });
 
     await test('/reference/ rend chaque badge et takeover, et donne accès à chaque animation', async () => {
@@ -1014,6 +1065,14 @@ async function testsProduction() {
       const r = await fetch(URL_PROD + ancien, { redirect: 'manual' });
       const cible = r.headers.get('location') || '';
       verifier(r.status === 301 && /\/hub\/\?onglet=trios$/.test(cible), `${ancien} → HTTP ${r.status} ${cible || '(sans redirection)'}`);
+    }
+  });
+
+  await test('l’ancienne adresse /progression/ mène à Mon build', async () => {
+    for (const ancien of ['/progression/', '/progression']) {
+      const r = await fetch(URL_PROD + ancien, { redirect: 'manual' });
+      const cible = r.headers.get('location') || '';
+      verifier(r.status === 301 && /\/mon-build\/\?onglet=progression$/.test(cible), `${ancien} → HTTP ${r.status} ${cible || '(sans redirection)'}`);
     }
   });
 }

@@ -6,3 +6,8 @@
 /trios         /hub/?onglet=trios  301
 /trios/        /hub/?onglet=trios  301
 /trios/*       /hub/?onglet=trios  301
+
+# « Progression » fait désormais partie de la page « Mon build ».
+/progression    /mon-build/?onglet=progression  301
+/progression/   /mon-build/?onglet=progression  301
+/progression/*  /mon-build/?onglet=progression  301

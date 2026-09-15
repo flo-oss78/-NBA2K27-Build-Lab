@@ -47,6 +47,16 @@
       if(panneau)panneau.hidden=!actif;
       if(actif&&focus)o.focus();
     });
+    // Navigation : « Badges » et « Animations » ouvrent tous deux cette page ;
+    // le lien actif suit l'onglet ouvert.
+    var lienBadges=document.querySelector('.reference-nav a[data-nav="badges"]');
+    var lienAnims=document.querySelector('.reference-nav a[data-nav="animations"]');
+    if(lienBadges&&lienAnims){
+      [[lienBadges,nom!=='animations'],[lienAnims,nom==='animations']].forEach(function(p){
+        p[0].classList.toggle('active',p[1]);
+        if(p[1])p[0].setAttribute('aria-current','page');else p[0].removeAttribute('aria-current');
+      });
+    }
     if(!depuisAdresse){
       try{
         var u=new URL(location.href);

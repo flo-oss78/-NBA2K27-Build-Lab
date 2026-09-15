@@ -25,8 +25,11 @@ const CTX_KEY='nba2k27_ctx_v1';
 function lireContexte(){
   try{const c=JSON.parse(localStorage.getItem(CTX_KEY)||'null');return c&&c.attrs?c:null}catch(e){return null}
 }
+/* Page « Mon build » sans build en cours : le moteur caché y tourne sur les
+   valeurs par défaut, qu'il ne doit pas faire passer pour le build de quelqu'un. */
+const MON_BUILD_VIDE=!!document.getElementById('moteurBuild')&&!lireContexte();
 function ecrireContexte(){
-  if(!BUILDER_PRESENT)return;
+  if(!BUILDER_PRESENT||MON_BUILD_VIDE)return;
   try{
     localStorage.setItem(CTX_KEY,JSON.stringify({
       attrs:Object.fromEntries(inputs.map(x=>[x.dataset.name,+x.value])),
@@ -35,6 +38,7 @@ function ecrireContexte(){
       wing:+document.getElementById('wing').value,
       position:document.getElementById('position').value,
       style:document.getElementById('style')?.value||'Équilibré',
+      hand:document.getElementById('dominantHand')?.value||'Droite',
       name:document.getElementById('buildname')?.textContent||'Mon build',
       score:+document.getElementById('score')?.textContent||0,
       badges:unlockedBadgeCount(),
@@ -166,7 +170,7 @@ function updateAttributeDeltas(){
 function update(){
  if(!BUILDER_PRESENT)return; /* page sans builder */
  updateProfileLabels();const caps=bodyCaps();clampInputsToCaps(caps);const r=ratings();updateThresholds();let sums={};Object.keys(data).forEach(k=>sums[k]=[]);inputs.forEach(x=>{document.getElementById('v'+x.dataset.name.replace(/[^a-z0-9]/gi,'')).textContent=x.value;sums[x.dataset.group].push(+x.value)});let avg=k=>Math.round(sums[k].reduce((a,b)=>a+b,0)/sums[k].length),vals={Finition:avg('Finition'),Tir:avg('Tir'),Création:avg('Création'),Défense:avg('Défense'),Rebond:avg('Rebond'),Physique:avg('Physique')};Object.entries(vals).forEach(([k,v])=>{const el=document.getElementById('avg-'+safeGroupId(k));if(el)el.textContent=v;});updateAttributeVisuals();const SCORE_W={Finition:1,Tir:1,Création:1,Défense:1,Rebond:.6,Physique:1};let wsum=0,wtot=0;Object.keys(vals).forEach(k=>{const w=SCORE_W[k]||1;wsum+=vals[k]*w;wtot+=w});let score=Math.round(wsum/wtot);document.getElementById('score').textContent=score;const ring=document.querySelector('.summary-ring');if(ring)ring.style.setProperty('--score-pct',Math.max(0,Math.min(100,score))+'%');texte('badgeReachable',unlockedBadgeCount(r));let nm=buildName(vals);document.getElementById('buildname').textContent=nm;const meta=document.getElementById('buildMeta');if(meta)meta.textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${document.getElementById('weight').value} lbs`;for(const [k,v] of Object.entries(vals)){let id={Finition:'finish',Tir:'shoot',Création:'play',Défense:'def',Rebond:'reb',Physique:'phys'}[k];const ve=document.getElementById(id+'Val');if(ve)ve.textContent=v;const be=document.getElementById(id+'Bar');if(be)be.style.width=v+'%'}updateAttributeDeltas();
- let capped=inputs.filter(x=>+x.value>=+(x.max||99)).length;document.getElementById('capStatus').textContent=`${capped} / ${inputs.length} au cap`;document.getElementById('bodyHint').textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${heightText(+document.getElementById('wing').value)} envergure — les caps évoluent avec le gabarit.`;renderBadges(r);renderTakeovers(r);renderBreakers(r);renderAnimations();renderScouting(r,vals);renderValidation(r,caps);ecrireContexte();
+ let capped=inputs.filter(x=>+x.value>=+(x.max||99)).length;document.getElementById('capStatus').textContent=`${capped} / ${inputs.length} au cap`;document.getElementById('bodyHint').textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${heightText(+document.getElementById('wing').value)} envergure — les caps évoluent avec le gabarit.`;renderBadges(r);renderTakeovers(r);renderBreakers(r);texte('breakerTotal',breakerTotalValue());renderAnimations();renderScouting(r,vals);renderValidation(r,caps);ecrireContexte();
 }
 function badgeTier(def,r){
  const h=heightInches();
@@ -371,7 +375,11 @@ document.querySelectorAll('[data-close-modal]').forEach(el=>el.addEventListener(
    en espaces par l'URL : on les restaure pour que ces liens fonctionnent aussi. */
 function buildDepuisURL(){const q=new URLSearchParams(location.search).get('build');return q?q.replace(/ /g,'+'):null}
 const codeURL=buildDepuisURL();
-if(codeURL){try{apply(JSON.parse(decodeURIComponent(escape(atob(codeURL)))))}catch(e){update()}}else update();
+// Page « Mon build » : le moteur caché reprend le build en cours au lieu des valeurs par défaut.
+const ctxMonBuild=!codeURL&&document.getElementById('moteurBuild')?lireContexte():null;
+if(codeURL){try{apply(JSON.parse(decodeURIComponent(escape(atob(codeURL)))))}catch(e){update()}}
+else if(ctxMonBuild)apply({position:ctxMonBuild.position,height:ctxMonBuild.height,weight:ctxMonBuild.weight,wing:ctxMonBuild.wing,style:ctxMonBuild.style,hand:ctxMonBuild.hand,attrs:ctxMonBuild.attrs});
+else update();
 
 
 
