@@ -375,6 +375,46 @@ body:not(.mode-expert) .hq-builder .attr .thresholds{display:none}
   .hq-builder #attributeGroups{grid-template-columns:1fr 1fr;align-items:start}
 }
 
+/* 6.9 Fil conducteur : une étape à la fois, dans une colonne centrée.
+   Placé après les grilles ci-dessus pour les remplacer à toutes les largeurs. */
+.hq-builder .builder-exact-grid,
+.hq-builder .builder-exact-grid[class]{display:block;width:100%;max-width:980px;margin:0 auto}
+.hq-builder #attributeGroups{grid-template-columns:minmax(0,1fr)}
+body:not(.mode-expert) .hq-builder .hq-tete-actions{display:none}
+
+.hq-etapes{justify-content:flex-start;overflow-x:auto;scrollbar-width:none;scroll-behavior:smooth}
+.hq-etapes::-webkit-scrollbar{display:none}
+.hq-etapes button{flex:none;display:inline-flex;align-items:center;gap:8px;padding:10px 12px;font-size:16px}
+.hq-etapes button i{
+  display:grid;place-items:center;flex:none;width:22px;height:22px;border-radius:50%;
+  border:1px solid var(--line);font-style:normal;font-family:var(--titre);font-size:13px;line-height:1;color:var(--muted);
+}
+.hq-etapes button.fait{color:var(--text)}
+.hq-etapes button.fait i{border-color:rgba(25,230,193,.6);color:var(--turquoise)}
+.hq-etapes button[aria-selected="true"] i{background:#fff;border-color:#fff;color:#07070A}
+
+.etapes-suite{display:flex;align-items:center;gap:10px;margin-top:6px}
+.etapes-suite button{min-height:46px;padding:10px 20px;border-radius:999px;font-weight:700}
+#etapeSuivante{margin-left:auto;background:linear-gradient(180deg,var(--rouge-2),var(--rouge));border:0;color:#fff}
+#etapeSuivante:hover{filter:brightness(1.08)}
+
+.etape-libelle{margin:4px 0 8px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.hq-builder .body-card .style-strip{margin:0 0 10px;padding:2px 0}
+.hq-builder .body-card .selected-style-panel{margin-bottom:12px}
+@media (min-width:980px){.hq-roues{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* Barre du corps : dans la carte à l'étape Corps ; fixée en bas du téléphone
+   seulement à l'étape Attributs, où elle sert à voir les plafonds bouger. */
+#barreCorpsAttributs:empty{display:none}
+@media (max-width:979.98px){
+  #barreCorpsCorps .hq-barre-corps{position:static;margin:0 0 16px;padding:0;background:none;border:0;box-shadow:none}
+  #barreCorpsCorps .hq-enregistrer{display:none}
+  body.avec-roues:not(.etape-attributs){padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+  body.avec-roues:not(.etape-attributs) .pwa-install{bottom:calc(72px + env(safe-area-inset-bottom))}
+  body.avec-roues:not(.etape-attributs) .toast-host{bottom:calc(72px + env(safe-area-inset-bottom))}
+  .hq-etapes button{padding:10px 9px;font-size:15px;gap:6px}
+}
+
 /* ---------- 7. Restes de l'ancien thème bleu ---------- */
 #startWizard,#shareCopy,#dnaRun,#addCurrentBuild{
   background:linear-gradient(180deg,var(--rouge-2),var(--rouge));

@@ -429,6 +429,30 @@ async function testsNavigateur(base) {
       await nav.evaluer(`document.getElementById('modeSimple').click();`);
     });
 
+    // Demande du 15/09/2026 : un builder épuré, avec un fil conducteur quand on fait son build.
+    await test('le builder guide pas à pas : Corps, Attributs, Badges, Animations, Récap', async () => {
+      await nav.ouvrir(base + '/');
+      const r = await nav.evaluer(`
+        const pause = () => new Promise(r => setTimeout(r, 120));
+        const etapes = [...document.querySelectorAll('.hq-etapes [role="tab"]')];
+        const actif = () => document.querySelector('.hq-etapes [aria-selected="true"]')?.dataset.onglet;
+        const visibles = () => [...document.querySelectorAll('#builder .hq-panneau')].filter(p => !p.hidden).map(p => p.id).join('+');
+        const barre = () => document.querySelector('.hq-barre-corps')?.parentNode.id;
+        const parcours = [actif() + ':' + visibles()], barres = [barre()];
+        for (let i = 0; i < 4; i++) { document.getElementById('etapeSuivante').click(); await pause(); parcours.push(actif() + ':' + visibles()); barres.push(barre()); }
+        const fin = document.getElementById('etapeSuivante').textContent.trim();
+        document.getElementById('etapePrecedente').click(); await pause();
+        return { etapes: etapes.length, parcours, barres, fin, retour: actif(),
+          avancesVisibles: ['validator', 'scouting', 'intelligence', 'proDashboard', 'nbabl-quick-guide'].filter(id => document.getElementById(id)?.offsetParent).join(', ') };`);
+      verifier(r.etapes === 5, `${r.etapes} étapes au lieu de 5`);
+      verifier(r.parcours.join(' ') === 'corps:panneauCorps attributs:panneauAttributs badges:panneauBadges animations:panneauAnimations recap:panneauRecap', 'parcours avec Suivant : ' + r.parcours.join(' '));
+      verifier(r.barres[0] === 'barreCorpsCorps' && r.barres[1] === 'barreCorpsAttributs', 'barre du corps selon l’étape : ' + r.barres.join(' '));
+      verifier(r.fin === 'Enregistrer le build', `dernier bouton : « ${r.fin} »`);
+      verifier(r.retour === 'animations', `Retour depuis le récap mène à « ${r.retour} »`);
+      verifier(!r.avancesVisibles, `sections avancées visibles en mode Simple : ${r.avancesVisibles}`);
+      sansErreur('parcours des étapes du builder');
+    });
+
     await test('/reference/ rend chaque badge et takeover, et donne accès à chaque animation', async () => {
       await nav.ouvrir(base + '/reference/');
       const r = await nav.evaluer(`

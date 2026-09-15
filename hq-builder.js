@@ -256,25 +256,50 @@
   var tousBadges=$('viewAllStyleBadges');
   if(tousBadges&&!$('badges'))tousBadges.addEventListener('click',function(){location.href='/reference/'});
 
-  /* ---- Sous-onglets ---- */
+  /* ---- Fil conducteur : Corps → Attributs → Badges → Animations → Récap ----
+     Une étape à la fois, avec Retour / Suivant. La barre du corps (roues) vit
+     dans la carte Corps à l'étape 1 et passe au-dessus des curseurs à l'étape 2 :
+     c'est là que les plafonds comptent. Aux autres étapes, elle disparaît. */
   var onglets=[].slice.call(builder.querySelectorAll('.hq-onglets [role="tab"]'));
   var centre=builder.querySelector('.builder-centre');
+  var barre=builder.querySelector('.hq-barre-corps');
+  var placeCorps=$('barreCorpsCorps'),placeAttributs=$('barreCorpsAttributs');
+  var suivant=$('etapeSuivante'),precedent=$('etapePrecedente');
+  var courant=0;
+  function libelle(i){return onglets[i].dataset.libelle||onglets[i].textContent.trim()}
   function ouvrir(nom,focus){
-    // Changer d'onglet tout en bas d'une longue liste laissait le lecteur au
-    // milieu de nulle part : on remonte au début du panneau, sous l'en-tête.
+    // Changer d'étape tout en bas d'une longue liste laissait le lecteur au
+    // milieu de nulle part : on remonte au début de l'étape, sous l'en-tête.
     if(centre){
       var haut=centre.getBoundingClientRect().top;
       var enTeteH=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h'))||0;
       if(haut<enTeteH)window.scrollTo({top:window.scrollY+haut-enTeteH,behavior:'auto'});
     }
-    onglets.forEach(function(o){
-      var actif=o.dataset.onglet===nom;
+    var i=0;
+    onglets.forEach(function(o,j){if(o.dataset.onglet===nom)i=j});
+    courant=i;
+    onglets.forEach(function(o,j){
+      var actif=j===i;
       o.setAttribute('aria-selected',String(actif));
       o.tabIndex=actif?0:-1;
+      o.classList.toggle('fait',j<i);
       var panneau=$(o.getAttribute('aria-controls'));
       if(panneau)panneau.hidden=!actif;
       if(actif&&focus)o.focus();
+      document.body.classList.toggle('etape-'+o.dataset.onglet,actif);
     });
+    if(barre&&placeCorps&&placeAttributs){
+      var place=onglets[i].dataset.onglet==='attributs'?placeAttributs:placeCorps;
+      if(barre.parentNode!==place)place.appendChild(barre);
+    }
+    // Sur téléphone, les étapes défilent : l'étape active reste visible.
+    var liste=onglets[i].parentNode;
+    if(liste&&liste.scrollWidth>liste.clientWidth)liste.scrollLeft=Math.max(0,onglets[i].offsetLeft-16);
+    if(precedent){
+      precedent.hidden=i===0;
+      if(i>0)precedent.querySelector('span').textContent=libelle(i-1);
+    }
+    if(suivant)suivant.innerHTML=i<onglets.length-1?'Suivant : <span>'+libelle(i+1)+'</span> →':'Enregistrer le build';
   }
   onglets.forEach(function(o,i){
     o.addEventListener('click',function(){ouvrir(o.dataset.onglet,false)});
@@ -285,6 +310,13 @@
       ouvrir(onglets[(j+onglets.length)%onglets.length].dataset.onglet,true);
     });
   });
+  if(suivant)suivant.addEventListener('click',function(){
+    if(courant<onglets.length-1)ouvrir(onglets[courant+1].dataset.onglet,false);
+    else{var s=$('save');if(s)s.click()}
+  });
+  if(precedent)precedent.addEventListener('click',function(){if(courant>0)ouvrir(onglets[courant-1].dataset.onglet,false)});
+  // Un build ouvert depuis un lien de partage est déjà fait : on montre son récapitulatif.
+  if(onglets.length)ouvrir(/[?&]build=/.test(location.search)?'recap':onglets[0].dataset.onglet,false);
 
   document.body.classList.add('avec-roues');
 })();
