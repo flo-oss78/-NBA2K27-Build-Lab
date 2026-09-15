@@ -893,6 +893,30 @@ async function testsNavigateur(base) {
       if (r.approx) verifier(r.approx.niveau === 'approx' && /approximatifs/.test(r.approx.texte), `corps sans relevé ${r.approx.corps} (appliqué ${r.approx.corpsApplique}) affiché « ${r.approx.texte} »`);
       sansErreur('indicateur de fiabilité des plafonds');
     });
+    await test('l’étape Attributs montre, comme le jeu, les badges de l’attribut choisi et leurs paliers', async () => {
+      await nav.ouvrir(base + '/?etape=attributs');
+      const r = await nav.evaluer(`
+        const ligne = n => document.querySelector('#attributeGroups .attr[data-attr="'+n+'"]');
+        const surOk = window.inputs.every(x => x.closest('.attr').querySelector('.attr-sur')?.textContent === '/ ' + x.max);
+        const note = +document.getElementById('iInteriorDefense').value;
+        ligne('Interior Defense').click();
+        await new Promise(r => setTimeout(r, 120));
+        const panneau = document.getElementById('editeurBadges');
+        const badges = [...panneau.querySelectorAll('.eb-badge .eb-nom')].map(b => b.textContent);
+        panneau.querySelector('.eb-badge[data-badge="Post Lockdown"]').click();
+        await new Promise(r => setTimeout(r, 120));
+        const paliers = [...panneau.querySelectorAll('.eb-palier')].map(p => p.querySelector('.eb-cout')?.textContent + ' ' + p.querySelector('li').textContent);
+        return { note, surOk, choisi: ligne('Interior Defense').classList.contains('attr-choisi'), lie: ligne('Strength').classList.contains('attr-lie'),
+          desc: panneau.querySelector('.eb-attr p')?.textContent || '', badges, titre: panneau.querySelector('.eb-detail h4').textContent, paliers,
+          flotteur: BADGE_DESC_FR['Float Game'] };`);
+      verifier(r.surOk, 'chaque attribut doit afficher « / maximum »');
+      verifier(r.choisi && /raquette/.test(r.desc), `attribut choisi absent ou sans description : ${r.desc}`);
+      verifier(['Muraille au poste', 'Patrouilleur dans la raquette', 'Teigne', 'Wall Up'].every(n => r.badges.includes(n)) && r.badges.length === 4, 'badges liés à Défense intérieure : ' + r.badges.join(', '));
+      verifier(r.titre === 'Muraille au poste' && r.lie, 'le badge choisi doit faire ressortir Force');
+      verifier(r.paliers[0] === `2 jetons 65 Défense intérieure (toi : ${r.note})` && r.paliers[3].startsWith('6 jetons 93 Défense intérieure'), 'paliers et coûts : ' + r.paliers.join(' | '));
+      verifier(/floaters/.test(r.flotteur), 'description officielle de Flotteur absente');
+      sansErreur('éditeur d’attributs façon jeu');
+    });
 
     await test('les types d’animation filtrent la liste et chaque carte dit ce qui manque', async () => {
       await nav.ouvrir(base + '/reference/?onglet=animations');

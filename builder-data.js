@@ -181,7 +181,7 @@ const BADGE_DESC_FR={
   "Versatile Visionary":"Améliore l'aptitude du joueur à réussir des passes millimétrées au bon moment, y compris des alley-oops.",
   // Finition
   "Aerial Wizard":"Améliore l'aptitude à conclure le alley-oop d'un coéquipier, ou de faire une claquette sur un rebond offensif.",
-  "Float Game":"",
+  "Float Game":"Améliore l'aptitude du joueur à rentrer ses floaters.",
   "Ghost Stepper":"Augmente l'efficacité des step through et des tirs de près suite à une feinte.",
   "Hook Specialist":"Améliore l'aptitude du joueur à rentrer ses bras roulés au poste.",
   "Layup Mixmaster":"Améliore l'aptitude du joueur à réussir des doubles-pas acrobatiques ou spectaculaires.",

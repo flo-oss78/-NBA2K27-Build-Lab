@@ -370,9 +370,9 @@
       "fr": "Flotteur",
       "en": "Float Game",
       "cat": "Finition",
-      "desc": "",
-      "certitude": 0.9,
-      "descManquante": "la bulle d’aide de ce badge n’a pas été filmée ; ancienne valeur erronée : note de relevé"
+      "desc": "Améliore l'aptitude du joueur à rentrer ses floaters.",
+      "certitude": 1,
+      "sourceDesc": "Éditeur d'attributs du jeu, vidéo IMG_5223 (15/09/2026) : description et exigences (Tirs de près 65/80/90/96 ou Double-pas 65/85/93/95) confirment Float Game"
     }
   ]
 }

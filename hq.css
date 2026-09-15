@@ -296,6 +296,72 @@ body:not(.mode-expert) .hq-builder .attr-en{display:none}
 .hq-builder .attr input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;background:#fff;box-shadow:0 0 0 3px rgba(0,0,0,.45)}
 body:not(.mode-expert) .hq-builder .attr .thresholds{display:none}
 
+/* 6.6 Éditeur d'attributs façon jeu (attributs-jeu.js) : « valeur / maximum »,
+   attribut choisi, badges qu'il fait progresser et leurs paliers. */
+.hq-builder .attr-name small[id^="cap"]{display:none}
+.hq-builder .attr-sur{font-family:var(--titre);font-weight:700;font-size:15px;color:var(--dim);white-space:nowrap}
+.hq-builder .attr[data-attr]{cursor:pointer;transition:background-color .15s}
+.hq-builder .attr.attr-choisi{background:rgba(255,255,255,.08);box-shadow:inset 3px 0 0 var(--c)}
+.hq-builder .attr.attr-lie .attr-name>span:first-child{color:var(--amber)}
+.editeur-corps{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+.editeur-corps>*{min-width:0}
+.editeur-badges{
+  --c:var(--cat-finish);
+  display:grid;gap:12px;padding:14px;
+  background:rgba(17,17,21,.92);border:1px solid var(--line);border-radius:var(--r);
+  border-top:3px solid var(--c);
+}
+.editeur-badges[hidden]{display:none}
+.editeur-badges.eb-shoot{--c:var(--cat-shoot)}
+.editeur-badges.eb-play{--c:var(--cat-play)}
+.editeur-badges.eb-defense{--c:var(--cat-defense)}
+.editeur-badges.eb-rebound{--c:var(--cat-rebound)}
+.editeur-badges.eb-physical{--c:var(--cat-physical)}
+@media (min-width:1100px){
+  .editeur-corps{grid-template-columns:minmax(0,1fr) minmax(290px,340px);align-items:start}
+  .editeur-badges{position:sticky;top:calc(var(--header-h) + 12px);max-height:calc(100vh - var(--header-h) - 24px);overflow:auto}
+}
+.eb-attr{display:grid;gap:6px;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,var(--c) 26%,transparent);border:1px solid color-mix(in srgb,var(--c) 55%,transparent)}
+.eb-attr-tete{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.eb-attr-tete b{font-family:var(--titre);font-size:18px;letter-spacing:.04em;text-transform:uppercase;color:#fff}
+.eb-attr-tete span{font-family:var(--titre);font-weight:800;font-size:18px;color:#fff;white-space:nowrap}
+.eb-attr p{margin:0;font-size:12.5px;line-height:1.45;color:var(--text)}
+.eb-titre{display:flex;justify-content:space-between;align-items:center;margin:0;font-family:var(--titre);font-size:16px;letter-spacing:.06em;text-transform:uppercase}
+.eb-titre span{min-width:26px;height:26px;display:grid;place-items:center;border-radius:50%;border:2px solid var(--c);font-size:13px}
+.eb-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:6px}
+.eb-badge{
+  display:grid;justify-items:center;align-content:start;gap:3px;min-width:0;padding:8px 4px;
+  border-radius:10px;border:1px solid transparent;background:rgba(255,255,255,.04);
+  color:var(--text);font:inherit;text-align:center;cursor:pointer;
+}
+.eb-badge:hover{background:rgba(255,255,255,.09)}
+.eb-badge[aria-pressed="true"]{border-color:#fff;background:rgba(255,255,255,.12)}
+.eb-badge:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.eb-icone svg{display:block;width:40px;height:40px}
+.eb-nom{font-size:11.5px;font-weight:650;line-height:1.2;overflow-wrap:anywhere}
+.eb-badge small{font-size:10px;color:var(--dim)}
+.eb-hors{opacity:.5}
+.eb-detail{display:grid;gap:8px;padding-top:10px;border-top:1px solid var(--line)}
+.eb-detail h4{margin:0;font-size:15px}
+.eb-desc{margin:0;font-size:12.5px;line-height:1.45;color:var(--muted)}
+.eb-alerte{margin:0;font-size:12px;color:#FF8A96}
+/* Une colonne dans le panneau étroit (téléphone, colonne de droite) ; deux sur tablette. */
+.eb-paliers{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:6px}
+@media (min-width:600px) and (max-width:1099.98px){.eb-paliers{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.eb-palier{--p:#C9803F;min-width:0;padding:7px 9px;border-radius:9px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-left:3px solid var(--p)}
+.eb-p2{--p:#C5CCD6}.eb-p3{--p:#F2C94C}.eb-p4{--p:#B36BFF}
+.eb-palier-tete{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700}
+.eb-niv{color:var(--p);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.eb-cout{margin-left:auto;padding:1px 7px;border-radius:999px;background:rgba(255,255,255,.1);font-size:10.5px;white-space:nowrap}
+.eb-etat{margin-left:auto;color:#FF8A96}
+.eb-cout~.eb-etat{margin-left:0}
+.eb-palier.ok .eb-etat{color:#8FF5E0}
+.eb-palier ul{list-style:none;margin:5px 0 0;padding:0;display:grid;gap:2px;font-size:11.5px;line-height:1.3}
+.eb-palier li{overflow-wrap:anywhere}
+.eb-palier li.ok span{color:#8FF5E0}
+.eb-palier li.ko span{color:#FF8A96}
+.eb-palier em{font-style:normal;color:var(--dim)}
+.eb-note,.eb-vide{margin:0;font-size:11px;color:var(--dim)}
 /* 6.6 Corps du joueur : roues */
 .hq-roues{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .roue{min-width:0;text-align:center}
