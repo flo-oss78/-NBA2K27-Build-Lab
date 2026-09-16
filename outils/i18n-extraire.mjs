@@ -59,6 +59,11 @@ function chainesJs(fichier) {
   for (const [, , contenu] of src.matchAll(/(['"`])((?:\\.|(?!\1)[^\\])*)\1/g)) {
     const t = contenu.replace(/\\n/g, ' ').replace(/\s+/g, ' ').trim();
     if (!t || vus.has(t) || t.includes('${')) continue;
+    // Un gabarit multi-ligne ou une expression régulière peut faire croire à une
+    // chaîne alors que le contenu est du code : ces fragments ne se traduisent pas.
+    if (/[<>]{1}\s*\/?\s*(div|span|p|b|em|option|optgroup|script)\b/i.test(t)) { /* HTML affiché : gardé */ }
+    else if (/\b(function|document\.|querySelector|getElementById|localStorage|return|const |let |var )\b/.test(t)) continue;
+    if (t.length > 400) continue;
     if (!estFrancais(t)) continue;
     vus.add(t);
     sortie.push({ texte: t });

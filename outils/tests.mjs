@@ -177,6 +177,20 @@ async function testsStatiques() {
     verifier(!enRetard.length, 'pages affichant une autre version : ' + enRetard.join(', '));
   });
 
+  await test('la version anglaise reste hors des moteurs tant qu’elle est incomplète', () => {
+    // Les scripts affichent encore du français sur /en/ : une page à moitié
+    // traduite, mémorisée par Google, vaut moins que pas de page du tout.
+    if (!fs.existsSync('en/index.html')) return;
+    const sansNoindex = ['en/index.html', 'en/hub/index.html', 'en/reference/index.html', 'en/mon-build/index.html', 'en/mentions-legales/index.html', 'en/404.html']
+      .filter(f => fs.existsSync(f) && !/<meta name="robots" content="noindex">/.test(fs.readFileSync(f, 'utf8')));
+    verifier(!sansNoindex.length, 'pages anglaises indexables : ' + sansNoindex.join(', '));
+    verifier(/^Disallow: \/en\/$/m.test(fs.readFileSync('robots.txt', 'utf8')), 'robots.txt n’interdit plus /en/');
+    // Rien ne doit conduire un visiteur vers une page encore à moitié française.
+    const liens = ['index.html', 'hub/index.html', 'reference/index.html', 'mon-build/index.html']
+      .filter(f => /href="\/en\//.test(fs.readFileSync(f, 'utf8')));
+    verifier(!liens.length, 'pages françaises pointant déjà vers /en/ : ' + liens.join(', '));
+  });
+
   await test('aucun id en double ni ancre morte', () => {
     const problemes = [];
     for (const p of PAGES) {
