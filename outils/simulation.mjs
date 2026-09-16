@@ -57,6 +57,22 @@ function corpsAuHasard() {
   return { pos, h, w: entre(pMin, pMax), wing: entre(eMin, eMax), style: piocher(Object.keys(PROFILS)) };
 }
 
+/* Les bords du domaine : plus petit et plus grand corps de chaque poste, aux
+   poids et envergures extrêmes. C'est là que les formules cassent, pas au milieu. */
+function corpsExtremes() {
+  const out = [];
+  for (const pos of Object.keys(ctx.CORPS)) {
+    const tailles = Object.keys(ctx.CORPS[pos]).map(Number).sort((a, b) => a - b);
+    for (const h of [tailles[0], tailles[tailles.length - 1]]) {
+      const [pMin, pMax, eMin, eMax] = ctx.CORPS[pos][h];
+      for (const [w, wing] of [[pMin, eMin], [pMin, eMax], [pMax, eMin], [pMax, eMax]]) {
+        for (const style of Object.keys(PROFILS)) out.push({ pos, h, w, wing, style });
+      }
+    }
+  }
+  return out;
+}
+
 /* ------------------------------------------------------------------ rapport */
 const anomalies = [];
 const signaler = (build, quoi) => anomalies.push(`${build.pos} ${build.h}po ${build.w}lbs ${build.wing}po ${build.style} — ${quoi}`);
@@ -66,7 +82,6 @@ const srv = PROD ? null : await serveurLocal();
 const base = PROD ? URL_PROD : `http://127.0.0.1:${srv.address().port}`;
 const nav = await navigateur();
 
-console.log(`Simulation de ${COMBIEN} builds sur ${base}\n`);
 
 const conseilsVus = new Map();     // animation conseillée → combien de fois
 const joueursVus = new Map();      // joueur cité → combien de fois
@@ -75,8 +90,12 @@ const variete = { noms: 0, cats: 0, pire: 0, pireMoyenne: 0, n: 0, recordPire: 0
 
 await nav.ouvrir(base + '/', 1500);
 
-for (let i = 0; i < COMBIEN; i++) {
-  const b = corpsAuHasard();
+const EXTREMES = process.argv.includes('--extremes') ? corpsExtremes() : null;
+const total = EXTREMES ? EXTREMES.length : COMBIEN;
+console.log(`${EXTREMES ? 'Corps extrêmes : ' : 'Simulation de '}${total} builds sur ${base}
+`);
+for (let i = 0; i < total; i++) {
+  const b = EXTREMES ? EXTREMES[i] : corpsAuHasard();
   const prioritaires = PROFILS[b.style];
 
   const r = await nav.evaluer(`
@@ -176,14 +195,14 @@ for (let i = 0; i < COMBIEN; i++) {
   chrono.total += r.duree; chrono.n++;
   if (r.duree > chrono.pire) { chrono.pire = r.duree; chrono.pireBuild = `${b.pos} ${b.h}po`; }
 
-  if ((i + 1) % 10 === 0) process.stdout.write(`  ${i + 1}/${COMBIEN} builds simulés\r`);
+  if ((i + 1) % 10 === 0) process.stdout.write(`  ${i + 1}/${total} builds simulés\r`);
 }
 
 nav.fermer();
 if (srv) srv.close();
 
 /* ------------------------------------------------------------------ sortie */
-console.log(`\n${COMBIEN} builds simulés.\n`);
+console.log(`\n${total} builds simulés.\n`);
 console.log(`Recalcul du build (21 attributs montés) : ${Math.round(chrono.total / chrono.n)} ms en moyenne, ${Math.round(chrono.pire)} ms au pire (${chrono.pireBuild}).`);
 
 console.log(`
