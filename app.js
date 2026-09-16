@@ -379,6 +379,10 @@ function animationsParCategorie(){
 const ANIM_PENALITE_REPETITION=0.3;    // face à l'exigence, ramenée entre 0 et 1
 // Une animation conseillée reste dans le haut de ce que le build débloque.
 const ANIM_PLANCHER_QUALITE=0.85;
+// Les dribbles d'abord : c'est là que le choix se voit le plus en match, donc on
+// n'y descend pratiquement pas — la variété ne joue qu'entre animations de même
+// niveau, et elles sont nombreuses à se tenir (plusieurs joueurs au même seuil).
+const ANIM_PLANCHER_DRIBBLE=0.95;
 /* « Basic », « Normal », « Pro » sont les animations de base, sans joueur : à
    exigence égale, une signature est toujours plus intéressante à équiper. Elles
    restent conseillées quand un build ne débloque rien d'autre. */
@@ -388,8 +392,32 @@ const ANIM_GENERIQUE=/^(Basic|Normal|Pro)( WNBA)?( \d+)?$/i;
 // le 18 août une City mixte et un builder puisant dans les animations NBA et WNBA).
 // Les entrées « Normal WNBA 2 » sont écartées comme les autres animations de base,
 // par la règle ci-dessus : elles n'ont pas de signature.
+/* Part des gabarits du jeu qui peuvent équiper cette animation. Une animation
+   ouverte à tous les corps n'a pas la même valeur qu'une autre réservée à une
+   poignée de gabarits : à exigence égale, la seconde est ce que cherchent les
+   joueurs qui poussent leur build. Mesuré sur les corps que le jeu autorise,
+   une fois par animation. */
+const ANIM_PART=new WeakMap();
+let ANIM_CORPS=null;
+function partDesCorps(a){
+ let p=ANIM_PART.get(a);
+ if(p!==undefined)return p;
+ if(!ANIM_CORPS){
+  ANIM_CORPS=[];
+  if(typeof CORPS_LEGAUX!=='undefined'&&CORPS_LEGAUX)
+   for(const poste of Object.keys(CORPS_LEGAUX))
+    for(const h of Object.keys(CORPS_LEGAUX[poste]))ANIM_CORPS.push(+h);
+ }
+ if(!ANIM_CORPS.length)return 1;
+ let n=0;
+ for(let i=0;i<ANIM_CORPS.length;i++)if(ANIM_CORPS[i]>=a.minH&&ANIM_CORPS[i]<=a.maxH)n++;
+ p=n/ANIM_CORPS.length;
+ ANIM_PART.set(a,p);
+ return p;
+}
 function qualiteAnimation(a,maxCat){
  let s=maxCat?exigenceAnimation(a)/maxCat:0;
+ s+=0.25*(1-partDesCorps(a));          // réservée à peu de gabarits
  s+=a.v===2?0.15:a.v===1?0.05:0;       // recoupée par nos deux sources
  if(a.jeu)s+=0.2;                      // vue équipée sur un vrai MyPLAYER
  return s;
@@ -426,7 +454,8 @@ function conseilsAnimations(r,h){
   // La variété ne doit jamais faire descendre en gamme : on ne choisit que parmi
   // le haut de ce que le build débloque vraiment dans cette catégorie.
   const maxAcc=Math.max(0,...liste.map(exigenceAnimation));
-  const candidats=maxAcc?liste.filter(a=>exigenceAnimation(a)>=maxAcc*ANIM_PLANCHER_QUALITE):liste;
+  const plancher=liste[0]&&liste[0].group==='Dribble'?ANIM_PLANCHER_DRIBBLE:ANIM_PLANCHER_QUALITE;
+  const candidats=maxAcc?liste.filter(a=>exigenceAnimation(a)>=maxAcc*plancher):liste;
   // La variété se joue entre signatures : « Basic » n'est pas un nom à varier.
   const note=a=>qualiteAnimation(a,maxCat)-(ANIM_GENERIQUE.test(a.name)?0:(propose.get(a.name)||0)*ANIM_PENALITE_REPETITION);
   // Deux temps : une signature passe toujours devant une animation de base — toutes
