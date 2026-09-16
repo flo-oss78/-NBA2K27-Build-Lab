@@ -34,6 +34,22 @@ let chargementFini=false;
 /* Page « Mon build » sans build en cours : le moteur caché y tourne sur les
    valeurs par défaut, qu'il ne doit pas faire passer pour le build de quelqu'un. */
 const MON_BUILD_VIDE=!!document.getElementById('moteurBuild')&&!lireContexte();
+/* Le contexte sert aux AUTRES pages (Mon build, Badges) : il n'a pas besoin
+   d'être réécrit à chaque pixel de curseur. On le repousse d'un court instant,
+   et on l'écrit tout de suite si la page se ferme ou passe à l'arrière-plan. */
+let ctxDiffere=null;
+function ecrireContexteBientot(){
+  if(ctxDiffere)return;
+  ctxDiffere=setTimeout(()=>{ctxDiffere=null;ecrireContexte()},400);
+}
+if(typeof window!=='undefined'){
+  const viteEcrit=()=>{if(ctxDiffere){clearTimeout(ctxDiffere);ctxDiffere=null;ecrireContexte()}};
+  window.addEventListener('pagehide',viteEcrit);
+  window.addEventListener('beforeunload',viteEcrit);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')viteEcrit()});
+  // Une navigation interne part souvent d'un clic sur un lien : on écrit avant.
+  document.addEventListener('click',e=>{if(e.target&&e.target.closest&&e.target.closest('a[href]'))viteEcrit()},true);
+}
 function ecrireContexte(){
   if(!BUILDER_PRESENT||MON_BUILD_VIDE)return;
   try{
@@ -206,7 +222,7 @@ function updateAttributeDeltas(){
 function update(){
  if(!BUILDER_PRESENT)return; /* page sans builder */
  updateProfileLabels();const caps=bodyCaps();clampInputsToCaps(caps);memoriserNotes();const r=ratings();updateThresholds();let sums={};Object.keys(data).forEach(k=>sums[k]=[]);inputs.forEach(x=>{document.getElementById('v'+x.dataset.name.replace(/[^a-z0-9]/gi,'')).textContent=x.value;sums[x.dataset.group].push(+x.value)});let avg=k=>Math.round(sums[k].reduce((a,b)=>a+b,0)/sums[k].length),vals={Finition:avg('Finition'),Tir:avg('Tir'),Création:avg('Création'),Défense:avg('Défense'),Rebond:avg('Rebond'),Physique:avg('Physique')};Object.entries(vals).forEach(([k,v])=>{const el=document.getElementById('avg-'+safeGroupId(k));if(el)el.textContent=v;});updateAttributeVisuals();const SCORE_W={Finition:1,Tir:1,Création:1,Défense:1,Rebond:.6,Physique:1};let wsum=0,wtot=0;Object.keys(vals).forEach(k=>{const w=SCORE_W[k]||1;wsum+=vals[k]*w;wtot+=w});let score=Math.round(wsum/wtot);document.getElementById('score').textContent=score;const ring=document.querySelector('.summary-ring');if(ring)ring.style.setProperty('--score-pct',Math.max(0,Math.min(100,score))+'%');texte('badgeReachable',unlockedBadgeCount(r));let nm=buildName(vals);document.getElementById('buildname').textContent=nm;const meta=document.getElementById('buildMeta');if(meta)meta.textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${document.getElementById('weight').value} lbs`;for(const [k,v] of Object.entries(vals)){let id={Finition:'finish',Tir:'shoot',Création:'play',Défense:'def',Rebond:'reb',Physique:'phys'}[k];const ve=document.getElementById(id+'Val');if(ve)ve.textContent=v;const be=document.getElementById(id+'Bar');if(be)be.style.width=v+'%'}updateAttributeDeltas();
- let capped=inputs.filter(x=>+x.value>=+(x.max||99)).length;document.getElementById('capStatus').textContent=`${capped} / ${inputs.length} au cap`;document.getElementById('bodyHint').textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${heightText(+document.getElementById('wing').value)} envergure — les maximums des attributs changent avec le gabarit.`;renderBadges(r);renderTakeovers(r);renderBreakers(r);texte('breakerTotal',breakerTotalValue());renderAnimations();renderScouting(r,vals);renderValidation(r,caps);ecrireContexte();
+ let capped=inputs.filter(x=>+x.value>=+(x.max||99)).length;document.getElementById('capStatus').textContent=`${capped} / ${inputs.length} au cap`;document.getElementById('bodyHint').textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${heightText(+document.getElementById('wing').value)} envergure — les maximums des attributs changent avec le gabarit.`;renderBadges(r);renderTakeovers(r);renderBreakers(r);texte('breakerTotal',breakerTotalValue());renderAnimations();renderScouting(r,vals);renderValidation(r,caps);ecrireContexteBientot();
 }
 function badgeTier(def,r){
  const h=heightInches();
@@ -319,7 +335,30 @@ function renderSourceAnimations(){
    - conseil : l'animation la plus exigeante que le build peut équiper à sa taille ;
    - suivant : parmi les animations plus exigeantes, celle qui demande le moins de points. */
 const ANIM_SANS_CONSEIL=new Set(['Jumper Base']);
-function exigenceAnimation(a){const v=Object.values(a?.req||{});return v.length?Math.max(...v):0}
+/* L'exigence d'une animation ne change jamais : la calculer à chaque passage
+   revenait à parcourir les 2 595 entrées plusieurs fois par mouvement de curseur. */
+const EXIGENCES=new WeakMap();
+function exigenceAnimation(a){
+ if(!a)return 0;
+ let v=EXIGENCES.get(a);
+ if(v===undefined){const l=Object.values(a.req||{});v=l.length?Math.max(...l):0;EXIGENCES.set(a,v)}
+ return v;
+}
+/* Les animations rangées par catégorie une fois pour toutes : la boucle des
+   conseils reparcourait toute la base, dont les 781 « Jumper Base » qu'elle
+   écarte aussitôt. */
+let ANIM_INDEX=null;
+function animationsParCategorie(){
+ if(!ANIM_INDEX){
+  ANIM_INDEX=new Map();
+  for(const a of ANIMATIONS){
+   if(ANIM_SANS_CONSEIL.has(a.category))continue;
+   let l=ANIM_INDEX.get(a.category); if(!l)ANIM_INDEX.set(a.category,l=[]);
+   l.push(a);
+  }
+ }
+ return ANIM_INDEX;
+}
 /* Conseils d'animations : une par catégorie, plus deux idées de rechange.
  *
  * Ce qu'on peut affirmer sans rien inventer, c'est :
@@ -337,7 +376,7 @@ function exigenceAnimation(a){const v=Object.values(a?.req||{});return v.length?
  * joueur qui n'a pas déjà été conseillé ailleurs — la qualité ne bouge pas, le
  * choix s'élargit.
  */
-const ANIM_PENALITE_REPETITION=0.04;   // face à l'exigence, ramenée entre 0 et 1
+const ANIM_PENALITE_REPETITION=0.3;    // face à l'exigence, ramenée entre 0 et 1
 // Une animation conseillée reste dans le haut de ce que le build débloque.
 const ANIM_PLANCHER_QUALITE=0.85;
 /* « Basic », « Normal », « Pro » sont les animations de base, sans joueur : à
@@ -352,8 +391,6 @@ function qualiteAnimation(a,maxCat){
  let s=maxCat?exigenceAnimation(a)/maxCat:0;
  s+=a.v===2?0.15:a.v===1?0.05:0;       // recoupée par nos deux sources
  if(a.jeu)s+=0.2;                      // vue équipée sur un vrai MyPLAYER
- // Franc : aucune répétition ne doit faire repasser « Pro » devant une signature.
- if(ANIM_GENERIQUE.test(a.name))s-=0.5;
  return s;
 }
 function motifAnimation(a,maxCat){
@@ -364,18 +401,20 @@ function motifAnimation(a,maxCat){
 }
 function conseilsAnimations(r,h){
  const dispo=new Map(), exigenceMax=new Map(), bloquees=new Map();
- // Une seule passe sur la base : accessible ou non, et la plus proche du but.
- for(const a of ANIMATIONS){
-  if(ANIM_SANS_CONSEIL.has(a.category)||h<a.minH||h>a.maxH)continue;
-  const ex=exigenceAnimation(a);
-  if(ex>(exigenceMax.get(a.category)||0))exigenceMax.set(a.category,ex);
-  const manques=animationManques(a,r);
-  if(manques.length){
-   const total=manques.reduce((s,[,n])=>s+n,0), avant=bloquees.get(a.category);
-   if(!avant||total<avant.total||(total===avant.total&&ex>exigenceAnimation(avant.a)))bloquees.set(a.category,{a,manques,total});
-  }else{
-   let l=dispo.get(a.category); if(!l)dispo.set(a.category,l=[]);
-   l.push(a);
+ // Une seule passe par catégorie : accessible ou non, et la plus proche du but.
+ for(const [cat,liste] of animationsParCategorie()){
+  for(const a of liste){
+   if(h<a.minH||h>a.maxH)continue;
+   const ex=exigenceAnimation(a);
+   if(ex>(exigenceMax.get(cat)||0))exigenceMax.set(cat,ex);
+   const manques=animationManques(a,r);
+   if(manques.length){
+    const total=manques.reduce((s,[,n])=>s+n,0), avant=bloquees.get(cat);
+    if(!avant||total<avant.total||(total===avant.total&&ex>exigenceAnimation(avant.a)))bloquees.set(cat,{a,manques,total});
+   }else{
+    let l=dispo.get(cat); if(!l)dispo.set(cat,l=[]);
+    l.push(a);
+   }
   }
  }
  const par=new Map(), propose=new Map();
@@ -389,7 +428,14 @@ function conseilsAnimations(r,h){
   const candidats=maxAcc?liste.filter(a=>exigenceAnimation(a)>=maxAcc*ANIM_PLANCHER_QUALITE):liste;
   // La variété se joue entre signatures : « Basic » n'est pas un nom à varier.
   const note=a=>qualiteAnimation(a,maxCat)-(ANIM_GENERIQUE.test(a.name)?0:(propose.get(a.name)||0)*ANIM_PENALITE_REPETITION);
-  const classe=candidats.slice().sort((x,y)=>note(y)-note(x)||x.name.localeCompare(y.name,'fr'));
+  // Deux temps : une signature passe toujours devant une animation de base — toutes
+  // ont déjà franchi le plancher de qualité — puis les signatures se départagent
+  // entre elles, la variété jouant à plein sans jamais rappeler « Basic ».
+  const classe=candidats.slice().sort((x,y)=>{
+   const gx=ANIM_GENERIQUE.test(x.name), gy=ANIM_GENERIQUE.test(y.name);
+   if(gx!==gy)return gx?1:-1;
+   return note(y)-note(x)||x.name.localeCompare(y.name,'fr');
+  });
   const conseil=classe[0], alternatives=classe.slice(1,3);
   propose.set(conseil.name,(propose.get(conseil.name)||0)+1);
   alternatives.forEach(a=>propose.set(a.name,(propose.get(a.name)||0)+0.5));

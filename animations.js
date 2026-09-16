@@ -2630,13 +2630,30 @@ const ANIMATION_CATEGORIES_FR={
 function nomCategorieAnimation(c){return ANIMATION_CATEGORIES_FR[c]||c}
 
 /* Ce qui manque au build pour une animation : liste de [attribut, points].
-   Pour une exigence « ou », seul l'attribut le plus proche compte. */
+   Pour une exigence « ou », seul l'attribut le plus proche compte.
+
+   Appelée des milliers de fois à chaque mouvement de curseur (2 595 animations,
+   plusieurs écrans) : les exigences sont donc converties une seule fois par
+   animation, et on n'alloue un tableau que s'il manque vraiment quelque chose. */
+const ANIM_REQ=new WeakMap(), ANIM_RIEN=[];
+function animationExigences(a){
+  let e=ANIM_REQ.get(a);
+  if(!e){e=Object.entries(a.req||{});ANIM_REQ.set(a,e)}
+  return e;
+}
 function animationManques(a,r){
-  const e=Object.entries(a.req||{});
+  const e=animationExigences(a);
   if(a.ou&&e.length>1){
-    const ecart=Math.min(...e.map(([k,v])=>Math.max(0,v-(r[k]??0))));
-    return ecart?[[e.map(([k])=>k).join(' ou '),ecart]]:[];
+    let ecart=Infinity;
+    for(let i=0;i<e.length;i++){const d=e[i][1]-(r[e[i][0]]??0);if(d<ecart)ecart=d}
+    if(ecart<=0)return ANIM_RIEN;
+    return [[e.map(x=>x[0]).join(' ou '),ecart]];
   }
-  return e.filter(([k,v])=>(r[k]??0)<v).map(([k,v])=>[k,v-(r[k]??0)]);
+  let out=null;
+  for(let i=0;i<e.length;i++){
+    const k=e[i][0], v=e[i][1], note=r[k]??0;
+    if(note<v)(out||(out=[])).push([k,v-note]);
+  }
+  return out||ANIM_RIEN;
 }
 function animationAccessible(a,r,h){return h>=a.minH&&h<=a.maxH&&animationManques(a,r).length===0}

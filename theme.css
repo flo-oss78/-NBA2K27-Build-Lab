@@ -357,7 +357,9 @@ body.mode-expert .start-here{display:none}
 .v15-unlock small,.v15-player small{display:block;color:var(--dim);font-size:11.5px;margin-top:2px}
 .v15-source-note{margin-top:10px;font-size:11.5px;color:var(--dim);line-height:1.55}
 .v15-advanced{margin-top:14px;border-top:1px solid var(--line-soft);padding-top:12px}
-.v15-advanced summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--muted)}
+.v15-advanced summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--muted);
+  /* 24 px au doigt : recommandation d’accessibilité pour une cible tactile. */
+  min-height:24px;display:flex;align-items:center}
 .v15-why{margin-top:10px;font-size:12.5px;color:var(--muted);display:grid;gap:6px}
 
 /* ---------- 8. Build DNA ---------- */
@@ -1600,3 +1602,6 @@ html[lang="en"] .badge-en{display:none}
   .bd-groups{grid-template-columns:repeat(3,1fr)}
   .badge-discipline-grid{grid-template-columns:repeat(3,1fr)}
 }
+
+/* Lien de retour des mentions légales : cible tactile confortable. */
+.legal-retour a{display:inline-flex;align-items:center;min-height:32px}

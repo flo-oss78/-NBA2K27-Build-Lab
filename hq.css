@@ -409,7 +409,7 @@ footer .footer-legal a{color:var(--muted)}
   }
   .hq-roues{max-width:640px;margin:0 auto}
   .roue-nom{margin-bottom:2px;font-size:9.5px}
-  .roue-voisin{height:22px;font-size:10.5px}
+  .roue-voisin{height:24px;font-size:10.5px}
   .cadran strong{font-size:19px}
   .hq-enregistrer{display:block;width:100%;max-width:420px;min-height:40px;margin:7px auto 0;font-size:16px}
   body.avec-roues{padding-bottom:calc(212px + env(safe-area-inset-bottom))}

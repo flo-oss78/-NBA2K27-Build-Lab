@@ -2,8 +2,8 @@ window.NBABL_SITE_CONFIG=Object.freeze({
   siteUrl:'https://lelabodesbuilds.com',
   apiBase:'/api',
   appName:'NBA 2K27 Build Lab',
-  version:'26.16.0',
-  shortVersion:'V26.16',
+  version:'26.17.0',
+  shortVersion:'V26.17',
   environment:'production'
 });
 
