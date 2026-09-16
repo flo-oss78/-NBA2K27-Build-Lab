@@ -155,6 +155,11 @@ async function testsStatiques() {
     verifier(fs.existsSync(nom), `${nom} absent : la propriété Search Console serait perdue`);
     verifier(fs.readFileSync(nom, 'utf8').trim() === 'google-site-verification: ' + nom,
       `${nom} ne contient pas la ligne attendue par Google`);
+    // Cloudflare Pages redirige /x.html vers /x : sans cette Function, Google
+    // reçoit un 308 sur l'adresse exacte qu'il vient vérifier.
+    const fonction = `functions/${nom}.js`;
+    verifier(fs.existsSync(fonction) && fs.readFileSync(fonction, 'utf8').includes('google-site-verification: ' + nom),
+      `${fonction} absente : l'adresse avec .html répondrait par une redirection`);
   });
 
   await test('aucun id en double ni ancre morte', () => {
