@@ -177,18 +177,34 @@ async function testsStatiques() {
     verifier(!enRetard.length, 'pages affichant une autre version : ' + enRetard.join(', '));
   });
 
-  await test('la version anglaise reste hors des moteurs tant qu’elle est incomplète', () => {
-    // Les scripts affichent encore du français sur /en/ : une page à moitié
-    // traduite, mémorisée par Google, vaut moins que pas de page du tout.
-    if (!fs.existsSync('en/index.html')) return;
-    const sansNoindex = ['en/index.html', 'en/hub/index.html', 'en/reference/index.html', 'en/mon-build/index.html', 'en/mentions-legales/index.html', 'en/404.html']
-      .filter(f => fs.existsSync(f) && !/<meta name="robots" content="noindex">/.test(fs.readFileSync(f, 'utf8')));
-    verifier(!sansNoindex.length, 'pages anglaises indexables : ' + sansNoindex.join(', '));
-    verifier(/^Disallow: \/en\/$/m.test(fs.readFileSync('robots.txt', 'utf8')), 'robots.txt n’interdit plus /en/');
-    // Rien ne doit conduire un visiteur vers une page encore à moitié française.
-    const liens = ['index.html', 'hub/index.html', 'reference/index.html', 'mon-build/index.html']
-      .filter(f => /href="\/en\//.test(fs.readFileSync(f, 'utf8')));
-    verifier(!liens.length, 'pages françaises pointant déjà vers /en/ : ' + liens.join(', '));
+  await test('chaque page existe dans les deux langues, et chacune mène à l’autre', () => {
+    // Une version anglaise que rien ne relie au site français est invisible :
+    // Google ne la rattache pas, et le visiteur ne la trouve pas.
+    const SITE = URL_PROD;
+    const COUPLES = [['index.html', '/'], ['hub/index.html', '/hub/'], ['reference/index.html', '/reference/'],
+      ['mon-build/index.html', '/mon-build/'], ['mentions-legales/index.html', '/mentions-legales/']];
+    const soucis = [];
+    for (const [f, chemin] of COUPLES) {
+      const fr = fs.readFileSync(f, 'utf8');
+      const anglais = 'en/' + f;
+      if (!fs.existsSync(anglais)) { soucis.push(`${anglais} manque`); continue; }
+      const en = fs.readFileSync(anglais, 'utf8');
+      if (/<meta name="robots" content="noindex">/.test(en)) soucis.push(`${anglais} reste en noindex`);
+      if (!en.includes('<html lang="en">')) soucis.push(`${anglais} ne se déclare pas en anglais`);
+      for (const [nom, html] of [['FR', fr], ['EN', en]]) {
+        if (!html.includes(`hreflang="en" href="${SITE}/en${chemin}"`)) soucis.push(`${nom} ${chemin} : hreflang anglais absent`);
+        if (!html.includes(`hreflang="fr" href="${SITE}${chemin}"`)) soucis.push(`${nom} ${chemin} : hreflang français absent`);
+      }
+      // Le bouton de langue : sur les pages qui ont un en-tête.
+      if (fr.includes('reference-actions')) {
+        if (!fr.includes(`class="lang-switch" href="/en${chemin}"`)) soucis.push(`${f} : bouton EN absent`);
+        if (!en.includes(`class="lang-switch" href="${chemin}"`)) soucis.push(`${anglais} : bouton FR absent`);
+      }
+    }
+    verifier(!soucis.length, soucis.join(' · '));
+    verifier(!/Disallow: \/en\//.test(fs.readFileSync('robots.txt', 'utf8')), 'robots.txt interdit encore /en/');
+    verifier(/\/en\$\{chemin\}|\/en\$\{/.test(fs.readFileSync('functions/sitemap.xml.js', 'utf8')), 'le sitemap ne liste pas les pages anglaises');
+    verifier(/<meta name="robots" content="noindex">/.test(fs.readFileSync('en/404.html', 'utf8')), 'la 404 anglaise doit rester hors des moteurs');
   });
 
   await test('aucun id en double ni ancre morte', () => {
@@ -1101,10 +1117,13 @@ async function testsNavigateur(base) {
 
     await test('mise en page sans débordement ni zone masquée, sur téléphone et sur ordinateur', async () => {
       const problemes = [];
+      // Les pages anglaises ont la même structure mais d'autres longueurs de texte :
+      // un libellé qui tient en français peut déborder une fois traduit.
+      const ECRANS = [...PAGES, ...PAGES.map(p => ({ ...p, chemin: '/en' + p.chemin }))];
       for (const [largeur, hauteur, mobile, nomEcran] of [[375, 812, true, 'téléphone'], [1440, 900, false, 'ordinateur']]) {
         await nav.ecran(largeur, hauteur, mobile);
         for (const mode of ['simple', 'expert']) {
-          for (const p of PAGES) {
+          for (const p of ECRANS) {
             await nav.ouvrir(base + p.chemin);
             await nav.evaluer(`localStorage.setItem('nba2k27_mode_v1', '${mode}');`);
             await nav.ouvrir(base + p.chemin);

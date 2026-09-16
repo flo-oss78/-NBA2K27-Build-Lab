@@ -1,5 +1,3 @@
 User-agent: *
 Allow: /
-# Version anglaise en cours de traduction : retirer cette ligne quand elle sera terminée.
-Disallow: /en/
 Sitemap: https://lelabodesbuilds.com/sitemap.xml

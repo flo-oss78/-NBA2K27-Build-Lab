@@ -25,9 +25,17 @@ export async function onRequestGet({request, env}){
     ['/mon-build/', '0.7'],
     ['/mentions-legales/', '0.2']
   ];
-  const urls = PAGES.map(([chemin, priorite]) =>
-    `<url><loc>${esc(origin)}${chemin}</loc><changefreq>weekly</changefreq><priority>${priorite}</priority></url>`
-  );
+  // Chaque page existe en français et en anglais : Google veut les deux adresses,
+  // et dans chacune le lien vers l'autre langue (hreflang), sinon il choisit seul.
+  const alternates = chemin =>
+    `<xhtml:link rel="alternate" hreflang="fr" href="${esc(origin)}${chemin}"/>` +
+    `<xhtml:link rel="alternate" hreflang="en" href="${esc(origin)}/en${chemin}"/>` +
+    `<xhtml:link rel="alternate" hreflang="x-default" href="${esc(origin)}${chemin}"/>`;
+  const urls = [];
+  for (const [chemin, priorite] of PAGES) {
+    urls.push(`<url><loc>${esc(origin)}${chemin}</loc>${alternates(chemin)}<changefreq>weekly</changefreq><priority>${priorite}</priority></url>`);
+    urls.push(`<url><loc>${esc(origin)}/en${chemin}</loc>${alternates(chemin)}<changefreq>weekly</changefreq><priority>${priorite}</priority></url>`);
+  }
 
   // Sans base configurée, on renvoie quand même un sitemap valide :
   // un 500 ferait échouer la soumission dans la Search Console.
@@ -47,7 +55,7 @@ export async function onRequestGet({request, env}){
   }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n` +
-    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  ` +
+    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n  ` +
     urls.join('\n  ') + `\n</urlset>\n`;
 
   return new Response(xml, {

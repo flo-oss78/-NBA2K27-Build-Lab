@@ -12,6 +12,9 @@
 <link rel="alternate" hreflang="fr" href="https://lelabodesbuilds.com/reference/">
 <link rel="alternate" hreflang="en" href="https://lelabodesbuilds.com/en/reference/">
 <link rel="alternate" hreflang="x-default" href="https://lelabodesbuilds.com/reference/">
+<link rel="alternate" hreflang="fr" href="https://lelabodesbuilds.com/reference/">
+<link rel="alternate" hreflang="en" href="https://lelabodesbuilds.com/en/reference/">
+<link rel="alternate" hreflang="x-default" href="https://lelabodesbuilds.com/reference/">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon-192.png">
@@ -35,7 +38,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>window.NBABL_LANG="en";</script>
-<meta name="robots" content="noindex">
 </head>
 
 <body>
@@ -58,7 +60,8 @@
     <button id="modeExpert" type="button" class="mode-btn" aria-pressed="false">Expert</button>
   </div>
   <div class="reference-actions">
-    <span id="referenceVersion">V26.12</span>
+    <a class="lang-switch" href="/reference/" hreflang="fr" lang="fr" title="Version française">FR</a>
+    <span id="referenceVersion">V26.14</span>
     <button id="referenceSettings" type="button" aria-label="Open settings" aria-expanded="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.9 19.3a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.7 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.56V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.56 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z"/></svg>
     </button>
@@ -89,7 +92,7 @@
     <div class="badges-outils">
       <div id="badgeCats" class="badge-cats" data-cat="all" role="group" aria-label="Categories"></div>
       <div class="badges-filtres">
-        <select id="badgeFilter" aria-label="Filter badges"><option value="all">All badges</option><option value="unlocked">Accessibles</option><option value="locked">Not reachable yet</option></select>
+        <select id="badgeFilter" aria-label="Filter badges"><option value="all">All badges</option><option value="unlocked">Unlocked</option><option value="locked">Not reachable yet</option></select>
         <input id="badgeSearch" type="search" aria-label="Search for a badge" placeholder="Search a badge…">
         <span id="badgeUnlocked" class="pill">0 accessibles</span>
       </div>
@@ -125,10 +128,10 @@
     <div class="anim-tools">
       <!-- Catégories générées depuis animations.js (app.js) -->
       <select id="animCategory" aria-label="Filter by category"><option value="all">All categories</option></select>
-      <select id="animStatus" aria-label="Filter by availability"><option value="all">All</option><option value="conseil">Recommended for your build</option><option value="yes">Accessibles</option><option value="no">Non accessibles</option></select>
+      <select id="animStatus" aria-label="Filter by availability"><option value="all">All</option><option value="conseil">Recommended for your build</option><option value="yes">Unlocked</option><option value="no">Locked</option></select>
       <input id="animSearch" aria-label="Search for an animation" placeholder="Search an animation…">
     </div>
-    <p class="anim-regle"><b>Recommended for your build</b>: in each category, the most demanding animation your build can equip at its height, often the most complete one.<b>Unlock next</b>: the closest one above. This is a site rule, not an official ranking or a performance test (jumpshot bases in the shot creator are not covered).</p>
+    <p class="anim-regle"><b>Recommended for your build</b> : in each category, the most demanding animation your build can equip at its height, often the most complete one. <b>Unlock next</b> : the closest one above. This is a site rule, not an official ranking or a performance test (jumpshot bases in the shot creator are not covered).</p>
     <p id="animResultats" class="anim-resultats" aria-live="polite"></p>
     <div id="animationList" class="animation-list"></div>
     <button id="animPlus" type="button" class="secondary anim-plus" hidden>Show more</button>
@@ -147,7 +150,7 @@
 
 <footer>
   <p>NBA 2K27 Build Lab — independent tool, public data, no official affiliation with 2K.</p>
-  <p class="footer-credit">For lab-measured shooting data (green window, shot speed, badge tests), have a look at<a href="https://www.nba2klab.com/" target="_blank" rel="noopener">NBA2KLab</a>: their jumpshots are tested on Hall of Fame, with no boosts, no badges and no shot meter, on an automated rig. We are not trying to redo that here.</p>
+  <p class="footer-credit">For lab-measured shooting data (green window, shot speed, badge tests), have a look at <a href="https://www.nba2klab.com/" target="_blank" rel="noopener">NBA2KLab</a> : their jumpshots are tested on Hall of Fame, with no boosts, no badges and no shot meter, on an automated rig. We are not trying to redo that here.</p>
   <p class="footer-legal"><a href="/en/mentions-legales/">Legal notice and privacy</a> · <a href="mailto:contact@lelabodesbuilds.com">Report a data error</a></p>
 </footer>
 
@@ -190,5 +193,7 @@
 <script src="/community.js"></script>
 <script src="/ui.js"></script>
 <script src="/reference-page.js"></script>
+<script src="/i18n-en.js"></script>
+<script src="/i18n.js"></script>
 </body>
 </html>

@@ -6,6 +6,11 @@
 (function(){
   'use strict';
 
+  /* La carte de build est dessinée dans un canvas : i18n.js, qui traduit le
+     document, ne peut rien y faire. Les rares textes écrits en dur passent donc
+     par la table que i18n.js publie (absente sur le site français : texte rendu tel quel). */
+  function TX(t){ var m=window.NBABL_TABLE_EN; return (m&&m[t])||t; }
+
   var ATTRS=['Close Shot','Driving Layup','Driving Dunk','Standing Dunk','Post Control',
     'Mid-Range','Three-Point','Free Throw','Pass Accuracy','Ball Handle','Speed With Ball',
     'Interior Defense','Perimeter Defense','Steal','Block','Offensive Rebound','Defensive Rebound',
@@ -157,7 +162,7 @@
     ctx.lineWidth=14;ctx.strokeStyle='#22D3EE';ctx.lineCap='round';ctx.stroke();
     ctx.textAlign='center';
     ctx.font='900 62px Inter, system-ui, sans-serif';ctx.fillStyle='#fff';ctx.fillText(score,0,16);
-    ctx.font='800 18px Inter, system-ui, sans-serif';ctx.fillStyle='#94A3B6';ctx.fillText('MOYENNE',0,48);
+    ctx.font='800 18px Inter, system-ui, sans-serif';ctx.fillStyle='#94A3B6';ctx.fillText(TX('MOYENNE'),0,48);
     ctx.restore();
 
     // Nom du build
@@ -207,7 +212,7 @@
     if(badges.length){
       y+=10;
       ctx.font='800 22px Inter, system-ui, sans-serif';
-      ctx.fillStyle='#64748B';ctx.fillText('BADGES CLÉS',64,y);
+      ctx.fillStyle='#64748B';ctx.fillText(TX('BADGES CLÉS'),64,y);
       y+=34;
       var bx=64;
       badges.forEach(function(n){
@@ -230,11 +235,11 @@
     }catch(e){}
     ctx.font='700 28px Inter, system-ui, sans-serif';
     ctx.fillStyle='#94A3B6';
-    ctx.fillText('Scanne pour ouvrir ce build',64,qrY+72);
+    ctx.fillText(TX('Scanne pour ouvrir ce build'),64,qrY+72);
     ctx.font='600 23px Inter, system-ui, sans-serif';
     ctx.fillStyle='#64748B';
     ctx.fillText('lelabodesbuilds.com',64,qrY+112);
-    ctx.fillText('Modèle indicatif — non officiel 2K',64,qrY+150);
+    ctx.fillText(TX('Modèle indicatif — non officiel 2K'),64,qrY+150);
 
     return cv;
   }

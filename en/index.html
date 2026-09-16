@@ -6,9 +6,12 @@
 <meta name="theme-color" content="#060608">
 <meta name="color-scheme" content="dark">
 <meta name="description" content="Build your NBA 2K27 player: the attribute maximums for your body, and the badges and animations you can actually equip, just like in the game.">
-<title>NBA 2K27 Build Lab — Builder MyPLAYER</title>
+<title>NBA 2K27 Build Lab — MyPLAYER builder</title>
 
 <link rel="canonical" href="https://lelabodesbuilds.com/en/">
+<link rel="alternate" hreflang="fr" href="https://lelabodesbuilds.com/">
+<link rel="alternate" hreflang="en" href="https://lelabodesbuilds.com/en/">
+<link rel="alternate" hreflang="x-default" href="https://lelabodesbuilds.com/">
 <link rel="alternate" hreflang="fr" href="https://lelabodesbuilds.com/">
 <link rel="alternate" hreflang="en" href="https://lelabodesbuilds.com/en/">
 <link rel="alternate" hreflang="x-default" href="https://lelabodesbuilds.com/">
@@ -35,7 +38,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>window.NBABL_LANG="en";</script>
-<meta name="robots" content="noindex">
 </head>
 
 <body>
@@ -58,7 +60,8 @@
     <button id="modeExpert" type="button" class="mode-btn" aria-pressed="false">Expert</button>
   </div>
   <div class="reference-actions">
-    <span id="referenceVersion">V26.12</span>
+    <a class="lang-switch" href="/" hreflang="fr" lang="fr" title="Version française">FR</a>
+    <span id="referenceVersion">V26.14</span>
     <button id="referenceSettings" type="button" aria-label="Open settings" aria-expanded="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.9 19.3a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.7 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.56V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.56 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z"/></svg>
     </button>
@@ -95,7 +98,7 @@
   <div id="activeBlueprint" class="active-blueprint" hidden></div>
 
   <!-- Le builder rouvre le dernier build (app.js) : on le dit, et on permet de repartir de zéro. -->
-  <p id="buildRouvert" class="build-rouvert" hidden>Your last build has been reopened.<a href="/en/?nouveau=1">Start from scratch</a></p>
+  <p id="buildRouvert" class="build-rouvert" hidden>Your last build has been reopened. <a href="/en/?nouveau=1">Start from scratch</a></p>
 
   <!-- En-tête du build façon 2K HQ. Il ne calcule rien : hq-builder.js y
        recopie ce que app.js affiche (moyenne, nom, gabarit, budget). -->
@@ -111,7 +114,7 @@
       <p id="hqPlafonds" class="hq-plafonds approx" role="status"></p>
       <div id="hqBudget" class="hq-budget" hidden>
         <div class="hq-jauge" aria-hidden="true"><i id="hqBudgetZone"></i><em id="hqBudgetBarre"></em></div>
-        <span>Attribute points used:<b id="hqBudgetValeur"></b> <small id="hqBudgetMarge"></small></span>
+        <span>Attribute points used: <b id="hqBudgetValeur"></b> <small id="hqBudgetMarge"></small></span>
       </div>
     </div>
     <div class="hq-tete-actions">
@@ -149,28 +152,31 @@
           </div>
 
           <!-- Champs d'origine : masqués à l'écran, ils restent la source de vérité du moteur. -->
-          <label for="position" class="hq-cache">Position<select id="position">
+          <label for="position" class="hq-cache">Position
+            <select id="position">
               <option selected>PG</option><option>SG</option><option>SF</option><option>PF</option><option>C</option>
             </select>
           </label>
 
-          <label for="height" class="hq-cache">Height<output id="heightOut" for="height">6'6" (198 cm)</output>
+          <label for="height" class="hq-cache">Height <output id="heightOut" for="height">6'6" (198 cm)</output>
             <input id="height" type="range" min="69" max="88" value="78" step="1">
           </label>
 
-          <label for="weight" class="hq-cache">Weight<output id="weightOut" for="weight">180 lbs (82 kg)</output>
+          <label for="weight" class="hq-cache">Weight <output id="weightOut" for="weight">180 lbs (82 kg)</output>
             <input id="weight" type="range" min="140" max="300" value="180" step="1">
           </label>
 
-          <label for="wing" class="hq-cache">Wingspan<output id="wingOut" for="wing">6'10" (208 cm)</output>
+          <label for="wing" class="hq-cache">Wingspan <output id="wingOut" for="wing">6'10" (208 cm)</output>
             <input id="wing" type="range" min="69" max="96" value="82" step="1">
           </label>
 
           <div class="hq-selects">
-            <label for="dominantHand">Dominant hand<select id="dominantHand"><option value="Right" selected>Right</option><option value="Left">Left</option></select>
+            <label for="dominantHand">Dominant hand
+              <select id="dominantHand"><option value="Right" selected>Right</option><option value="Left">Left</option></select>
             </label>
 
-            <label for="style">Archetype<select id="style">
+            <label for="style">Archetype
+              <select id="style">
                 <option>Balanced</option><option>Shooter</option><option selected>Slasher</option>
                 <option>Playmaker</option><option>Lockdown</option><option>Big</option>
               </select>
@@ -240,7 +246,7 @@
         <div id="barreCorpsAttributs" class="etape-barre-slot"></div>
         <div class="panel exact-card attributes-exact-card">
           <div class="exact-card-title">
-            <h2>Attributes<span id="selectedStyleAttrTitle">(optimized for Slasher)</span></h2>
+            <h2>Attributes <span id="selectedStyleAttrTitle">(optimized for Slasher)</span></h2>
             <div class="attr-tools">
               <button type="button" id="undoBtn" class="small-btn" aria-label="Undo" title="Undo (Ctrl+Z)" disabled>↶</button>
               <button type="button" id="redoBtn" class="small-btn" aria-label="Redo" title="Redo (Ctrl+Shift+Z)" disabled>↷</button>
@@ -363,7 +369,7 @@
   <div class="identity-grid">
     <div class="identity-card"><span class="v15-label">Identity</span><strong id="v15IdentityName">—</strong><p id="v15IdentityText">Change your attributes to shape your identity.</p><div id="v15IdentityTags" class="v15-tags"></div></div>
     <div class="identity-card"><span class="v15-label">Profil</span><div id="v15CategoryScores" class="v15-category-scores"></div></div>
-    <div class="identity-card"><span class="v15-label">Prochain objectif</span><strong id="v15NextTitle">—</strong><p id="v15NextText">The engine is looking for the next useful threshold.</p><button id="v15JumpNext" type="button" class="secondary small-btn">Voir l'attribut</button></div>
+    <div class="identity-card"><span class="v15-label">Next goal</span><strong id="v15NextTitle">—</strong><p id="v15NextText">The engine is looking for the next useful threshold.</p><button id="v15JumpNext" type="button" class="secondary small-btn">See the attribute</button></div>
   </div>
   <div class="v15-columns">
     <div>
@@ -421,7 +427,7 @@
       <div><span>Animations</span><b id="checkAnimations">—</b></div>
     </div>
   </div>
-  <p class="validation-note"><b>Good to know:</b>this checker guarantees consistency with the data rules built into the site. It cannot promise official accuracy as long as 2K does not publish the internal tables behind the 2K27 builder. Undocumented rules are flagged as<b>indicatives</b>.</p>
+  <p class="validation-note"><b>Good to know:</b> this checker guarantees consistency with the data rules built into the site. It cannot promise official accuracy as long as 2K does not publish the internal tables behind the 2K27 builder. Undocumented rules are flagged as <b>indicatives</b>.</p>
 </section>
 
 <!-- ============ SCOUTING ============ -->
@@ -501,7 +507,7 @@
 
 <footer>
   <p>NBA 2K27 Build Lab — independent tool, public data, no official affiliation with 2K.</p>
-  <p class="footer-credit">For lab-measured shooting data (green window, shot speed, badge tests), have a look at<a href="https://www.nba2klab.com/" target="_blank" rel="noopener">NBA2KLab</a>: their jumpshots are tested on Hall of Fame, with no boosts, no badges and no shot meter, on an automated rig. We are not trying to redo that here.</p>
+  <p class="footer-credit">For lab-measured shooting data (green window, shot speed, badge tests), have a look at <a href="https://www.nba2klab.com/" target="_blank" rel="noopener">NBA2KLab</a> : their jumpshots are tested on Hall of Fame, with no boosts, no badges and no shot meter, on an automated rig. We are not trying to redo that here.</p>
   <p class="footer-legal"><a href="/en/mentions-legales/">Legal notice and privacy</a> · <a href="mailto:contact@lelabodesbuilds.com">Report a data error</a></p>
 </footer>
 
@@ -549,5 +555,7 @@
 <script src="/ui.js"></script>
 <script src="/hq-builder.js"></script>
 <script src="/attributs-jeu.js"></script>
+<script src="/i18n-en.js"></script>
+<script src="/i18n.js"></script>
 </body>
 </html>

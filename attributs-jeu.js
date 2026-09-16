@@ -31,6 +31,9 @@
     'Strength':"Détermine le vainqueur d'un duel au contact offensivement et défensivement ainsi que l'aptitude d'un joueur à faire reculer un adversaire ou à lui résister au poste, avec ou sans ballon."
   };
 
+  // Lue par i18n.js sur les pages /en/ : la description anglaise vient du jeu.
+  window.DESC_ATTR_FR=DESC_ATTR;
+
   /* Coût en jetons de chaque palier (Bronze, Argent, Or, Hall of Fame), relevé
      dans le jeu (vidéo IMG_5223). Les autres badges : coût pas encore relevé. */
   var COUT_JETONS={

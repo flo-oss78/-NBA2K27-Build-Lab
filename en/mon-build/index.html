@@ -12,6 +12,9 @@
 <link rel="alternate" hreflang="fr" href="https://lelabodesbuilds.com/mon-build/">
 <link rel="alternate" hreflang="en" href="https://lelabodesbuilds.com/en/mon-build/">
 <link rel="alternate" hreflang="x-default" href="https://lelabodesbuilds.com/mon-build/">
+<link rel="alternate" hreflang="fr" href="https://lelabodesbuilds.com/mon-build/">
+<link rel="alternate" hreflang="en" href="https://lelabodesbuilds.com/en/mon-build/">
+<link rel="alternate" hreflang="x-default" href="https://lelabodesbuilds.com/mon-build/">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon-192.png">
@@ -35,7 +38,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>window.NBABL_LANG="en";</script>
-<meta name="robots" content="noindex">
 </head>
 
 <body>
@@ -58,7 +60,8 @@
     <button id="modeExpert" type="button" class="mode-btn" aria-pressed="false">Expert</button>
   </div>
   <div class="reference-actions">
-    <span id="referenceVersion">V26.12</span>
+    <a class="lang-switch" href="/mon-build/" hreflang="fr" lang="fr" title="Version française">FR</a>
+    <span id="referenceVersion">V26.14</span>
     <button id="referenceSettings" type="button" aria-label="Open settings" aria-expanded="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.9 19.3a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.7 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.56V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.56 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z"/></svg>
     </button>
@@ -156,7 +159,8 @@
       <span id="cbStagePill" class="pill">Base</span>
     </div>
     <div class="cb-toolbar">
-      <label for="cbStage">Step<select id="cbStage"><option value="0">Base</option><option value="3">3 CB</option><option value="5">5 CB</option><option value="8">8 CB</option><option value="10">10 CB</option><option value="12">12 CB</option><option value="15">15 CB</option><option value="20">20 CB</option><option value="28">28 CB</option><option value="40">40 CB</option><option value="50">50 CB</option></select>
+      <label for="cbStage">Step
+        <select id="cbStage"><option value="0">Base</option><option value="3">3 CB</option><option value="5">5 CB</option><option value="8">8 CB</option><option value="10">10 CB</option><option value="12">12 CB</option><option value="15">15 CB</option><option value="20">20 CB</option><option value="28">28 CB</option><option value="40">40 CB</option><option value="50">50 CB</option></select>
       </label>
       <button id="cbAutoPlan" type="button">Plan automatique</button>
       <button id="cbClearPlan" type="button" class="secondary">Effacer</button>
@@ -201,7 +205,7 @@
       <span class="pill">20 slots</span>
     </div>
     <div id="loadoutPanel" class="loadout-panel"></div>
-    <p class="data-note">L'indicateur <strong>✓</strong>marks the badges NBA2KLab has published a test for. The others are still “test pending” there: their real effect has not been measured.</p>
+    <p class="data-note">L'indicateur <strong>✓</strong> marks the badges NBA2KLab has published a test for. The others are still “test pending” there: their real effect has not been measured.</p>
   </section>
 
   <section class="panel token-panel" id="tokens">
@@ -273,7 +277,7 @@
 
 <footer>
   <p>NBA 2K27 Build Lab — independent tool, public data, no official affiliation with 2K.</p>
-  <p class="footer-credit">For lab-measured shooting data (green window, shot speed, badge tests), have a look at<a href="https://www.nba2klab.com/" target="_blank" rel="noopener">NBA2KLab</a>: their jumpshots are tested on Hall of Fame, with no boosts, no badges and no shot meter, on an automated rig. We are not trying to redo that here.</p>
+  <p class="footer-credit">For lab-measured shooting data (green window, shot speed, badge tests), have a look at <a href="https://www.nba2klab.com/" target="_blank" rel="noopener">NBA2KLab</a> : their jumpshots are tested on Hall of Fame, with no boosts, no badges and no shot meter, on an automated rig. We are not trying to redo that here.</p>
   <p class="footer-legal"><a href="/en/mentions-legales/">Legal notice and privacy</a> · <a href="mailto:contact@lelabodesbuilds.com">Report a data error</a></p>
 </footer>
 
@@ -307,5 +311,7 @@
 <script src="/progression.js"></script>
 <script src="/ui.js"></script>
 <script src="/mon-build.js"></script>
+<script src="/i18n-en.js"></script>
+<script src="/i18n.js"></script>
 </body>
 </html>
