@@ -20,14 +20,17 @@
   if(LANG.indexOf('en')!==0||!window.NBABL_EN)return;
   window.NBABL_LANG='en';
   var EN=window.NBABL_EN, AS=String.fromCharCode(92);
-  // Les tables du jeu sont déclarées en const dans builder-data.js et animations.js :
-  // elles vivent dans la portée globale sans être accrochées à window.
-  function globale(nom){
-    try{ return window[nom]||eval(nom)||null; }catch(e){ return null; }
-  }
-  var NOMS=globale('NOMS_ATTRIBUTS_FR'), BADGES=globale('BADGE_FR'),
-      CATS_ANIM=globale('ANIMATION_CATEGORIES_FR'), DESCS=globale('BADGE_DESC_FR'),
-      DESCS_ATTR=globale('DESC_ATTR_FR');
+  /* Les tables du jeu sont déclarées en const dans builder-data.js et
+     animations.js : elles vivent dans la portée globale sans être accrochées à
+     window. On les lit donc par leur nom, protégées par typeof si le fichier
+     n'est pas chargé — surtout pas par eval(), que la CSP du site interdit
+     (script-src 'self') : la page partait alors sans aucun nom du jeu traduit. */
+  function table(nom,direct){ return window[nom]||direct||null; }
+  var NOMS=table('NOMS_ATTRIBUTS_FR',typeof NOMS_ATTRIBUTS_FR!=='undefined'?NOMS_ATTRIBUTS_FR:null),
+      BADGES=table('BADGE_FR',typeof BADGE_FR!=='undefined'?BADGE_FR:null),
+      CATS_ANIM=table('ANIMATION_CATEGORIES_FR',typeof ANIMATION_CATEGORIES_FR!=='undefined'?ANIMATION_CATEGORIES_FR:null),
+      DESCS=table('BADGE_DESC_FR',typeof BADGE_DESC_FR!=='undefined'?BADGE_DESC_FR:null),
+      DESCS_ATTR=table('DESC_ATTR_FR',null);
 
   /* ---- Table française → anglais ---- */
   var TABLE=Object.create(null);

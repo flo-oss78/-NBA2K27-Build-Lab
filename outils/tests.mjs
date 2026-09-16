@@ -1196,6 +1196,32 @@ async function testsNavigateur(base) {
       sansErreur('ouverture d\u2019un build réel depuis /hub/');
     });
 
+    await test('la version anglaise n’affiche plus rien en français', async () => {
+      // Les pages /en/ sont traduites à la génération, mais une trentaine de
+      // scripts écrivent après coup : i18n.js traduit ce qu'ils produisent. Un
+      // simple eval() bloqué par la CSP suffisait à tout faire tomber en ligne
+      // sans erreur visible. Ce test regarde la page telle qu'elle est rendue.
+      const restes = [];
+      for (const chemin of ['/en/', '/en/reference/', '/en/mon-build/']) {
+        await nav.ouvrir(base + chemin);
+        const trouves = await nav.evaluer(`
+          const FR = /[àâçéèêëîïôöûùüÿœÀÂÇÉÈÊËÎÏÔÖÛÙÜŒ]|(^|[^a-zA-Z])(le|la|les|une|des|du|pour|avec|dans|sans|est|sont|ton|tes|aucun|aucune|ouvert|accessibles|niveau|taille|restantes)([^a-zA-Z]|$)/;
+          const OK = t => !t || t.includes('Le Labo des Builds') || t.includes('Version française');
+          const vus = new Set();
+          const marche = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+          for (let n = marche.nextNode(); n; n = marche.nextNode()) {
+            const t = (n.nodeValue || '').replace(/\\s+/g, ' ').trim();
+            const p = n.parentElement;
+            if (t.length < 3 || OK(t) || !FR.test(t)) continue;
+            if (!p || p.tagName === 'SCRIPT' || p.tagName === 'STYLE') continue;
+            vus.add(t.slice(0, 80));
+          }
+          return [...vus].slice(0, 5);`);
+        trouves.forEach(t => restes.push(`${chemin} : « ${t} »`));
+      }
+      verifier(!restes.length, `du français reste à l’écran sur la version anglaise : ${restes.join(' · ')}`);
+    });
+
     await test('mise en page sans débordement ni zone masquée, sur téléphone et sur ordinateur', async () => {
       const problemes = [];
       // Les pages anglaises ont la même structure mais d'autres longueurs de texte :

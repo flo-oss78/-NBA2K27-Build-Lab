@@ -29,7 +29,25 @@ const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; ch
   '.webmanifest': 'application/manifest+json', '.svg': 'image/svg+xml', '.png': 'image/png',
   '.woff2': 'font/woff2', '.txt': 'text/plain; charset=utf-8', '.xml': 'application/xml' };
 
+// Les en-têtes que Cloudflare ajoute à tout le site (_headers, règle « /* »).
+// Sans eux, l'audit local était plus permissif que la production : eval() passait
+// ici et se faisait bloquer en ligne par la CSP, laissant la page sans traduction.
+function entetesDuSite() {
+  const lignes = fs.readFileSync('_headers', 'utf8').replace(/\r\n/g, '\n').split('\n');
+  const out = {};
+  let dedans = false;
+  for (const l of lignes) {
+    if (!l.trim() || l.trim().startsWith('#')) continue;
+    if (!/^\s/.test(l)) { dedans = l.trim() === '/*'; continue; }
+    if (!dedans) continue;
+    const i = l.indexOf(':');
+    if (i > 0) out[l.slice(0, i).trim()] = l.slice(i + 1).trim();
+  }
+  return out;
+}
+
 function serveurLocal() {
+  const communs = entetesDuSite();
   return new Promise(ok => {
     const srv = http.createServer((req, res) => {
       let rel = decodeURIComponent(req.url.split('?')[0]);
@@ -38,7 +56,7 @@ function serveurLocal() {
       if (!f.startsWith(RACINE)) { res.writeHead(403).end(); return; }
       fs.readFile(f, (err, buf) => {
         if (err) { res.writeHead(404, { 'content-type': 'text/plain' }).end('404'); return; }
-        res.writeHead(200, { 'content-type': TYPES[path.extname(f)] || 'application/octet-stream' }).end(buf);
+        res.writeHead(200, { ...communs, 'content-type': TYPES[path.extname(f)] || 'application/octet-stream' }).end(buf);
       });
     });
     srv.listen(0, '127.0.0.1', () => ok(srv));
