@@ -1111,11 +1111,22 @@ async function testsNavigateur(base) {
 async function testsProduction() {
   section('Production — le déploiement est-il bien en ligne ?');
 
+  /* Sur le domaine, Cloudflare masque les adresses e-mail (Scrape Shield) : les liens
+     mailto: du pied de page deviennent /cdn-cgi/l/email-protection et un script de
+     décodage est inséré. Le fichier déployé est pourtant bien celui du dossier :
+     on annule cette réécriture avant de comparer, plutôt que de couper la protection. */
+  const CONTACT = 'contact@lelabodesbuilds.com';
+  const sansCloudflare = b => Buffer.from(b.toString('utf8')
+    .replace(/<script data-cfasync="false" src="\/cdn-cgi\/scripts\/[^"]*"><\/script>/g, '')
+    // Le texte affiché est lui aussi masqué quand c'est l'adresse elle-même.
+    .replace(/<span class="__cf_email__" data-cfemail="[0-9a-f]*">\[email&#160;protected\]<\/span>/g, CONTACT)
+    .replace(/href="\/cdn-cgi\/l\/email-protection#[0-9a-f]*"/g, `href="mailto:${CONTACT}"`), 'utf8');
+
   await test('une adresse inconnue renvoie un vrai 404, avec la page d’erreur du site', async () => {
     // Sans 404.html, Cloudflare Pages servait la page du builder avec un code 200 :
     // chaque faute de frappe devenait une « page » indexable par les moteurs.
     const attendu = fs.readFileSync('404.html');
-    const empreinte = b => crypto.createHash('sha256').update(b).digest('hex');
+    const empreinte = b => crypto.createHash('sha256').update(sansCloudflare(b)).digest('hex');
     let r, corps;
     for (let essai = 1; essai <= 12; essai++) {
       r = await fetch(`${URL_PROD}/adresse-qui-n-existe-pas-${Date.now()}/`);
@@ -1129,8 +1140,8 @@ async function testsProduction() {
 
   await test('la production sert exactement les fichiers de ce dossier', async () => {
     const fichiers = [...fs.readdirSync('.').filter(f => f.endsWith('.js') || f.endsWith('.css')),
-                      ...PAGES.map(p => p.fichier)];
-    const empreinte = b => crypto.createHash('sha256').update(b).digest('hex');
+                      ...PAGES.map(p => p.fichier), 'mentions-legales/index.html'];
+    const empreinte = b => crypto.createHash('sha256').update(sansCloudflare(b)).digest('hex');
     let differents = [];
     // Juste après un déploiement, la propagation peut prendre quelques secondes.
     for (let essai = 1; essai <= 12; essai++) {

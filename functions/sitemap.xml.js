@@ -22,7 +22,8 @@ export async function onRequestGet({request, env}){
     ['/', '1.0'],
     ['/hub/', '0.9'],
     ['/reference/', '0.9'],
-    ['/mon-build/', '0.7']
+    ['/mon-build/', '0.7'],
+    ['/mentions-legales/', '0.2']
   ];
   const urls = PAGES.map(([chemin, priorite]) =>
     `<url><loc>${esc(origin)}${chemin}</loc><changefreq>weekly</changefreq><priority>${priorite}</priority></url>`
