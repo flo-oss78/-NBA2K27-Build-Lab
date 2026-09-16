@@ -162,6 +162,21 @@ async function testsStatiques() {
       `${fonction} absente : l'adresse avec .html répondrait par une redirection`);
   });
 
+  await test('la version affichée est celle du site déployé', () => {
+    // L'en-tête affichait « V24.1 » alors que le site en était à la v26 :
+    // un visiteur ne peut pas dire si sa page est à jour.
+    const version = fs.readFileSync('sw.js', 'utf8').match(/VERSION='v([0-9.]+)'/)[1];
+    const court = 'V' + version.split('.').slice(0, 2).join('.');
+    const config = fs.readFileSync('site-config.js', 'utf8');
+    verifier(config.includes(`version:'${version}'`), `site-config.js n’annonce pas la version ${version} du service worker`);
+    verifier(config.includes(`shortVersion:'${court}'`), `site-config.js n’annonce pas ${court}`);
+    const enRetard = PAGES.map(p => p.fichier).filter(f => {
+      const m = fs.readFileSync(f, 'utf8').match(/id="referenceVersion">([^<]*)</);
+      return m && m[1] !== court;
+    });
+    verifier(!enRetard.length, 'pages affichant une autre version : ' + enRetard.join(', '));
+  });
+
   await test('aucun id en double ni ancre morte', () => {
     const problemes = [];
     for (const p of PAGES) {
