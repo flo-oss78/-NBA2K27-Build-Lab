@@ -233,7 +233,7 @@
     ctx.fillText('Scanne pour ouvrir ce build',64,qrY+72);
     ctx.font='600 23px Inter, system-ui, sans-serif';
     ctx.fillStyle='#64748B';
-    ctx.fillText('nba2k27-build-lab.pages.dev',64,qrY+112);
+    ctx.fillText('lelabodesbuilds.com',64,qrY+112);
     ctx.fillText('Modèle indicatif — non officiel 2K',64,qrY+150);
 
     return cv;

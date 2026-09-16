@@ -26,7 +26,7 @@ const RACINE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 process.chdir(RACINE);
 
 const PROD = process.argv.includes('--prod');
-const URL_PROD = 'https://nba2k27-build-lab.pages.dev';
+const URL_PROD = 'https://lelabodesbuilds.com';
 const PAGES = [
   { chemin: '/',             fichier: 'index.html',             nav: 'Créer' },
   { chemin: '/hub/',         fichier: 'hub/index.html',         nav: 'Builds' },
@@ -119,9 +119,18 @@ async function testsStatiques() {
     parcourir('.');
     verifier(!fautifs.length, 'ancienne adresse encore présente : ' + fautifs.join(', '));
     const config = fs.readFileSync('site-config.js', 'utf8');
-    verifier(config.includes("siteUrl:'https://nba2k27-build-lab.pages.dev'"), 'siteUrl ne pointe pas vers le site en production');
+    verifier(config.includes("siteUrl:'https://lelabodesbuilds.com'"), 'siteUrl ne pointe pas vers le site en production');
     verifier(/COMMENTAIRES_OUVERTS = false/.test(fs.readFileSync('functions/api/builds/[id]/comments.js', 'utf8')), 'les commentaires ont été rouverts sans modération');
     verifier(!fs.readFileSync('server-client.js', 'utf8').includes('serverCommentForm'), 'le formulaire de commentaire est revenu');
+  });
+
+  await test('la page de mentions légales existe et est liée depuis chaque page', () => {
+    const page = fs.readFileSync('mentions-legales/index.html', 'utf8');
+    for (const attendu of ['Le Labo des Builds', 'contact@lelabodesbuilds.com', 'Cloudflare, Inc.', 'héberge', 'affilié'])
+      verifier(page.toLowerCase().includes(attendu.toLowerCase()), `mentions légales sans « ${attendu} »`);
+    const sansLien = [...PAGES.map(p => p.fichier), '404.html'].filter(f => !fs.readFileSync(f, 'utf8').includes('href="/mentions-legales/"'));
+    verifier(!sansLien.length, 'pages sans lien vers les mentions légales : ' + sansLien.join(', '));
+    verifier(fs.readFileSync('sw.js', 'utf8').includes("'/mentions-legales/'"), 'la page légale n’est pas mise en cache par le service worker');
   });
 
   await test('aucun id en double ni ancre morte', () => {

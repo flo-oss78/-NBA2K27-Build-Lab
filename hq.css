@@ -362,6 +362,19 @@ body:not(.mode-expert) .hq-builder .attr .thresholds{display:none}
 .eb-palier li.ko span{color:#FF8A96}
 .eb-palier em{font-style:normal;color:var(--dim)}
 .eb-note,.eb-vide{margin:0;font-size:11px;color:var(--dim)}
+
+/* 6.7 Mentions légales et confidentialité (/mentions-legales/) : une page de texte,
+   lisible sur téléphone comme sur ordinateur. */
+.hq-page-legal{max-width:780px;margin:0 auto;padding:18px 16px 40px}
+.legal-card{display:grid;gap:10px;padding:18px}
+.legal-card h1{margin:0;font-family:var(--titre);font-size:clamp(26px,6vw,34px);line-height:1.05;text-transform:uppercase;letter-spacing:.02em}
+.legal-card h2{margin:14px 0 0;font-family:var(--titre);font-size:19px;letter-spacing:.04em;text-transform:uppercase;color:#fff}
+.legal-card p,.legal-card li{margin:0;font-size:14.5px;line-height:1.6;color:var(--text);overflow-wrap:anywhere}
+.legal-card ul{margin:0;padding-left:20px;display:grid;gap:6px}
+.legal-maj{color:var(--dim);font-size:12.5px}
+.legal-retour{margin-top:16px}
+footer .footer-legal{margin-top:6px;font-size:12.5px}
+footer .footer-legal a{color:var(--muted)}
 /* 6.6 Corps du joueur : roues */
 .hq-roues{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .roue{min-width:0;text-align:center}

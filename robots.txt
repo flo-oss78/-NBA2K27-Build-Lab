@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://nba2k27-build-lab.pages.dev/sitemap.xml
+Sitemap: https://lelabodesbuilds.com/sitemap.xml
