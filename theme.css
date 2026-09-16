@@ -589,6 +589,8 @@ body.mode-expert .start-here{display:none}
   100%{box-shadow:0 0 0 0 rgba(242,51,74,0)}
 }
 @media (prefers-reduced-motion:reduce){.budget-estime.budget-plein{animation:none;border-color:var(--red)}}
+/* Pourquoi cette animation est conseillée : critère vérifiable, pas un avis. */
+.anim-motif{display:block;color:var(--dim);font-size:11px;font-style:italic}
 .budget-texte{font-size:12.5px;line-height:1.5}
 .budget-note{margin-top:6px;font-size:11px;color:var(--dim);line-height:1.5}
 .builds-proches{display:grid;gap:10px}

@@ -320,23 +320,87 @@ function renderSourceAnimations(){
    - suivant : parmi les animations plus exigeantes, celle qui demande le moins de points. */
 const ANIM_SANS_CONSEIL=new Set(['Jumper Base']);
 function exigenceAnimation(a){const v=Object.values(a?.req||{});return v.length?Math.max(...v):0}
+/* Conseils d'animations : une par catégorie, plus deux idées de rechange.
+ *
+ * Ce qu'on peut affirmer sans rien inventer, c'est :
+ *   — ce que le build débloque (taille et attributs) ;
+ *   — l'exigence de chaque animation : le jeu réserve les plus hautes aux builds
+ *     les plus poussés, c'est le seul classement que les données contiennent ;
+ *   — la solidité de la donnée : recoupée par deux sources, ou vue équipée en jeu.
+ * Nous ne classons pas les animations « par qualité de jeu » : personne ne publie
+ * ce classement gratuitement, et l'inventer tromperait le joueur.
+ *
+ * S'y ajoute une règle de variété. Cinq catégories de dribble (crossover,
+ * hésitation, entre les jambes, dans le dos, size-up) demandent les MÊMES
+ * attributs aux mêmes joueurs : sans cette règle, le même nom sortait dans les
+ * cinq et le joueur ne découvrait rien. À exigence voisine, on propose donc un
+ * joueur qui n'a pas déjà été conseillé ailleurs — la qualité ne bouge pas, le
+ * choix s'élargit.
+ */
+const ANIM_PENALITE_REPETITION=0.04;   // face à l'exigence, ramenée entre 0 et 1
+// Une animation conseillée reste dans le haut de ce que le build débloque.
+const ANIM_PLANCHER_QUALITE=0.85;
+/* « Basic », « Normal », « Pro » sont les animations de base, sans joueur : à
+   exigence égale, une signature est toujours plus intéressante à équiper. Elles
+   restent conseillées quand un build ne débloque rien d'autre. */
+const ANIM_GENERIQUE=/^(Basic|Normal|Pro)( WNBA)?( \d+)?$/i;
+// Rien n'est écarté au nom de la ligue : dans NBA 2K27 la City est mixte, on crée
+// aussi des MyPLAYER féminines, et le builder puise dans les animations NBA ET WNBA
+// (annonce 2K du 18 août 2026). Les entrées « Normal WNBA 2 » sont écartées comme
+// les autres animations de base, par la règle ci-dessus : elles n'ont pas de signature.
+function qualiteAnimation(a,maxCat){
+ let s=maxCat?exigenceAnimation(a)/maxCat:0;
+ s+=a.v===2?0.15:a.v===1?0.05:0;       // recoupée par nos deux sources
+ if(a.jeu)s+=0.2;                      // vue équipée sur un vrai MyPLAYER
+ // Franc : aucune répétition ne doit faire repasser « Pro » devant une signature.
+ if(ANIM_GENERIQUE.test(a.name))s-=0.5;
+ return s;
+}
+function motifAnimation(a,maxCat){
+ if(a.jeu)return 'confirmée en jeu';
+ if(!maxCat)return 'aucune exigence connue dans cette catégorie';
+ if(exigenceAnimation(a)===maxCat)return 'la plus exigeante de sa catégorie';
+ return 'la plus exigeante que ton build atteint';
+}
 function conseilsAnimations(r,h){
- const par=new Map();
- for(const a of ANIMATIONS){
-  if(ANIM_SANS_CONSEIL.has(a.category)||h<a.minH||h>a.maxH||animationManques(a,r).length)continue;
-  const c=par.get(a.category)||{conseil:null,suivant:null,manques:null};
-  const ea=exigenceAnimation(a),ec=exigenceAnimation(c.conseil);
-  if(!c.conseil||ea>ec||(ea===ec&&a.name.localeCompare(c.conseil.name,'fr')<0))c.conseil=a;
-  par.set(a.category,c);
- }
+ const dispo=new Map(), exigenceMax=new Map(), bloquees=new Map();
+ // Une seule passe sur la base : accessible ou non, et la plus proche du but.
  for(const a of ANIMATIONS){
   if(ANIM_SANS_CONSEIL.has(a.category)||h<a.minH||h>a.maxH)continue;
-  const manques=animationManques(a,r); if(!manques.length)continue;
-  const c=par.get(a.category)||{conseil:null,suivant:null,manques:null};
-  if(c.conseil&&exigenceAnimation(a)<=exigenceAnimation(c.conseil)){par.set(a.category,c);continue}
-  const total=manques.reduce((s,[,n])=>s+n,0), avant=c.manques?c.manques.reduce((s,[,n])=>s+n,0):Infinity;
-  if(total<avant||(total===avant&&exigenceAnimation(a)>exigenceAnimation(c.suivant))){c.suivant=a;c.manques=manques}
-  par.set(a.category,c);
+  const ex=exigenceAnimation(a);
+  if(ex>(exigenceMax.get(a.category)||0))exigenceMax.set(a.category,ex);
+  const manques=animationManques(a,r);
+  if(manques.length){
+   const total=manques.reduce((s,[,n])=>s+n,0), avant=bloquees.get(a.category);
+   if(!avant||total<avant.total||(total===avant.total&&ex>exigenceAnimation(avant.a)))bloquees.set(a.category,{a,manques,total});
+  }else{
+   let l=dispo.get(a.category); if(!l)dispo.set(a.category,l=[]);
+   l.push(a);
+  }
+ }
+ const par=new Map(), propose=new Map();
+ // Ordre fixe : deux builds identiques reçoivent les mêmes conseils.
+ for(const cat of [...dispo.keys()].sort()){
+  const maxCat=exigenceMax.get(cat)||0;
+  const liste=dispo.get(cat);
+  // La variété ne doit jamais faire descendre en gamme : on ne choisit que parmi
+  // le haut de ce que le build débloque vraiment dans cette catégorie.
+  const maxAcc=Math.max(0,...liste.map(exigenceAnimation));
+  const candidats=maxAcc?liste.filter(a=>exigenceAnimation(a)>=maxAcc*ANIM_PLANCHER_QUALITE):liste;
+  // La variété se joue entre signatures : « Basic » n'est pas un nom à varier.
+  const note=a=>qualiteAnimation(a,maxCat)-(ANIM_GENERIQUE.test(a.name)?0:(propose.get(a.name)||0)*ANIM_PENALITE_REPETITION);
+  const classe=candidats.slice().sort((x,y)=>note(y)-note(x)||x.name.localeCompare(y.name,'fr'));
+  const conseil=classe[0], alternatives=classe.slice(1,3);
+  propose.set(conseil.name,(propose.get(conseil.name)||0)+1);
+  alternatives.forEach(a=>propose.set(a.name,(propose.get(a.name)||0)+0.5));
+  par.set(cat,{conseil,alternatives,motif:motifAnimation(conseil,maxCat),suivant:null,manques:null});
+ }
+ // Catégories encore fermées : ce qui manque pour la plus proche.
+ for(const [cat,b] of bloquees){
+  const c=par.get(cat);
+  if(c&&c.conseil&&exigenceAnimation(b.a)<=exigenceAnimation(c.conseil))continue;
+  if(c){c.suivant=b.a;c.manques=b.manques}
+  else par.set(cat,{conseil:null,alternatives:[],motif:null,suivant:b.a,manques:b.manques});
  }
  return par;
 }

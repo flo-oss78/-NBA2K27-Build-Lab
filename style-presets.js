@@ -186,10 +186,12 @@
         if(cat)utilisees[cat]=1;
         if(!cat)return '<li class="anim-slot vide"><small>'+esc(libelle)+'</small><b>'+esc(note||'Pas encore dans notre base')+'</b></li>';
         var c=conseils.get(cat)||{};
-        var autres=(window.ANIMATIONS||[]).filter(function(a){return a.category===cat&&a!==c.conseil&&h>=a.minH&&h<=a.maxH&&!animationManques(a,r).length})
-          .sort(function(a,b){return exige(b)-exige(a)||a.name.localeCompare(b.name,'fr')}).slice(0,c.suivant?2:3)
-          .map(function(a){return esc(a.name)});
+        // Les rechanges viennent de conseilsAnimations : elles tiennent compte de
+        // ce qui a déjà été proposé ailleurs, et évitent de refiltrer les 2 595
+        // animations une fois par ligne de cet écran.
+        var autres=(c.alternatives||[]).slice(0,c.suivant?2:3).map(function(a){return esc(a.name)});
         var sugg=autres.length?'<span>Aussi : '+autres.join(' · ')+'</span>':'';
+        if(c.conseil&&c.motif)sugg+='<span class="anim-motif">'+esc(c.motif)+'</span>';
         if(c.conseil&&!Object.keys(c.conseil.req||{}).length)sugg+='<span class="nonconfirme">Exigences non confirmées dans le jeu</span>';
         if(c.suivant)sugg+='<span class="ensuite">Ensuite : '+esc(c.suivant.name)+' ('+c.manques.map(function(m){return String(m[0]).split(' ou ').map(nomA).join(' ou ')+' +'+m[1]}).join(', ')+')</span>';
         return '<li class="anim-slot '+(c.conseil?'ok':'locked')+'"><small>'+esc(libelle)+'</small><b>'+esc(c.conseil?c.conseil.name:'Aucune accessible')+'</b>'+(sugg?'<p>'+sugg+'</p>':'')+'</li>';

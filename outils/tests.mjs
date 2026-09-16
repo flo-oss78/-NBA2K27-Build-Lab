@@ -1147,7 +1147,15 @@ async function testsNavigateur(base) {
             if (acc.length && !x.conseil) erreurs.push(h + ' ' + cat + ' : aucune conseillée alors que ' + acc.length + ' accessibles');
             if (x.conseil) { conseils++;
               if (animationManques(x.conseil, r).length) erreurs.push(cat + ' : conseillée non accessible');
-              if (acc.some(a => exigenceAnimation(a) > exigenceAnimation(x.conseil))) erreurs.push(cat + ' : une accessible plus exigeante existe'); }
+              // La conseillée n'est plus forcément la plus exigeante : à exigence voisine,
+              // on varie les joueurs et on préfère une signature à « Basic / Normal / Pro ».
+              // Ce qui reste vrai : elle est accessible, proche du haut du panier, et jamais
+              // générique quand une signature de même exigence est accessible.
+              const maxAcc = Math.max(...acc.map(exigenceAnimation));
+              const gen = n => /^(Basic|Normal|Pro)( WNBA)?( \\d+)?$/i.test(n);
+              if (maxAcc > 0 && exigenceAnimation(x.conseil) < maxAcc * 0.85) erreurs.push(cat + ' : conseillée trop faible (' + exigenceAnimation(x.conseil) + ' contre ' + maxAcc + ')');
+              if (gen(x.conseil.name) && acc.some(a => !gen(a.name) && exigenceAnimation(a) >= exigenceAnimation(x.conseil))) erreurs.push(cat + ' : « ' + x.conseil.name + ' » conseillé malgré une signature équivalente');
+              if (x.alternatives) for (const alt of x.alternatives) { if (animationManques(alt, r).length) erreurs.push(cat + ' : rechange « ' + alt.name + ' » non accessible'); } }
             if (x.suivant && !animationManques(x.suivant, r).length) erreurs.push(cat + ' : « à débloquer » déjà accessible');
           }
         }

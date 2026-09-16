@@ -699,7 +699,11 @@
   "Attribut": "Attribute",
   "à": "to",
   "de": "of",
-  "Plus de points d’attributs : baisse un autre attribut pour monter celui-ci.": "Out of attribute points: lower another attribute to raise this one."
+  "Plus de points d’attributs : baisse un autre attribut pour monter celui-ci.": "Out of attribute points: lower another attribute to raise this one.",
+  "confirmée en jeu": "confirmed in game",
+  "la plus exigeante de sa catégorie": "highest requirement in its category",
+  "la plus exigeante que ton build atteint": "highest requirement your build reaches",
+  "aucune exigence connue dans cette catégorie": "no known requirement in this category"
  },
  "motifs": [
   [
