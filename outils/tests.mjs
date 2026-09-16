@@ -133,6 +133,21 @@ async function testsStatiques() {
     verifier(fs.readFileSync('sw.js', 'utf8').includes("'/mentions-legales/'"), 'la page légale n’est pas mise en cache par le service worker');
   });
 
+  await test('l’image de partage existe et chaque page l’annonce', () => {
+    // Sans elle, un lien collé dans Discord ou X n'affiche qu'un rectangle vide.
+    const png = fs.readFileSync('partage.png');
+    verifier(png.length > 20000, `partage.png fait ${png.length} octets : image probablement vide`);
+    verifier(png.readUInt32BE(16) === 1200 && png.readUInt32BE(20) === 630,
+      `partage.png fait ${png.readUInt32BE(16)}×${png.readUInt32BE(20)} au lieu de 1200×630`);
+    const manquantes = [];
+    for (const f of [...PAGES.map(p => p.fichier), 'mentions-legales/index.html']) {
+      const html = fs.readFileSync(f, 'utf8');
+      for (const balise of ['og:image" content="https://lelabodesbuilds.com/partage.png', 'og:image:alt', 'twitter:image'])
+        if (!html.includes(balise)) manquantes.push(`${f} → ${balise}`);
+    }
+    verifier(!manquantes.length, 'balises de partage manquantes : ' + manquantes.join(', '));
+  });
+
   await test('aucun id en double ni ancre morte', () => {
     const problemes = [];
     for (const p of PAGES) {
