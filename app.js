@@ -383,10 +383,11 @@ const ANIM_PLANCHER_QUALITE=0.85;
    exigence égale, une signature est toujours plus intéressante à équiper. Elles
    restent conseillées quand un build ne débloque rien d'autre. */
 const ANIM_GENERIQUE=/^(Basic|Normal|Pro)( WNBA)?( \d+)?$/i;
-// Rien n'est écarté au nom de la ligue : dans NBA 2K27 la City est mixte, on crée
-// aussi des MyPLAYER féminines, et le builder puise dans les animations NBA ET WNBA
-// (annonce 2K du 18 août 2026). Les entrées « Normal WNBA 2 » sont écartées comme
-// les autres animations de base, par la règle ci-dessus : elles n'ont pas de signature.
+// Rien n'est écarté au nom de la ligue : un MyPLAYER équipe bien une signature de
+// joueuse (vérifié dans le jeu par l'utilisateur, 17 septembre 2026 ; 2K annonçait
+// le 18 août une City mixte et un builder puisant dans les animations NBA et WNBA).
+// Les entrées « Normal WNBA 2 » sont écartées comme les autres animations de base,
+// par la règle ci-dessus : elles n'ont pas de signature.
 function qualiteAnimation(a,maxCat){
  let s=maxCat?exigenceAnimation(a)/maxCat:0;
  s+=a.v===2?0.15:a.v===1?0.05:0;       // recoupée par nos deux sources
