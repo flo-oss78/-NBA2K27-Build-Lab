@@ -133,6 +133,35 @@ function bodyCaps(){
  window.NBABL_PLAFONDS=niveau;
  return estimes;
 }
+/* Points d'attributs : le jeu en donne un nombre fini et refuse qu'on monte tout
+   au maximum. Le site s'arrête au même endroit — 100 % des points estimés pour
+   ce corps — parce que lire « 138 % » sans être arrêté ne dit pas à un joueur
+   que son build est impossible à recopier en jeu.
+   Deux garde-fous : on ne bloque qu'une HAUSSE (un build recopié du jeu peut
+   dépasser notre estimation, il doit rester modifiable), et la limite ne
+   s'applique qu'aux gestes du joueur, jamais à un build qu'on charge. */
+const notesAvant={};
+function memoriserNotes(){inputs.forEach(x=>notesAvant[x.dataset.name]=+x.value)}
+function limiterAuBudget(x){
+  if(typeof maxSelonBudget!=='function')return false;
+  const nom=x.dataset.name, avant=notesAvant[nom], demandee=+x.value;
+  if(avant===undefined||demandee<=avant)return false;
+  const max=maxSelonBudget(document.getElementById('position').value,heightInches(),
+    +document.getElementById('weight').value,+document.getElementById('wing').value,ratings(),nom);
+  if(max===null)return false;
+  // Un build déjà au-dessus de l'estimation ne monte plus, mais ne redescend pas de force.
+  const permis=Math.max(avant,max);
+  if(demandee<=permis)return false;
+  x.value=permis;
+  return true;
+}
+let dernierSignalBudget=0;
+function signalerBudgetPlein(){
+  const t=Date.now(); if(t-dernierSignalBudget<2500)return; dernierSignalBudget=t;
+  const carte=document.getElementById('budgetEstime');
+  if(carte&&!carte.hidden){carte.classList.remove('budget-plein');void carte.offsetWidth;carte.classList.add('budget-plein')}
+  if(window.NBABL_TOAST)window.NBABL_TOAST('Plus de points d’attributs : baisse un autre attribut pour monter celui-ci.','warn');
+}
 function clampInputsToCaps(caps){inputs.forEach(x=>{let cap=caps[x.dataset.name]??99;x.max=cap;if(+x.value>cap)x.value=cap;let id=x.dataset.name.replace(/[^a-z0-9]/gi,'');document.getElementById('cap'+id).textContent='CAP '+cap})}
 function scoreGrade(s){return s>=86?'S':s>=82?'A+':s>=78?'A':s>=74?'A-':s>=70?'B+':s>=66?'B':s>=62?'B-':s>=56?'C':'D'}
 function buildName(vals){let tags=[];if(vals.Tir>=88)tags.push('Sharpshooter');if(vals.Création>=88)tags.push('Creator');if(vals.Défense>=88)tags.push('Two-Way');if(vals.Finition>=88)tags.push('Slasher');if(vals.Physique>=88)tags.push('Athletic');if(vals.Rebond>=88)tags.push('Glass Cleaner');return tags.length?tags.slice(0,3).join(' '):'Two-Way Creator'}
@@ -176,7 +205,7 @@ function updateAttributeDeltas(){
 }
 function update(){
  if(!BUILDER_PRESENT)return; /* page sans builder */
- updateProfileLabels();const caps=bodyCaps();clampInputsToCaps(caps);const r=ratings();updateThresholds();let sums={};Object.keys(data).forEach(k=>sums[k]=[]);inputs.forEach(x=>{document.getElementById('v'+x.dataset.name.replace(/[^a-z0-9]/gi,'')).textContent=x.value;sums[x.dataset.group].push(+x.value)});let avg=k=>Math.round(sums[k].reduce((a,b)=>a+b,0)/sums[k].length),vals={Finition:avg('Finition'),Tir:avg('Tir'),Création:avg('Création'),Défense:avg('Défense'),Rebond:avg('Rebond'),Physique:avg('Physique')};Object.entries(vals).forEach(([k,v])=>{const el=document.getElementById('avg-'+safeGroupId(k));if(el)el.textContent=v;});updateAttributeVisuals();const SCORE_W={Finition:1,Tir:1,Création:1,Défense:1,Rebond:.6,Physique:1};let wsum=0,wtot=0;Object.keys(vals).forEach(k=>{const w=SCORE_W[k]||1;wsum+=vals[k]*w;wtot+=w});let score=Math.round(wsum/wtot);document.getElementById('score').textContent=score;const ring=document.querySelector('.summary-ring');if(ring)ring.style.setProperty('--score-pct',Math.max(0,Math.min(100,score))+'%');texte('badgeReachable',unlockedBadgeCount(r));let nm=buildName(vals);document.getElementById('buildname').textContent=nm;const meta=document.getElementById('buildMeta');if(meta)meta.textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${document.getElementById('weight').value} lbs`;for(const [k,v] of Object.entries(vals)){let id={Finition:'finish',Tir:'shoot',Création:'play',Défense:'def',Rebond:'reb',Physique:'phys'}[k];const ve=document.getElementById(id+'Val');if(ve)ve.textContent=v;const be=document.getElementById(id+'Bar');if(be)be.style.width=v+'%'}updateAttributeDeltas();
+ updateProfileLabels();const caps=bodyCaps();clampInputsToCaps(caps);memoriserNotes();const r=ratings();updateThresholds();let sums={};Object.keys(data).forEach(k=>sums[k]=[]);inputs.forEach(x=>{document.getElementById('v'+x.dataset.name.replace(/[^a-z0-9]/gi,'')).textContent=x.value;sums[x.dataset.group].push(+x.value)});let avg=k=>Math.round(sums[k].reduce((a,b)=>a+b,0)/sums[k].length),vals={Finition:avg('Finition'),Tir:avg('Tir'),Création:avg('Création'),Défense:avg('Défense'),Rebond:avg('Rebond'),Physique:avg('Physique')};Object.entries(vals).forEach(([k,v])=>{const el=document.getElementById('avg-'+safeGroupId(k));if(el)el.textContent=v;});updateAttributeVisuals();const SCORE_W={Finition:1,Tir:1,Création:1,Défense:1,Rebond:.6,Physique:1};let wsum=0,wtot=0;Object.keys(vals).forEach(k=>{const w=SCORE_W[k]||1;wsum+=vals[k]*w;wtot+=w});let score=Math.round(wsum/wtot);document.getElementById('score').textContent=score;const ring=document.querySelector('.summary-ring');if(ring)ring.style.setProperty('--score-pct',Math.max(0,Math.min(100,score))+'%');texte('badgeReachable',unlockedBadgeCount(r));let nm=buildName(vals);document.getElementById('buildname').textContent=nm;const meta=document.getElementById('buildMeta');if(meta)meta.textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${document.getElementById('weight').value} lbs`;for(const [k,v] of Object.entries(vals)){let id={Finition:'finish',Tir:'shoot',Création:'play',Défense:'def',Rebond:'reb',Physique:'phys'}[k];const ve=document.getElementById(id+'Val');if(ve)ve.textContent=v;const be=document.getElementById(id+'Bar');if(be)be.style.width=v+'%'}updateAttributeDeltas();
  let capped=inputs.filter(x=>+x.value>=+(x.max||99)).length;document.getElementById('capStatus').textContent=`${capped} / ${inputs.length} au cap`;document.getElementById('bodyHint').textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${heightText(+document.getElementById('wing').value)} envergure — les maximums des attributs changent avec le gabarit.`;renderBadges(r);renderTakeovers(r);renderBreakers(r);texte('breakerTotal',breakerTotalValue());renderAnimations();renderScouting(r,vals);renderValidation(r,caps);ecrireContexte();
 }
 function badgeTier(def,r){
@@ -369,7 +398,7 @@ function renderAnimations(){
 function handValue(){return document.getElementById('dominantHand')?.value||'Droite'}
 function serialize(){let obj={position:position.value,height:height.value,weight:weight.value,wing:wing.value,style:style.value,hand:handValue(),attrs:Object.fromEntries(inputs.map(x=>[x.dataset.name,x.value]))};return btoa(unescape(encodeURIComponent(JSON.stringify(obj))))}
 function apply(obj){if(chargementFini)buildTouche=true;position.value=obj.position||'SF';height.value=obj.height||80;weight.value=obj.weight||210;wing.value=obj.wing||84;style.value=obj.style||'Équilibré';const handEl=document.getElementById('dominantHand');if(handEl&&obj.hand)handEl.value=obj.hand;update();if(obj.attrs)inputs.forEach(x=>{if(obj.attrs[x.dataset.name])x.value=Math.min(+obj.attrs[x.dataset.name],+x.max)});update()}
-inputs.forEach(x=>x.addEventListener('input',update));['position','height','weight','wing','style'].forEach(id=>document.getElementById(id)?.addEventListener('input',update));const animRefiltrer=()=>{animLimite=ANIM_PAGE;renderAnimations()};['animCategory','animStatus'].forEach(id=>document.getElementById(id)?.addEventListener('change',animRefiltrer));document.getElementById('animSearch')?.addEventListener('input',animRefiltrer);document.getElementById('animPlus')?.addEventListener('click',()=>{animLimite+=ANIM_PAGE;renderAnimations()});document.getElementById('animGroupes')?.addEventListener('click',e=>{const b=e.target.closest('[data-groupe]');if(!b||b===e.currentTarget)return;e.currentTarget.dataset.groupe=b.dataset.groupe;const s=document.getElementById('animCategory');if(s)s.value='all';animLimite=ANIM_PAGE;renderAnimations()});['badgeFilter'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>renderBadges(ratings())));document.getElementById('badgeCats')?.addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b||!e.currentTarget.contains(b)||b===e.currentTarget)return;e.currentTarget.dataset.cat=b.dataset.cat;renderBadges(ratings())});document.getElementById('badgeSearch')?.addEventListener('input',()=>renderBadges(ratings()));
+inputs.forEach(x=>x.addEventListener('input',()=>{if(limiterAuBudget(x))signalerBudgetPlein();update()}));['position','height','weight','wing','style'].forEach(id=>document.getElementById(id)?.addEventListener('input',update));const animRefiltrer=()=>{animLimite=ANIM_PAGE;renderAnimations()};['animCategory','animStatus'].forEach(id=>document.getElementById(id)?.addEventListener('change',animRefiltrer));document.getElementById('animSearch')?.addEventListener('input',animRefiltrer);document.getElementById('animPlus')?.addEventListener('click',()=>{animLimite+=ANIM_PAGE;renderAnimations()});document.getElementById('animGroupes')?.addEventListener('click',e=>{const b=e.target.closest('[data-groupe]');if(!b||b===e.currentTarget)return;e.currentTarget.dataset.groupe=b.dataset.groupe;const s=document.getElementById('animCategory');if(s)s.value='all';animLimite=ANIM_PAGE;renderAnimations()});['badgeFilter'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>renderBadges(ratings())));document.getElementById('badgeCats')?.addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b||!e.currentTarget.contains(b)||b===e.currentTarget)return;e.currentTarget.dataset.cat=b.dataset.cat;renderBadges(ratings())});document.getElementById('badgeSearch')?.addEventListener('input',()=>renderBadges(ratings()));
 
 /* Un geste réel sur le corps, les attributs, le style ou l'import rend le build « touché ». */
 if(BUILDER_PRESENT){

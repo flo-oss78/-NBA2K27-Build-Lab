@@ -68,8 +68,9 @@ function page(fichier) {
       `\n<link rel="alternate" hreflang="en" href="${SITE}/en${chemin}">` +
       `\n<link rel="alternate" hreflang="x-default" href="${SITE}${chemin}">`)
     .replace(/<meta property="og:url" content="[^"]*">/, `<meta property="og:url" content="${SITE}/en${chemin}">`)
-    // Les scripts lisent la langue de la page pour traduire ce qu'ils affichent.
-    .replace('</head>', '<script>window.NBABL_LANG="en";</script>\n</head>')
+    // Pas de script inline pour annoncer la langue : la CSP du site les interdit
+    // (script-src 'self'), et une page /en/ partait alors sans traduction.
+    // i18n.js lit <html lang="en">, posé juste au-dessus.
     // Le bouton de langue fait l'aller-retour : « EN » côté français, « FR » ici.
     .replace(/<a class="lang-switch"[^>]*>EN<\/a>/,
       `<a class="lang-switch" href="${chemin}" hreflang="fr" lang="fr" title="Version française">FR</a>`)

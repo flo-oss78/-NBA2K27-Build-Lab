@@ -581,6 +581,14 @@ body.mode-expert .start-here{display:none}
 .budget-jauge em{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:linear-gradient(90deg,var(--blue),var(--cyan))}
 .budget-estime.dessus .budget-jauge em{background:linear-gradient(90deg,var(--amber),var(--red))}
 .budget-estime.dessus .exact-card-title>span b{color:var(--amber)}
+/* Le curseur a refusé de monter : la carte des points le signale une fois. */
+.budget-estime.budget-plein{animation:budget-plein .9s ease}
+@keyframes budget-plein{
+  0%{box-shadow:0 0 0 0 rgba(242,51,74,.5)}
+  40%{box-shadow:0 0 0 6px rgba(242,51,74,0)}
+  100%{box-shadow:0 0 0 0 rgba(242,51,74,0)}
+}
+@media (prefers-reduced-motion:reduce){.budget-estime.budget-plein{animation:none;border-color:var(--red)}}
 .budget-texte{font-size:12.5px;line-height:1.5}
 .budget-note{margin-top:6px;font-size:11px;color:var(--dim);line-height:1.5}
 .builds-proches{display:grid;gap:10px}

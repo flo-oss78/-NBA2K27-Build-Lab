@@ -24,7 +24,7 @@ function nomAttribut(n){return NOMS_ATTRIBUTS_FR[n]||n}
 window.NOMS_ATTRIBUTS_FR=NOMS_ATTRIBUTS_FR;
 window.nomAttribut=nomAttribut;
 
-const data={Finition:[['Close Shot',75],['Driving Layup',82],['Driving Dunk',85],['Standing Dunk',55],['Post Control',60]],Tir:[['Mid-Range',82],['Three-Point',88],['Free Throw',78]],Création:[['Pass Accuracy',78],['Ball Handle',86],['Speed With Ball',84]],Défense:[['Interior Defense',55],['Perimeter Defense',85],['Steal',80],['Block',70]],Rebond:[['Offensive Rebound',45],['Defensive Rebound',65]],Physique:[['Speed',84],['Agility',82],['Strength',72],['Vertical',80]]};
+const data={Finition:[['Close Shot',75],['Driving Layup',82],['Driving Dunk',83],['Standing Dunk',55],['Post Control',60]],Tir:[['Mid-Range',82],['Three-Point',83],['Free Throw',78]],Création:[['Pass Accuracy',78],['Ball Handle',83],['Speed With Ball',83]],Défense:[['Interior Defense',55],['Perimeter Defense',83],['Steal',80],['Block',70]],Rebond:[['Offensive Rebound',45],['Defensive Rebound',65]],Physique:[['Speed',83],['Agility',82],['Strength',72],['Vertical',80]]};
 const badgeDefs=[
 {name:'Arc Cadence',cat:'Tir',req:[['Three-Point',70,86,91,98]],logic:'AND',minH:69,maxH:83},
 {name:'Deadeye',cat:'Tir',req:[['Mid-Range',65,85,92,99],['Three-Point',65,85,92,99]],logic:'OR',minH:69,maxH:88},

@@ -263,6 +263,12 @@ async function testsStatiques() {
     verifier(A.length === 21 && A.every(a => ATTRIBUTS.includes(a)), 'ordre des attributs inconnu');
     if (B.length < 3000) problemes.push(`${B.length} builds seulement`);
     if (B.filter(b => b[0] === 'bp').length !== 40) problemes.push('les 40 Signature Blueprints manquent');
+    // Aucun attribut ne doit être gratuit : sinon on pourrait le monter à 99 sans
+    // dépenser, alors que le jeu le fait payer comme les autres.
+    for (const [poste, m] of Object.entries(M)) {
+      const gratuits = m.w.slice(0, 21).map((c, i) => [A[i], c]).filter(([, c]) => !(c > 0));
+      if (gratuits.length) problemes.push(`${poste} : coût nul pour ${gratuits.map(([n]) => n).join(', ')}`);
+    }
     for (const b of B) {
       const [src, pos, h, w, wing, nom, v] = b, c = ctx.corpsLegal(pos, h);
       if (!['lc', 'bp'].includes(src) || !nom) problemes.push(`source ou nom manquant : ${JSON.stringify(b).slice(0, 80)}`);
@@ -314,7 +320,25 @@ const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; ch
   '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml',
   '.png': 'image/png', '.webmanifest': 'application/manifest+json', '.txt': 'text/plain' };
 
+// En-têtes que Cloudflare ajoute à tout le site (_headers, règle « /* »).
+// Sans eux, le serveur de test était plus permissif que la production : un script
+// inline passait ici et se faisait bloquer en ligne par la Content-Security-Policy.
+function entetesDuSite() {
+  const lignes = fs.readFileSync('_headers', 'utf8').replace(/\r\n/g, '\n').split('\n');
+  const out = {};
+  let dedans = false;
+  for (const l of lignes) {
+    if (!l.trim() || l.trim().startsWith('#')) continue;
+    if (!/^\s/.test(l)) { dedans = l.trim() === '/*'; continue; }
+    if (!dedans) continue;
+    const i = l.indexOf(':');
+    if (i > 0) out[l.slice(0, i).trim()] = l.slice(i + 1).trim();
+  }
+  return out;
+}
+
 function serveurLocal() {
+  const communs = entetesDuSite();
   return new Promise(ok => {
     const srv = http.createServer((req, res) => {
       let rel = decodeURIComponent(req.url.split('?')[0]);
@@ -323,7 +347,7 @@ function serveurLocal() {
       if (!f.startsWith(RACINE)) { res.writeHead(403).end(); return; }
       fs.readFile(f, (err, buf) => {
         if (err) { res.writeHead(404, { 'content-type': 'text/plain' }).end('404'); return; }
-        res.writeHead(200, { 'content-type': TYPES[path.extname(f)] || 'application/octet-stream' }).end(buf);
+        res.writeHead(200, { ...communs, 'content-type': TYPES[path.extname(f)] || 'application/octet-stream' }).end(buf);
       });
     });
     srv.listen(0, '127.0.0.1', () => ok(srv));
@@ -885,9 +909,66 @@ async function testsNavigateur(base) {
       sansErreur('budget estimé et builds réels');
       verifier(r.budget.visible && /\d+ %/.test(r.budget.valeur) && /± \d+ %/.test(r.budget.marge), `budget estimé absent : ${JSON.stringify(r.budget)}`);
       verifier(r.avant > 70 && r.avant < 130, `ton build réel à 96 estimé à ${r.avant} % du budget`);
-      verifier(r.plein.dessus && r.plein.valeur > r.avant, `tout monter à fond n’est pas signalé au-delà du budget : ${JSON.stringify(r.plein)}`);
+      // Le jeu donne un nombre fini de points : monter tous les curseurs à fond
+      // doit buter sur les points disponibles, pas afficher 138 %.
+      const auPlafond = Object.keys(r.plein.notes).filter(k => r.plein.notes[k] >= r.plein.plafonds[k]).length;
+      // Le build de départ vient du jeu : s'il est déjà au-dessus de l'estimation,
+      // on ne le rogne pas — la limite empêche seulement d'aller plus haut.
+      verifier(r.plein.valeur <= Math.max(100, r.avant), `tout monter à fond dépasse les points disponibles (${r.avant} % → ${r.plein.valeur} %)`);
+      verifier(auPlafond < Object.keys(r.plein.notes).length, 'tous les attributs ont atteint leur plafond : les points ne sont pas limités');
       verifier(r.cartes === 5, `${r.cartes} builds réels proches affichés`);
       verifier(r.pgTaille === r.maxPG, `un meneur à 7'1" n’est pas ramené à ${r.maxPG} po (taille : ${r.pgTaille})`);
+    });
+
+    await test('les points d’attributs sont limités : monter l’un oblige à baisser l’autre', async () => {
+      await nav.ouvrir(base + '/');
+      const r = await nav.evaluer(`
+        const el = id => document.getElementById(id), attendre = ms => new Promise(r => setTimeout(r, ms));
+        const curseur = n => [...document.querySelectorAll('#attributeGroups input')].find(x => x.dataset.name === n);
+        const monter = (x, v) => { x.value = v; x.dispatchEvent(new Event('input', { bubbles: true })); };
+        const pct = () => parseInt(el('budgetEstimeValeur').textContent);
+        // Un build recopié du jeu peut dépasser l'estimation et n'est jamais rogné :
+        // on repart donc d'un build vide pour mesurer la limite elle-même.
+        document.querySelectorAll('#attributeGroups input').forEach(x => monter(x, 25));
+        await attendre(200);
+        // 1. On dépense tout, puis on tente de monter un attribut que le budget
+        // a laissé en plan — pas un attribut déjà arrivé au plafond du corps.
+        document.querySelectorAll('#attributeGroups input').forEach(x => monter(x, x.max));
+        await attendre(200);
+        const plein = pct();
+        const tir = [...document.querySelectorAll('#attributeGroups input')].find(x => +x.value < +x.max - 5);
+        const nomBride = tir && tir.dataset.name, avantTir = tir ? +tir.value : null;
+        if (tir) { monter(tir, +tir.max); await attendre(150); }
+        const apresHausse = tir ? +tir.value : null;
+        // 2. Baisser reste toujours possible, même au maximum des points.
+        // Monter dans l'ordre dépense tout sur les premiers attributs : on prend
+        // l'un de ceux qui ont réellement reçu des points.
+        const force = [...document.querySelectorAll('#attributeGroups input')].find(x => +x.value > 40);
+        const avantForce = +force.value;
+        monter(force, avantForce - 10); await attendre(150);
+        const apresBaisse = +force.value;
+        // 3. Les points libérés redeviennent dépensables sur l'attribut bridé.
+        if (tir) { monter(tir, +tir.max); await attendre(150); }
+        const apresLiberation = tir ? +tir.value : null;
+        // 4. Les deux attributs que le modèle jugeait gratuits coûtent maintenant :
+        // sur un build vide, les monter doit faire bouger le compteur de points.
+        document.querySelectorAll('#attributeGroups input').forEach(x => monter(x, 25));
+        await attendre(200);
+        const vide = pct();
+        monter(curseur('Free Throw'), 70); await attendre(150);
+        const apresLancers = pct();
+        monter(curseur('Mid-Range'), 70); await attendre(150);
+        const apresMid = pct();
+        return { plein, nomBride, avantTir, apresHausse, avantForce, apresBaisse, apresLiberation,
+                 vide, apresLancers, apresMid };`);
+      sansErreur('limite des points d’attributs');
+      verifier(r.plein <= 100, `le builder laisse dépasser les points disponibles (${r.plein} %)`);
+      verifier(r.nomBride, 'aucun attribut n’a été bridé par les points : la limite ne s’applique pas');
+      verifier(r.apresHausse === r.avantTir, `« ${r.nomBride} » monte encore alors que les points sont épuisés (${r.avantTir} → ${r.apresHausse})`);
+      verifier(r.apresBaisse < r.avantForce, `impossible de baisser un attribut (${r.avantForce} → ${r.apresBaisse})`);
+      verifier(r.apresLiberation > r.apresHausse, `les points libérés par la baisse ne sont pas redépensables sur « ${r.nomBride} » (${r.apresHausse} → ${r.apresLiberation})`);
+      verifier(r.apresLancers > r.vide, `monter Lancers francs ne coûte aucun point (${r.vide} % → ${r.apresLancers} %)`);
+      verifier(r.apresMid > r.apresLancers, `monter Mi-distance ne coûte aucun point (${r.apresLancers} % → ${r.apresMid} %)`);
     });
 
     await test('un build réel chargé garde exactement ses notes et son corps', async () => {

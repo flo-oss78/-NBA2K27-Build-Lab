@@ -14,7 +14,11 @@
    2. donnees/en-jeu.json (via i18n-en.js) : descriptions officielles du jeu ;
    3. donnees/en.json : les textes d'interface écrits pour le site. */
 (function(){
-  if(window.NBABL_LANG!=='en'||!window.NBABL_EN)return;
+  // La langue se lit sur <html lang="en"> : la CSP du site interdit tout script
+  // inline, donc pas de window.NBABL_LANG posé dans la page.
+  var LANG=(document.documentElement.getAttribute('lang')||'').toLowerCase();
+  if(LANG.indexOf('en')!==0||!window.NBABL_EN)return;
+  window.NBABL_LANG='en';
   var EN=window.NBABL_EN, AS=String.fromCharCode(92);
   // Les tables du jeu sont déclarées en const dans builder-data.js et animations.js :
   // elles vivent dans la portée globale sans être accrochées à window.

@@ -133,29 +133,38 @@ function resoudre(A, b) {
   return M.map(r => r[n]);
 }
 // Ajuste w pour que X·w soit constant : données centrées, Trois points fixé à 1.
-// Un point d'attribut ne peut pas « rendre » du budget : les coûts des notes
-// négatifs sont retirés un à un (mis à zéro) jusqu'à ce qu'il n'en reste aucun.
-// Sans cette contrainte, mettre tous les attributs à 99 restait « dans le budget ».
+// Un point d'attribut ne peut pas « rendre » du budget, ni être gratuit : les
+// coûts qui passent sous le plancher y sont FIXÉS, et le reste du modèle
+// s'ajuste autour. Les mettre à zéro, comme avant, rendait deux attributs
+// (Mi-distance, Lancers francs) montables à 99 sans rien dépenser — le jeu, lui,
+// les fait payer. Le plancher est choisi dans outils/budget-modele.mjs, qui
+// compare les marges obtenues ; il ne coûte presque rien en précision.
 // Les termes de corps (taille, poids, envergure) restent libres.
+const PLANCHER_COUT = 0.1;
 function ajuster(S) {
   const X = S.map(f), n = X[0].length, m = X.length, moy = new Array(n).fill(0), REF = 6;
   X.forEach(x => x.forEach((v, i) => moy[i] += v / m));
-  const actifs = new Set([...Array(n).keys()].filter(i => i !== REF));
-  for (let tour = 0; tour < 30; tour++) {
-    const idx = [...actifs];
+  const fixes = new Map();
+  for (let tour = 0; tour < 40; tour++) {
+    const idx = [...Array(n).keys()].filter(i => i !== REF && !fixes.has(i));
     const A = idx.map(() => new Array(idx.length).fill(0)), b = new Array(idx.length).fill(0);
     for (const x of X) {
       const c = x.map((v, i) => v - moy[i]);
-      for (let a = 0; a < idx.length; a++) { const ca = c[idx[a]]; if (!ca) continue; b[a] -= ca * c[REF]; for (let q = 0; q < idx.length; q++) A[a][q] += ca * c[idx[q]]; }
+      let impose = 0;
+      for (const [i, val] of fixes) impose += val * c[i];
+      for (let a = 0; a < idx.length; a++) { const ca = c[idx[a]]; if (!ca) continue; b[a] -= ca * (c[REF] + impose); for (let q = 0; q < idx.length; q++) A[a][q] += ca * c[idx[q]]; }
     }
     for (let a = 0; a < idx.length; a++) A[a][a] += 1e-3 * m;
-    const s = resoudre(A, b), w = new Array(n).fill(0); w[REF] = 1; idx.forEach((i, a) => w[i] = s[a]);
-    const negatifs = idx.filter(i => i < 21 && w[i] < 0);
-    if (!negatifs.length) {
+    const s = resoudre(A, b), w = new Array(n).fill(0);
+    w[REF] = 1;
+    for (const [i, val] of fixes) w[i] = val;
+    idx.forEach((i, a) => w[i] = s[a]);
+    const sous = idx.filter(i => i < 21 && w[i] < PLANCHER_COUT);
+    if (!sous.length) {
       const budget = X.reduce((t, x) => t + x.reduce((u, v, i) => u + v * w[i], 0), 0) / m;
       return { w, budget };
     }
-    negatifs.forEach(i => actifs.delete(i));
+    sous.forEach(i => fixes.set(i, PLANCHER_COUT));
   }
   throw new Error('ajustement du budget : pas de solution à coûts positifs');
 }
@@ -255,6 +264,20 @@ function budgetEstime(pos,h,w,wing,notes){
   if(!(dispo>0))return null;
   const notesCout=BUILDS_ATTRIBUTS.reduce((t,a,i)=>t+m.w[i]*(Math.exp(${K}*((notes[a]??25)-25))-1),0);
   return {part:notesCout/dispo,marge:m.marge*m.budget/dispo,groupe:pos,n:m.n};
+}
+/* Note la plus haute atteignable pour un attribut sans dépasser 100 % des points,
+   les autres attributs restant tels quels : le jeu ne laisse pas tout monter au
+   maximum, le site non plus. null si le poste est inconnu. */
+function maxSelonBudget(pos,h,w,wing,notes,attr){
+  const m=BUDGET_MODELES[pos]; if(!m)return null;
+  const i=BUILDS_ATTRIBUTS.indexOf(attr); if(i<0||!(m.w[i]>0))return null;
+  const corps=m.w[21]*h+m.w[22]*w/10+m.w[23]*wing, dispo=m.budget-corps;
+  if(!(dispo>0))return null;
+  const autres=BUILDS_ATTRIBUTS.reduce((t,a,j)=>j===i?t:t+m.w[j]*(Math.exp(${K}*((notes[a]??25)-25))-1),0);
+  const reste=dispo-autres;
+  if(reste<=0)return 25;
+  // Coût = w·(e^${K}·(note−25) − 1) : on l'inverse pour la note.
+  return Math.max(25,Math.min(99,Math.floor(25+Math.log(reste/m.w[i]+1)/${K})));
 }
 /* Plafonds connus pour un corps : exacts (Blueprint officiel) ou minimum garanti
    (note la plus haute vue dans un build réel de ce corps). null si inconnu. */

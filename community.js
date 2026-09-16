@@ -142,6 +142,8 @@
   }
 
   /* ================= 2. Notifications ================= */
+  // Partagé : app.js s'en sert pour dire pourquoi un curseur refuse de monter.
+  window.NBABL_TOAST=function(m,k){toast(m,k)};
   function toast(msg,kind){
     var host=el('toastHost');
     if(!host){
