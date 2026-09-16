@@ -148,6 +148,15 @@ async function testsStatiques() {
     verifier(!manquantes.length, 'balises de partage manquantes : ' + manquantes.join(', '));
   });
 
+  await test('le fichier de validation Google Search Console reste en place', () => {
+    // Google retire la propriété si le fichier disparaît : le site sortirait des
+    // rapports d'indexation sans que rien ne le signale.
+    const nom = 'googlebd16fe6ac8fc5e87.html';
+    verifier(fs.existsSync(nom), `${nom} absent : la propriété Search Console serait perdue`);
+    verifier(fs.readFileSync(nom, 'utf8').trim() === 'google-site-verification: ' + nom,
+      `${nom} ne contient pas la ligne attendue par Google`);
+  });
+
   await test('aucun id en double ni ancre morte', () => {
     const problemes = [];
     for (const p of PAGES) {
