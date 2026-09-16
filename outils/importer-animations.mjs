@@ -150,7 +150,7 @@ for (const a of A) {
   range(norm(a.name + ' ' + a.category), a);
   range(norm(a.name + ' ' + a.category.replace(/^.* - /, '')), a);
 }
-let lignesLC = 0, identiques = 0, desaccords = 0;
+let lignesLC = 0, identiques = 0, desaccords = 0, complements = 0;
 const sansCorrespondance = [], datesLC = new Set();
 for (const [page, cat] of Object.entries(PAGES_LC)) {
   const h = await telecharger(LOCKERCODES + page);
@@ -184,14 +184,30 @@ for (const [page, cat] of Object.entries(PAGES_LC)) {
       const memeTaille = cands.filter(a => a.minH === tailles[0] && a.maxH === tailles[1]);
       const ident = memeTaille.find(a => valeurs(Object.values(a.req)) === valeurs(exig.map(([, v]) => v)));
       if (ident) { if (ident.v !== 0) ident.v = 2; identiques++; continue; }
+      // Les deux sources ne publient pas toujours les mêmes colonnes : LockerCodes
+      // ne donne pas la détente sur les dunks signature. Tant que les attributs
+      // présents des deux côtés portent les mêmes chiffres, elles disent la même
+      // chose — l'une est seulement plus complète. Ce n'est pas un désaccord.
+      const eux = Object.fromEntries(exig);
+      const complement = memeTaille.find(a => {
+        const communs = Object.keys(eux).filter(k => k in (a.req || {}));
+        return communs.length && communs.length === Object.keys(eux).length && communs.every(k => a.req[k] === eux[k]);
+      });
+      const detail = `LockerCodes indique ${exig.length ? exig.map(([e, v]) => `${e} ${v}`).join(', ') : 'aucun attribut'}` +
+        ` (${tailles.map(taille).join(' – ')})`;
+      if (complement) {
+        if (complement.v !== 0) complement.v = 2;
+        complement.note = detail + ' : mêmes chiffres, sans les attributs que LockerCodes ne publie pas.';
+        identiques++; complements++;
+        continue;
+      }
       const cible = memeTaille[0] || cands[0];
       cible.v = 0; desaccords++;
-      cible.note = `LockerCodes indique ${exig.length ? exig.map(([e, v]) => `${e} ${v}`).join(', ') : 'aucun attribut'}` +
-        ` (${tailles.map(taille).join(' – ')})`;
+      cible.note = detail;
     }
   }
 }
-console.log(`LockerCodes : ${lignesLC} lignes, ${identiques} identiques, ${desaccords} en désaccord, ${sansCorrespondance.length} sans correspondance`);
+console.log(`LockerCodes : ${lignesLC} lignes, ${identiques} identiques (dont ${complements} où une source publie un attribut de plus), ${desaccords} en désaccord, ${sansCorrespondance.length} sans correspondance`);
 if (sansCorrespondance.length) console.log('  ' + sansCorrespondance.join('\n  '));
 if (!datesLC.size) throw new Error('LockerCodes : date de vérification introuvable, la page a changé.');
 
