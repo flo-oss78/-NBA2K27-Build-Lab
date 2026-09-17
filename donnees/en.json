@@ -711,7 +711,12 @@
   "la plus exigeante que ton build atteint": "highest requirement your build reaches",
   "aucune exigence connue dans cette catégorie": "no known requirement in this category",
   "Pourquoi monter cet attribut ?": "Why raise this attribute?",
-  "Aucun attribut n’ouvre de nouveau palier dans les 5 points au-dessus de son maximum.": "No attribute opens a new tier within 5 points above its maximum."
+  "Aucun attribut n’ouvre de nouveau palier dans les 5 points au-dessus de son maximum.": "No attribute opens a new tier within 5 points above its maximum.",
+  "Se connecter": "Sign in",
+  "Se déconnecter": "Sign out",
+  "Mon profil public": "My public profile",
+  "La connexion Discord n’a pas abouti.": "Discord sign-in did not complete.",
+  "Ce compte ne peut plus publier sur le site.": "This account can no longer publish on the site."
  },
  "motifs": [
   [

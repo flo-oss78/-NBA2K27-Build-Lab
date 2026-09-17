@@ -49,6 +49,13 @@ export async function onRequestPost({request, env}){
 
   const meta=normalizeBuildMeta(b.meta ?? b);
 
+  // Un joueur connecté publie sous son identité Discord : le pseudo affiché ne
+  // peut plus être celui d'un autre, et le build rejoint son profil. Sans compte,
+  // la publication reste possible comme avant, avec le nom libre saisi.
+  const compte=await utilisateurConnecte(request, env);
+  if(compte){ meta.author=compte.pseudo; }
+  const author_id=compte?compte.id:'';
+
   const token=crypto.randomUUID()+crypto.randomUUID();
   const owner_token_hash=await ownerHash(token);
   const idv=id('build'); const t=now();
@@ -68,21 +75,21 @@ export async function onRequestPost({request, env}){
     tags_json:JSON.stringify(meta.tags),modes_json:JSON.stringify(meta.modes),
     inspired_by:meta.inspiredBy,hq_link:meta.hqLink,
     cb_plan_json:JSON.stringify(meta.capBreakerPlan),
-    season:meta.season,slug:slugify(name)
+    season:meta.season,slug:slugify(name),author_id
   };
 
   await env.DB.prepare(
     `INSERT INTO builds (
        id,name,position,height,weight,wing,score,style,attributes_json,badges,animations,
        cap_breakers,validated,owner_token_hash,created_at,updated_at,
-       author,description,tags_json,modes_json,inspired_by,hq_link,cb_plan_json,season,slug
-     ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+       author,description,tags_json,modes_json,inspired_by,hq_link,cb_plan_json,season,slug,author_id
+     ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
   ).bind(
     row.id,row.name,row.position,row.height,row.weight,row.wing,row.score,row.style,
     row.attributes_json,row.badges,row.animations,row.cap_breakers,row.validated,
     row.owner_token_hash,row.created_at,row.updated_at,
     row.author,row.description,row.tags_json,row.modes_json,row.inspired_by,
-    row.hq_link,row.cb_plan_json,row.season,row.slug
+    row.hq_link,row.cb_plan_json,row.season,row.slug,row.author_id
   ).run();
 
   return json({build:publicBuild(row), ownerToken:token},201);

@@ -5,7 +5,7 @@
    - /api/ : jamais mis en cache
    - install : addAll tolérant aux 404 (un fichier manquant ne casse plus l'installation)
 */
-const VERSION='v26.23.0';
+const VERSION='v26.24.0';
 const SHELL_CACHE='nbabl-shell-'+VERSION;
 const RUNTIME_CACHE='nbabl-runtime-'+VERSION;
 
@@ -16,7 +16,7 @@ const PAGES=['/','/hub/','/reference/','/mon-build/','/mentions-legales/',
 
 const SHELL=[
   ...PAGES,
-  './theme.css','./hq.css','./hq-builder.js','./attributs-jeu.js','./paliers.js','./sections-repliables.js','./fonts/BarlowCondensed-600.woff2','./fonts/BarlowCondensed-700.woff2','./fonts/BarlowCondensed-800.woff2','./fonts/Inter-400-700.woff2',
+  './theme.css','./hq.css','./hq-builder.js','./attributs-jeu.js','./paliers.js','./sections-repliables.js','./compte.js','./fonts/BarlowCondensed-600.woff2','./fonts/BarlowCondensed-700.woff2','./fonts/BarlowCondensed-800.woff2','./fonts/Inter-400-700.woff2',
   './site-config.js','./builder-data.js','./badge-icones.js',
   './validator.js','./builds-reels.js','./caps-deduits.js','./app.js','./import-jeu.js','./builds-ui.js','./builds-page.js','./reference-page.js','./optimizer.js','./hub.js','./animations.js',
   './dna-engine.js','./data-registry.js','./data-validation.js','./players-core.js',

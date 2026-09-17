@@ -1608,3 +1608,28 @@ html[lang="en"] .badge-en{display:none}
 
 /* Lien de retour des mentions légales : cible tactile confortable. */
 .legal-retour a{display:inline-flex;align-items:center;min-height:32px}
+
+/* Connexion Discord, dans l'en-tête. Le site reste utilisable sans compte :
+   ce bouton ne s'affiche que lorsque la connexion est configurée. */
+.compte-zone{display:flex;align-items:center;gap:6px}
+.compte-entrer{
+  display:inline-flex;align-items:center;gap:7px;min-height:34px;padding:0 11px;
+  border-radius:var(--r-sm);background:#5865F2;color:#fff;text-decoration:none;
+  font-size:12px;font-weight:800;letter-spacing:.02em;white-space:nowrap;
+}
+.compte-entrer:hover,.compte-entrer:focus-visible{background:#4752C4;color:#fff}
+.compte-entrer svg{width:17px;height:17px;fill:currentColor}
+.compte-profil{
+  display:inline-flex;align-items:center;gap:7px;min-height:34px;padding:0 10px;
+  border:1px solid var(--line);border-radius:var(--r-sm);background:var(--panel-2);
+  color:var(--text);text-decoration:none;font-size:12px;font-weight:800;max-width:180px;
+}
+.compte-profil img{border-radius:50%;flex:0 0 auto}
+.compte-profil b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.compte-rond{width:22px;height:22px;border-radius:50%;background:var(--line);flex:0 0 auto}
+.compte-sortie{min-height:34px;padding:0 10px;font-size:11.5px;font-weight:700}
+@media (max-width:860px){
+  .compte-entrer span{display:none}
+  .compte-entrer{padding:0 10px}
+  .compte-sortie{display:none}
+}
