@@ -1,7 +1,7 @@
 {
   "id": "nba2k27-build-lab",
-  "name": "NBA 2K27 Build Lab",
-  "short_name": "2K27 Build Lab",
+  "name": "Le Labo des Builds",
+  "short_name": "Labo des Builds",
   "description": "Builder MyPLAYER NBA 2K27 : attributs, caps, badges, animations, Cap Breakers et builds communautaires.",
   "start_url": "./",
   "scope": "./",

@@ -119,7 +119,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--rouge-2)}
     backdrop-filter:none;-webkit-backdrop-filter:none;
     background:rgba(6,6,8,.97);
   }
-  .reference-brand>div{font-size:20px}
+  .reference-brand>div{font-size:17px}
   #referenceVersion{display:none}
   .mode-btn{min-height:32px;padding:4px 11px;font-size:12px}
   .reference-actions button{min-height:34px;width:34px}

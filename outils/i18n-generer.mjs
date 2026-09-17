@@ -49,6 +49,13 @@ function page(fichier) {
   const crlf = brut.includes('\r\n');
   let html = brut.replace(/\r\n/g, '\n');
 
+  // Le site s'appelle « Le Labo des Builds » en français et « Build Lab » en
+  // anglais. Le nom est remplacé d'un bloc, avant la traduction mot à mot : le
+  // nom de l'éditeur, dans les mentions légales, ne doit pas bouger pour autant.
+  html = html
+    .replace('<div>LE LABO <b>DES&nbsp;BUILDS</b></div>', '<div>BUILD <b>LAB</b></div>')
+    .replace(/<meta property="og:site_name" content="[^"]*">/, '<meta property="og:site_name" content="Build Lab">');
+
   // Les scripts et styles sont protégés : leur contenu n'est pas du texte affiché.
   const coffre = [];
   html = html.replace(/<(script|style)[\s\S]*?<\/\1>/g, m => '@@BLOC' + (coffre.push(m) - 1) + '@@');
