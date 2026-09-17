@@ -317,6 +317,26 @@ async function testsStatiques() {
     });
     verifier(!morts.length, 'liens morts : ' + morts.join(', '));
   });
+
+  /* Une valeur d'exemple recopiée telle quelle dans le tableau de bord
+     Cloudflare passait autrefois pour une vraie configuration : le site
+     affichait « Se connecter » et Discord répondait par une page d'erreur. */
+  await test('la connexion Discord ne s’annonce que si elle est vraiment réglée', async () => {
+    const { connexionConfiguree } = await import('../functions/api/_session.js');
+    const DB = {};
+    const vrai = { DISCORD_CLIENT_ID: '1234567890123456789', DISCORD_CLIENT_SECRET: 'x'.repeat(32), SESSION_SECRET: 'y'.repeat(32), DB };
+    verifier(connexionConfiguree(vrai), 'une configuration complète devrait être acceptée');
+    verifier(!connexionConfiguree({ ...vrai, DISCORD_CLIENT_ID: 'ton Client ID Discord' }), 'un identifiant qui n’est pas un nombre devrait être refusé');
+    verifier(!connexionConfiguree({ ...vrai, DISCORD_CLIENT_SECRET: 'ton secret' }), 'une clé trop courte devrait être refusée');
+    verifier(!connexionConfiguree({ ...vrai, SESSION_SECRET: '' }), 'une clé de session absente devrait être refusée');
+    verifier(!connexionConfiguree({ ...vrai, DB: undefined }), 'sans base, la connexion ne peut pas fonctionner');
+
+    // Les trois points d'entrée doivent passer par ce même contrôle.
+    for (const f of ['moi.js', 'discord.js', 'retour.js']) {
+      const src = fs.readFileSync(`functions/api/auth/${f}`, 'utf8');
+      verifier(src.includes('connexionConfiguree'), `${f} ne vérifie pas la configuration`);
+    }
+  });
 }
 
 /* ------------------------------------------------------------ serveur local */

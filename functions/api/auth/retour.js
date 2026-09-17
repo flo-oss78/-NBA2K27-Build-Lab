@@ -6,7 +6,7 @@
  * profil et le reconnaître à la visite suivante.
  */
 import { json, now, id as nouvelId, clampText } from '../_utils.js';
-import { cookiesDe, creerSession, cookieSession } from '../_session.js';
+import { cookiesDe, creerSession, cookieSession, connexionConfiguree } from '../_session.js';
 
 function pseudoVersSlug(pseudo, discordId) {
   const base = String(pseudo || '').toLowerCase()
@@ -24,7 +24,7 @@ function versPage(chemin, cookies = []) {
 }
 
 export async function onRequestGet({ request, env }) {
-  if (!env.DISCORD_CLIENT_ID || !env.DISCORD_CLIENT_SECRET || !env.SESSION_SECRET || !env.DB) {
+  if (!connexionConfiguree(env)) {
     return json({ error: 'La connexion Discord n’est pas configurée sur ce site.' }, 503);
   }
   const url = new URL(request.url);

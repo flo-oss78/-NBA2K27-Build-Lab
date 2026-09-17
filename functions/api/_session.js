@@ -94,3 +94,19 @@ export function profilPublic(row) {
     depuis: row.created_at
   };
 }
+
+/* La connexion Discord est-elle vraiment réglée ?
+ *
+ * Il ne suffit pas que les trois valeurs existent : une valeur d'exemple
+ * recopiée telle quelle dans le tableau de bord passerait ce test et le site
+ * afficherait un bouton qui mène à une page d'erreur de Discord. Un identifiant
+ * d'application Discord est un nombre (17 à 20 chiffres) ; les deux clés sont
+ * des chaînes longues. Ce contrôle coûte trois comparaisons et évite d'envoyer
+ * un joueur dans le mur.
+ */
+export function connexionConfiguree(env) {
+  const id = String(env.DISCORD_CLIENT_ID || '');
+  const secret = String(env.DISCORD_CLIENT_SECRET || '');
+  const cle = String(env.SESSION_SECRET || '');
+  return /^\d{15,25}$/.test(id) && secret.length >= 16 && cle.length >= 16 && !!env.DB;
+}

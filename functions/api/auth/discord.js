@@ -9,9 +9,10 @@
  * connexion à l'insu du joueur.
  */
 import { json } from '../_utils.js';
+import { connexionConfiguree } from '../_session.js';
 
 export async function onRequestGet({ request, env }) {
-  if (!env.DISCORD_CLIENT_ID || !env.SESSION_SECRET) {
+  if (!connexionConfiguree(env)) {
     return json({ error: 'La connexion Discord n’est pas configurée sur ce site.' }, 503);
   }
   const origine = new URL(request.url).origin;

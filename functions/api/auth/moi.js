@@ -2,7 +2,7 @@
    bouton de connexion. Ne renvoie jamais l'identifiant Discord ni rien qui
    permette de retrouver la personne ailleurs. */
 import { json } from '../_utils.js';
-import { utilisateurConnecte, profilPublic } from '../_session.js';
+import { utilisateurConnecte, profilPublic, connexionConfiguree } from '../_session.js';
 
 export async function onRequestGet({ request, env }) {
   const compte = await utilisateurConnecte(request, env);
@@ -10,6 +10,6 @@ export async function onRequestGet({ request, env }) {
     connecte: !!compte,
     profil: profilPublic(compte),
     // L'interface doit savoir s'il est inutile de proposer la connexion.
-    disponible: !!(env.DISCORD_CLIENT_ID && env.SESSION_SECRET && env.DB)
+    disponible: connexionConfiguree(env)
   });
 }
