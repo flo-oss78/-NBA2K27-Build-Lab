@@ -142,6 +142,25 @@
     var d=DESC_ATTR[choixAttr];
     var html='<div class="eb-attr"><div class="eb-attr-tete"><b>'+esc(nomA(choixAttr))+'</b><span>'+(r[choixAttr]||0)+' / '+input.max+'</span></div>'+
       (d?'<p>'+esc(d)+'</p>':'')+'</div>';
+
+    /* Pourquoi monter cet attribut : les notes qui débloquent vraiment quelque
+       chose, et ce qu'elles coûtent. Entre deux paliers, un point ne fait que
+       monter une statistique — autant le savoir avant de le dépenser. */
+    var suite=window.NBABL_PALIERS?window.NBABL_PALIERS.paliers(choixAttr,r,h,+input.max):[];
+    html+='<div class="eb-gains"><h3 class="eb-titre">Pourquoi monter cet attribut&nbsp;?</h3>';
+    if(!suite.length){
+      html+='<p class="eb-vide">Aucun nouveau palier jusqu’à '+input.max+' : les points suivants ne feront que monter la note.</p>';
+    }else{
+      html+='<ol class="eb-paliers-suite">';
+      suite.slice(0,4).forEach(function(p){
+        var manque=p.note-(+r[choixAttr]||0);
+        html+='<li><span class="eb-gain-note">'+p.note+'</span><span class="eb-gain-cout">+'+manque+' point'+(manque>1?'s':'')+'</span><span class="eb-gain-liste">'+
+          p.gains.slice(0,3).map(function(g){return '<span class="eb-gain eb-gain-'+g.type+'">'+esc(g.texte)+'</span>'}).join('')+
+          (p.gains.length>3?'<span class="eb-gain-plus">et '+(p.gains.length-3)+' de plus</span>':'')+'</span></li>';
+      });
+      html+='</ol>';
+    }
+    html+='</div>';
     if(!lies.length){
       html+='<p class="eb-vide">Aucun badge ne dépend de cet attribut.</p>';
     }else{

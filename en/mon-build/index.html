@@ -57,7 +57,7 @@
   </div>
   <div class="reference-actions">
     <a class="lang-switch" href="/mon-build/" hreflang="fr" lang="fr" title="Version française">FR</a>
-    <span id="referenceVersion">V26.21</span>
+    <span id="referenceVersion">V26.22</span>
     <button id="referenceSettings" type="button" aria-label="Open settings" aria-expanded="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.9 19.3a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.7 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.56V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.56 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z"/></svg>
     </button>
@@ -141,8 +141,13 @@
 <div id="panneauBrise" class="hq-panneau" role="tabpanel" aria-labelledby="ongletBrise" hidden>
   <section class="panel capbreaker" id="capbreakers">
     <div class="section-title"><div><p class="eyebrow">Cap breakers</p><h2>Plan your +1 to +5</h2></div><span class="pill">5 max per attribute</span></div>
-    <p class="sub">Choose which attributes to spend your cap breakers on. The real gains depend on the game's rules.</p>
+    <p class="sub">Choose the attributes to spend your Cap Breakers on. The real gains depend on the game’s own rules.</p>
     <div id="breakerList" class="breaker-list"></div>
+    <div class="cb-placements-bloc">
+      <h3>Where to spend them?</h3>
+      <p class="sub">What each attribute would open above its maximum. A Cap Breaker raises the ceiling: you will still need attribute points to reach the rating.</p>
+      <ol id="cbPlacements" class="cb-placements"></ol>
+    </div>
   </section>
 
   <section class="panel cap-progression" id="capProgression">
@@ -298,6 +303,7 @@
      Pas de style-presets.js : il réécrirait les attributs du build en cours. -->
 <script src="/builder-data.js"></script>
 <script src="/badge-icones.js"></script>
+<script src="/paliers.js"></script>
 <script src="/validator.js"></script>
 <script src="/builds-reels.js"></script>
 <script src="/caps-deduits.js"></script>

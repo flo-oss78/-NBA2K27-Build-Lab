@@ -138,6 +138,10 @@ const COLLECTE = `
   // Un mot court seul dans son nœud (« et » entre deux liens) compte aussi.
   const COURT=/^(et|ou|de|du|des|le|la|les|un|une|ton|ta|tes|au|aux|en|sur|avec|sans|pour|puis|donc|mais|soit|non|oui)$/i;
   const suspect=t=>COURT.test(t)||(t.length>=3&&FR.test(NETTOYER(t)));
+  // i18n.js traduit sur requestAnimationFrame : un message qui vient d'apparaître
+  // (un toast, par exemple) est encore en français à l'instant du clic. On laisse
+  // passer deux images avant de lire, sinon on signale un faux défaut.
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
   const vus=new Map();
   function chemin(n){
     const p=[];

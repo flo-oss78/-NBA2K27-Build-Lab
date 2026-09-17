@@ -1407,6 +1407,9 @@ footer{
 .toast.out{opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s}
 .toast-level{border-color:rgba(25,230,193,.5);color:var(--cyan)}
 .toast-achievement{border-color:rgba(255,201,74,.5);color:var(--amber)}
+/* Un seuil vient d'être franchi : badge, animation ou Takeover ouvert. */
+.toast-palier{border-color:rgba(29,139,255,.55);color:#A8D4FF}
+.toast-warn{border-color:rgba(242,51,74,.5);color:#FF9AA8}
 @keyframes toast-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
 /* ---- Profil joueur ---- */

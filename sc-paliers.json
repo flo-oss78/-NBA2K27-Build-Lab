@@ -1,0 +1,4 @@
+[
+ {"nom":"attributs-1440","url":"/?etape=attributs","largeur":1440,"hauteur":900,"mobile":false,"avant":"await new Promise(r=>setTimeout(r,900));"},
+ {"nom":"attributs-375","url":"/?etape=attributs","largeur":375,"hauteur":860,"mobile":true,"avant":"await new Promise(r=>setTimeout(r,900));"}
+]

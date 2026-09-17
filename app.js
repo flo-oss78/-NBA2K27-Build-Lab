@@ -171,6 +171,28 @@ function limiterAuBudget(x){
   x.value=permis;
   return true;
 }
+/* Franchir un seuil utile mérite d'être dit : sinon le joueur monte un attribut
+   sans savoir qu'il vient d'ouvrir un badge ou une animation. On l'annonce à la
+   fin du geste — pas à chaque pixel du curseur — en comparant à la note d'avant. */
+let serieGeste=null, serieMinuteur=null;
+function suivrePalier(x){
+  if(!window.NBABL_PALIERS)return;
+  const nom=x.dataset.name;
+  if(!serieGeste||serieGeste.nom!==nom)serieGeste={nom,avant:notesAvant[nom]};
+  clearTimeout(serieMinuteur);
+  serieMinuteur=setTimeout(annoncerPalier,450);
+}
+function annoncerPalier(){
+  const s=serieGeste; serieGeste=null;
+  if(!s||s.avant===undefined)return;
+  const x=inputs.find(i=>i.dataset.name===s.nom);
+  if(!x||+x.value<=s.avant)return;
+  let gains=[];
+  try{ gains=window.NBABL_PALIERS.franchis(s.nom,s.avant,+x.value,ratings(),heightInches()); }catch(e){ return }
+  if(!gains.length||!window.NBABL_TOAST)return;
+  const liste=gains.slice(0,2).map(g=>g.texte).join(' · ');
+  window.NBABL_TOAST('Nouveau palier : '+liste+(gains.length>2?' et '+(gains.length-2)+' de plus':''),'palier');
+}
 let dernierSignalBudget=0;
 function signalerBudgetPlein(){
   const t=Date.now(); if(t-dernierSignalBudget<2500)return; dernierSignalBudget=t;
@@ -313,6 +335,41 @@ function renderBreakers(r){if(!document.getElementById("breakerList"))return; /*
  });
  const total=inputs.reduce((s,x)=>s+ +(getBreaker(x.dataset.name)||0),0);
  document.getElementById('breakerTotal').textContent=total;
+ renderPlacementsCB(r);
+}
+/* Où placer ses Cap Breakers : pour chaque attribut, ce qui s'ouvrirait au-dessus
+   de son maximum actuel, et à quel prix. Les attributs qui n'ouvrent rien ne sont
+   pas listés — c'est l'information utile : cinq points ailleurs ne servent à rien.
+   Un Cap Breaker lève le plafond, il ne donne pas la note : la page le dit. */
+function renderPlacementsCB(r){
+ const hote=document.getElementById('cbPlacements');
+ if(!hote||!window.NBABL_PALIERS)return;
+ const h=heightInches(), lignes=[];
+ for(const x of inputs){
+  const attr=x.dataset.name, cap=+x.max;
+  if(cap>=99)continue;
+  let suite=[];
+  try{ suite=window.NBABL_PALIERS.paliers(attr,r,h,Math.min(99,cap+5)); }catch(e){ continue }
+  const utiles=suite.filter(p=>p.note>cap);
+  if(!utiles.length)continue;
+  lignes.push({attr,cap,utiles,gains:utiles.reduce((t,p)=>t+p.gains.length,0)});
+ }
+ lignes.sort((a,b)=>b.gains-a.gains||(a.utiles[0].note-a.cap)-(b.utiles[0].note-b.cap));
+ if(!lignes.length){
+  hote.innerHTML='<li class="cb-placement-vide">Aucun attribut n’ouvre de nouveau palier dans les 5 points au-dessus de son maximum.</li>';
+  return;
+ }
+ hote.innerHTML=lignes.slice(0,5).map(l=>{
+  const premier=l.utiles[0], cb=premier.note-l.cap;
+  const gains=l.utiles.slice(0,2).flatMap(p=>p.gains).slice(0,3);
+  const reste=l.gains-gains.length;
+  return `<li class="cb-placement">
+   <div class="cb-placement-tete"><b>${escapeHTML(nomAttribut(l.attr))}</b>
+   <span class="cb-placement-cap">maximum ${l.cap} → ${premier.note}</span>
+   <span class="cb-placement-cout">${cb} Cap Breaker${cb>1?'s':''}</span></div>
+   <div class="cb-placement-gains">${gains.map(g=>`<span class="eb-gain eb-gain-${g.type}">${escapeHTML(g.texte)}</span>`).join('')}${reste>0?`<span class="eb-gain-plus">et ${reste} de plus</span>`:''}</div>
+  </li>`;
+ }).join('');
 }
 /* ---------- Animations (page Référence) ----------
    Plus de 2 500 animations : on n'affiche que ANIM_PAGE cartes à la fois. */
@@ -538,7 +595,7 @@ function renderAnimations(){
 function handValue(){return document.getElementById('dominantHand')?.value||'Droite'}
 function serialize(){let obj={position:position.value,height:height.value,weight:weight.value,wing:wing.value,style:style.value,hand:handValue(),attrs:Object.fromEntries(inputs.map(x=>[x.dataset.name,x.value]))};return btoa(unescape(encodeURIComponent(JSON.stringify(obj))))}
 function apply(obj){if(chargementFini)buildTouche=true;position.value=obj.position||'SF';height.value=obj.height||80;weight.value=obj.weight||210;wing.value=obj.wing||84;style.value=obj.style||'Équilibré';const handEl=document.getElementById('dominantHand');if(handEl&&obj.hand)handEl.value=obj.hand;update();if(obj.attrs)inputs.forEach(x=>{if(obj.attrs[x.dataset.name])x.value=Math.min(+obj.attrs[x.dataset.name],+x.max)});update()}
-inputs.forEach(x=>x.addEventListener('input',()=>{if(limiterAuBudget(x))signalerBudgetPlein();update()}));['position','height','weight','wing','style'].forEach(id=>document.getElementById(id)?.addEventListener('input',update));const animRefiltrer=()=>{animLimite=ANIM_PAGE;renderAnimations()};['animCategory','animStatus'].forEach(id=>document.getElementById(id)?.addEventListener('change',animRefiltrer));document.getElementById('animSearch')?.addEventListener('input',animRefiltrer);document.getElementById('animPlus')?.addEventListener('click',()=>{animLimite+=ANIM_PAGE;renderAnimations()});document.getElementById('animGroupes')?.addEventListener('click',e=>{const b=e.target.closest('[data-groupe]');if(!b||b===e.currentTarget)return;e.currentTarget.dataset.groupe=b.dataset.groupe;const s=document.getElementById('animCategory');if(s)s.value='all';animLimite=ANIM_PAGE;renderAnimations()});['badgeFilter'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>renderBadges(ratings())));document.getElementById('badgeCats')?.addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b||!e.currentTarget.contains(b)||b===e.currentTarget)return;e.currentTarget.dataset.cat=b.dataset.cat;renderBadges(ratings())});document.getElementById('badgeSearch')?.addEventListener('input',()=>renderBadges(ratings()));
+inputs.forEach(x=>x.addEventListener('input',()=>{if(limiterAuBudget(x))signalerBudgetPlein();suivrePalier(x);update()}));['position','height','weight','wing','style'].forEach(id=>document.getElementById(id)?.addEventListener('input',update));const animRefiltrer=()=>{animLimite=ANIM_PAGE;renderAnimations()};['animCategory','animStatus'].forEach(id=>document.getElementById(id)?.addEventListener('change',animRefiltrer));document.getElementById('animSearch')?.addEventListener('input',animRefiltrer);document.getElementById('animPlus')?.addEventListener('click',()=>{animLimite+=ANIM_PAGE;renderAnimations()});document.getElementById('animGroupes')?.addEventListener('click',e=>{const b=e.target.closest('[data-groupe]');if(!b||b===e.currentTarget)return;e.currentTarget.dataset.groupe=b.dataset.groupe;const s=document.getElementById('animCategory');if(s)s.value='all';animLimite=ANIM_PAGE;renderAnimations()});['badgeFilter'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>renderBadges(ratings())));document.getElementById('badgeCats')?.addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b||!e.currentTarget.contains(b)||b===e.currentTarget)return;e.currentTarget.dataset.cat=b.dataset.cat;renderBadges(ratings())});document.getElementById('badgeSearch')?.addEventListener('input',()=>renderBadges(ratings()));
 
 /* Un geste réel sur le corps, les attributs, le style ou l'import rend le build « touché ». */
 if(BUILDER_PRESENT){

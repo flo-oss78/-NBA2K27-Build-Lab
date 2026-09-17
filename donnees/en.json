@@ -317,7 +317,10 @@
   "Non accessibles": "Locked",
   "Le Labo des Builds — builder NBA 2K27": "Build Lab — NBA 2K27 MyPLAYER builder",
   "Le Labo des Builds — crée ton build NBA 2K27": "Build Lab — build your NBA 2K27 MyPLAYER",
-  "Page introuvable — Le Labo des Builds": "Page not found — Build Lab"
+  "Page introuvable — Le Labo des Builds": "Page not found — Build Lab",
+  "Où les placer&nbsp;?": "Where to spend them?",
+  "Ce que chaque attribut ouvrirait au-dessus de son maximum. Un Cap Breaker lève le plafond : il faudra ensuite des points d’attributs pour atteindre la note.": "What each attribute would open above its maximum. A Cap Breaker raises the ceiling: you will still need attribute points to reach the rating.",
+  "Choisis les attributs sur lesquels investir tes Cap Breakers. Les gains réels dépendent des règles du jeu.": "Choose the attributes to spend your Cap Breakers on. The real gains depend on the game’s own rules."
  },
  "scripts": {
   "Terminer au cercle, layups, dunks et jeu au poste.": "Finishing at the rim, layups, dunks and post play.",
@@ -706,7 +709,9 @@
   "confirmée en jeu": "confirmed in game",
   "la plus exigeante de sa catégorie": "highest requirement in its category",
   "la plus exigeante que ton build atteint": "highest requirement your build reaches",
-  "aucune exigence connue dans cette catégorie": "no known requirement in this category"
+  "aucune exigence connue dans cette catégorie": "no known requirement in this category",
+  "Pourquoi monter cet attribut ?": "Why raise this attribute?",
+  "Aucun attribut n’ouvre de nouveau palier dans les 5 points au-dessus de son maximum.": "No attribute opens a new tier within 5 points above its maximum."
  },
  "motifs": [
   [
@@ -752,6 +757,14 @@
   [
    "Palier atteint\\s*:\\s*aucun",
    "Tier reached: none"
+  ],
+  [
+   "+(d+) points?\b",
+   "+$1 points"
+  ],
+  [
+   "(d+) Cap Breakers?\b",
+   "$1 Cap Breakers"
   ]
  ]
 }
