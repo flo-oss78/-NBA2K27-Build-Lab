@@ -814,3 +814,17 @@ body:not(.mode-expert) #wizardBanner{display:none}
 @media (min-width:1180px){
   .explorateur-liste,.hq-page-builds .blueprint-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
+
+/* Modules d'analyse repliables (mode Expert). L'en-tête reste visible : on voit
+   ce qui est disponible sans dérouler quatre mille pixels. */
+.section-title-pliable{cursor:pointer;user-select:none}
+.section-plier{
+  margin-left:auto;flex:0 0 auto;width:34px;height:34px;padding:0;
+  display:grid;place-items:center;border-radius:50%;
+  background:var(--panel-2);border:1px solid var(--line);
+}
+.section-plier svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .18s ease}
+.section-repliee .section-plier svg{transform:rotate(-90deg)}
+.section-repliee>*:not(.section-title){display:none}
+.section-repliee{padding-bottom:14px}
+@media (prefers-reduced-motion:reduce){.section-plier svg{transition:none}}

@@ -549,10 +549,23 @@ async function testsNavigateur(base) {
 
       const expert = await nav.evaluer(`
         document.getElementById('modeExpert').click();
-        await new Promise(r => setTimeout(r, 200));
+        await new Promise(r => setTimeout(r, 300));
         const avances = [...document.querySelectorAll('[data-mode="expert"]')];
-        return { masques: avances.filter(e => e.offsetParent === null).length };`);
-      verifier(expert.masques === 0, `${expert.masques} élément(s) avancé(s) encore masqué(s) en mode Expert`);
+        const masques = avances.filter(e => e.offsetParent === null);
+        // Les modules d'analyse arrivent repliés : leur en-tête est visible et
+        // leur contenu est à un clic. Ce qui serait fautif, c'est un élément
+        // masqué SANS être dans une section repliable.
+        const horsPli = masques.filter(e => !e.closest('.section-repliee')).length;
+        const pliables = document.querySelectorAll('.section-plier').length;
+        const titresReplies = [...document.querySelectorAll('.section-repliee .section-title')];
+        titresReplies.forEach(t => t.click());
+        await new Promise(r => setTimeout(r, 400));
+        const apresDepli = [...document.querySelectorAll('[data-mode="expert"]')].filter(e => e.offsetParent === null).length;
+        return { horsPli, pliables, replies: titresReplies.length, apresDepli };`);
+      verifier(expert.horsPli === 0, `${expert.horsPli} élément(s) avancé(s) masqué(s) hors d'une section repliable`);
+      verifier(expert.pliables >= 5, `${expert.pliables} section(s) repliable(s) : les modules d'analyse devraient l'être`);
+      verifier(expert.replies >= 5, `${expert.replies} section(s) repliée(s) à l'arrivée : la page Expert doit s'ouvrir courte`);
+      verifier(expert.apresDepli === 0, `${expert.apresDepli} élément(s) encore masqué(s) une fois tout déplié`);
 
       await nav.ouvrir(base + '/hub/');
       const hub = await nav.evaluer(`return document.body.classList.contains('mode-expert');`);
