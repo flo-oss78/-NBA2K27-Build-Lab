@@ -104,9 +104,18 @@ export function profilPublic(row) {
  * des chaînes longues. Ce contrôle coûte trois comparaisons et évite d'envoyer
  * un joueur dans le mur.
  */
-export function connexionConfiguree(env) {
+export function reglagesManquants(env) {
   const id = String(env.DISCORD_CLIENT_ID || '');
   const secret = String(env.DISCORD_CLIENT_SECRET || '');
   const cle = String(env.SESSION_SECRET || '');
-  return /^\d{15,25}$/.test(id) && secret.length >= 16 && cle.length >= 16 && !!env.DB;
+  const manque = [];
+  if (!/^\d{15,25}$/.test(id)) manque.push('DISCORD_CLIENT_ID');
+  if (secret.length < 16) manque.push('DISCORD_CLIENT_SECRET');
+  if (cle.length < 16) manque.push('SESSION_SECRET');
+  if (!env.DB) manque.push('DB');
+  return manque;
+}
+
+export function connexionConfiguree(env) {
+  return reglagesManquants(env).length === 0;
 }
