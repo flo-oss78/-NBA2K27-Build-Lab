@@ -5,7 +5,7 @@
    Les plafonds du site sont une estimation. Quand le joueur recopie son écran
    « Améliorations d'attribut », on connaît les vrais : pour chaque attribut,
    le Max du jeu et la valeur actuelle. Une valeur au-dessus du Max vient des
-   brise-plafonds (5 au plus par attribut : règle officielle 2K).
+   Cap Breakers (5 au plus par attribut : règle officielle 2K).
    bodyCaps() applique ces plafonds tant que le gabarit importé n'a pas changé. */
 (function(){
   if(!BUILDER_PRESENT)return;
@@ -58,7 +58,7 @@
             <input name="max-${cle(k)}" type="number" inputmode="numeric" min="25" max="99" value="${valeur(k,'max')}" aria-label="${fr} : Max">
             <input name="act-${cle(k)}" type="number" inputmode="numeric" min="25" max="99" value="${valeur(k,'actuel')}" aria-label="${fr} : actuel"></div>`).join('')}
         </div>
-        <p class="ij-aide">Une valeur actuelle au-dessus du Max vient des brise-plafonds : ${BRISE_PLAFONDS_MAX} au plus par attribut.</p>
+        <p class="ij-aide">Une valeur actuelle au-dessus du Max vient des Cap Breakers : ${BRISE_PLAFONDS_MAX} au plus par attribut.</p>
         <div class="modal-actions"><button type="submit">Importer ce build</button><button type="button" class="secondary" data-ij-fermer>Annuler</button></div>
       </form>`;
   }
@@ -82,7 +82,7 @@
     for(const [k,fr] of ATTRS_JEU){
       const m=nombre('max-'+cle(k)), a=nombre('act-'+cle(k));
       if(!entier(m,25,99)||!entier(a,25,99)){erreurs.push(`${fr} : Max et Actuel doivent être des nombres entiers entre 25 et 99.`);continue}
-      if(a>m+BRISE_PLAFONDS_MAX){erreurs.push(`${fr} : ${a} dépasse le Max ${m} de plus de ${BRISE_PLAFONDS_MAX}. Impossible, un attribut ne reçoit que ${BRISE_PLAFONDS_MAX} brise-plafonds.`);continue}
+      if(a>m+BRISE_PLAFONDS_MAX){erreurs.push(`${fr} : ${a} dépasse le Max ${m} de plus de ${BRISE_PLAFONDS_MAX}. Impossible, un attribut ne reçoit que ${BRISE_PLAFONDS_MAX} Cap Breakers.`);continue}
       max[k]=m; actuel[k]=a;
     }
     return {erreurs,imp:{saisie,h,w,wg,max,actuel,gnr:saisie.gnr,date:new Date().toISOString()}};
@@ -95,7 +95,7 @@
     imp.envergureCorrigee=+$('wing').value!==imp.wg;
     try{localStorage.setItem(IMPORT_JEU_KEY,JSON.stringify(imp))}
     catch(e){alert('Impossible d’enregistrer l’import sur cet appareil (stockage refusé ou plein).');return false}
-    // Les brise-plafonds sont rangés par gabarit : le gabarit est déjà en place.
+    // Les Cap Breakers sont rangés par gabarit : le gabarit est déjà en place.
     for(const [k] of ATTRS_JEU)setBreaker(k,Math.max(0,imp.actuel[k]-imp.max[k]));
     apply({position:$('position').value,height:+$('height').value,weight:+$('weight').value,wing:+$('wing').value,
            style:$('style').value,hand:handValue(),attrs:{...ratings(),...imp.actuel}});
@@ -132,7 +132,7 @@
     if(actif){
       etat.className='import-jeu-etat actif';
       etat.innerHTML=`<b>✓ Build importé du jeu${actif.gnr!=null?` · GNR ${actif.gnr}`:''}</b>
-        <span>Les plafonds affichés sont ceux de ton jeu (MAX), plus tes brise-plafonds (BP).${actif.envergureCorrigee?' Le site a dû ajuster ton envergure : vérifie-la.':''}</span>
+        <span>Les plafonds affichés sont ceux de ton jeu (MAX), plus tes Cap Breakers (BP).${actif.envergureCorrigee?' Le site a dû ajuster ton envergure : vérifie-la.':''}</span>
         <div><button type="button" class="secondary" data-ij="modifier">Modifier</button><button type="button" class="secondary" data-ij="oublier">Oublier l’import</button></div>`;
       for(const x of inputs){
         const k=x.dataset.name; if(!(k in actif.max))continue;

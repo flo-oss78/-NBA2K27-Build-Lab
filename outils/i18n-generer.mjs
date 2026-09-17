@@ -67,6 +67,10 @@ function page(fichier) {
   html = html.replace(/href="(\/[^"]*)"/g, (m, h) => `href="${lienAnglais(h)}"`);
 
   const chemin = fichier === '404.html' ? '/404.html' : '/' + fichier.replace(/index\.html$/, '');
+  // La page française porte déjà ses trois hreflang (marquerFrancais) ; la page
+  // anglaise en reçoit trois autres juste en dessous. Sans ce nettoyage, chaque
+  // page /en/ sortait avec six balises, la moitié en double.
+  html = html.replace(/\s*<link rel="alternate" hreflang="[^"]*" href="[^"]*">/g, '');
   html = html
     .replace(/<html lang="fr">/, '<html lang="en">')
     .replace(/<meta property="og:locale" content="fr_FR">/, '<meta property="og:locale" content="en_US">')

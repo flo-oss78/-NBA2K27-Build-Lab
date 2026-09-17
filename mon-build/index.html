@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#060608">
 <meta name="color-scheme" content="dark">
-<meta name="description" content="Ton build NBA 2K27 au même endroit : sa fiche, le plan de brise-plafonds, les badges et leurs jetons, les takeovers et les quêtes.">
-<title>Mon build NBA 2K27 — fiche, brise-plafonds et progression</title>
+<meta name="description" content="Ton build NBA 2K27 au même endroit : sa fiche, le plan de Cap Breakers, les badges et leurs jetons, les takeovers et les quêtes.">
+<title>Mon build NBA 2K27 — fiche, Cap Breakers et progression</title>
 
 <link rel="canonical" href="https://lelabodesbuilds.com/mon-build/">
 <link rel="alternate" hreflang="fr" href="https://lelabodesbuilds.com/mon-build/">
@@ -19,8 +19,8 @@
 <link rel="stylesheet" href="/theme.css">
 <link rel="stylesheet" href="/hq.css">
 
-<meta property="og:title" content="Mon build NBA 2K27 — fiche, brise-plafonds et progression">
-<meta property="og:description" content="Ton build NBA 2K27 au même endroit : sa fiche, le plan de brise-plafonds, les badges et leurs jetons, les takeovers et les quêtes.">
+<meta property="og:title" content="Mon build NBA 2K27 — fiche, Cap Breakers et progression">
+<meta property="og:description" content="Ton build NBA 2K27 au même endroit : sa fiche, le plan de Cap Breakers, les badges et leurs jetons, les takeovers et les quêtes.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://lelabodesbuilds.com/mon-build/">
 <meta property="og:locale" content="fr_FR">
@@ -57,7 +57,7 @@
   </div>
   <div class="reference-actions">
     <a class="lang-switch" href="/en/mon-build/" hreflang="en" lang="en" title="English version">EN</a>
-    <span id="referenceVersion">V26.20</span>
+    <span id="referenceVersion">V26.21</span>
     <button id="referenceSettings" type="button" aria-label="Ouvrir les réglages" aria-expanded="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.9 19.3a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.7 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.56V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.56 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z"/></svg>
     </button>
@@ -66,12 +66,12 @@
 
 <main id="main" class="hq-page-monbuild">
 
-<!-- Page « Mon build » : le build en cours, sa fiche, ses brise-plafonds, ses
+<!-- Page « Mon build » : le build en cours, sa fiche, ses Cap Breakers, ses
      badges et sa progression. Onglets et actions : mon-build.js. -->
 <div class="hq-page-tete">
   <p class="eyebrow">Mon build</p>
   <h1>Ton build, de la fiche aux quêtes</h1>
-  <p class="sub">Le dernier build que tu as créé ou importé : décris-le, planifie ses brise-plafonds, prépare ses badges et suis sa progression. Tout reste enregistré sur cet appareil.</p>
+  <p class="sub">Le dernier build que tu as créé ou importé : décris-le, planifie ses Cap Breakers, prépare ses badges et suis sa progression. Tout reste enregistré sur cet appareil.</p>
 </div>
 
 <div id="monBuildVide" class="panel monbuild-vide" hidden>
@@ -86,7 +86,7 @@
 
 <div class="hq-onglets hq-onglets-page" role="tablist" aria-label="Sections de mon build">
   <button type="button" role="tab" id="ongletApercu" data-onglet="apercu" aria-controls="panneauApercu" aria-selected="true">Mon build</button>
-  <button type="button" role="tab" id="ongletBrise" data-onglet="brise" aria-controls="panneauBrise" aria-selected="false" tabindex="-1">Brise-plafonds</button>
+  <button type="button" role="tab" id="ongletBrise" data-onglet="brise" aria-controls="panneauBrise" aria-selected="false" tabindex="-1">Cap Breakers</button>
   <button type="button" role="tab" id="ongletBadges" data-onglet="badges" aria-controls="panneauBadges" aria-selected="false" tabindex="-1">Badges</button>
   <button type="button" role="tab" id="ongletProgression" data-onglet="progression" aria-controls="panneauProgression" aria-selected="false" tabindex="-1">Progression</button>
 </div>
@@ -115,7 +115,7 @@
     <div class="summary-counts">
       <div><b id="badgeReachable">39</b><span>badges accessibles</span></div>
       <div><b id="monBuildAnims">0</b><span>animations accessibles</span></div>
-      <div><b id="breakerTotal">0</b><span>brise-plafonds planifiés</span></div>
+      <div><b id="breakerTotal">0</b><span>Cap Breakers planifiés</span></div>
     </div>
     <div class="monbuild-actions">
       <a id="monBuildModifier" class="primary" href="/">Modifier dans le builder</a>
@@ -137,11 +137,11 @@
   </section>
 </div>
 
-<!-- ============ BRISE-PLAFONDS ============ -->
+<!-- ============ CAP BREAKERS ============ -->
 <div id="panneauBrise" class="hq-panneau" role="tabpanel" aria-labelledby="ongletBrise" hidden>
   <section class="panel capbreaker" id="capbreakers">
-    <div class="section-title"><div><p class="eyebrow">Brise-plafonds</p><h2>Planifie tes +1 à +5</h2></div><span class="pill">5 max par attribut</span></div>
-    <p class="sub">Choisis les attributs sur lesquels investir tes brise-plafonds (Cap Breakers). Les gains réels dépendent des règles du jeu.</p>
+    <div class="section-title"><div><p class="eyebrow">Cap Breakers</p><h2>Planifie tes +1 à +5</h2></div><span class="pill">5 max par attribut</span></div>
+    <p class="sub">Choisis les attributs sur lesquels investir tes Cap Breakers (Cap Breakers). Les gains réels dépendent des règles du jeu.</p>
     <div id="breakerList" class="breaker-list"></div>
   </section>
 
@@ -149,7 +149,7 @@
     <div class="section-title">
       <div>
         <p class="eyebrow">Cap Breaker Lab</p>
-        <h2>Ton build après tes brise-plafonds</h2>
+        <h2>Ton build après tes Cap Breakers</h2>
         <p class="sub">Prévisualisation locale : les valeurs proposées sont des scénarios, pas une reproduction des règles internes de 2K.</p>
       </div>
       <span id="cbStagePill" class="pill">Base</span>
@@ -168,9 +168,9 @@
   <section id="cbGuideSection" class="panel cb-guide-section">
     <div class="section-title">
       <div>
-        <p class="eyebrow">Guide brise-plafonds</p>
+        <p class="eyebrow">Guide Cap Breakers</p>
         <h2>Dans quel ordre les appliquer</h2>
-        <p class="sub">Écris le chemin : quel brise-plafonds en premier, et pourquoi. C'est ce que les autres joueurs lisent en premier.</p>
+        <p class="sub">Écris le chemin : quel Cap Breakers en premier, et pourquoi. C'est ce que les autres joueurs lisent en premier.</p>
       </div>
     </div>
     <div id="cbGuide" class="cb-guide"></div>
@@ -256,7 +256,7 @@
 </div>
 
 <!-- Moteur du builder, caché : app.js y recharge le build en cours (lireContexte),
-     ce qui fait fonctionner fiche, brise-plafonds, jetons et progression.
+     ce qui fait fonctionner fiche, Cap Breakers, jetons et progression.
      Ces champs ne s'affichent jamais : le build se modifie dans le builder. -->
 <div id="moteurBuild" class="moteur-cache" hidden aria-hidden="true">
   <div id="attributeGroups"></div>

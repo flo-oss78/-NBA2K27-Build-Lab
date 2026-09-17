@@ -192,6 +192,10 @@ async function testsStatiques() {
       if (/<meta name="robots" content="noindex">/.test(en)) soucis.push(`${anglais} reste en noindex`);
       if (!en.includes('<html lang="en">')) soucis.push(`${anglais} ne se déclare pas en anglais`);
       for (const [nom, html] of [['FR', fr], ['EN', en]]) {
+        // Trois balises, pas six : la page anglaise part de la française, qui
+        // porte déjà les siennes. Des hreflang en double brouillent l'indexation.
+        const n = (html.match(/<link rel="alternate" hreflang=/g) || []).length;
+        if (n !== 3) soucis.push(`${nom} ${chemin} : ${n} balises hreflang au lieu de 3`);
         if (!html.includes(`hreflang="en" href="${SITE}/en${chemin}"`)) soucis.push(`${nom} ${chemin} : hreflang anglais absent`);
         if (!html.includes(`hreflang="fr" href="${SITE}${chemin}"`)) soucis.push(`${nom} ${chemin} : hreflang français absent`);
       }

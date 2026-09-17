@@ -12,9 +12,6 @@
 <link rel="alternate" hreflang="fr" href="https://lelabodesbuilds.com/mon-build/">
 <link rel="alternate" hreflang="en" href="https://lelabodesbuilds.com/en/mon-build/">
 <link rel="alternate" hreflang="x-default" href="https://lelabodesbuilds.com/mon-build/">
-<link rel="alternate" hreflang="fr" href="https://lelabodesbuilds.com/mon-build/">
-<link rel="alternate" hreflang="en" href="https://lelabodesbuilds.com/en/mon-build/">
-<link rel="alternate" hreflang="x-default" href="https://lelabodesbuilds.com/mon-build/">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon-192.png">
@@ -60,7 +57,7 @@
   </div>
   <div class="reference-actions">
     <a class="lang-switch" href="/mon-build/" hreflang="fr" lang="fr" title="Version française">FR</a>
-    <span id="referenceVersion">V26.20</span>
+    <span id="referenceVersion">V26.21</span>
     <button id="referenceSettings" type="button" aria-label="Open settings" aria-expanded="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.9 19.3a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.7 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.56V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.56 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z"/></svg>
     </button>
@@ -69,7 +66,7 @@
 
 <main id="main" class="hq-page-monbuild">
 
-<!-- Page « Mon build » : le build en cours, sa fiche, ses brise-plafonds, ses
+<!-- Page « Mon build » : le build en cours, sa fiche, ses Cap Breakers, ses
      badges et sa progression. Onglets et actions : mon-build.js. -->
 <div class="hq-page-tete">
   <p class="eyebrow">My build</p>
@@ -140,7 +137,7 @@
   </section>
 </div>
 
-<!-- ============ BRISE-PLAFONDS ============ -->
+<!-- ============ CAP BREAKERS ============ -->
 <div id="panneauBrise" class="hq-panneau" role="tabpanel" aria-labelledby="ongletBrise" hidden>
   <section class="panel capbreaker" id="capbreakers">
     <div class="section-title"><div><p class="eyebrow">Cap breakers</p><h2>Plan your +1 to +5</h2></div><span class="pill">5 max per attribute</span></div>
@@ -171,7 +168,7 @@
   <section id="cbGuideSection" class="panel cb-guide-section">
     <div class="section-title">
       <div>
-        <p class="eyebrow">Guide brise-plafonds</p>
+        <p class="eyebrow">Guide Cap Breakers</p>
         <h2>What order to apply them in</h2>
         <p class="sub">Write out the path: which cap breaker first, and why. That is what other players read first.</p>
       </div>
@@ -259,7 +256,7 @@
 </div>
 
 <!-- Moteur du builder, caché : app.js y recharge le build en cours (lireContexte),
-     ce qui fait fonctionner fiche, brise-plafonds, jetons et progression.
+     ce qui fait fonctionner fiche, Cap Breakers, jetons et progression.
      Ces champs ne s'affichent jamais : le build se modifie dans le builder. -->
 <div id="moteurBuild" class="moteur-cache" hidden aria-hidden="true">
   <div id="attributeGroups"></div>

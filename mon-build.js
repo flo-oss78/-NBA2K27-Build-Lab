@@ -1,7 +1,7 @@
 /* NBA 2K27 Build Lab — Page « Mon build » (/mon-build/)
    Chargé APRÈS app.js, build-sheet.js et progression.js.
    Le moteur du builder tourne caché sur cette page (#moteurBuild) : app.js y
-   recharge le build en cours, ce qui fait fonctionner fiche, brise-plafonds,
+   recharge le build en cours, ce qui fait fonctionner fiche, Cap Breakers,
    jetons et progression sans les recoder. Ce fichier gère les onglets
    (reflétés dans l'adresse : ?onglet=brise), le bandeau et les actions. */
 (function(){
