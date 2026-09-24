@@ -88,9 +88,9 @@ export function profilPublic(row) {
   return {
     pseudo: row.pseudo,
     slug: row.slug,
-    avatar: row.avatar
-      ? `https://cdn.discordapp.com/avatars/${row.discord_id}/${row.avatar}.png?size=64`
-      : '',
+    // Servi par le site, jamais par le CDN de Discord : l'adresse d'un avatar
+    // Discord contient l'identifiant Discord, qui ne doit apparaître nulle part.
+    avatar: row.avatar ? `/avatar/${encodeURIComponent(row.slug)}` : '',
     depuis: row.created_at
   };
 }

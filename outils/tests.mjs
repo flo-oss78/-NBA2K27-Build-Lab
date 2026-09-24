@@ -318,6 +318,39 @@ async function testsStatiques() {
     verifier(!morts.length, 'liens morts : ' + morts.join(', '));
   });
 
+  /* L'adresse d'un avatar Discord contient l'identifiant Discord de la
+     personne. La page de profil l'affichait donc en clair, alors que les
+     mentions légales promettent qu'il ne quitte jamais le site — et il permet
+     de retrouver quelqu'un ailleurs. Les avatars passent par /avatar/<slug>. */
+  await test('l’identifiant Discord ne sort jamais du serveur', () => {
+    const cotePublic = [];
+    const parcourir = (dossier) => {
+      for (const e of fs.readdirSync(dossier, { withFileTypes: true })) {
+        const chemin = `${dossier}/${e.name}`;
+        if (e.isDirectory()) { parcourir(chemin); continue; }
+        if (!e.name.endsWith('.js')) continue;
+        cotePublic.push(chemin);
+      }
+    };
+    parcourir('functions');
+    // Seule la fonction qui sert les avatars a le droit de parler au CDN de
+    // Discord : c'est elle qui protège l'identifiant en le gardant côté serveur.
+    const fautifs = cotePublic
+      .filter(f => !f.endsWith('avatar/[slug].js'))
+      .filter(f => /cdn\.discordapp\.com/.test(fs.readFileSync(f, 'utf8')));
+    verifier(!fautifs.length, 'fabriquent une adresse d’avatar Discord : ' + fautifs.join(', '));
+
+    const session = fs.readFileSync('functions/api/_session.js', 'utf8');
+    const bloc = session.slice(session.indexOf('export function profilPublic'));
+    verifier(!/discord_id/.test(bloc.slice(0, bloc.indexOf('\n}'))),
+      'profilPublic laisse passer l’identifiant Discord');
+
+    // Et rien côté navigateur ne doit chercher à joindre Discord pour une image.
+    const scripts = fs.readdirSync('.').filter(f => f.endsWith('.js'));
+    const clients = scripts.filter(f => /cdn\.discordapp\.com/.test(fs.readFileSync(f, 'utf8')));
+    verifier(!clients.length, 'scripts de page pointant sur le CDN Discord : ' + clients.join(', '));
+  });
+
   /* Une valeur d'exemple recopiée telle quelle dans le tableau de bord
      Cloudflare passait autrefois pour une vraie configuration : le site
      affichait « Se connecter » et Discord répondait par une page d'erreur. */
