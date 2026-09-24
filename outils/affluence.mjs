@@ -8,7 +8,7 @@
  * forme. Les robots et nos propres tests ne sont jamais comptés — ils sont
  * écartés à l'enregistrement.
  */
-import { execFileSync } from 'node:child_process';
+import { execSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -21,15 +21,25 @@ const depuis = new Date(Date.now() - JOURS * 86400000).toISOString().slice(0, 10
 const gras = s => `\x1b[1m${s}\x1b[0m`;
 const pale = s => `\x1b[2m${s}\x1b[0m`;
 
+/* Deux pièges rencontrés en chemin :
+   - sous Windows, depuis une mise à jour de sécurité de Node, un fichier .cmd
+     comme npx.cmd ne peut plus être lancé directement : il faut le shell ;
+   - « --file » n'est pas une solution de repli : sur une base distante,
+     wrangler le fait passer par son API d'import, qui demande d'autres droits
+     et refuse une simple lecture. On reste donc sur « --command », avec la
+     requête tenue sur une seule ligne et entre guillemets. */
+const NPX = process.platform === 'win32'
+  ? `"${path.join(process.env.ProgramFiles || 'C:\\Program Files', 'nodejs', 'npx.cmd')}"`
+  : 'npx';
+
 function interroger(sql) {
-  const npx = process.platform === 'win32'
-    ? path.join(process.env.ProgramFiles || 'C:\\Program Files', 'nodejs', 'npx.cmd')
-    : 'npx';
-  const brut = execFileSync(npx,
-    ['--yes', 'wrangler@4', 'd1', 'execute', 'nba-build-lab', '--remote', '--json', '--command', sql],
+  const uneLigne = sql.replace(/\s+/g, ' ').trim();
+  const brut = execSync(
+    `${NPX} --yes wrangler@4 d1 execute nba-build-lab --remote --json --command "${uneLigne}"`,
     { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'] });
   // wrangler préfixe parfois sa sortie : on ne garde que le JSON.
   const debut = brut.indexOf('[');
+  if (debut < 0) throw new Error('réponse inattendue de wrangler :\n' + brut.slice(0, 400));
   const paquet = JSON.parse(brut.slice(debut));
   return (paquet[0] && paquet[0].results) || [];
 }
@@ -64,8 +74,11 @@ if (!+total.vues) {
   process.exit(0);
 }
 
-console.log(`  ${gras(N('visiteurs')(total))} visiteurs  ·  ${gras(N('vues')(total))} pages vues  ·  `
-  + `${(total.vues / Math.max(1, total.visiteurs)).toFixed(1)} pages par visiteur`);
+const pluriel = (n, mot) => `${mot}${+n > 1 ? 's' : ''}`;
+const parVisiteur = (total.vues / Math.max(1, total.visiteurs)).toFixed(1).replace('.', ',');
+console.log(`  ${gras(N('visiteurs')(total))} ${pluriel(total.visiteurs, 'visiteur')}`
+  + `  ·  ${gras(N('vues')(total))} ${pluriel(total.vues, 'page')} ${pluriel(total.vues, 'vue')}`
+  + `  ·  ${parVisiteur} pages par visiteur`);
 
 tableau('Par jour', interroger(
   `SELECT jour, SUM(vues) AS vues, SUM(visiteurs) AS visiteurs
