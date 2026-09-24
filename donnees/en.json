@@ -725,7 +725,13 @@
     "La connexion Discord n’a pas abouti.": "Discord sign-in did not complete.",
     "Ce compte ne peut plus publier sur le site.": "This account can no longer publish on the site.",
     "Plus de points : baisse un autre attribut.": "No points left: lower another attribute.",
-    "Build d’exemple chargé. Tout reste modifiable.": "Example build loaded. Everything stays editable."
+    "Build d’exemple chargé. Tout reste modifiable.": "Example build loaded. Everything stays editable.",
+    "autorisation refusée sur Discord": "authorisation declined on Discord",
+    "le cookie de sécurité n’est pas revenu (navigateur trop strict ?)": "the security cookie did not come back (browser too strict?)",
+    "jeton de sécurité différent : recommence depuis le site": "security token mismatch: start again from the site",
+    "le site n’a pas pu obtenir de jeton auprès de Discord": "the site could not obtain a token from Discord",
+    "Discord n’a pas renvoyé le profil": "Discord did not return the profile",
+    "La connexion Discord n’a pas abouti": "Discord sign-in did not go through"
   },
   "motifs": [
     [

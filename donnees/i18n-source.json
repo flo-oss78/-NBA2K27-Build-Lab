@@ -2528,13 +2528,31 @@
     "texte": "<button type=\"button\" id=\"compteSortie\" class=\"compte-sortie\">Se déconnecter</button>"
    },
    {
+    "texte": "autorisation refusée sur Discord"
+   },
+   {
+    "texte": "le cookie de sécurité n’est pas revenu (navigateur trop strict ?)"
+   },
+   {
+    "texte": "jeton de sécurité différent : recommence depuis le site"
+   },
+   {
+    "texte": "le site n’a pas pu obtenir de jeton auprès de Discord"
+   },
+   {
+    "texte": "Discord n’a pas renvoyé le profil"
+   },
+   {
     "texte": "Connecté"
    },
    {
     "texte": "Ce compte ne peut plus publier sur le site."
    },
    {
-    "texte": "La connexion Discord n’a pas abouti."
+    "texte": "ou"
+   },
+   {
+    "texte": "La connexion Discord n’a pas abouti"
    }
   ],
   "data-registry.js": [
@@ -3544,6 +3562,21 @@
    },
    {
     "texte": "pars d’un exemple"
+   },
+   {
+    "texte": ", qui le développe seul, à titre personnel."
+   },
+   {
+    "texte": "Le site ne demande ni compte, ni inscription, ni mot de passe."
+   },
+   {
+    "texte": "Publicité."
+   },
+   {
+    "texte": "Le site n'affiche aucune publicité à ce jour, et ne dépose donc aucun traceur publicitaire : c'est pourquoi tu ne vois pas de bandeau cookies. S'il venait à en afficher, cette page le dirait, et ton accord te serait demandé avant le dépôt du moindre traceur. Sans accord de ta part, aucun traceur publicitaire n'est déposé."
+   },
+   {
+    "texte": "Aucune donnée n'est vendue ni louée, et aucune n'est transmise à un tiers à des fins publicitaires sans ton accord préalable."
    },
    {
     "texte": "Terminer au cercle, layups, dunks et jeu au poste."

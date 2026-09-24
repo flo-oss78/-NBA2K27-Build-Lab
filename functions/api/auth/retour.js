@@ -34,9 +34,18 @@ export async function onRequestGet({ request, env }) {
   const [attendu, depuisBrut] = brut.split('|');
   const depuis = decodeURIComponent(depuisBrut || '/hub/');
 
+  /* Une connexion qui échoue sans dire où laisse chercher à l'aveugle : le
+     réglage fautif est invisible depuis le navigateur comme depuis la base.
+     On nomme donc l'étape, et pour l'échange de jeton le code d'erreur
+     standard renvoyé par Discord (invalid_client quand la clé est fausse).
+     Rien de secret ne sort d'ici : ni clé, ni jeton, ni identité. */
+  const echec = (ou, quoi) => versPage(
+    `${depuis}${depuis.includes('?') ? '&' : '?'}connexion=echec&ou=${encodeURIComponent(ou)}`
+    + (quoi ? `&code=${encodeURIComponent(String(quoi).slice(0, 40))}` : ''));
+
   // Refus de Discord, ou state absent/différent : on ne va pas plus loin.
   if (!code || !state || !attendu || state !== attendu) {
-    return versPage(`${depuis}${depuis.includes('?') ? '&' : '?'}connexion=echec`);
+    return echec(!code ? 'refus' : !attendu ? 'cookie' : 'state');
   }
 
   // 1. Le code contre un jeton d'accès.
@@ -51,17 +60,22 @@ export async function onRequestGet({ request, env }) {
       redirect_uri: `${url.origin}/api/auth/retour`
     })
   });
-  if (!reponse.ok) return versPage(`${depuis}${depuis.includes('?') ? '&' : '?'}connexion=echec`);
+  if (!reponse.ok) {
+    let motif = reponse.status;
+    try { motif = (await reponse.json()).error || motif; } catch { /* réponse non JSON */ }
+    return echec('jeton', motif);
+  }
   const jeton = await reponse.json();
+  if (!jeton.access_token) return echec('jeton', 'sans_jeton');
 
   // 2. L'identité, puis on oublie le jeton.
   const moi = await fetch('https://discord.com/api/users/@me', {
     headers: { authorization: `Bearer ${jeton.access_token}` }
   });
-  if (!moi.ok) return versPage(`${depuis}${depuis.includes('?') ? '&' : '?'}connexion=echec`);
+  if (!moi.ok) return echec('profil', moi.status);
   const profil = await moi.json();
   const discordId = String(profil.id || '');
-  if (!discordId) return versPage(`${depuis}${depuis.includes('?') ? '&' : '?'}connexion=echec`);
+  if (!discordId) return echec('profil', 'sans_id');
 
   const pseudo = clampText(profil.global_name || profil.username || 'Joueur', 32);
   const avatar = clampText(profil.avatar || '', 64);

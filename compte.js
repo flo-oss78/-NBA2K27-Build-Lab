@@ -62,16 +62,35 @@
 
   /* Retour de Discord : un mot, puis l'adresse est nettoyée pour que le
      paramètre ne traîne pas dans l'historique ni dans un lien partagé. */
+  /* Quand la connexion échoue, dire à quelle étape : sans cela, le même
+     message couvre un réglage manquant, une clé fausse et un refus de
+     l'utilisateur, et il n'y a aucun moyen de les distinguer. */
+  var ETAPES = {
+    refus: 'autorisation refusée sur Discord',
+    cookie: 'le cookie de sécurité n’est pas revenu (navigateur trop strict ?)',
+    state: 'jeton de sécurité différent : recommence depuis le site',
+    jeton: 'le site n’a pas pu obtenir de jeton auprès de Discord',
+    profil: 'Discord n’a pas renvoyé le profil'
+  };
+
   function message() {
-    var p = new URLSearchParams(location.search).get('connexion');
+    var q = new URLSearchParams(location.search), p = q.get('connexion');
     if (!p) return;
     if (window.NBABL_TOAST) {
       if (p === 'ok') window.NBABL_TOAST('Connecté' + (etat.profil ? ' : ' + etat.profil.pseudo : '') + '.', 'level');
       else if (p === 'bloque') window.NBABL_TOAST('Ce compte ne peut plus publier sur le site.', 'warn');
-      else window.NBABL_TOAST('La connexion Discord n’a pas abouti.', 'warn');
+      else {
+        var ou = q.get('ou'), code = q.get('code');
+        var detail = ETAPES[ou] || ou;
+        window.NBABL_TOAST('La connexion Discord n’a pas abouti'
+          + (detail ? ' — ' + detail : '')
+          + (code ? ' (' + code + ')' : '') + '.', 'warn');
+      }
     }
     var url = new URL(location.href);
     url.searchParams.delete('connexion');
+    url.searchParams.delete('ou');
+    url.searchParams.delete('code');
     history.replaceState(null, '', url.pathname + (url.search || '') + url.hash);
   }
 
