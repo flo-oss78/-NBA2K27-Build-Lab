@@ -164,11 +164,11 @@
     "ou": "texte"
    },
    {
-    "texte": "Build vierge : aucun point d'attribut dépensé. Monte les attributs que tu veux, ou",
+    "texte": "Build vierge : aucun point d’attribut dépensé. Monte les attributs que tu veux, ou",
     "ou": "texte"
    },
    {
-    "texte": "pars d'un exemple",
+    "texte": "pars d’un exemple",
     "ou": "texte"
    },
    {
@@ -1192,7 +1192,7 @@
     "ou": "texte"
    },
    {
-    "texte": ", qui le développe seul, sans but commercial.",
+    "texte": ", qui le développe seul, à titre personnel.",
     "ou": "texte"
    },
    {
@@ -1216,7 +1216,7 @@
     "ou": "texte"
    },
    {
-    "texte": "Le site ne demande ni compte, ni inscription, ni mot de passe. Il n'affiche aucune publicité et n'utilise aucun pisteur publicitaire : il n'y a donc pas de bandeau cookies.",
+    "texte": "Le site ne demande ni compte, ni inscription, ni mot de passe.",
     "ou": "texte"
    },
    {
@@ -1248,7 +1248,15 @@
     "ou": "texte"
    },
    {
-    "texte": "Aucune donnée n'est vendue, louée ni transmise à un tiers à des fins publicitaires.",
+    "texte": "Publicité.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Le site n'affiche aucune publicité à ce jour, et ne dépose donc aucun traceur publicitaire : c'est pourquoi tu ne vois pas de bandeau cookies. S'il venait à en afficher, cette page le dirait, et ton accord te serait demandé avant le dépôt du moindre traceur. Sans accord de ta part, aucun traceur publicitaire n'est déposé.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Aucune donnée n'est vendue ni louée, et aucune n'est transmise à un tiers à des fins publicitaires sans ton accord préalable.",
     "ou": "texte"
    },
    {
@@ -3532,6 +3540,12 @@
     "texte": "Choose the attributes to spend your Cap Breakers on. The real gains depend on the game’s own rules."
    },
    {
+    "texte": "Build vierge : aucun point d’attribut dépensé. Monte les attributs que tu veux, ou"
+   },
+   {
+    "texte": "pars d’un exemple"
+   },
+   {
     "texte": "Terminer au cercle, layups, dunks et jeu au poste."
    },
    {
@@ -4670,6 +4684,12 @@
    },
    {
     "texte": "This account can no longer publish on the site."
+   },
+   {
+    "texte": "Plus de points : baisse un autre attribut."
+   },
+   {
+    "texte": "Build d’exemple chargé. Tout reste modifiable."
    },
    {
     "texte": "Afficher plus \\\\(([^)]*?) sur ([^)]*?) restants\\\\)"

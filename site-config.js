@@ -3,7 +3,7 @@ window.NBABL_SITE_CONFIG=Object.freeze({
   apiBase:'/api',
   appName:'NBA 2K27 Build Lab',
   version:'26.25.0',
-  shortVersion:'V26.24',
+  shortVersion:'V26.25',
   environment:'production'
 });
 

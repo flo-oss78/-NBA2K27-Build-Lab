@@ -322,7 +322,12 @@
     "Ce que chaque attribut ouvrirait au-dessus de son maximum. Un Cap Breaker lève le plafond : il faudra ensuite des points d’attributs pour atteindre la note.": "What each attribute would open above its maximum. A Cap Breaker raises the ceiling: you will still need attribute points to reach the rating.",
     "Choisis les attributs sur lesquels investir tes Cap Breakers. Les gains réels dépendent des règles du jeu.": "Choose the attributes to spend your Cap Breakers on. The real gains depend on the game’s own rules.",
     "Build vierge : aucun point d’attribut dépensé. Monte les attributs que tu veux, ou": "Blank build: no attribute points spent. Raise whatever attributes you want, or",
-    "pars d’un exemple": "start from an example"
+    "pars d’un exemple": "start from an example",
+    ", qui le développe seul, à titre personnel.": ", who develops it alone, in a personal capacity.",
+    "Le site ne demande ni compte, ni inscription, ni mot de passe.": "The site asks for no account, no sign-up and no password.",
+    "Publicité.": "Advertising.",
+    "Le site n'affiche aucune publicité à ce jour, et ne dépose donc aucun traceur publicitaire : c'est pourquoi tu ne vois pas de bandeau cookies. S'il venait à en afficher, cette page le dirait, et ton accord te serait demandé avant le dépôt du moindre traceur. Sans accord de ta part, aucun traceur publicitaire n'est déposé.": "The site shows no advertising to date, and therefore sets no advertising trackers: that is why you see no cookie banner. Should it ever show ads, this page would say so, and your consent would be requested before any tracker is set. Without your consent, no advertising tracker is set.",
+    "Aucune donnée n'est vendue ni louée, et aucune n'est transmise à un tiers à des fins publicitaires sans ton accord préalable.": "No data is sold or rented, and none is passed to a third party for advertising purposes without your prior consent."
   },
   "scripts": {
     "Terminer au cercle, layups, dunks et jeu au poste.": "Finishing at the rim, layups, dunks and post play.",
