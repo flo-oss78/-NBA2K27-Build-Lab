@@ -42,6 +42,19 @@ function estRobot(ua) {
   return !ua || /bot|crawl|spider|slurp|headless|preview|monitor|curl|wget|python|node-fetch|lighthouse/i.test(ua);
 }
 
+/* Le jour, à l'heure de Paris. En UTC, une visite du soir après minuit heure
+   française serait rangée la veille : en lisant « hier », on ne verrait pas
+   la soirée qu'on vient de passer. */
+function jourLocal() {
+  try {
+    return new Intl.DateTimeFormat('fr-CA', {
+      timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit'
+    }).format(new Date());
+  } catch {
+    return new Date().toISOString().slice(0, 10);
+  }
+}
+
 export async function onRequestPost({ request, env }) {
   // Une mesure qui échoue ne doit jamais gêner la navigation : on répond
   // toujours « c'est noté », même quand il n'y a rien à noter.
@@ -58,7 +71,7 @@ export async function onRequestPost({ request, env }) {
   const langue = corps && corps.langue === 'en' ? 'en' : 'fr';
   const appareil = corps && corps.mobile ? 'mobile' : 'ordinateur';
   const source = sourceDe(corps && corps.source, url.origin);
-  const jour = new Date().toISOString().slice(0, 10);
+  const jour = jourLocal();
 
   const ip = request.headers.get('CF-Connecting-IP') || request.headers.get('x-forwarded-for') || '';
   const empreinte = (await sha256(`${ip}|${ua}|${jour}|${env.SESSION_SECRET}`)).slice(0, 32);
