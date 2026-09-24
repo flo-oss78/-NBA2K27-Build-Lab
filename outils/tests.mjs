@@ -1501,6 +1501,24 @@ async function testsProduction() {
     verifier(!absentes.length, 'pages absentes du sitemap : ' + absentes.join(', '));
   });
 
+  /* /u/ répondait 200 pendant que /u/<pseudo> renvoyait un 404 : la règle de
+     réécriture de _redirects ne s'appliquait pas, et le lien vers son propre
+     profil menait dans le vide. Une fonction sert la page ; ce test le vérifie
+     là où ça compte, c'est-à-dire en ligne. */
+  await test('l’adresse d’un profil sert bien la page, pas un 404', async () => {
+    for (const chemin of ['/u/', '/u/quelquun', '/en/u/', '/en/u/quelquun']) {
+      const r = await fetch(URL_PROD + chemin);
+      verifier(r.ok, `${chemin} → HTTP ${r.status}`);
+      const html = await r.text();
+      verifier(/id="profilBuilds"/.test(html), `${chemin} ne sert pas la page de profil`);
+    }
+    const inconnu = await fetch(`${URL_PROD}/api/profil?slug=aucun-joueur-de-ce-nom`);
+    verifier(inconnu.status === 404, `un profil inexistant → HTTP ${inconnu.status} au lieu de 404`);
+    const suivre = await fetch(`${URL_PROD}/api/suivre`, {
+      method: 'POST', headers: { 'content-type': 'application/json' }, body: '{"slug":"x"}' });
+    verifier(suivre.status === 401, `suivre sans compte → HTTP ${suivre.status} au lieu de 401`);
+  });
+
   await test('les anciennes adresses /blueprints/ et /trios/ mènent à l\u2019onglet Trios', async () => {
     for (const ancien of ['/blueprints/', '/blueprints', '/trios/', '/trios']) {
       const r = await fetch(URL_PROD + ancien, { redirect: 'manual' });
