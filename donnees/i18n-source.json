@@ -1338,6 +1338,14 @@
     "ou": "texte"
    },
    {
+    "texte": "Mesure de fréquentation.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Le site compte ses visites lui-même, sans cookie, sans identifiant et sans service extérieur : rien n'est envoyé à un tiers. Ce qui est enregistré est un compteur par jour, par page, par langue, par type d'appareil et par domaine de provenance — jamais l'adresse complète de la page qui t'a amené ici. Pour ne pas compter deux fois la même personne dans la journée, une empreinte est calculée à partir de ton adresse IP, de ton navigateur, de la date et d'une clé du serveur ; elle change chaque jour, ne peut pas être inversée, ne permet pas de te suivre d'un jour à l'autre, et elle est effacée au bout d'une semaine.",
+    "ou": "texte"
+   },
+   {
     "texte": "Publicité.",
     "ou": "texte"
    },
@@ -3669,6 +3677,51 @@
     "texte": "Aucune donnée n'est vendue ni louée, et aucune n'est transmise à un tiers à des fins publicitaires sans ton accord préalable."
    },
    {
+    "texte": "Profil d'un joueur — Le Labo des Builds"
+   },
+   {
+    "texte": "A player's profile — Le Labo des Builds"
+   },
+   {
+    "texte": "Builds publiés"
+   },
+   {
+    "texte": "Ce que le site garde de toi : ton pseudo Discord, ton avatar et un identifiant, pour te reconnaître à ta prochaine visite. Ni e-mail, ni mot de passe."
+   },
+   {
+    "texte": "Supprimer ton compte efface tout cela ainsi que tes abonnements. Les builds que tu as publiés restent en ligne mais ne sont plus reliés à toi : écris-nous si tu veux aussi les retirer."
+   },
+   {
+    "texte": "Le profil d'un joueur sur Le Labo des Builds : ses builds NBA 2K27 publiés, ses gabarits et ses badges."
+   },
+   {
+    "texte": "A player's profile on Le Labo des Builds: their published NBA 2K27 builds, bodies and badges."
+   },
+   {
+    "texte": "Les builds NBA 2K27 publiés par ce joueur."
+   },
+   {
+    "texte": "Le site s'utilise entièrement sans compte : créer un build, l'ajuster et le partager par lien ne demande aucune inscription. Se connecter ne sert qu'à publier sous une identité reconnaissable."
+   },
+   {
+    "texte": "Une fois connecté, tu as une adresse publique de la forme"
+   },
+   {
+    "texte": ": on y voit ton pseudo, ton avatar, le mois de ton arrivée, le nombre de personnes qui te suivent et les builds que tu as publiés. Rien d'autre. Ces pages ne sont pas indexées par les moteurs de recherche."
+   },
+   {
+    "texte": "Suivre un joueur enregistre uniquement le lien entre ton compte et le sien. La personne suivie voit son nombre d'abonnés, jamais la liste de qui la suit."
+   },
+   {
+    "texte": "Supprimer ton compte."
+   },
+   {
+    "texte": "Le bouton se trouve sur ton profil. Il efface ton identifiant Discord, ton pseudo, ton avatar, ton adresse publique et tes abonnements. Les builds que tu avais publiés restent en ligne mais ne sont plus reliés à toi, pour ne pas casser les liens partagés par d'autres ; écris-nous si tu veux aussi les retirer."
+   },
+   {
+    "texte": "The button is on your profile. It erases your Discord identifier, your name, your avatar, your public address and who you follow. The builds you published stay online but are no longer linked to you, so links shared by others keep working; write to us if you want them removed too."
+   },
+   {
     "texte": "Terminer au cercle, layups, dunks et jeu au poste."
    },
    {
@@ -4834,6 +4887,48 @@
    },
    {
     "texte": "La connexion Discord n’a pas abouti"
+   },
+   {
+    "texte": "— Le Labo des Builds"
+   },
+   {
+    "texte": "Sur le site depuis"
+   },
+   {
+    "texte": "On the site since"
+   },
+   {
+    "texte": "abonnés"
+   },
+   {
+    "texte": "abonné"
+   },
+   {
+    "texte": "Ne plus suivre"
+   },
+   {
+    "texte": "Tu n’as encore rien publié. Crée un build, puis publie-le : il apparaîtra ici."
+   },
+   {
+    "texte": "Ce joueur n’a encore rien publié."
+   },
+   {
+    "texte": "Vérifie l’adresse, ou retourne à la liste des builds."
+   },
+   {
+    "texte": "Lien du profil copié."
+   },
+   {
+    "texte": "Supprimer ton compte ? Ton pseudo, ton avatar et tes abonnements seront effacés. Tes builds publiés restent en ligne, sans lien avec toi."
+   },
+   {
+    "texte": "Aucun joueur indiqué dans l’adresse."
+   },
+   {
+    "texte": "Ce joueur n’existe pas, ou son compte a été supprimé."
+   },
+   {
+    "texte": "Le profil n’a pas pu être chargé."
    },
    {
     "texte": "Afficher plus \\\\(([^)]*?) sur ([^)]*?) restants\\\\)"

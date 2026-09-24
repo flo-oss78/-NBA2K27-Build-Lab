@@ -318,6 +318,34 @@ async function testsStatiques() {
     verifier(!morts.length, 'liens morts : ' + morts.join(', '));
   });
 
+  /* Le site compte ses visites lui-même plutôt que d'appeler un service
+     extérieur. Ce qui rend cette mesure acceptable — pas de bandeau, pas de
+     traceur — tient à trois choses qu'un changement pourrait défaire sans
+     bruit : rien ne part ailleurs que chez nous, l'adresse complète de la page
+     de provenance n'est jamais envoyée, et les robots ne sont pas comptés. */
+  await test('la mesure de fréquentation ne suit personne', () => {
+    const client = fs.readFileSync('mesure.js', 'utf8');
+    verifier(!/https?:\/\//.test(client.replace(/\/\*[\s\S]*?\*\//g, '')),
+      'mesure.js contacte une adresse extérieure');
+    verifier(/\/api\/mesure/.test(client), 'mesure.js n’envoie rien au site');
+    verifier(!/document\.cookie|localStorage|randomUUID/.test(client),
+      'mesure.js pose un identifiant : la mesure deviendrait un traceur');
+    verifier(/new URL\(document\.referrer\)\.origin/.test(client),
+      'mesure.js envoie l’adresse complète de provenance au lieu du seul domaine');
+
+    const serveur = fs.readFileSync('functions/api/mesure.js', 'utf8');
+    verifier(/headless/i.test(serveur), 'le serveur compterait nos propres tests comme des visiteurs');
+    verifier(/bot\|crawl/i.test(serveur), 'le serveur compterait les robots comme des visiteurs');
+    verifier(/DELETE FROM visiteurs_jour/.test(serveur),
+      'les empreintes de visiteurs ne sont jamais effacées');
+    verifier(/SESSION_SECRET/.test(serveur), 'l’empreinte des visiteurs n’est pas salée');
+
+    // La page qui l'explique doit rester en accord avec ce que fait le code.
+    const legal = fs.readFileSync('mentions-legales/index.html', 'utf8');
+    verifier(/Mesure de fréquentation/.test(legal),
+      'les mentions légales ne parlent pas de la mesure de fréquentation');
+  });
+
   /* L'adresse d'un avatar Discord contient l'identifiant Discord de la
      personne. La page de profil l'affichait donc en clair, alors que les
      mentions légales promettent qu'il ne quitte jamais le site — et il permet

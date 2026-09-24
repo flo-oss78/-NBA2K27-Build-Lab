@@ -347,7 +347,9 @@
     "Connexion Discord.": "Discord sign-in.",
     "Profil public.": "Public profile.",
     "Abonnements.": "Following.",
-    "/u/ton-pseudo": "/u/your-name"
+    "/u/ton-pseudo": "/u/your-name",
+    "Mesure de fréquentation.": "Traffic measurement.",
+    "Le site compte ses visites lui-même, sans cookie, sans identifiant et sans service extérieur : rien n'est envoyé à un tiers. Ce qui est enregistré est un compteur par jour, par page, par langue, par type d'appareil et par domaine de provenance — jamais l'adresse complète de la page qui t'a amené ici. Pour ne pas compter deux fois la même personne dans la journée, une empreinte est calculée à partir de ton adresse IP, de ton navigateur, de la date et d'une clé du serveur ; elle change chaque jour, ne peut pas être inversée, ne permet pas de te suivre d'un jour à l'autre, et elle est effacée au bout d'une semaine.": "The site counts its own visits, with no cookie, no identifier and no outside service: nothing is sent to a third party. What is recorded is a counter per day, page, language, device type and referring domain — never the full address of the page that brought you here. So that the same person is not counted twice in a day, a fingerprint is derived from your IP address, your browser, the date and a server key; it changes every day, cannot be reversed, does not let anyone follow you from one day to the next, and is erased after a week."
   },
   "scripts": {
     "Terminer au cercle, layups, dunks et jeu au poste.": "Finishing at the rim, layups, dunks and post play.",
