@@ -1158,6 +1158,72 @@
     "ou": "aria-label"
    }
   ],
+  "u/index.html": [
+   {
+    "texte": "Profil d'un joueur — Le Labo des Builds",
+    "ou": "texte"
+   },
+   {
+    "texte": "Aller au contenu",
+    "ou": "texte"
+   },
+   {
+    "texte": "LE LABO",
+    "ou": "texte"
+   },
+   {
+    "texte": "Créer",
+    "ou": "texte"
+   },
+   {
+    "texte": "Copier le lien",
+    "ou": "texte"
+   },
+   {
+    "texte": "Builds publiés",
+    "ou": "texte"
+   },
+   {
+    "texte": "Ce que le site garde de toi : ton pseudo Discord, ton avatar et un identifiant, pour te reconnaître à ta prochaine visite. Ni e-mail, ni mot de passe.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Supprimer ton compte efface tout cela ainsi que tes abonnements. Les builds que tu as publiés restent en ligne mais ne sont plus reliés à toi : écris-nous si tu veux aussi les retirer.",
+    "ou": "texte"
+   },
+   {
+    "texte": "NBA 2K27 Build Lab — outil indépendant, données publiques, aucune affiliation officielle avec 2K.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Mentions légales et confidentialité",
+    "ou": "texte"
+   },
+   {
+    "texte": "Signaler une erreur de données",
+    "ou": "texte"
+   },
+   {
+    "texte": "Le profil d'un joueur sur Le Labo des Builds : ses builds NBA 2K27 publiés, ses gabarits et ses badges.",
+    "ou": "content"
+   },
+   {
+    "texte": "Les builds NBA 2K27 publiés par ce joueur.",
+    "ou": "content"
+   },
+   {
+    "texte": "Build Lab NBA 2K27 : 340 corps relevés, 94 % de maximums justes, 53 badges, plus de 2 500 animations.",
+    "ou": "content"
+   },
+   {
+    "texte": "Le Labo des Builds",
+    "ou": "content"
+   },
+   {
+    "texte": "Ouvrir les réglages",
+    "ou": "aria-label"
+   }
+  ],
   "mentions-legales/index.html": [
    {
     "texte": "Mentions légales et confidentialité — Le Labo des Builds",
@@ -1216,7 +1282,7 @@
     "ou": "texte"
    },
    {
-    "texte": "Le site ne demande ni compte, ni inscription, ni mot de passe.",
+    "texte": "Le site s'utilise entièrement sans compte : créer un build, l'ajuster et le partager par lien ne demande aucune inscription. Se connecter ne sert qu'à publier sous une identité reconnaissable.",
     "ou": "texte"
    },
    {
@@ -1245,6 +1311,30 @@
    },
    {
     "texte": "Ils sont fermés. Les commentaires écrits avant cette fermeture restent visibles ; écris-nous pour en faire retirer un.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Si tu te connectes, le site demande à Discord la seule autorisation « identify » : il reçoit ton identifiant Discord, ton pseudo et ton avatar. Ni e-mail, ni mot de passe, ni liste de serveurs. Ces trois éléments sont conservés pour te reconnaître à ta prochaine visite et afficher ton profil ; ton identifiant Discord ne quitte jamais le site et n'apparaît sur aucune page. Ta session tient dans un cookie signé, valable trente jours, que le JavaScript de la page ne peut pas lire.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Une fois connecté, tu as une adresse publique de la forme",
+    "ou": "texte"
+   },
+   {
+    "texte": ": on y voit ton pseudo, ton avatar, le mois de ton arrivée, le nombre de personnes qui te suivent et les builds que tu as publiés. Rien d'autre. Ces pages ne sont pas indexées par les moteurs de recherche.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Suivre un joueur enregistre uniquement le lien entre ton compte et le sien. La personne suivie voit son nombre d'abonnés, jamais la liste de qui la suit.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Supprimer ton compte.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Le bouton se trouve sur ton profil. Il efface ton identifiant Discord, ton pseudo, ton avatar, ton adresse publique et tes abonnements. Les builds que tu avais publiés restent en ligne mais ne sont plus reliés à toi, pour ne pas casser les liens partagés par d'autres ; écris-nous si tu veux aussi les retirer.",
     "ou": "texte"
    },
    {
@@ -4725,6 +4815,27 @@
     "texte": "Build d’exemple chargé. Tout reste modifiable."
    },
    {
+    "texte": "autorisation refusée sur Discord"
+   },
+   {
+    "texte": "authorisation declined on Discord"
+   },
+   {
+    "texte": "le cookie de sécurité n’est pas revenu (navigateur trop strict ?)"
+   },
+   {
+    "texte": "jeton de sécurité différent : recommence depuis le site"
+   },
+   {
+    "texte": "le site n’a pas pu obtenir de jeton auprès de Discord"
+   },
+   {
+    "texte": "Discord n’a pas renvoyé le profil"
+   },
+   {
+    "texte": "La connexion Discord n’a pas abouti"
+   },
+   {
     "texte": "Afficher plus \\\\(([^)]*?) sur ([^)]*?) restants\\\\)"
    },
    {
@@ -5080,6 +5191,47 @@
    },
    {
     "texte": ").join(''):'<div><span>Build déjà optimisé</span><b>Aucun changement</b></div>'}</div><div class=\"modal-actions\"><button data-close-modal>Garder ce build</button><button class=\"secondary\" data-close-modal>Fermer</button></div>"
+   }
+  ],
+  "profil.js": [
+   {
+    "texte": "— Le Labo des Builds"
+   },
+   {
+    "texte": "Sur le site depuis"
+   },
+   {
+    "texte": "abonnés"
+   },
+   {
+    "texte": "abonné"
+   },
+   {
+    "texte": "Ne plus suivre"
+   },
+   {
+    "texte": "Tu n’as encore rien publié. Crée un build, puis publie-le : il apparaîtra ici."
+   },
+   {
+    "texte": "Ce joueur n’a encore rien publié."
+   },
+   {
+    "texte": "Vérifie l’adresse, ou retourne à la liste des builds."
+   },
+   {
+    "texte": "Lien du profil copié."
+   },
+   {
+    "texte": "Supprimer ton compte ? Ton pseudo, ton avatar et tes abonnements seront effacés. Tes builds publiés restent en ligne, sans lien avec toi."
+   },
+   {
+    "texte": "Aucun joueur indiqué dans l’adresse."
+   },
+   {
+    "texte": "Ce joueur n’existe pas, ou son compte a été supprimé."
+   },
+   {
+    "texte": "Le profil n’a pas pu être chargé."
    }
   ],
   "progression.js": [

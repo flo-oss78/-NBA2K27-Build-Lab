@@ -18,7 +18,7 @@ import { fileURLToPath } from 'node:url';
 const RACINE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 process.chdir(RACINE);
 
-const PAGES = ['index.html', 'hub/index.html', 'reference/index.html', 'mon-build/index.html', 'mentions-legales/index.html', '404.html'];
+const PAGES = ['index.html', 'hub/index.html', 'reference/index.html', 'mon-build/index.html', 'u/index.html', 'mentions-legales/index.html', '404.html'];
 const SITE = 'https://lelabodesbuilds.com';
 const ATTRS_TEXTE = ['aria-label', 'placeholder', 'title', 'alt', 'content', 'value', 'label', 'data-libelle'];
 // Liens internes à préfixer. Les fichiers (police, image, script) restent partagés.

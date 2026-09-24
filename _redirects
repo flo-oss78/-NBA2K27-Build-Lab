@@ -11,3 +11,8 @@
 /progression    /mon-build/?onglet=progression  301
 /progression/   /mon-build/?onglet=progression  301
 /progression/*  /mon-build/?onglet=progression  301
+
+# Profils publics : une page par joueur, un seul fichier. Le slug est lu dans
+# l'adresse par profil.js. Statut 200 = on sert la page sans changer l'URL.
+/u/*     /u/index.html     200
+/en/u/*  /en/u/index.html  200

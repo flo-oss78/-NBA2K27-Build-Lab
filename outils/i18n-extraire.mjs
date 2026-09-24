@@ -20,7 +20,7 @@ const RACINE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 process.chdir(RACINE);
 const SORTIE = process.argv[2] || 'donnees/i18n-source.json';
 
-const PAGES = ['index.html', 'hub/index.html', 'reference/index.html', 'mon-build/index.html', 'mentions-legales/index.html', '404.html'];
+const PAGES = ['index.html', 'hub/index.html', 'reference/index.html', 'mon-build/index.html', 'u/index.html', 'mentions-legales/index.html', '404.html'];
 const ATTRS_TEXTE = ['aria-label', 'placeholder', 'title', 'alt', 'content', 'value', 'label', 'data-libelle'];
 
 // Un texte est « français » s'il porte un accent ou un mot outil du français.

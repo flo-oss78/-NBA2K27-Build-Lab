@@ -540,6 +540,30 @@ async function testsNavigateur(base) {
       });
     }
 
+    /* La page de profil est la même pour tous : le pseudo vient de l'adresse.
+       Sans slug, elle doit le dire proprement — et surtout ne pas rester sur
+       « Chargement… » indéfiniment, ni jeter une erreur dans la console. */
+    await test('la page de profil se charge et dit quand l’adresse ne désigne personne', async () => {
+      await nav.ouvrir(base + '/u/');
+      await new Promise(r => setTimeout(r, 900));
+      sansErreur('/u/');
+      const r = await nav.evaluer(`return {
+        titre: document.title,
+        nom: (document.getElementById('profilNom')||{}).textContent,
+        meta: (document.getElementById('profilMeta')||{}).textContent,
+        builds: (document.getElementById('profilBuilds')||{}).textContent,
+        suivreCache: (document.getElementById('profilSuivre')||{}).hidden,
+        compteCache: (document.getElementById('profilMonCompte')||{}).hidden,
+        legal: !!document.querySelector('a[href="/mentions-legales/"],a[href="/en/mentions-legales/"]')
+      }`);
+      verifier(r.titre, 'la page de profil n’a pas de titre');
+      verifier(!/Chargement/i.test(r.meta || ''), 'la page reste bloquée sur « Chargement… »');
+      verifier(!/Chargement/i.test(r.builds || ''), 'la liste des builds reste sur « Chargement… »');
+      verifier(r.suivreCache, 'le bouton « Suivre » s’affiche alors qu’aucun joueur n’est désigné');
+      verifier(r.compteCache, '« Mon compte » s’affiche sur un profil qui n’est pas le sien');
+      verifier(r.legal, 'la page de profil ne mène pas aux mentions légales');
+    });
+
     await test('le builder construit ses curseurs et recalcule', async () => {
       await nav.ouvrir(base + '/');
       const r = await nav.evaluer(`

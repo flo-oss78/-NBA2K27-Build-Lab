@@ -21,7 +21,7 @@ process.chdir(RACINE);
 
 const PROD = process.argv.includes('--prod');
 const BASE_PROD = 'https://lelabodesbuilds.com';
-const PAGES = ['/en/', '/en/hub/', '/en/reference/', '/en/mon-build/', '/en/mentions-legales/'];
+const PAGES = ['/en/', '/en/hub/', '/en/reference/', '/en/mon-build/', '/en/u/', '/en/mentions-legales/'];
 const pause = ms => new Promise(r => setTimeout(r, ms));
 
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',

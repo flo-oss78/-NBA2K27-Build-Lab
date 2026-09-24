@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#060608">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="A player's profile on Le Labo des Builds: their published NBA 2K27 builds, bodies and badges.">
+<title>A player's profile — Le Labo des Builds</title>
+
+<!-- Une page par joueur, mais un seul fichier : le slug est lu dans l'adresse
+     et le contenu vient de /api/profil. Tant que la page n'est pas rendue côté
+     serveur, elle n'a rien à donner à un moteur de recherche : noindex évite
+     de faire indexer une coquille vide sous chaque pseudo. -->
+<meta name="robots" content="noindex,follow">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="preload" href="/fonts/BarlowCondensed-800.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/theme.css">
+<link rel="stylesheet" href="/hq.css">
+
+<meta property="og:title" content="A player's profile — Le Labo des Builds">
+<meta property="og:description" content="The NBA 2K27 builds published by this player.">
+<meta property="og:type" content="profile">
+<meta property="og:url" content="https://lelabodesbuilds.com/en/u/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lelabodesbuilds.com/partage.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Build Lab NBA 2K27: 340 bodies recorded, 94% exact maximums, 53 badges, over 2,500 animations.">
+<meta property="og:site_name" content="Build Lab">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://lelabodesbuilds.com/partage.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="reference-header">
+  <div class="reference-brand">
+    <div>BUILD <b>LAB</b></div>
+    <small>NBA 2K27</small>
+  </div>
+  <nav class="reference-nav" aria-label="Main navigation">
+    <a href="/en/" data-nav="creer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Create</a>
+    <a href="/en/hub/" data-nav="builds"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Builds</a>
+    <a href="/en/reference/" data-nav="badges"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/></svg>Badges</a>
+    <a href="/en/reference/?onglet=animations" data-nav="animations"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c2 2 3 5 3 8s-1 6-3 8M12 4c-2 2-3 5-3 8s1 6 3 8"/></svg>Animations</a>
+    <a href="/en/mon-build/" data-nav="monbuild"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>My build</a>
+  </nav>
+  <div class="mode-switch header-mode" role="group" aria-label="Display level">
+    <button id="modeSimple" type="button" class="mode-btn" aria-pressed="true">Simple</button>
+    <button id="modeExpert" type="button" class="mode-btn" aria-pressed="false">Expert</button>
+  </div>
+  <div class="reference-actions">
+    <div id="compteZone" class="compte-zone" hidden></div>
+    <a class="lang-switch" href="/u/" hreflang="fr" lang="fr" title="Version française">FR</a>
+    <span id="referenceVersion">V26.26</span>
+    <button id="referenceSettings" type="button" aria-label="Open settings" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.9 19.3a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.7 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.56V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.56 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main" class="hq-page-profil">
+
+  <!-- Rempli par profil.js. Le squelette reste dans le HTML pour que la page
+       ait une forme avant la réponse de l'API, plutôt qu'un écran blanc. -->
+  <section class="panel profil-tete" aria-labelledby="profilNom">
+    <div class="profil-identite">
+      <div id="profilAvatar" class="profil-avatar" aria-hidden="true"></div>
+      <div>
+        <h1 id="profilNom">Profile</h1>
+        <p id="profilMeta" class="profil-meta">Chargement…</p>
+      </div>
+    </div>
+    <div class="profil-actions">
+      <button type="button" id="profilSuivre" class="hq-pilule hq-pilule-forte" hidden></button>
+      <button type="button" id="profilPartager" class="hq-pilule" hidden>Copy link</button>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="profilBuildsTitre">
+    <div class="exact-card-title"><h2 id="profilBuildsTitre">Published builds</h2><span id="profilBuildsCompte"></span></div>
+    <div id="profilBuilds" class="profil-builds" role="status">Chargement…</div>
+  </section>
+
+  <!-- N'apparaît que sur son propre profil. -->
+  <section class="panel profil-compte" id="profilMonCompte" hidden aria-labelledby="profilMonCompteTitre">
+    <div class="exact-card-title"><h2 id="profilMonCompteTitre">My account</h2></div>
+    <p class="profil-compte-texte">What the site keeps about you: your Discord name, your avatar and an identifier, so it recognises you next time. No email, no password.</p>
+    <p class="profil-compte-texte">Deleting your account erases all of that, along with who you follow. The builds you published stay online but are no longer linked to you: write to us if you want them removed too.</p>
+    <button type="button" id="profilSupprimer" class="hq-pilule profil-danger">Delete my account</button>
+  </section>
+
+</main>
+
+<footer>
+  <p>NBA 2K27 Build Lab — independent tool, public data, no official affiliation with 2K.</p>
+  <p class="footer-legal"><a href="/en/mentions-legales/">Legal notice and privacy</a> · <a href="mailto:contact@lelabodesbuilds.com">Report a data error</a></p>
+</footer>
+
+<script src="/site-config.js"></script>
+<script src="/compte.js"></script>
+<script src="/ui.js"></script>
+<script src="/profil.js"></script>
+<script src="/i18n-en.js"></script>
+<script src="/i18n.js"></script>
+</body>
+</html>
