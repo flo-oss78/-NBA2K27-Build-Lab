@@ -1,10 +1,18 @@
 {
- "genere": "2026-09-16",
+ "genere": "2026-09-24",
  "note": "Source unique des textes à traduire. Régénérer après toute modification des textes français.",
  "pages": {
   "index.html": [
    {
+    "texte": "Le Labo des Builds — builder NBA 2K27",
+    "ou": "texte"
+   },
+   {
     "texte": "Aller au contenu",
+    "ou": "texte"
+   },
+   {
+    "texte": "LE LABO",
     "ou": "texte"
    },
    {
@@ -152,7 +160,15 @@
     "ou": "texte"
    },
    {
-    "texte": "0 / 21 au cap",
+    "texte": "1 / 21 au cap",
+    "ou": "texte"
+   },
+   {
+    "texte": "Build vierge : aucun point d'attribut dépensé. Monte les attributs que tu veux, ou",
+    "ou": "texte"
+   },
+   {
+    "texte": "pars d'un exemple",
     "ou": "texte"
    },
    {
@@ -188,7 +204,7 @@
     "ou": "texte"
    },
    {
-    "texte": "brise-plafonds planifiés",
+    "texte": "Cap Breakers planifiés",
     "ou": "texte"
    },
    {
@@ -456,7 +472,7 @@
     "ou": "content"
    },
    {
-    "texte": "Build Lab — crée ton build NBA 2K27",
+    "texte": "Le Labo des Builds — crée ton build NBA 2K27",
     "ou": "content"
    },
    {
@@ -507,6 +523,10 @@
    },
    {
     "texte": "Aller au contenu",
+    "ou": "texte"
+   },
+   {
+    "texte": "LE LABO",
     "ou": "texte"
    },
    {
@@ -732,6 +752,10 @@
     "ou": "texte"
    },
    {
+    "texte": "LE LABO",
+    "ou": "texte"
+   },
+   {
     "texte": "Créer",
     "ou": "texte"
    },
@@ -890,11 +914,15 @@
   ],
   "mon-build/index.html": [
    {
-    "texte": "Mon build NBA 2K27 — fiche, brise-plafonds et progression",
+    "texte": "Mon build NBA 2K27 — fiche, Cap Breakers et progression",
     "ou": "texte"
    },
    {
     "texte": "Aller au contenu",
+    "ou": "texte"
+   },
+   {
+    "texte": "LE LABO",
     "ou": "texte"
    },
    {
@@ -906,7 +934,7 @@
     "ou": "texte"
    },
    {
-    "texte": "Le dernier build que tu as créé ou importé : décris-le, planifie ses brise-plafonds, prépare ses badges et suis sa progression. Tout reste enregistré sur cet appareil.",
+    "texte": "Le dernier build que tu as créé ou importé : décris-le, planifie ses Cap Breakers, prépare ses badges et suis sa progression. Tout reste enregistré sur cet appareil.",
     "ou": "texte"
    },
    {
@@ -938,7 +966,7 @@
     "ou": "texte"
    },
    {
-    "texte": "brise-plafonds planifiés",
+    "texte": "Cap Breakers planifiés",
     "ou": "texte"
    },
    {
@@ -970,11 +998,19 @@
     "ou": "texte"
    },
    {
-    "texte": "Choisis les attributs sur lesquels investir tes brise-plafonds (Cap Breakers). Les gains réels dépendent des règles du jeu.",
+    "texte": "Choisis les attributs sur lesquels investir tes Cap Breakers. Les gains réels dépendent des règles du jeu.",
     "ou": "texte"
    },
    {
-    "texte": "Ton build après tes brise-plafonds",
+    "texte": "Où les placer&nbsp;?",
+    "ou": "texte"
+   },
+   {
+    "texte": "Ce que chaque attribut ouvrirait au-dessus de son maximum. Un Cap Breaker lève le plafond : il faudra ensuite des points d’attributs pour atteindre la note.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Ton build après tes Cap Breakers",
     "ou": "texte"
    },
    {
@@ -990,7 +1026,7 @@
     "ou": "texte"
    },
    {
-    "texte": "Écris le chemin : quel brise-plafonds en premier, et pourquoi. C'est ce que les autres joueurs lisent en premier.",
+    "texte": "Écris le chemin : quel Cap Breakers en premier, et pourquoi. C'est ce que les autres joueurs lisent en premier.",
     "ou": "texte"
    },
    {
@@ -1066,6 +1102,10 @@
     "ou": "texte"
    },
    {
+    "texte": "1 / 21 au cap",
+    "ou": "texte"
+   },
+   {
     "texte": "NBA 2K27 Build Lab — outil indépendant, données publiques, aucune affiliation officielle avec 2K.",
     "ou": "texte"
    },
@@ -1098,7 +1138,7 @@
     "ou": "texte"
    },
    {
-    "texte": "Ton build NBA 2K27 au même endroit : sa fiche, le plan de brise-plafonds, les badges et leurs jetons, les takeovers et les quêtes.",
+    "texte": "Ton build NBA 2K27 au même endroit : sa fiche, le plan de Cap Breakers, les badges et leurs jetons, les takeovers et les quêtes.",
     "ou": "content"
    },
    {
@@ -1302,6 +1342,10 @@
   ],
   "404.html": [
    {
+    "texte": "Page introuvable — Le Labo des Builds",
+    "ou": "texte"
+   },
+   {
     "texte": "Créer",
     "ou": "texte"
    },
@@ -1360,7 +1404,67 @@
     "texte": "arrière 1,91 m, GNR 96"
    },
    {
+    "texte": "LockerCodes indique Driving Dunk 80, Standing Dunk 55 (6'5\\\" – 6'9\\\") : mêmes chiffres, sans les attributs que LockerCodes ne publie pas."
+   },
+   {
+    "texte": "LockerCodes indique Driving Dunk 70, Standing Dunk 75 (6'10\\\" – 7'4\\\") : mêmes chiffres, sans les attributs que LockerCodes ne publie pas."
+   },
+   {
+    "texte": "LockerCodes indique Driving Dunk 82, Standing Dunk 70 (5'9\\\" – 7'4\\\") : mêmes chiffres, sans les attributs que LockerCodes ne publie pas."
+   },
+   {
     "texte": "De'Aaron Fox"
+   },
+   {
+    "texte": "LockerCodes indique Driving Dunk 65, Standing Dunk 72 (5'9\\\" – 7'4\\\") : mêmes chiffres, sans les attributs que LockerCodes ne publie pas."
+   },
+   {
+    "texte": "LockerCodes indique Driving Dunk 75, Standing Dunk 70 (6'10\\\" – 7'4\\\") : mêmes chiffres, sans les attributs que LockerCodes ne publie pas."
+   },
+   {
+    "texte": "LockerCodes indique Driving Dunk 60, Standing Dunk 58 (6'5\\\" – 7'4\\\") : mêmes chiffres, sans les attributs que LockerCodes ne publie pas."
+   },
+   {
+    "texte": "LockerCodes indique Driving Dunk 65, Standing Dunk 75 (5'9\\\" – 7'4\\\") : mêmes chiffres, sans les attributs que LockerCodes ne publie pas."
+   },
+   {
+    "texte": "LockerCodes indique Driving Dunk 73, Standing Dunk 75 (5'9\\\" – 7'4\\\") : mêmes chiffres, sans les attributs que LockerCodes ne publie pas."
+   },
+   {
+    "texte": "LockerCodes indique Driving Dunk 82 (6'5\\\" – 6'9\\\") : mêmes chiffres, sans les attributs que LockerCodes ne publie pas."
+   },
+   {
+    "texte": "LockerCodes indique Driving Dunk 68, Standing Dunk 77 (6'10\\\" – 7'4\\\") : mêmes chiffres, sans les attributs que LockerCodes ne publie pas."
+   },
+   {
+    "texte": "LockerCodes indique Driving Dunk 75, Standing Dunk 85 (5'9\\\" – 7'4\\\") : mêmes chiffres, sans les attributs que LockerCodes ne publie pas."
+   },
+   {
+    "texte": "LockerCodes indique Driving Dunk 72, Standing Dunk 75 (6'10\\\" – 7'4\\\") : mêmes chiffres, sans les attributs que LockerCodes ne publie pas."
+   },
+   {
+    "texte": "LockerCodes indique Driving Dunk 72, Standing Dunk 70 (5'9\\\" – 7'4\\\") : mêmes chiffres, sans les attributs que LockerCodes ne publie pas."
+   },
+   {
+    "texte": "LockerCodes indique Driving Dunk 60, Standing Dunk 85 (6'10\\\" – 7'4\\\") : mêmes chiffres, sans les attributs que LockerCodes ne publie pas."
+   },
+   {
+    "texte": "LockerCodes indique Driving Dunk 84, Standing Dunk 40 (6'5\\\" – 7'4\\\") : mêmes chiffres, sans les attributs que LockerCodes ne publie pas."
+   },
+   {
+    "texte": "LockerCodes indique Driving Dunk 75, Standing Dunk 58 (6'5\\\" – 6'9\\\") : mêmes chiffres, sans les attributs que LockerCodes ne publie pas."
+   },
+   {
+    "texte": "LockerCodes indique Driving Dunk 62, Standing Dunk 71 (6'10\\\" – 7'4\\\") : mêmes chiffres, sans les attributs que LockerCodes ne publie pas."
+   },
+   {
+    "texte": "LockerCodes indique Driving Dunk 55, Standing Dunk 80 (6'10\\\" – 7'4\\\") : mêmes chiffres, sans les attributs que LockerCodes ne publie pas."
+   },
+   {
+    "texte": "LockerCodes indique Driving Dunk 82, Standing Dunk 70 (6'10\\\" – 7'4\\\") : mêmes chiffres, sans les attributs que LockerCodes ne publie pas."
+   },
+   {
+    "texte": "LockerCodes indique Driving Dunk 75, Standing Dunk 90 (6'10\\\" – 7'4\\\") : mêmes chiffres, sans les attributs que LockerCodes ne publie pas."
    },
    {
     "texte": "ou"
@@ -1485,6 +1589,21 @@
     "texte": "plus"
    },
    {
+    "texte": "et"
+   },
+   {
+    "texte": "de plus"
+   },
+   {
+    "texte": "Plus de points : baisse un autre attribut."
+   },
+   {
+    "texte": "Plus de points d’attributs : baisse un autre attribut pour monter celui-ci."
+   },
+   {
+    "texte": "Build d’exemple chargé. Tout reste modifiable."
+   },
+   {
     "texte": "Création"
    },
    {
@@ -1494,9 +1613,6 @@
     "texte": "Palier maximal pour ce badge."
    },
    {
-    "texte": "et"
-   },
-   {
     "texte": "Un seul de ces attributs suffit."
    },
    {
@@ -1504,6 +1620,9 @@
    },
    {
     "texte": "<div class=\"empty\">Aucun badge dans ce filtre.</div>"
+   },
+   {
+    "texte": "<li class=\"cb-placement-vide\">Aucun attribut n’ouvre de nouveau palier dans les 5 points au-dessus de son maximum.</li>"
    },
    {
     "texte": "Mêmes exigences chez NBA2KLab et LockerCodes"
@@ -1519,6 +1638,18 @@
    },
    {
     "texte": "<option value=\"all\">Toutes les catégories</option>"
+   },
+   {
+    "texte": "confirmée en jeu"
+   },
+   {
+    "texte": "aucune exigence connue dans cette catégorie"
+   },
+   {
+    "texte": "la plus exigeante de sa catégorie"
+   },
+   {
+    "texte": "la plus exigeante que ton build atteint"
    },
    {
     "texte": "<span class=\"anim-repere conseil\">Conseillée pour ton build</span>"
@@ -2384,6 +2515,20 @@
     "texte": "Validé"
    }
   ],
+  "compte.js": [
+   {
+    "texte": "<button type=\"button\" id=\"compteSortie\" class=\"compte-sortie\">Se déconnecter</button>"
+   },
+   {
+    "texte": "Connecté"
+   },
+   {
+    "texte": "Ce compte ne peut plus publier sur le site."
+   },
+   {
+    "texte": "La connexion Discord n’a pas abouti."
+   }
+  ],
   "data-registry.js": [
    {
     "texte": "53 badge definitions and tier thresholds are aligned with the public 2KFR table. This is an independent community source, not an official 2K publication; values can change with patches and should not be presented as official in-game verification."
@@ -2510,6 +2655,2279 @@
    },
    {
     "texte": "<div class=\"empty\">Sélectionne au moins 2 builds pour lancer la comparaison.</div>"
+   }
+  ],
+  "i18n-en.js": [
+   {
+    "texte": "Aller au contenu"
+   },
+   {
+    "texte": "Créer"
+   },
+   {
+    "texte": "Par où commencer&nbsp;?"
+   },
+   {
+    "texte": "Pars d'un modèle ou réponds à trois questions — tu ajusteras ensuite."
+   },
+   {
+    "texte": "Partir d'un trio"
+   },
+   {
+    "texte": "Répondre à 3 questions"
+   },
+   {
+    "texte": "Tout afficher"
+   },
+   {
+    "texte": "Première fois ?"
+   },
+   {
+    "texte": "Réponds à 3 questions, on te propose 3 builds prêts à jouer."
+   },
+   {
+    "texte": "Ton dernier build a été rouvert."
+   },
+   {
+    "texte": "Repartir de zéro"
+   },
+   {
+    "texte": "Meneur de jeu"
+   },
+   {
+    "texte": "Arrière"
+   },
+   {
+    "texte": "Points d’attributs utilisés :"
+   },
+   {
+    "texte": "Points d’attributs utilisés"
+   },
+   {
+    "texte": "Importer mon build du jeu"
+   },
+   {
+    "texte": "Copier le lien"
+   },
+   {
+    "texte": "Récap"
+   },
+   {
+    "texte": "Corps du joueur"
+   },
+   {
+    "texte": "Maximums selon le gabarit"
+   },
+   {
+    "texte": "Archétype"
+   },
+   {
+    "texte": "Style de jeu"
+   },
+   {
+    "texte": "Équilibré"
+   },
+   {
+    "texte": "Tir à 3 pts"
+   },
+   {
+    "texte": "Création de jeu"
+   },
+   {
+    "texte": "Défense"
+   },
+   {
+    "texte": "Intérieur"
+   },
+   {
+    "texte": "Enregistrer le build"
+   },
+   {
+    "texte": "Réinitialiser ce style"
+   },
+   {
+    "texte": "Style sélectionné"
+   },
+   {
+    "texte": "✓ Optimisé"
+   },
+   {
+    "texte": "Attaque le cercle, finition élite, crée de l'espace et peut finir en force."
+   },
+   {
+    "texte": "Attributs optimisés"
+   },
+   {
+    "texte": "Meilleurs badges sélectionnés"
+   },
+   {
+    "texte": "Animations recommandées"
+   },
+   {
+    "texte": "Réglages adaptés à la taille et au poste"
+   },
+   {
+    "texte": "Changer de style"
+   },
+   {
+    "texte": "Les dimensions modifient les plafonds d'attributs. Les caps affichés simulent le builder 2K27&nbsp;: modèle indicatif, non officiel."
+   },
+   {
+    "texte": "(optimisés Slasher)"
+   },
+   {
+    "texte": "0 / 21 au cap"
+   },
+   {
+    "texte": "Voir tous les badges"
+   },
+   {
+    "texte": "Takeovers conseillés"
+   },
+   {
+    "texte": "Animations conseillées"
+   },
+   {
+    "texte": "Toutes les animations"
+   },
+   {
+    "texte": "Pour chaque catégorie, l’animation la plus exigeante que ton build peut équiper à sa taille. Règle du site, pas un classement officiel."
+   },
+   {
+    "texte": "Résumé du build"
+   },
+   {
+    "texte": "Moyenne de tes attributs par secteur. Ce n’est pas la note globale (GNR) du jeu, que 2K calcule autrement."
+   },
+   {
+    "texte": "badges à portée"
+   },
+   {
+    "texte": "Cap Breakers planifiés"
+   },
+   {
+    "texte": "badges dans le jeu"
+   },
+   {
+    "texte": "animations dans la base"
+   },
+   {
+    "texte": "Optimiser ce build"
+   },
+   {
+    "texte": "Tout réinitialiser"
+   },
+   {
+    "texte": "Le jeu n’affiche pas combien de points d’attributs il te reste. On l’estime en comparant ton build à de vrais builds montés au maximum (99) ; la zone claire montre la marge d’erreur."
+   },
+   {
+    "texte": "Garder ton build"
+   },
+   {
+    "texte": "Builds réels proches"
+   },
+   {
+    "texte": "même poste, taille ±1"
+   },
+   {
+    "texte": "Données badges et animations : sources publiques vérifiées par la communauté."
+   },
+   {
+    "texte": "Les caps du builder restent un modèle indicatif, sans validation officielle de 2K."
+   },
+   {
+    "texte": "Style appliqué automatiquement"
+   },
+   {
+    "texte": "Comprends ton build avant de dépenser tes VC"
+   },
+   {
+    "texte": "Ton identité de joueur, les prochains paliers utiles et les profils NBA 2K27 les plus proches."
+   },
+   {
+    "texte": "Identité"
+   },
+   {
+    "texte": "Modifie tes attributs pour construire ton identité."
+   },
+   {
+    "texte": "Le moteur cherche le prochain palier utile."
+   },
+   {
+    "texte": "Ce que tu gagnes maintenant"
+   },
+   {
+    "texte": "Tu ressembles à qui ?"
+   },
+   {
+    "texte": "Référence NBA 2K27"
+   },
+   {
+    "texte": "Les profils joueurs viennent de 2KRatings. Le matching est un indicateur de similarité, pas une promesse qu'un MyPLAYER reproduira exactement un joueur NBA."
+   },
+   {
+    "texte": "Pourquoi ce résultat ?"
+   },
+   {
+    "texte": "Décris le joueur que tu veux"
+   },
+   {
+    "texte": "Écris ton objectif en français. Le moteur extrait les contraintes détectables, construit plusieurs compromis et explique ce qu'il sacrifie."
+   },
+   {
+    "texte": "Local, sans compte"
+   },
+   {
+    "texte": "Générer mes builds"
+   },
+   {
+    "texte": "Créateur"
+   },
+   {
+    "texte": "Big défensif"
+   },
+   {
+    "texte": "Décris ton joueur, puis lance l'analyse."
+   },
+   {
+    "texte": "Vérification du build"
+   },
+   {
+    "texte": "Le moteur contrôle le gabarit, les caps, les badges et les animations présentes dans la base embarquée."
+   },
+   {
+    "texte": "Attributs et caps"
+   },
+   {
+    "texte": "À savoir :"
+   },
+   {
+    "texte": "ce validateur garantit la cohérence avec les règles de données intégrées au site. Il ne peut pas promettre une exactitude officielle tant que 2K ne publie pas les tables internes des caps du builder 2K27. Les règles non documentées sont signalées comme"
+   },
+   {
+    "texte": "this checker guarantees consistency with the data rules built into the site. It cannot promise official accuracy as long as 2K does not publish the internal tables behind the 2K27 builder. Undocumented rules are flagged as"
+   },
+   {
+    "texte": "Analyse automatique du build"
+   },
+   {
+    "texte": "Style recommandé"
+   },
+   {
+    "texte": "Profil NBA 2K27 de référence"
+   },
+   {
+    "texte": "Compatibilité"
+   },
+   {
+    "texte": "Exporter la fiche"
+   },
+   {
+    "texte": "Tout contrôler avant de dépenser tes VC"
+   },
+   {
+    "texte": "Qualité du build, reproductibilité et points encore incertains, au même endroit."
+   },
+   {
+    "texte": "Le moteur combine cohérence du gabarit, caps, badges et animations."
+   },
+   {
+    "texte": "Couverture des données"
+   },
+   {
+    "texte": "badges intégrés"
+   },
+   {
+    "texte": "animations intégrées"
+   },
+   {
+    "texte": "règles vérifiées"
+   },
+   {
+    "texte": "règles indicatives"
+   },
+   {
+    "texte": "Checklist de reproductibilité"
+   },
+   {
+    "texte": "Ce qui peut encore changer"
+   },
+   {
+    "texte": "La règle simple"
+   },
+   {
+    "texte": "Corps → secteur de jeu → note → palier → badges et animations. Tu n'as pas besoin de connaître NBA 2K pour comprendre le builder."
+   },
+   {
+    "texte": "3. Vérifie"
+   },
+   {
+    "texte": "Le builder en une page"
+   },
+   {
+    "texte": "Taille, poids et envergure recalculent les plafonds."
+   },
+   {
+    "texte": "Bronze, Argent, Or et Hall of Fame selon les seuils disponibles."
+   },
+   {
+    "texte": "Bronze, Silver, Gold and Hall of Fame, based on the available thresholds."
+   },
+   {
+    "texte": "Dunks, layups, dribbles, tirs, passes et motion styles."
+   },
+   {
+    "texte": "Les spécialisations qui correspondent à ton profil."
+   },
+   {
+    "texte": "Builds NBA 2K27 — builds réels, trios et communauté"
+   },
+   {
+    "texte": "Trouve un build qui marche"
+   },
+   {
+    "texte": "Des builds réels à 99, des trios de joueurs et les builds de la communauté. Ouvre celui qui te plaît directement dans le builder."
+   },
+   {
+    "texte": "Builds réels"
+   },
+   {
+    "texte": "Communauté"
+   },
+   {
+    "texte": "Tous les postes"
+   },
+   {
+    "texte": "Toutes les tailles"
+   },
+   {
+    "texte": "Toutes les sources"
+   },
+   {
+    "texte": "Modèles officiels 2K"
+   },
+   {
+    "texte": "Builds complets à 99"
+   },
+   {
+    "texte": "Afficher plus"
+   },
+   {
+    "texte": "Dans NBA 2K27, les Signature Blueprints façonnent un build à partir de trois joueurs NBA et WNBA. Ici, choisis trois joueurs plutôt que vingt-deux curseurs."
+   },
+   {
+    "texte": "Toutes les disciplines"
+   },
+   {
+    "texte": "Création"
+   },
+   {
+    "texte": "Les trios sont un"
+   },
+   {
+    "texte": "modèle indicatif"
+   },
+   {
+    "texte": "construit à partir des profils publics des joueurs. 2K ne publie pas la table officielle des Signature Blueprints : pour les vrais modèles du jeu, regarde l'onglet Builds réels, source « Modèles officiels 2K »."
+   },
+   {
+    "texte": "Les builds publiés par les joueurs : filtre, compare jusqu'à trois builds et partage-les par lien."
+   },
+   {
+    "texte": "Tous les styles"
+   },
+   {
+    "texte": "Builds validés seulement"
+   },
+   {
+    "texte": "Avec Cap Breakers"
+   },
+   {
+    "texte": "Réinitialiser"
+   },
+   {
+    "texte": "Les builds publiés sur le serveur sont visibles par toute la communauté. Si le serveur n'est pas encore configuré, le site bascule automatiquement en mode local."
+   },
+   {
+    "texte": "Builds published on the server are visible to everyone. If the server is not set up yet, the site falls back to local mode automatically."
+   },
+   {
+    "texte": "Compare jusqu'à trois builds côte à côte."
+   },
+   {
+    "texte": "Badges NBA 2K27 — paliers, exigences et animations"
+   },
+   {
+    "texte": "Les 53 badges de NBA 2K27"
+   },
+   {
+    "texte": "Chaque badge avec son nom officiel en français, ce qu’il fait, les notes demandées pour chaque palier et ce qu’il te manque pour monter."
+   },
+   {
+    "texte": "Tous les badges"
+   },
+   {
+    "texte": "Pas encore accessibles"
+   },
+   {
+    "texte": "Vérifié communauté"
+   },
+   {
+    "texte": ", ce n'est pas une donnée officielle 2K."
+   },
+   {
+    "texte": "Classés selon ton build : 100 % veut dire que l’attribut déclencheur atteint la note demandée."
+   },
+   {
+    "texte": "Plus de 2 500 animations avec les notes et la taille demandées. Chaque carte compare avec ton build et dit ce qu’il te manque."
+   },
+   {
+    "texte": "Toutes les catégories"
+   },
+   {
+    "texte": "Toutes"
+   },
+   {
+    "texte": "Conseillées pour ton build"
+   },
+   {
+    "texte": "Conseillée pour ton build"
+   },
+   {
+    "texte": ": dans chaque catégorie, l’animation la plus exigeante que ton build peut équiper à sa taille, souvent la plus complète."
+   },
+   {
+    "texte": "À débloquer ensuite"
+   },
+   {
+    "texte": ": la plus proche au-dessus. C’est une règle du site, pas un classement officiel ni un test de performance (les bases de tir du créateur de tir ne sont pas concernées)."
+   },
+   {
+    "texte": "Mon build NBA 2K27 — fiche, Cap Breakers et progression"
+   },
+   {
+    "texte": "Ton build, de la fiche aux quêtes"
+   },
+   {
+    "texte": "Le dernier build que tu as créé ou importé : décris-le, planifie ses Cap Breakers, prépare ses badges et suis sa progression. Tout reste enregistré sur cet appareil."
+   },
+   {
+    "texte": "The last build you created or imported: describe it, plan its cap breakers, prepare its badges and follow its progress. Everything stays on this device."
+   },
+   {
+    "texte": "Aucun build pour l’instant"
+   },
+   {
+    "texte": "Crée ton build dans le builder, ou recopie celui du jeu : il apparaîtra ici avec sa fiche et sa progression."
+   },
+   {
+    "texte": "Créer mon build"
+   },
+   {
+    "texte": "Partir d’un build réel"
+   },
+   {
+    "texte": "Aperçu"
+   },
+   {
+    "texte": "Modifier dans le builder"
+   },
+   {
+    "texte": "Fiche de build"
+   },
+   {
+    "texte": "Ce que les autres verront"
+   },
+   {
+    "texte": "Décris ton build, choisis les modes où il brille, et colle ton lien NBA 2K HQ pour que n'importe qui puisse l'importer en jeu d'un scan."
+   },
+   {
+    "texte": "Planifie tes +1 à +5"
+   },
+   {
+    "texte": "5 max par attribut"
+   },
+   {
+    "texte": "Choisis les attributs sur lesquels investir tes Cap Breakers (Cap Breakers). Les gains réels dépendent des règles du jeu."
+   },
+   {
+    "texte": "Choose which attributes to spend your cap breakers on. The real gains depend on the game's rules."
+   },
+   {
+    "texte": "Ton build après tes Cap Breakers"
+   },
+   {
+    "texte": "Prévisualisation locale : les valeurs proposées sont des scénarios, pas une reproduction des règles internes de 2K."
+   },
+   {
+    "texte": "Étape"
+   },
+   {
+    "texte": "Dans quel ordre les appliquer"
+   },
+   {
+    "texte": "Écris le chemin : quel Cap Breakers en premier, et pourquoi. C'est ce que les autres joueurs lisent en premier."
+   },
+   {
+    "texte": "Vue par discipline"
+   },
+   {
+    "texte": "En couleur, les badges atteignables à leur meilleur palier avec ces attributs et cette taille. Barrés, ceux hors de portée pour ce build."
+   },
+   {
+    "texte": "Prépare plusieurs combinaisons de badges"
+   },
+   {
+    "texte": "Nouveau en 2K27 : on sauvegarde plusieurs loadouts et on change l'actif avant l'engagement pour contrer la taille ou le style d'un adversaire, sans quitter le menu."
+   },
+   {
+    "texte": "signale les badges dont NBA2KLab a publié un test. Les autres sont encore « test en attente » chez eux : leur effet réel n'est pas mesuré."
+   },
+   {
+    "texte": "Répartition des 20 emplacements"
+   },
+   {
+    "texte": "Les 20 emplacements sont disponibles immédiatement, mais il faut gagner des Badge Tokens pour les remplir. La progression est suivie par six compteurs alimentés par les performances en match, les entraînements d'équipe et les séances Gatorade."
+   },
+   {
+    "texte": "/ 20 emplacements planifiés"
+   },
+   {
+    "texte": "Fuse et Reaction"
+   },
+   {
+    "texte": "Le système compte 16 emplacements répartis entre Fuse Badges et Reaction Badges. Ensemble, ils poussent les badges au-delà de leur potentiel de base, jusqu'au tier Legend."
+   },
+   {
+    "texte": "Cinq emplacements, trois types de perk"
+   },
+   {
+    "texte": "Accelerator remplit la jauge plus vite, Longevity prolonge la capacité active, Overdrive augmente les bonus d'attributs."
+   },
+   {
+    "texte": "Spécialisation"
+   },
+   {
+    "texte": "Six pistes, dix quêtes chacune"
+   },
+   {
+    "texte": "Chaque piste donne des cosmétiques, des Cap Breakers, et un slot de Synergy permanent au niveau 10. Coche ce que tu as terminé : les slots gagnés apparaissent dans la Synergy."
+   },
+   {
+    "texte": "0 / 60 quêtes"
+   },
+   {
+    "texte": "Remettre à zéro"
+   },
+   {
+    "texte": "Mentions légales et confidentialité — Le Labo des Builds"
+   },
+   {
+    "texte": "Legal notice and privacy — Le Labo des Builds"
+   },
+   {
+    "texte": "Mentions légales et confidentialité"
+   },
+   {
+    "texte": "Dernière mise à jour : 16 septembre 2026."
+   },
+   {
+    "texte": "Qui édite ce site"
+   },
+   {
+    "texte": "Ce site est édité par un particulier, sous le pseudonyme"
+   },
+   {
+    "texte": "Le Labo des Builds"
+   },
+   {
+    "texte": ", qui le développe seul, sans but commercial."
+   },
+   {
+    "texte": ". C'est la seule adresse à utiliser pour toute demande : erreur de données, retrait d'un contenu, question juridique."
+   },
+   {
+    "texte": "Directeur de la publication : Le Labo des Builds. L'identité complète de l'éditeur est communiquée à l'hébergeur, conformément à la loi pour la confiance dans l'économie numérique."
+   },
+   {
+    "texte": "Publication director: Le Labo des Builds. The publisher's full identity is held by the host, as required by French law (LCEN)."
+   },
+   {
+    "texte": "Qui héberge ce site"
+   },
+   {
+    "texte": "Cloudflare, Inc. — 101 Townsend Street, San Francisco, CA 94107, États-Unis —"
+   },
+   {
+    "texte": "Ce que le site fait de tes données"
+   },
+   {
+    "texte": "Le site ne demande ni compte, ni inscription, ni mot de passe. Il n'affiche aucune publicité et n'utilise aucun pisteur publicitaire : il n'y a donc pas de bandeau cookies."
+   },
+   {
+    "texte": "Ton build reste chez toi."
+   },
+   {
+    "texte": "Il est enregistré dans la mémoire de ton navigateur (stockage local). Il n'est envoyé nulle part tant que tu ne publies pas."
+   },
+   {
+    "texte": "Build publié."
+   },
+   {
+    "texte": "Si tu utilises « Publier », le build (corps, attributs, nom, description) devient visible par tout le monde et reçoit une adresse publique. Tu peux demander sa suppression à tout moment par e-mail."
+   },
+   {
+    "texte": "Protection contre les abus."
+   },
+   {
+    "texte": "À chaque publication ou « j'aime », le site enregistre une empreinte chiffrée de ton adresse IP pour limiter le nombre d'envois par minute. Cette empreinte ne permet pas de retrouver ton adresse IP, et elle est effacée au bout d'une heure environ."
+   },
+   {
+    "texte": "Ils sont fermés. Les commentaires écrits avant cette fermeture restent visibles ; écris-nous pour en faire retirer un."
+   },
+   {
+    "texte": "Aucune donnée n'est vendue, louée ni transmise à un tiers à des fins publicitaires."
+   },
+   {
+    "texte": "Tu peux demander l'accès, la rectification ou la suppression de ce qui te concerne en écrivant à"
+   },
+   {
+    "texte": "D'où viennent les données du jeu"
+   },
+   {
+    "texte": "Relevés personnels :"
+   },
+   {
+    "texte": "les maximums d'attributs par corps sont relevés dans le builder du jeu et dans l'application NBA 2K HQ, puis vérifiés."
+   },
+   {
+    "texte": "Builds réels :"
+   },
+   {
+    "texte": "builds complets publiés par"
+   },
+   {
+    "texte": "Modèles officiels 2K (Signature Blueprints) :"
+   },
+   {
+    "texte": "relevés via"
+   },
+   {
+    "texte": "Les sources sont citées et liées sur les pages concernées. Tout ayant droit qui souhaite le retrait de ses données peut écrire à"
+   },
+   {
+    "texte": "Sources are credited and linked on the relevant pages. Any rights holder who wants their data removed can write to"
+   },
+   {
+    "texte": ": le retrait est effectué sans discussion préalable."
+   },
+   {
+    "texte": "Fiabilité des informations"
+   },
+   {
+    "texte": "Une partie des valeurs affichées est"
+   },
+   {
+    "texte": "estimée"
+   },
+   {
+    "texte": "à partir des corps relevés, et le site l'indique à chaque fois. Le jeu peut aussi changer ses règles à chaque mise à jour. Ce site ne garantit donc pas l'exactitude des informations et ne remplace pas le jeu."
+   },
+   {
+    "texte": "NBA 2K27, NBA 2K, MyPLAYER et NBA sont des marques de leurs détenteurs respectifs (2K, Take-Two Interactive, NBA Properties). Ce site est un outil indépendant réalisé par un joueur : il n'est ni affilié à 2K ou à la NBA, ni approuvé ou sponsorisé par eux. Aucune image ni aucun élément graphique du jeu n'est reproduit ici."
+   },
+   {
+    "texte": "Propriété du site"
+   },
+   {
+    "texte": "Le code, les textes et les icônes de ce site sont l'œuvre de son éditeur. Tu peux partager librement les liens de builds et les fiches produites par le site."
+   },
+   {
+    "texte": "The code, the texts and the icons on this site are the work of its publisher. You are free to share the build links and build sheets the site produces."
+   },
+   {
+    "texte": "Retour au builder"
+   },
+   {
+    "texte": "Cette page n’existe pas"
+   },
+   {
+    "texte": "L’adresse est peut-être mal écrite, ou la page a changé de place. Les « Blueprints », par exemple, s’appellent désormais les Trios."
+   },
+   {
+    "texte": "Ouvrir le builder"
+   },
+   {
+    "texte": "Partir d’un trio"
+   },
+   {
+    "texte": "Voir les builds"
+   },
+   {
+    "texte": "NBA 2K27 Build Lab — outil indépendant, données publiques, aucune affiliation officielle avec 2K."
+   },
+   {
+    "texte": "Pour les données de tir mesurées en laboratoire (green window, vitesse de tir, tests de badges), va voir"
+   },
+   {
+    "texte": ": leurs jumpers sont testés en Hall of Fame, sans boosts, sans badges et sans shot meter, sur une station automatisée. On ne cherche pas à refaire ça ici."
+   },
+   {
+    "texte": ": their jumpshots are tested on Hall of Fame, with no boosts, no badges and no shot meter, on an automated rig. We are not trying to redo that here."
+   },
+   {
+    "texte": "Signaler une erreur de données"
+   },
+   {
+    "texte": "Installe NBA 2K27 Build Lab sur ton téléphone."
+   },
+   {
+    "texte": "Install NBA 2K27 Build Lab on your phone."
+   },
+   {
+    "texte": "Plus tard"
+   },
+   {
+    "texte": "Une nouvelle version de Build Lab est disponible."
+   },
+   {
+    "texte": "Mettre à jour"
+   },
+   {
+    "texte": "Crée ton build NBA 2K27 : les maximums d’attributs de ton gabarit, les badges et les animations que tu peux vraiment équiper, comme dans le jeu."
+   },
+   {
+    "texte": "Build Lab — crée ton build NBA 2K27"
+   },
+   {
+    "texte": "Build Lab NBA 2K27 : 340 corps relevés, 94 % de maximums justes, 53 badges, plus de 2 500 animations."
+   },
+   {
+    "texte": "Plus de 3 600 builds NBA 2K27 montés au maximum, les modèles officiels 2K et des trios de joueurs, à ouvrir en un clic dans le builder."
+   },
+   {
+    "texte": "Les 53 badges NBA 2K27 avec leurs 4 niveaux et ce qu’il te manque pour les avoir, et plus de 2 500 animations avec la taille et les attributs qu’elles demandent."
+   },
+   {
+    "texte": "All 53 NBA 2K27 badges with their 4 tiers and what you are missing, plus over 2,500 animations with the height and attributes they require."
+   },
+   {
+    "texte": "Badges et animations NBA 2K27 — ce qu’il te manque"
+   },
+   {
+    "texte": "Ton build NBA 2K27 au même endroit : sa fiche, le plan de Cap Breakers, les badges et leurs jetons, les takeovers et les quêtes."
+   },
+   {
+    "texte": "Éditeur, hébergeur, données conservées, sources et contact du site Le Labo des Builds."
+   },
+   {
+    "texte": "Publisher, host, data kept, sources and contact for Le Labo des Builds."
+   },
+   {
+    "texte": "Ouvrir les réglages"
+   },
+   {
+    "texte": "Étapes du build"
+   },
+   {
+    "texte": "Styles de build"
+   },
+   {
+    "texte": "Rétablir"
+   },
+   {
+    "texte": "Rétablir (Ctrl+Maj+Z)"
+   },
+   {
+    "texte": "Décris ton joueur"
+   },
+   {
+    "texte": "Ex. Je veux un ailier 6'8 3&D, 90+ à 3 points, Gold Challenger, 85+ steal, bon handle et assez de dunk pour finir au cercle."
+   },
+   {
+    "texte": "Détail du build"
+   },
+   {
+    "texte": "Types de builds"
+   },
+   {
+    "texte": "Filtrer par poste"
+   },
+   {
+    "texte": "Filtrer par taille"
+   },
+   {
+    "texte": "Filtrer par source"
+   },
+   {
+    "texte": "Rechercher un build"
+   },
+   {
+    "texte": "Rechercher un nom de build…"
+   },
+   {
+    "texte": "Filtrer par discipline"
+   },
+   {
+    "texte": "Rechercher un trio ou un joueur"
+   },
+   {
+    "texte": "Rechercher un joueur ou un trio…"
+   },
+   {
+    "texte": "Rechercher un build…"
+   },
+   {
+    "texte": "Filtrer par style"
+   },
+   {
+    "texte": "Tri des builds"
+   },
+   {
+    "texte": "Catégories"
+   },
+   {
+    "texte": "Filtrer les badges"
+   },
+   {
+    "texte": "Rechercher un badge"
+   },
+   {
+    "texte": "Rechercher un badge…"
+   },
+   {
+    "texte": "Filtrer par catégorie"
+   },
+   {
+    "texte": "Filtrer par accessibilité"
+   },
+   {
+    "texte": "Rechercher une animation"
+   },
+   {
+    "texte": "Rechercher une animation…"
+   },
+   {
+    "texte": "Sections de mon build"
+   },
+   {
+    "texte": "Le Labo des Builds — builder NBA 2K27"
+   },
+   {
+    "texte": "Le Labo des Builds — crée ton build NBA 2K27"
+   },
+   {
+    "texte": "Page introuvable — Le Labo des Builds"
+   },
+   {
+    "texte": "Où les placer&nbsp;?"
+   },
+   {
+    "texte": "Ce que chaque attribut ouvrirait au-dessus de son maximum. Un Cap Breaker lève le plafond : il faudra ensuite des points d’attributs pour atteindre la note."
+   },
+   {
+    "texte": "Choisis les attributs sur lesquels investir tes Cap Breakers. Les gains réels dépendent des règles du jeu."
+   },
+   {
+    "texte": "Choose the attributes to spend your Cap Breakers on. The real gains depend on the game’s own rules."
+   },
+   {
+    "texte": "Terminer au cercle, layups, dunks et jeu au poste."
+   },
+   {
+    "texte": "Mid-range, trois points et lancer franc."
+   },
+   {
+    "texte": "Passe, dribble et création balle en main."
+   },
+   {
+    "texte": "Défense au cercle, périmètre, interceptions et contres."
+   },
+   {
+    "texte": "Rebond offensif et défensif."
+   },
+   {
+    "texte": "Vitesse, agilité, force et détente."
+   },
+   {
+    "texte": "plus"
+   },
+   {
+    "texte": "Non débloqué"
+   },
+   {
+    "texte": "Palier maximal pour ce badge."
+   },
+   {
+    "texte": "et"
+   },
+   {
+    "texte": "ou"
+   },
+   {
+    "texte": "Un seul de ces attributs suffit."
+   },
+   {
+    "texte": "Tous ces attributs sont requis."
+   },
+   {
+    "texte": "Aucun badge dans ce filtre."
+   },
+   {
+    "texte": "Mêmes exigences chez NBA2KLab et LockerCodes"
+   },
+   {
+    "texte": "Same requirements on NBA2KLab and LockerCodes"
+   },
+   {
+    "texte": "Pas de ligne correspondante chez LockerCodes"
+   },
+   {
+    "texte": "No matching entry on LockerCodes"
+   },
+   {
+    "texte": "⚠ Sources en désaccord"
+   },
+   {
+    "texte": "NBA2KLab et LockerCodes diffèrent : valeur NBA2KLab affichée"
+   },
+   {
+    "texte": "Exigences non confirmées : nos sources n’indiquent aucun attribut requis, le jeu peut en demander."
+   },
+   {
+    "texte": "Bloquée"
+   },
+   {
+    "texte": "Aucune animation dans ce filtre."
+   },
+   {
+    "texte": "Build sauvegardé sur cet appareil."
+   },
+   {
+    "texte": "Build saved on this device."
+   },
+   {
+    "texte": "Aucun build sauvegardé."
+   },
+   {
+    "texte": "Lien du build copié."
+   },
+   {
+    "texte": "Maximums des attributs exacts du jeu (corps relevé)"
+   },
+   {
+    "texte": "Maximums des attributs estimés"
+   },
+   {
+    "texte": ": justes à"
+   },
+   {
+    "texte": "d’écart"
+   },
+   {
+    "texte": "d’après des corps relevés"
+   },
+   {
+    "texte": "Maximums des attributs approximatifs : aucun corps assez proche relevé, écart possible de plusieurs points"
+   },
+   {
+    "texte": "Maximums des attributs de ton build importé du jeu"
+   },
+   {
+    "texte": "Réglages"
+   },
+   {
+    "texte": ". Toutes tes données (builds sauvegardés, cap breakers, jetons) restent sur cet appareil sauf si tu publies un build."
+   },
+   {
+    "texte": ". Everything you save (builds, cap breakers, tokens) stays on this device unless you publish a build."
+   },
+   {
+    "texte": "Données locales"
+   },
+   {
+    "texte": "Builds sauvegardés"
+   },
+   {
+    "texte": "Bibliothèque locale"
+   },
+   {
+    "texte": "API communauté"
+   },
+   {
+    "texte": "Effacer mes données locales"
+   },
+   {
+    "texte": "Effacer tous les builds et plans enregistrés sur cet appareil ?"
+   },
+   {
+    "texte": "Delete every build and plan saved on this device?"
+   },
+   {
+    "texte": "Sur iPhone : Partager, puis « Sur l’écran d’accueil » pour installer Build Lab."
+   },
+   {
+    "texte": "On iPhone: tap Share, then “Add to Home Screen” to install Build Lab."
+   },
+   {
+    "texte": "GNR : un nombre entier entre 25 et 99, ou vide."
+   },
+   {
+    "texte": "Impossible d’enregistrer l’import sur cet appareil (stockage refusé ou plein)."
+   },
+   {
+    "texte": "The import could not be saved on this device (storage blocked or full)."
+   },
+   {
+    "texte": "À corriger"
+   },
+   {
+    "texte": "Gabarit modifié"
+   },
+   {
+    "texte": "Les plafonds de ton jeu ne valent que pour le gabarit importé : le site est revenu à son estimation."
+   },
+   {
+    "texte": "Revenir au build importé"
+   },
+   {
+    "texte": "Démo locale"
+   },
+   {
+    "texte": "Aucun build sauvegardé ou publié depuis cet appareil pour l’instant."
+   },
+   {
+    "texte": "Aucun build ne correspond à ces filtres."
+   },
+   {
+    "texte": "Le hub est encore vide. Publie ton build pour ouvrir le bal."
+   },
+   {
+    "texte": "✓ Validé"
+   },
+   {
+    "texte": "⚠ À vérifier"
+   },
+   {
+    "texte": "Charger ce build"
+   },
+   {
+    "texte": "Copie ce lien :"
+   },
+   {
+    "texte": "Compose d’abord ton build dans le builder."
+   },
+   {
+    "texte": "Build ajouté à ta bibliothèque locale."
+   },
+   {
+    "texte": "Sélectionne au moins 2 builds pour lancer la comparaison."
+   },
+   {
+    "texte": "Compose d’abord ton build dans le builder, puis reviens le publier."
+   },
+   {
+    "texte": "✅ Build publié sur le serveur. Il est maintenant visible par tout le monde."
+   },
+   {
+    "texte": "⚠️ Serveur indisponible : le build a été sauvegardé localement."
+   },
+   {
+    "texte": "Pas encore de commentaire."
+   },
+   {
+    "texte": "Ce qui bouge en ce moment"
+   },
+   {
+    "texte": "Récents"
+   },
+   {
+    "texte": "Les derniers publiés"
+   },
+   {
+    "texte": "Les moyennes d’attributs les plus hautes (pas la note du jeu)"
+   },
+   {
+    "texte": "Les plus aimés et les plus vus"
+   },
+   {
+    "texte": "Sauvegardés ou publiés depuis cet appareil"
+   },
+   {
+    "texte": "Build de qualité"
+   },
+   {
+    "texte": "Validé"
+   },
+   {
+    "texte": "Remplit la jauge de Takeover plus vite."
+   },
+   {
+    "texte": "Prolonge la durée de la capacité active."
+   },
+   {
+    "texte": "Augmente les bonus d’attributs accordés."
+   },
+   {
+    "texte": "Marquer 50 points dans la peinture"
+   },
+   {
+    "texte": "Réussir 25 dunks en pénétration"
+   },
+   {
+    "texte": "Réussir 15 layups au contact"
+   },
+   {
+    "texte": "Marquer 10 fois après un écran"
+   },
+   {
+    "texte": "Réussir 20 finitions main faible"
+   },
+   {
+    "texte": "Réussir 10 alley-oops"
+   },
+   {
+    "texte": "Réussir 25 tirs au poste"
+   },
+   {
+    "texte": "Marquer 500 points au total"
+   },
+   {
+    "texte": "Rentrer 50 tirs à 3 points"
+   },
+   {
+    "texte": "Rentrer 20 tirs en sortie de dribble"
+   },
+   {
+    "texte": "Rentrer 15 tirs contestés"
+   },
+   {
+    "texte": "Rentrer 30 tirs à mi-distance"
+   },
+   {
+    "texte": "Rentrer 10 tirs de très loin"
+   },
+   {
+    "texte": "Réussir 40 lancers francs"
+   },
+   {
+    "texte": "Rentrer 5 tirs décisifs"
+   },
+   {
+    "texte": "Terminer 10 matchs à 50% ou plus"
+   },
+   {
+    "texte": "Rentrer 200 tirs au total"
+   },
+   {
+    "texte": "Délivrer 50 passes décisives"
+   },
+   {
+    "texte": "Réussir 25 passes lob"
+   },
+   {
+    "texte": "Provoquer 20 franchissements de cheville"
+   },
+   {
+    "texte": "Terminer 10 matchs sans perte de balle"
+   },
+   {
+    "texte": "Délivrer 15 assists en transition"
+   },
+   {
+    "texte": "Réussir 30 pick and roll"
+   },
+   {
+    "texte": "Délivrer 5 matchs à 10 assists"
+   },
+   {
+    "texte": "Réussir 40 dribbles gagnants"
+   },
+   {
+    "texte": "Créer 25 tirs ouverts"
+   },
+   {
+    "texte": "Délivrer 300 assists au total"
+   },
+   {
+    "texte": "Réussir 25 interceptions"
+   },
+   {
+    "texte": "Réussir 25 contres"
+   },
+   {
+    "texte": "Forcer 20 pertes de balle"
+   },
+   {
+    "texte": "Défendre 30 tirs contestés"
+   },
+   {
+    "texte": "Passer 40 écrans sans retard"
+   },
+   {
+    "texte": "Tenir un joueur sous 30% de réussite"
+   },
+   {
+    "texte": "Réussir 10 charges provoquées"
+   },
+   {
+    "texte": "Défendre 15 pick and roll"
+   },
+   {
+    "texte": "Terminer 5 matchs à 5 stops"
+   },
+   {
+    "texte": "Cumuler 200 actions défensives"
+   },
+   {
+    "texte": "Prendre 50 rebonds défensifs"
+   },
+   {
+    "texte": "Réussir 15 putbacks"
+   },
+   {
+    "texte": "Prendre 10 rebonds sur un même match"
+   },
+   {
+    "texte": "Réussir 30 box outs"
+   },
+   {
+    "texte": "Enchaîner 5 matchs à 10 rebonds"
+   },
+   {
+    "texte": "Réussir 10 tip-ins"
+   },
+   {
+    "texte": "Terminer 10 matchs sans fatigue critique"
+   },
+   {
+    "texte": "Gagner 30 duels de force"
+   },
+   {
+    "texte": "Réussir 25 sprints en contre-attaque"
+   },
+   {
+    "texte": "Tenir 40 minutes sur un match"
+   },
+   {
+    "texte": "Gagner 20 positions au poste"
+   },
+   {
+    "texte": "Réussir 15 blocs en verticalité"
+   },
+   {
+    "texte": "Enchaîner 5 matchs complets"
+   },
+   {
+    "texte": "Cumuler 100 actions athlétiques"
+   },
+   {
+    "texte": "Testé par NBA2KLab"
+   },
+   {
+    "texte": "Aucun badge accessible avec ce build. Monte des attributs pour débloquer des badges."
+   },
+   {
+    "texte": "Nom du loadout"
+   },
+   {
+    "texte": "Les emplacements sont remplis avec des Badge Tokens gagnés en match. Prépare plusieurs loadouts et change avant l’engagement selon l’adversaire."
+   },
+   {
+    "texte": "Slots are filled with Badge Tokens earned in games. Prepare several loadouts and switch before tip-off depending on your opponent."
+   },
+   {
+    "texte": "Renfort permanent : le badge dépasse son potentiel de base."
+   },
+   {
+    "texte": "Déclenché par une situation de jeu, jusqu’au tier Legend."
+   },
+   {
+    "texte": "Équipe d’abord des badges dans ton loadout."
+   },
+   {
+    "texte": "slots de Synergy utilisés"
+   },
+   {
+    "texte": "gagné"
+   },
+   {
+    "texte": "en spécialisation"
+   },
+   {
+    "texte": "Takeover du slot"
+   },
+   {
+    "texte": "(à atteindre)"
+   },
+   {
+    "texte": "/ 60 quêtes"
+   },
+   {
+    "texte": "Remettre toutes les quêtes à zéro ?"
+   },
+   {
+    "texte": "Build sauvegardé"
+   },
+   {
+    "texte": "Build publié"
+   },
+   {
+    "texte": "Trio appliqué"
+   },
+   {
+    "texte": "Loadout créé"
+   },
+   {
+    "texte": "Synergy planifiée"
+   },
+   {
+    "texte": "Quête cochée"
+   },
+   {
+    "texte": "Build partagé"
+   },
+   {
+    "texte": "Builds comparés"
+   },
+   {
+    "texte": "Premier pas"
+   },
+   {
+    "texte": "Sauvegarder un build"
+   },
+   {
+    "texte": "Appliquer 5 trios différents"
+   },
+   {
+    "texte": "Créer 3 loadouts de badges"
+   },
+   {
+    "texte": "Remplir 8 slots de Synergy"
+   },
+   {
+    "texte": "Spécialiste"
+   },
+   {
+    "texte": "Terminer une piste de spécialisation"
+   },
+   {
+    "texte": "Complétiste"
+   },
+   {
+    "texte": "Terminer les six pistes"
+   },
+   {
+    "texte": "Publier un build dans le hub"
+   },
+   {
+    "texte": "Au plafond"
+   },
+   {
+    "texte": "Atteindre le cap sur 5 attributs"
+   },
+   {
+    "texte": "Sans faiblesse"
+   },
+   {
+    "texte": "60+ dans les six disciplines"
+   },
+   {
+    "texte": "95+ au tir à 3 points"
+   },
+   {
+    "texte": "Le Mur"
+   },
+   {
+    "texte": "95+ en contre et défense intérieure"
+   },
+   {
+    "texte": "Succès débloqué :"
+   },
+   {
+    "texte": "Succès"
+   },
+   {
+    "texte": "Polyvalent, aucune faiblesse majeure, prêt à jouer dans plusieurs rôles."
+   },
+   {
+    "texte": "Tir à 3 points prioritaire, création secondaire et assez de mobilité pour rester dangereux."
+   },
+   {
+    "texte": "Création de jeu prioritaire : gros handle, vitesse balle en main et passe de haut niveau."
+   },
+   {
+    "texte": "Défense extérieure prioritaire : interception, mobilité et résistance physique."
+   },
+   {
+    "texte": "Intérieur dominant : protection du cercle, rebond, force et finition près du panier."
+   },
+   {
+    "texte": "Création / Tir"
+   },
+   {
+    "texte": "Création / Finition"
+   },
+   {
+    "texte": "recommandés"
+   },
+   {
+    "texte": "Pas encore dans notre base"
+   },
+   {
+    "texte": "Exigences non confirmées dans le jeu"
+   },
+   {
+    "texte": "Se règle dans le créateur de tirs"
+   },
+   {
+    "texte": "— à atteindre"
+   },
+   {
+    "texte": "(optimisés"
+   },
+   {
+    "texte": "Tu veux faire quoi sur le terrain ?"
+   },
+   {
+    "texte": "What do you want to do on the court?"
+   },
+   {
+    "texte": "Être la première option en attaque"
+   },
+   {
+    "texte": "Be the first option on offense"
+   },
+   {
+    "texte": "Faire jouer les autres, dribbler"
+   },
+   {
+    "texte": "Défendre"
+   },
+   {
+    "texte": "Gêner, intercepter, contrer"
+   },
+   {
+    "texte": "Dominer la peinture"
+   },
+   {
+    "texte": "Rebonds et finition au cercle"
+   },
+   {
+    "texte": "Tu marques d’où, surtout ?"
+   },
+   {
+    "texte": "De loin"
+   },
+   {
+    "texte": "Tir à 3 points"
+   },
+   {
+    "texte": "À mi-distance"
+   },
+   {
+    "texte": "Tir en sortie de dribble"
+   },
+   {
+    "texte": "Au cercle"
+   },
+   {
+    "texte": "Pénétrations et dunks"
+   },
+   {
+    "texte": "Au poste"
+   },
+   {
+    "texte": "Dos au panier"
+   },
+   {
+    "texte": "Petit et rapide"
+   },
+   {
+    "texte": "Moins de 6'5\\\""
+   },
+   {
+    "texte": "6'10\\\" et plus"
+   },
+   {
+    "texte": "sur"
+   },
+   {
+    "texte": "Trois builds pour toi"
+   },
+   {
+    "texte": "Chaque trio mélange trois joueurs réels. Choisis-en un : tous les attributs, badges et animations sont réglés automatiquement, et tu peux tout ajuster ensuite."
+   },
+   {
+    "texte": "Build de la semaine"
+   },
+   {
+    "texte": "Emplacements planifiés"
+   },
+   {
+    "texte": "Attribut à faire monter"
+   },
+   {
+    "texte": "Points gagnés"
+   },
+   {
+    "texte": "Ajouter une étape"
+   },
+   {
+    "texte": "points au total"
+   },
+   {
+    "texte": "Aucune étape. Ajoute les Cap Breakers dans l’ordre où tu conseilles de les appliquer — c’est ce que les autres joueurs liront en premier."
+   },
+   {
+    "texte": "Description du build"
+   },
+   {
+    "texte": "À quoi sert ce build, comment le jouer, ce qu’il sacrifie…"
+   },
+   {
+    "texte": "Modes conseillés"
+   },
+   {
+    "texte": "Style de jeu <small>(3 maximum)</small>"
+   },
+   {
+    "texte": "Inspiré par"
+   },
+   {
+    "texte": "NBA 2K27 génère un lien de partage depuis l’app NBA 2K HQ. Colle-le ici : le site en fera un QR scannable qui importe le build <strong>directement en jeu</strong>. Ce site ne peut pas fabriquer ce lien lui-même — seul 2K peut le produire."
+   },
+   {
+    "texte": "Lien de partage NBA 2K HQ"
+   },
+   {
+    "texte": "Ce lien ne vient pas de nba.2k.com. Vérifie que tu as bien copié le lien de partage depuis l’app NBA 2K HQ."
+   },
+   {
+    "texte": "Scanne ce code dans NBA 2K HQ pour importer le build en jeu."
+   },
+   {
+    "texte": "Lien trop long pour un QR ("
+   },
+   {
+    "texte": "). Partage le lien tel quel."
+   },
+   {
+    "texte": "). Share the link as it is."
+   },
+   {
+    "texte": "Retirer le trio"
+   },
+   {
+    "texte": "Utiliser ce trio"
+   },
+   {
+    "texte": "Aucun trio avec ces filtres. Élargis la recherche."
+   },
+   {
+    "texte": "table complète NBA 2K27"
+   },
+   {
+    "texte": "Données © NBA2KLab, reprises avec citation."
+   },
+   {
+    "texte": "recoupement ligne par ligne"
+   },
+   {
+    "texte": "Tables annoncées vérifiées sur la version du jeu du 3 septembre 2026."
+   },
+   {
+    "texte": "Tables stated as verified on the 3 September 2026 game version."
+   },
+   {
+    "texte": "Tirs : le jeu demande Mi-distance OU 3 pts. Un Spin Jumper Kyrie Irving (90) a été équipé avec 88 à mi-distance et 94 à 3 pts."
+   },
+   {
+    "texte": "arrière 1,91 m, GNR 96"
+   },
+   {
+    "texte": "Déplacement"
+   },
+   {
+    "texte": "Tir de très loin, sortie de dribble rapide, création en mouvement."
+   },
+   {
+    "texte": "Deep range, quick pull-ups, creating on the move."
+   },
+   {
+    "texte": "Contrôle du tempo, passe chirurgicale, mi-distance fiable."
+   },
+   {
+    "texte": "Vitesse pure balle en main, finition acrobatique au cercle."
+   },
+   {
+    "texte": "Défense de meneur agressive, interception, physique au-dessus du poste."
+   },
+   {
+    "texte": "Attaque au mi-poste, floaters, création de fautes."
+   },
+   {
+    "texte": "Catch and shoot pur, déplacement sans ballon, spacing maximal."
+   },
+   {
+    "texte": "Scoring complet et défense périmétrique solide. Le couteau suisse."
+   },
+   {
+    "texte": "Dunk en pénétration, alley-oops, verticalité explosive."
+   },
+   {
+    "texte": "Création isolée, handle élite, tir en sortie de dribble."
+   },
+   {
+    "texte": "Spécialiste défensif : mains rapides, passage d’écrans, 3 de coin."
+   },
+   {
+    "texte": "Scoring instantané en sortie de banc, tir profond et handle libre."
+   },
+   {
+    "texte": "Ailier créateur : ballon dans les mains, passe et poids au poste."
+   },
+   {
+    "texte": "Le standard moderne : 3 points fiable, défense multi-postes."
+   },
+   {
+    "texte": "Scoring à trois niveaux, tir par-dessus la défense."
+   },
+   {
+    "texte": "Pénétration en force, finition dans le contact, transition."
+   },
+   {
+    "texte": "Aucun trou : passe, rebond, défense de toutes tailles."
+   },
+   {
+    "texte": "Verticalité au sommet, lobs, rebond offensif."
+   },
+   {
+    "texte": "Défense d’élimination sur l’extérieur, mains énormes, mi-distance."
+   },
+   {
+    "texte": "Intérieur qui ouvre le terrain : 3 points et finition au cercle."
+   },
+   {
+    "texte": "Domination au rebond des deux côtés, deuxièmes chances."
+   },
+   {
+    "texte": "Dominates the glass on both ends, second chances."
+   },
+   {
+    "texte": "Défense de tous les postes, écrans solides, passe depuis le poste haut."
+   },
+   {
+    "texte": "Jeu au poste dominant, drop steps, finition en force."
+   },
+   {
+    "texte": "Intérieur passeur : le jeu passe par le poste haut."
+   },
+   {
+    "texte": "Envergure extrême, contres et tir extérieur sur le même joueur."
+   },
+   {
+    "texte": "Protection du cercle absolue, lobs, rebond défensif."
+   },
+   {
+    "texte": "Le centre de gravité de l’attaque : passe, poste, tir."
+   },
+   {
+    "texte": "The centre of gravity on offense: passing, post play, shooting."
+   },
+   {
+    "texte": "Roll vers le cercle, finition au-dessus du panier, deuxième chance."
+   },
+   {
+    "texte": "Pivot qui tire à 3 et protège quand même le cercle."
+   },
+   {
+    "texte": "Masse pure : écrans, rebond offensif, impossible à déplacer."
+   },
+   {
+    "texte": "Pivot capable de switcher sur un meneur sans perdre le cercle."
+   },
+   {
+    "texte": "Scoreur et meneur à parts égales, tir très loin."
+   },
+   {
+    "texte": "Tir extérieur et pénétration, avec une vraie défense."
+   },
+   {
+    "texte": "Rebond depuis l’extérieur, transition, défense sans relâche."
+   },
+   {
+    "texte": "Le build de passeur pur : assists, spacing, zéro perte."
+   },
+   {
+    "texte": "Intérieur de transition : lobs, rebond offensif, contres."
+   },
+   {
+    "texte": "Création de son propre tir en toutes situations."
+   },
+   {
+    "texte": "Écrans indéplaçables et défense intérieure maximale."
+   },
+   {
+    "texte": "Impact des deux côtés sans dépendre du ballon."
+   },
+   {
+    "texte": "Impact on both ends without needing the ball."
+   },
+   {
+    "texte": "Menace à 10 mètres du panier. Le spacing est l’arme."
+   },
+   {
+    "texte": "Badges liés"
+   },
+   {
+    "texte": "Coût en jetons relevé dans le jeu."
+   },
+   {
+    "texte": "Coût en jetons pas encore relevé pour ce badge."
+   },
+   {
+    "texte": "Aucun badge ne dépend de cet attribut."
+   },
+   {
+    "texte": "No badge depends on this attribute."
+   },
+   {
+    "texte": "Pas à ta taille"
+   },
+   {
+    "texte": "Aussi"
+   },
+   {
+    "texte": "Il te manque"
+   },
+   {
+    "texte": "Build réel à 99"
+   },
+   {
+    "texte": "Animations les plus exigeantes accessibles"
+   },
+   {
+    "texte": "écart moyen"
+   },
+   {
+    "texte": "Lien copié"
+   },
+   {
+    "texte": "Lien du build"
+   },
+   {
+    "texte": "QR code du build"
+   },
+   {
+    "texte": "BADGES CLÉS"
+   },
+   {
+    "texte": "BUILD COHÉRENT"
+   },
+   {
+    "texte": "BUILD À CORRIGER"
+   },
+   {
+    "texte": "ESTIMÉ"
+   },
+   {
+    "texte": "NON VÉRIFIÉ"
+   },
+   {
+    "texte": "VÉRIFIÉ EN JEU"
+   },
+   {
+    "texte": "VÉRIFIÉ COMMUNAUTÉ"
+   },
+   {
+    "texte": "Garder ce build"
+   },
+   {
+    "texte": "Toutes les notes"
+   },
+   {
+    "texte": "Modifier le build"
+   },
+   {
+    "texte": "Modèle officiel 2K"
+   },
+   {
+    "texte": "Build déjà optimisé"
+   },
+   {
+    "texte": "Ton build en un scan"
+   },
+   {
+    "texte": "Ouvrir dans le builder"
+   },
+   {
+    "texte": "Version de code inconnue"
+   },
+   {
+    "texte": "Scanne pour ouvrir ce build"
+   },
+   {
+    "texte": "QR indisponible pour ce build."
+   },
+   {
+    "texte": "Paliers calculés pour ton build"
+   },
+   {
+    "texte": "Modèle indicatif — non officiel 2K"
+   },
+   {
+    "texte": "Aucun build réel pour ce poste à cette taille."
+   },
+   {
+    "texte": "Aucun build avec ces filtres. Élargis la recherche."
+   },
+   {
+    "texte": "Aucun palier à 1 seul attribut n’est actuellement identifié."
+   },
+   {
+    "texte": "✅ Aucun conflit détecté avec les règles actuellement intégrées."
+   },
+   {
+    "texte": "🟢 Build cohérent avec les règles intégrées"
+   },
+   {
+    "texte": "🔴 Build non valide selon les règles intégrées"
+   },
+   {
+    "texte": "Maximums des attributs approximatifs : écart possible de plusieurs points"
+   },
+   {
+    "texte": "Monte un attribut ou change ton profil pour générer de nouveaux objectifs."
+   },
+   {
+    "texte": "Double-pas (normal, inversé, Floater, Scoop rapide, Eurostep, Hop Step, renversé)"
+   },
+   {
+    "texte": "Les caps sont indicatifs tant que les tables internes complètes de 2K27 ne sont pas publiées."
+   },
+   {
+    "texte": "Les paliers affichés sont ceux du build d’exemple. Crée ton build pour voir ce que tu débloques."
+   },
+   {
+    "texte": "Points d’attributs estimés en comparant ton build à ces builds réels : le jeu ne publie pas son calcul exact."
+   },
+   {
+    "texte": "Aucune contradiction détectée entre le gabarit, les caps calculés et les données de badges/animations embarquées."
+   },
+   {
+    "texte": "Le site a détecté au moins une contradiction. Corrige les points ci-dessous avant de considérer le build comme reproductible."
+   },
+   {
+    "texte": "The site detected at least one contradiction. Fix the points below before treating this build as reproducible."
+   },
+   {
+    "texte": "Données de badges/animations issues des tables embarquées. Les caps, coûts et compromis non publiés officiellement restent indicatifs."
+   },
+   {
+    "texte": "Le QR contient le build complet. Sur NBA 2K27 tu peux préparer un build sur mobile puis le retrouver sur console — ici c’est le même principe entre toi et tes amis."
+   },
+   {
+    "texte": "The QR holds the whole build. In NBA 2K27 you can set a build up on mobile then pick it up on console — same idea here, between you and your friends."
+   },
+   {
+    "texte": "NBA 2K27 génère un lien de partage depuis l’app NBA 2K HQ. Colle-le ici : le site en fera un QR scannable qui importe le build"
+   },
+   {
+    "texte": ". Ce site ne peut pas fabriquer ce lien lui-même — seul 2K peut le produire."
+   },
+   {
+    "texte": "). Ouvre-en un dans le builder pour voir ses badges et ses animations."
+   },
+   {
+    "texte": "recoupement des corps autorisés"
+   },
+   {
+    "texte": "builds complets à 99 (exemples de noms de build)"
+   },
+   {
+    "texte": "corps autorisés par poste et par taille (vérifiés dans le jeu)"
+   },
+   {
+    "texte": "plafonds exacts de 339 corps, relevés dans le builder officiel (donnees/caps-2khq.json)"
+   },
+   {
+    "texte": "LockerCodes : vérifié sur la version du jeu du 3 septembre 2026"
+   },
+   {
+    "texte": "NBA2KLab (table complète), recoupée ligne par ligne avec LockerCodes"
+   },
+   {
+    "texte": "Généré par outils/importer-animations.mjs. Données © NBA2KLab, reprises avec citation. Chaque entrée indique son recoupement (animations.js : v, note, jeu) ; ANIMATIONS_SOURCE donne les totaux."
+   },
+   {
+    "texte": "Prêt à être vérifié dans le jeu"
+   },
+   {
+    "texte": "Très bon niveau de cohérence"
+   },
+   {
+    "texte": "Build à corriger"
+   },
+   {
+    "texte": "COHÉRENT"
+   },
+   {
+    "texte": "À VÉRIFIER"
+   },
+   {
+    "texte": "Pas encore"
+   },
+   {
+    "texte": "Démo"
+   },
+   {
+    "texte": "Ajoute un build depuis le Build Hub"
+   },
+   {
+    "texte": "Équipée sur un vrai MyPLAYER dont les attributs respectent cette exigence"
+   },
+   {
+    "texte": "Equipped on a real MyPLAYER whose attributes meet this requirement"
+   },
+   {
+    "texte": "Confirmée en jeu"
+   },
+   {
+    "texte": "Badges liés à l’attribut choisi"
+   },
+   {
+    "texte": "Aucun conflit détecté dans les règles actuellement intégrées. Les règles non publiées restent signalées séparément."
+   },
+   {
+    "texte": "Corrige les points rouges ci-dessous avant de considérer le build comme reproductible."
+   },
+   {
+    "texte": "Fix the red points below before treating this build as reproducible."
+   },
+   {
+    "texte": "Caps internes exacts : non publiés comme table complète."
+   },
+   {
+    "texte": "Exact internal caps: not published as a complete table."
+   },
+   {
+    "texte": "La moyenne affichée n’est pas la note globale (GNR) du jeu."
+   },
+   {
+    "texte": "La base d’animations embarquée n’est pas une exportation exhaustive."
+   },
+   {
+    "texte": "Les systèmes de progression (Synergie / Tokens / Takeovers) sont affichés séparément des règles de caps."
+   },
+   {
+    "texte": "Une validation verte signifie « cohérent avec la base intégrée », pas « garantie officielle 2K »."
+   },
+   {
+    "texte": "Données communautaires, pas une publication officielle 2K."
+   },
+   {
+    "texte": "Améliorations d’attribut"
+   },
+   {
+    "texte": "Une valeur actuelle au-dessus du Max vient des Cap Breakers : 5 au plus par attribut."
+   },
+   {
+    "texte": "Télécharger la carte"
+   },
+   {
+    "texte": "Télécharger le QR"
+   },
+   {
+    "texte": "de"
+   },
+   {
+    "texte": "Plus de points d’attributs : baisse un autre attribut pour monter celui-ci."
+   },
+   {
+    "texte": "confirmée en jeu"
+   },
+   {
+    "texte": "la plus exigeante de sa catégorie"
+   },
+   {
+    "texte": "la plus exigeante que ton build atteint"
+   },
+   {
+    "texte": "aucune exigence connue dans cette catégorie"
+   },
+   {
+    "texte": "Aucun attribut n’ouvre de nouveau palier dans les 5 points au-dessus de son maximum."
+   },
+   {
+    "texte": "Se déconnecter"
+   },
+   {
+    "texte": "La connexion Discord n’a pas abouti."
+   },
+   {
+    "texte": "Ce compte ne peut plus publier sur le site."
+   },
+   {
+    "texte": "This account can no longer publish on the site."
+   },
+   {
+    "texte": "Afficher plus \\\\(([^)]*?) sur ([^)]*?) restants\\\\)"
+   },
+   {
+    "texte": "Afficher (\\\\d+) de plus \\\\(([^)]*?) restantes?\\\\)"
+   },
+   {
+    "texte": "Tu utilises environ (\\\\d+) % des points d’attributs d’un build complet \\\\(comparé à (.+?)\\\\)\\\\. Il te reste sans doute des points : tu peux encore monter des attributs\\\\."
+   },
+   {
+    "texte": "Tu es autour du maximum de points d’attributs \\\\(comparé à (.+?)\\\\) : pour monter un attribut, il faudra probablement en baisser un autre\\\\."
+   },
+   {
+    "texte": "Tu dépasses les points d’attributs d’un build complet \\\\(comparé à (.+?)\\\\) : le jeu refuserait probablement ce build\\\\. Baisse des attributs\\\\."
+   },
+   {
+    "texte": "Il te manque 1 point sur (.+?) pour le prochain niveau intégré\\\\."
+   },
+   {
+    "texte": "Il te manque (\\\\d+) points sur (.+?) pour le prochain niveau intégré\\\\."
+   },
+   {
+    "texte": "Pour (Bronze|Silver|Gold|Hall of Fame)\\\\s*:"
+   },
+   {
+    "texte": "(\\\\+\\\\d+) et ([A-Z])"
+   },
+   {
+    "texte": "Ability to throw the ball on target in all types of passing situations, such as bounce, chest, lob, overhead, flashy and alley-oop passes."
+   },
+   {
+    "texte": "Determines the ability for the player to defend the paint both on and off the ball, as well as contest shots near the rim."
+   },
+   {
+    "texte": "Determines the ability for the player to defend the perimeter both on and off the ball, as well as contest shots from outside."
+   },
+   {
+    "texte": "Ability to grab offensive rebounds. Along with vertical, unlocks rebound content to reach the ball more easily on missed shots."
+   },
+   {
+    "texte": "Ability to grab defensive rebounds. Along with vertical, unlocks rebound content to reach the ball more easily on missed shots."
+   },
+   {
+    "texte": "Used as a gate for dunk animations, and in combination with attribute counterparts, allows a player to jump higher on rebounds and blocks."
+   },
+   {
+    "texte": "Increases the chances of throwing down a dunk on your defender while driving to the hoop."
+   },
+   {
+    "texte": "Increases the likelihood of dunking on your opponent when standing in the painted area."
+   },
+   {
+    "texte": "Improves a player's ability to knock down 3-point shots on the move, including pull-ups, hop-steps, or spin shots."
+   },
+   {
+    "texte": "Improves a player's ability to knock down mid-range shots on the move, including pull-ups, hop-steps, or spin shots."
+   },
+   {
+    "texte": "Improves a player's ability to thread and fire tight passes, including alley-oops, quickly and on time."
+   },
+   {
+    "texte": "Makes players more difficult to get past when playing off-ball, as they can grab and hold their matchup."
+   },
+   {
+    "texte": "Improves a player's ability to navigate through and around screens while on defense."
+   },
+   {
+    "texte": "Improves the effectiveness of boxouts as the boxer."
+   },
+   {
+    "texte": "Boosts a player's ability to track down or grab rebounds on the offensive end."
+   },
+   {
+    "texte": "Boosts a player's ability to grab rebounds on the defensive end."
+   },
+   {
+    "texte": "Speeds up movement without the ball while in transition on offense or defense."
+   },
+   {
+    "texte": "Qualités physiques"
+   },
+   {
+    "texte": "Défense intérieure"
+   },
+   {
+    "texte": "Défense extérieure"
+   },
+   {
+    "texte": "du maximum"
+   },
+   {
+    "texte": "les maximums des attributs changent avec le gabarit."
+   },
+   {
+    "texte": "pas atteint"
+   },
+   {
+    "texte": "points d’écart"
+   },
+   {
+    "texte": "point d’écart"
+   },
+   {
+    "texte": "il te manque"
+   },
+   {
+    "texte": "du maximum (marge d’erreur ±"
+   },
+   {
+    "texte": "dépasse le cap calculé de"
+   },
+   {
+    "texte": "Signature Blueprints officiels de 2K"
+   },
+   {
+    "texte": "builds complets à 99 relevés par"
+   },
+   {
+    "texte": "Texte trop long pour ce générateur QR"
+   },
+   {
+    "texte": "badges sur"
+   },
+   {
+    "texte": "arrière"
+   },
+   {
+    "texte": "(recommandés)"
+   },
+   {
+    "texte": "vrais builds de"
+   },
+   {
+    "texte": "montés au maximum"
+   },
+   {
+    "texte": "équilibré"
+   },
+   {
+    "texte": "Ton axe dominant est"
+   },
+   {
+    "texte": "Plus gros écart"
+   },
+   {
+    "texte": "comparaison pondérée des 5 axes, du gabarit et d’un bonus de poste compatible."
+   },
+   {
+    "texte": "Ton profil est surtout orienté"
+   },
+   {
+    "texte": "Le rapport compare automatiquement tes attributs, ton poste et ton gabarit à plusieurs profils de référence. Les profils de référence sont des exemples publics, pas des builds officiels imposés par 2K."
+   },
+   {
+    "texte": "Attributs sous les caps intégrés"
+   },
+   {
+    "texte": "Au moins un palier de badge accessible"
+   },
+   {
+    "texte": "Animations calculées pour ce profil"
+   },
+   {
+    "texte": "badges intégrés. Noms et descriptions officiels du jeu en français (relevés dans l’app NBA 2K HQ), nom anglais sous chacun."
+   },
+   {
+    "texte": "recoupées ligne par ligne avec"
+   },
+   {
+    "texte": "Tables stated as verified against the 3 September 2026 game version."
+   },
+   {
+    "texte": "en désaccord,"
+   },
+   {
+    "texte": "sans équivalent."
+   },
+   {
+    "texte": "animations sont en plus"
+   },
+   {
+    "texte": "confirmées en jeu"
+   },
+   {
+    "texte": "le jeu demande Mi-distance OU 3 pts."
+   },
+   {
+    "texte": "a été équipé avec 88 à mi-distance et 94 à 3 pts."
+   },
+   {
+    "texte": "Réservée aux joueurs de"
+   },
+   {
+    "texte": "Réservé aux joueurs de"
+   },
+   {
+    "texte": "builds complets à 99"
+   },
+   {
+    "texte": "modèles officiels 2K"
+   },
+   {
+    "texte": "Points d’attributs estimés en comparant ton build à ces builds réels"
+   },
+   {
+    "texte": "le jeu ne publie pas son calcul exact."
+   },
+   {
+    "texte": "Un Spin Jumper Kyrie Irving (90)"
+   },
+   {
+    "texte": "résultats"
+   },
+   {
+    "texte": "résultat"
+   },
+   {
+    "texte": "Succès débloqué"
+   },
+   {
+    "texte": "Recopie l’écran"
+   },
+   {
+    "texte": "de ton MyPLAYER : pour chaque attribut, le"
+   },
+   {
+    "texte": "(en haut de la barre) et la valeur"
+   },
+   {
+    "texte": "(en bas). Les plafonds de ton jeu remplaceront l’estimation du site."
+   },
+   {
+    "texte": "Toutes tes données (builds sauvegardés, cap breakers,"
+   },
+   {
+    "texte": ") restent sur cet appareil sauf si tu publies un build."
+   },
+   {
+    "texte": ") stays on this device unless you publish a build."
+   },
+   {
+    "texte": "et 40 Signature Blueprints officiels de 2K"
+   },
+   {
+    "texte": "Aucun nouveau palier jusqu’à"
+   },
+   {
+    "texte": ": les points suivants ne feront que monter la note."
+   },
+   {
+    "texte": "de plus"
+   },
+   {
+    "texte": "Déplier :"
+   },
+   {
+    "texte": "Connecté :"
    }
   ],
   "import-jeu.js": [
@@ -2855,6 +5273,11 @@
    },
    {
     "texte": "<a class=\"hq-pilule\" href=\"/\">Créer mon build</a>"
+   }
+  ],
+  "sections-repliables.js": [
+   {
+    "texte": "Déplier"
    }
   ],
   "server-client.js": [

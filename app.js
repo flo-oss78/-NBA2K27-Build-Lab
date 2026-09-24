@@ -194,11 +194,51 @@ function annoncerPalier(){
   window.NBABL_TOAST('Nouveau palier : '+liste+(gains.length>2?' et '+(gains.length-2)+' de plus':''),'palier');
 }
 let dernierSignalBudget=0;
-function signalerBudgetPlein(){
+/* Un curseur qui refuse de monter doit le dire là où le joueur regarde,
+   c'est-à-dire sur l'attribut qu'il est en train de pousser. Le message en haut
+   de page ne suffit pas : on a le nez sur son curseur, pas sur l'en-tête. */
+function signalerBudgetPlein(x){
+  if(x){
+    const carteAttr=x.closest('.attr');
+    if(carteAttr){
+      carteAttr.classList.remove('attr-bloque'); void carteAttr.offsetWidth;
+      carteAttr.classList.add('attr-bloque');
+      let mot=carteAttr.querySelector('.attr-bloque-mot');
+      if(!mot){
+        mot=document.createElement('small');
+        mot.className='attr-bloque-mot';
+        mot.setAttribute('role','status');
+        carteAttr.appendChild(mot);
+      }
+      mot.textContent='Plus de points : baisse un autre attribut.';
+      clearTimeout(carteAttr._motMinuteur);
+      carteAttr._motMinuteur=setTimeout(()=>{
+        carteAttr.classList.remove('attr-bloque');
+        if(mot.isConnected)mot.textContent='';
+      },2600);
+    }
+  }
   const t=Date.now(); if(t-dernierSignalBudget<2500)return; dernierSignalBudget=t;
   const carte=document.getElementById('budgetEstime');
   if(carte&&!carte.hidden){carte.classList.remove('budget-plein');void carte.offsetWidth;carte.classList.add('budget-plein')}
   if(window.NBABL_TOAST)window.NBABL_TOAST('Plus de points d’attributs : baisse un autre attribut pour monter celui-ci.','warn');
+}
+/* Le builder s'ouvre vierge : on le dit, et on propose un exemple à ceux qui
+   préfèrent partir d'un build déjà rempli. */
+function buildEstVierge(){
+  const mini=typeof NOTE_MINI!=='undefined'?NOTE_MINI:25;
+  return inputs.length>0&&inputs.every(x=>+x.value<=mini);
+}
+function majBuildVierge(){
+  const el=document.getElementById('buildVierge');
+  if(el)el.hidden=!buildEstVierge();
+}
+function chargerExemple(){
+  if(typeof BUILD_EXEMPLE==='undefined')return;
+  apply({position:document.getElementById('position').value,height:heightInches(),
+    weight:+document.getElementById('weight').value,wing:+document.getElementById('wing').value,
+    style:document.getElementById('style').value,attrs:{...BUILD_EXEMPLE}});
+  if(window.NBABL_TOAST)window.NBABL_TOAST('Build d’exemple chargé. Tout reste modifiable.','level');
 }
 function clampInputsToCaps(caps){inputs.forEach(x=>{let cap=caps[x.dataset.name]??99;x.max=cap;if(+x.value>cap)x.value=cap;let id=x.dataset.name.replace(/[^a-z0-9]/gi,'');document.getElementById('cap'+id).textContent='CAP '+cap})}
 function scoreGrade(s){return s>=86?'S':s>=82?'A+':s>=78?'A':s>=74?'A-':s>=70?'B+':s>=66?'B':s>=62?'B-':s>=56?'C':'D'}
@@ -244,7 +284,7 @@ function updateAttributeDeltas(){
 function update(){
  if(!BUILDER_PRESENT)return; /* page sans builder */
  updateProfileLabels();const caps=bodyCaps();clampInputsToCaps(caps);memoriserNotes();const r=ratings();updateThresholds();let sums={};Object.keys(data).forEach(k=>sums[k]=[]);inputs.forEach(x=>{document.getElementById('v'+x.dataset.name.replace(/[^a-z0-9]/gi,'')).textContent=x.value;sums[x.dataset.group].push(+x.value)});let avg=k=>Math.round(sums[k].reduce((a,b)=>a+b,0)/sums[k].length),vals={Finition:avg('Finition'),Tir:avg('Tir'),Création:avg('Création'),Défense:avg('Défense'),Rebond:avg('Rebond'),Physique:avg('Physique')};Object.entries(vals).forEach(([k,v])=>{const el=document.getElementById('avg-'+safeGroupId(k));if(el)el.textContent=v;});updateAttributeVisuals();const SCORE_W={Finition:1,Tir:1,Création:1,Défense:1,Rebond:.6,Physique:1};let wsum=0,wtot=0;Object.keys(vals).forEach(k=>{const w=SCORE_W[k]||1;wsum+=vals[k]*w;wtot+=w});let score=Math.round(wsum/wtot);document.getElementById('score').textContent=score;const ring=document.querySelector('.summary-ring');if(ring)ring.style.setProperty('--score-pct',Math.max(0,Math.min(100,score))+'%');texte('badgeReachable',unlockedBadgeCount(r));let nm=buildName(vals);document.getElementById('buildname').textContent=nm;const meta=document.getElementById('buildMeta');if(meta)meta.textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${document.getElementById('weight').value} lbs`;for(const [k,v] of Object.entries(vals)){let id={Finition:'finish',Tir:'shoot',Création:'play',Défense:'def',Rebond:'reb',Physique:'phys'}[k];const ve=document.getElementById(id+'Val');if(ve)ve.textContent=v;const be=document.getElementById(id+'Bar');if(be)be.style.width=v+'%'}updateAttributeDeltas();
- let capped=inputs.filter(x=>+x.value>=+(x.max||99)).length;document.getElementById('capStatus').textContent=`${capped} / ${inputs.length} au cap`;document.getElementById('bodyHint').textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${heightText(+document.getElementById('wing').value)} envergure — les maximums des attributs changent avec le gabarit.`;renderBadges(r);renderTakeovers(r);renderBreakers(r);texte('breakerTotal',breakerTotalValue());renderAnimations();renderScouting(r,vals);renderValidation(r,caps);ecrireContexteBientot();
+ let capped=inputs.filter(x=>+x.value>=+(x.max||99)).length;document.getElementById('capStatus').textContent=`${capped} / ${inputs.length} au cap`;document.getElementById('bodyHint').textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${heightText(+document.getElementById('wing').value)} envergure — les maximums des attributs changent avec le gabarit.`;renderBadges(r);renderTakeovers(r);renderBreakers(r);texte('breakerTotal',breakerTotalValue());renderAnimations();renderScouting(r,vals);renderValidation(r,caps);majBuildVierge();ecrireContexteBientot();
 }
 function badgeTier(def,r){
  const h=heightInches();
@@ -595,7 +635,7 @@ function renderAnimations(){
 function handValue(){return document.getElementById('dominantHand')?.value||'Droite'}
 function serialize(){let obj={position:position.value,height:height.value,weight:weight.value,wing:wing.value,style:style.value,hand:handValue(),attrs:Object.fromEntries(inputs.map(x=>[x.dataset.name,x.value]))};return btoa(unescape(encodeURIComponent(JSON.stringify(obj))))}
 function apply(obj){if(chargementFini)buildTouche=true;position.value=obj.position||'SF';height.value=obj.height||80;weight.value=obj.weight||210;wing.value=obj.wing||84;style.value=obj.style||'Équilibré';const handEl=document.getElementById('dominantHand');if(handEl&&obj.hand)handEl.value=obj.hand;update();if(obj.attrs)inputs.forEach(x=>{if(obj.attrs[x.dataset.name])x.value=Math.min(+obj.attrs[x.dataset.name],+x.max)});update()}
-inputs.forEach(x=>x.addEventListener('input',()=>{if(limiterAuBudget(x))signalerBudgetPlein();suivrePalier(x);update()}));['position','height','weight','wing','style'].forEach(id=>document.getElementById(id)?.addEventListener('input',update));const animRefiltrer=()=>{animLimite=ANIM_PAGE;renderAnimations()};['animCategory','animStatus'].forEach(id=>document.getElementById(id)?.addEventListener('change',animRefiltrer));document.getElementById('animSearch')?.addEventListener('input',animRefiltrer);document.getElementById('animPlus')?.addEventListener('click',()=>{animLimite+=ANIM_PAGE;renderAnimations()});document.getElementById('animGroupes')?.addEventListener('click',e=>{const b=e.target.closest('[data-groupe]');if(!b||b===e.currentTarget)return;e.currentTarget.dataset.groupe=b.dataset.groupe;const s=document.getElementById('animCategory');if(s)s.value='all';animLimite=ANIM_PAGE;renderAnimations()});['badgeFilter'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>renderBadges(ratings())));document.getElementById('badgeCats')?.addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b||!e.currentTarget.contains(b)||b===e.currentTarget)return;e.currentTarget.dataset.cat=b.dataset.cat;renderBadges(ratings())});document.getElementById('badgeSearch')?.addEventListener('input',()=>renderBadges(ratings()));
+inputs.forEach(x=>x.addEventListener('input',()=>{if(limiterAuBudget(x))signalerBudgetPlein(x);suivrePalier(x);update()}));document.getElementById('chargerExemple')?.addEventListener('click',chargerExemple);['position','height','weight','wing','style'].forEach(id=>document.getElementById(id)?.addEventListener('input',update));const animRefiltrer=()=>{animLimite=ANIM_PAGE;renderAnimations()};['animCategory','animStatus'].forEach(id=>document.getElementById(id)?.addEventListener('change',animRefiltrer));document.getElementById('animSearch')?.addEventListener('input',animRefiltrer);document.getElementById('animPlus')?.addEventListener('click',()=>{animLimite+=ANIM_PAGE;renderAnimations()});document.getElementById('animGroupes')?.addEventListener('click',e=>{const b=e.target.closest('[data-groupe]');if(!b||b===e.currentTarget)return;e.currentTarget.dataset.groupe=b.dataset.groupe;const s=document.getElementById('animCategory');if(s)s.value='all';animLimite=ANIM_PAGE;renderAnimations()});['badgeFilter'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>renderBadges(ratings())));document.getElementById('badgeCats')?.addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b||!e.currentTarget.contains(b)||b===e.currentTarget)return;e.currentTarget.dataset.cat=b.dataset.cat;renderBadges(ratings())});document.getElementById('badgeSearch')?.addEventListener('input',()=>renderBadges(ratings()));
 
 /* Un geste réel sur le corps, les attributs, le style ou l'import rend le build « touché ». */
 if(BUILDER_PRESENT){

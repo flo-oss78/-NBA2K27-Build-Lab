@@ -1013,6 +1013,77 @@ async function testsNavigateur(base) {
       verifier(r.apresMid > r.apresLancers, `monter Mi-distance ne coûte aucun point (${r.apresLancers} % → ${r.apresMid} %)`);
     });
 
+    /* Le builder démarrait sur un build qui consommait déjà 99 % des points :
+       le premier geste était rogné, les suivants refusés, et le curseur revenait
+       sous le doigt. Un créateur l'a lu comme un site qui ne répond pas. */
+    await test('le builder s’ouvre vierge, et un curseur qui refuse de monter le dit sur l’attribut', async () => {
+      // Le builder rouvre le dernier build : pour juger l'arrivée d'un nouveau
+      // venu, il faut un navigateur sans passé, pas celui du test précédent.
+      await nav.ouvrir(base + '/');
+      await nav.evaluer('localStorage.clear(); return 1;');
+      await nav.ouvrir(base + '/?etape=attributs');
+      const r = await nav.evaluer(`
+        const el = id => document.getElementById(id), attendre = ms => new Promise(r => setTimeout(r, ms));
+        const curseurs = () => [...document.querySelectorAll('#attributeGroups input[type=range]')];
+        const pct = () => parseInt(el('budgetEstimeValeur').textContent);
+        const depart = { budget: pct(), max: Math.max(...curseurs().map(x => +x.value)) };
+        const encart = el('buildVierge'), bouton = el('chargerExemple');
+        const visible = n => { if (!n) return false; const c = n.getBoundingClientRect();
+          return c.height > 0 && c.bottom > 0 && c.top < innerHeight; };
+        // On ne mesure pas « dans la fenêtre » : la hauteur du navigateur de
+        // test ne dit rien de celle d'un joueur. Ce qui compte, c'est que
+        // l'encart soit affiché et placé au-dessus des curseurs, donc lu avant
+        // qu'on touche au premier attribut.
+        const hautDe = n => n ? Math.round(n.getBoundingClientRect().top) : null;
+        depart.encartAffiche = !!encart && !encart.hidden && encart.getBoundingClientRect().height > 0;
+        depart.encartAvantCurseurs = hautDe(encart) !== null && hautDe(encart) < hautDe(curseurs()[0]);
+        depart.boutonAffiche = !!bouton && bouton.getBoundingClientRect().height > 0;
+
+        // Sur un build vierge, monter un attribut doit marcher du premier coup.
+        const premier = curseurs()[0], avant = +premier.value;
+        premier.value = avant + 10; premier.dispatchEvent(new Event('input', { bubbles: true }));
+        await attendre(150);
+        const monteSansRogner = +premier.value === avant + 10;
+
+        // On dépense tout, puis on pousse encore : le refus doit se voir ici.
+        for (let tour = 0; tour < 40; tour++) {
+          let bouge = false;
+          for (const x of curseurs()) { const d = +x.value; x.value = Math.min(+x.max, d + 3);
+            x.dispatchEvent(new Event('input', { bubbles: true })); if (+x.value !== d) bouge = true; }
+          if (!bouge) break;
+        }
+        await attendre(200);
+        const bride = curseurs().find(x => +x.value < +x.max);
+        bride.scrollIntoView({ block: 'center' }); await attendre(250);
+        const avantRefus = +bride.value;
+        bride.value = avantRefus + 5; bride.dispatchEvent(new Event('input', { bubbles: true }));
+        await attendre(150);
+        const carte = bride.closest('.attr'), mot = carte && carte.querySelector('.attr-bloque-mot');
+        const refus = { bloque: +bride.value === avantRefus, marque: !!carte && carte.classList.contains('attr-bloque'),
+                        message: mot ? mot.textContent.trim() : '', messageVisible: visible(mot) };
+
+        // Le bouton d'exemple remplit le build sans rien casser.
+        el('chargerExemple') && el('chargerExemple').click();
+        await attendre(400);
+        const exemple = { budget: pct(), max: Math.max(...curseurs().map(x => +x.value)),
+                          encartMasque: !!el('buildVierge') && el('buildVierge').hidden };
+        return { depart, monteSansRogner, refus, exemple };`);
+      sansErreur('build vierge au démarrage');
+      verifier(r.depart.budget === 0, `le builder s’ouvre à ${r.depart.budget} % des points au lieu de 0 %`);
+      verifier(r.depart.max <= 25, `un attribut démarre à ${r.depart.max} au lieu du minimum`);
+      verifier(r.depart.encartAffiche, 'l’encart « build vierge » ne s’affiche pas à l’ouverture');
+      verifier(r.depart.encartAvantCurseurs, 'l’encart « build vierge » est placé après les curseurs : on le lit trop tard');
+      verifier(r.depart.boutonAffiche, 'le bouton « pars d’un exemple » ne s’affiche pas');
+      verifier(r.monteSansRogner, 'sur un build vierge, monter un attribut est déjà rogné');
+      verifier(r.refus.bloque, 'les points épuisés ne bloquent plus la hausse');
+      verifier(r.refus.marque, 'l’attribut refusé n’est pas signalé visuellement');
+      verifier(/baisse un autre attribut/i.test(r.refus.message), `message absent sur l’attribut refusé (« ${r.refus.message} »)`);
+      verifier(r.refus.messageVisible, 'le message du refus est hors écran : c’est le défaut qu’on corrige');
+      verifier(r.exemple.budget > 80, `le build d’exemple ne remplit pas le build (${r.exemple.budget} %)`);
+      verifier(r.exemple.max > 70, 'le build d’exemple ne monte aucun attribut');
+      verifier(r.exemple.encartMasque, 'l’encart « build vierge » reste affiché après le chargement d’un exemple');
+    });
+
     await test('un build réel chargé garde exactement ses notes et son corps', async () => {
       await nav.ouvrir(base + '/');
       const r = await nav.evaluer(`

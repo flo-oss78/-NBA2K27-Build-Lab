@@ -24,7 +24,31 @@ function nomAttribut(n){return NOMS_ATTRIBUTS_FR[n]||n}
 window.NOMS_ATTRIBUTS_FR=NOMS_ATTRIBUTS_FR;
 window.nomAttribut=nomAttribut;
 
-const data={Finition:[['Close Shot',75],['Driving Layup',82],['Driving Dunk',83],['Standing Dunk',55],['Post Control',60]],Tir:[['Mid-Range',82],['Three-Point',83],['Free Throw',78]],Création:[['Pass Accuracy',78],['Ball Handle',83],['Speed With Ball',83]],Défense:[['Interior Defense',55],['Perimeter Defense',83],['Steal',80],['Block',70]],Rebond:[['Offensive Rebound',45],['Defensive Rebound',65]],Physique:[['Speed',83],['Agility',82],['Strength',72],['Vertical',80]]};
+/* Le builder s'ouvre comme celui du jeu : tous les attributs au minimum, aucun
+   point dépensé. On monte ce qu'on veut, au lieu de devoir d'abord retirer
+   ailleurs. Auparavant le site démarrait sur un build tout fait qui consommait
+   déjà 99 % du budget : le premier geste était rogné, les suivants refusés, et
+   le curseur revenait sous le doigt — au point de passer pour un site qui ne
+   répond pas. Ce build tout fait reste disponible sous « Charger un exemple ». */
+const NOTE_MINI=25;
+const BUILD_EXEMPLE={
+  'Close Shot':75,'Driving Layup':82,'Driving Dunk':83,'Standing Dunk':55,'Post Control':60,
+  'Mid-Range':82,'Three-Point':83,'Free Throw':78,
+  'Pass Accuracy':78,'Ball Handle':83,'Speed With Ball':83,
+  'Interior Defense':55,'Perimeter Defense':83,'Steal':80,'Block':70,
+  'Offensive Rebound':45,'Defensive Rebound':65,
+  'Speed':83,'Agility':82,'Strength':72,'Vertical':80
+};
+const data={
+  Finition:[['Close Shot',NOTE_MINI],['Driving Layup',NOTE_MINI],['Driving Dunk',NOTE_MINI],['Standing Dunk',NOTE_MINI],['Post Control',NOTE_MINI]],
+  Tir:[['Mid-Range',NOTE_MINI],['Three-Point',NOTE_MINI],['Free Throw',NOTE_MINI]],
+  Création:[['Pass Accuracy',NOTE_MINI],['Ball Handle',NOTE_MINI],['Speed With Ball',NOTE_MINI]],
+  Défense:[['Interior Defense',NOTE_MINI],['Perimeter Defense',NOTE_MINI],['Steal',NOTE_MINI],['Block',NOTE_MINI]],
+  Rebond:[['Offensive Rebound',NOTE_MINI],['Defensive Rebound',NOTE_MINI]],
+  Physique:[['Speed',NOTE_MINI],['Agility',NOTE_MINI],['Strength',NOTE_MINI],['Vertical',NOTE_MINI]]
+};
+window.BUILD_EXEMPLE=BUILD_EXEMPLE;
+window.NOTE_MINI=NOTE_MINI;
 const badgeDefs=[
 {name:'Arc Cadence',cat:'Tir',req:[['Three-Point',70,86,91,98]],logic:'AND',minH:69,maxH:83},
 {name:'Deadeye',cat:'Tir',req:[['Mid-Range',65,85,92,99],['Three-Point',65,85,92,99]],logic:'OR',minH:69,maxH:88},
