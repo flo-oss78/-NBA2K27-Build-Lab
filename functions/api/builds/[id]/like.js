@@ -15,5 +15,23 @@ export async function onRequestPost({params,env,request}){
  }
  await env.DB.prepare('UPDATE builds SET likes=likes+1 WHERE id=?').bind(id).run();
  const row=await env.DB.prepare('SELECT likes FROM builds WHERE id=?').bind(id).first();
- return json({ok:true,likes:row.likes});
+ return json({ok:true,likes:row.likes,liked:true});
+}
+
+/* Retirer son « j'aime ». Un bouton qui s'allume sans pouvoir s'éteindre
+   piège la personne qui a cliqué par erreur, et fausse le compteur d'autant.
+   Le compteur ne descend que si un like de ce visiteur existait vraiment. */
+export async function onRequestDelete({params,env,request}){
+ if(!env.DB)return json({error:'D1 database is not configured.'},503);
+ const throttle=await rateLimit(env,request,'like',30);
+ if(!throttle.ok)return json({error:'Trop de demandes. Réessaie dans une minute.'},429,{'retry-after':'60'});
+ const visitor=await clientHash(request); const id=params.id;
+ const retrait=await env.DB.prepare('DELETE FROM build_likes WHERE build_id=? AND visitor_hash=?')
+   .bind(id,visitor).run();
+ if(retrait.meta&&retrait.meta.changes){
+  await env.DB.prepare('UPDATE builds SET likes=MAX(0,likes-1) WHERE id=?').bind(id).run();
+ }
+ const row=await env.DB.prepare('SELECT likes FROM builds WHERE id=?').bind(id).first();
+ if(!row)return json({error:'Build not found.'},404);
+ return json({ok:true,likes:row.likes,liked:false});
 }

@@ -186,6 +186,10 @@ export function publicMeta(row){
   };
   return {
     author: row.author || '',
+    // L'adresse publique de l'auteur, quand le build a été publié depuis un
+    // compte : sans elle, le pseudo affiché ne mène nulle part et les profils
+    // ne servent à rien. Vient de la jointure avec users (voir builds.js).
+    authorSlug: row.author_slug || '',
     description: row.description || '',
     tags: parse(row.tags_json, []),
     modes: parse(row.modes_json, []),

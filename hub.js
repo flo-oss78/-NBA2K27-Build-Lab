@@ -92,21 +92,86 @@ function renderCommunity(){
    const onServer=x.source==='Serveur'||/^build_/.test(x.id||'');
    const quality=window.NBABL_HUB?.quality?.(x);
    const isDemo=x.source==='Démo locale';
+   /* La carte se lit en une seconde : le gabarit en haut, les trois attributs
+      qui font le build, son rôle, son nom, puis qui l'a fait. La grande lettre
+      du poste en fond donne une identité à chaque carte sans image à héberger
+      ni à modérer. */
+   const abrev=k=>window.NBABL_HUB?.shortAttr?window.NBABL_HUB.shortAttr(k):String(k).slice(0,4).toUpperCase();
+   const tags=[...(x.tags||[]),...(x.modes||[])].slice(0,3);
+   const aime=dejaAime(x.id);
+   const auteur=x.authorSlug
+     ? `<a class="build-auteur" href="/u/${encodeURIComponent(x.authorSlug)}">`
+       +`<img src="/avatar/${encodeURIComponent(x.authorSlug)}" alt="" width="20" height="20" loading="lazy">`
+       +`<span>par <b>${escapeHTML(x.author||x.authorSlug)}</b></span></a>`
+     : (x.author?`<span class="build-auteur build-auteur-sans">par <b>${escapeHTML(x.author)}</b></span>`
+                :`<span class="build-auteur build-auteur-sans">${isDemo?'Exemple du site':'Sans compte'}</span>`);
+
    return `<article class="build-card ${x.validated?'is-validated':''}">
-     <div class="build-card-top"><div class="build-avatar">${x.position}</div><div><b>${escapeHTML(x.name)}</b>${isDemo?'<span class="build-demo-tag">Démo</span>':''}${quality?`<span class="hub-quality ${quality.cls}">${escapeHTML(quality.t)}</span>`:''}<small>${heightLabel(x.height)} • ${x.weight} lbs • ${heightLabel(x.wing)} ENVG • ${escapeHTML(x.style||'—')}</small></div><strong>${x.score||0}</strong></div>
-     <div class="build-status-line"><span class="${x.validated?'ok':'warn'}">${status}</span><span>⭐ ${(x.rating||0).toFixed(1)}</span><span>👁 ${(x.views||0)}</span><span>♥ ${(x.likes||0)}</span></div>
-     <div class="build-top-attrs">${top.map(([k,v])=>`<span>${escapeHTML(k)}<b>${v}</b></span>`).join('')}</div>
-     <div class="build-card-foot"><span>🏆 ${x.badges||0} badges</span><span>🎯 ${x.animations||0} animations</span><span>🧱 ${x.capBreakers||0} CB</span><button data-open-build="${x.id}">Voir</button><button data-like-build="${x.id}">♥</button><button data-compare-build="${x.id}">Comparer</button>${onServer?`<a class="build-card-link" href="/b/${encodeURIComponent(x.id)}">Fiche publique</a>`:''}</div>
+     <div class="build-card-visuel" data-poste="${escapeHTML(x.position)}">
+       <span class="build-filigrane" aria-hidden="true">${escapeHTML(x.position)}</span>
+       <span class="build-taille">${heightLabel(x.height)}</span>
+       <span class="build-poste">${escapeHTML(x.position)}</span>
+       ${quality?`<span class="hub-quality ${quality.cls}">${escapeHTML(quality.t)}</span>`:''}
+       <div class="build-attrs-cles">${top.map(([k,v])=>`<span><i>${escapeHTML(abrev(k))}</i><b>${v}</b></span>`).join('')}</div>
+     </div>
+     <div class="build-card-corps">
+       ${tags.length?`<div class="build-tags">${tags.map(t=>`<span>${escapeHTML(t)}</span>`).join('')}</div>`:''}
+       <h3 class="build-card-nom">${escapeHTML(x.name)}${isDemo?'<span class="build-demo-tag">Démo</span>':''}</h3>
+       <p class="build-card-gabarit">${heightLabel(x.height)} · ${x.weight} lbs · ${heightLabel(x.wing)} envergure · ${escapeHTML(x.style||'—')} · <b>${x.score||0}</b> de moyenne</p>
+       <div class="build-card-chiffres">
+         <button type="button" class="build-aime${aime?' actif':''}" data-like-build="${x.id}" aria-pressed="${aime?'true':'false'}" title="${aime?'Je n’aime plus':'J’aime ce build'}">♥ <b>${x.likes||0}</b></button>
+         <span title="Vues">👁 ${x.views||0}</span>
+         <span title="Badges">🏆 ${x.badges||0}</span>
+         <span title="Cap Breakers">🧱 ${x.capBreakers||0}</span>
+         <span class="${x.validated?'ok':'warn'}">${status}</span>
+       </div>
+     </div>
+     <div class="build-card-pied">
+       ${auteur}
+       <span class="build-card-actions">
+         <button type="button" data-open-build="${x.id}">Voir</button>
+         <button type="button" data-compare-build="${x.id}" class="secondary">Comparer</button>
+         ${onServer?`<a class="build-card-link" href="/b/${encodeURIComponent(x.id)}">Fiche</a>`:''}
+       </span>
+     </div>
    </article>`;
  }).join('')||`<div class="empty">${hubEmptyMessage(hub)}</div>`;
  list.querySelectorAll('[data-open-build]').forEach(btn=>btn.onclick=()=>openBuildModal(btn.dataset.openBuild));
  list.querySelectorAll('[data-compare-build]').forEach(btn=>btn.onclick=()=>addCompareById(btn.dataset.compareBuild));
  list.querySelectorAll('[data-like-build]').forEach(btn=>btn.onclick=()=>likeBuild(btn.dataset.likeBuild));
 }
+/* Ce qu'on a aimé, retenu sur cet appareil : le serveur, lui, reconnaît le
+   visiteur par une empreinte, mais la page ne peut pas la lire. Sans cette
+   mémoire, le cœur repartirait éteint à chaque visite et on ne saurait plus
+   ce qu'on a déjà aimé. */
+const AIMES_KEY='nbabl_aimes_v1';
+function lireAimes(){try{return JSON.parse(localStorage.getItem(AIMES_KEY)||'[]')}catch(e){return []}}
+function dejaAime(id){return lireAimes().indexOf(id)>=0}
+function noterAime(id,aime){
+ const l=lireAimes().filter(x=>x!==id);
+ if(aime)l.push(id);
+ try{localStorage.setItem(AIMES_KEY,JSON.stringify(l.slice(-400)))}catch(e){}
+}
 function likeBuild(id){
+ const aime=dejaAime(id), surServeur=/^build_/.test(id||'');
+ // On bascule l'affichage tout de suite : attendre le réseau pour voir un
+ // cœur changer de couleur donne l'impression que le bouton ne répond pas.
+ noterAime(id,!aime);
+ const delta=aime?-1:1;
  const all=readHub(); const idx=all.findIndex(x=>x.id===id);
- if(idx>=0){all[idx].likes=(all[idx].likes||0)+1;writeHub(all);renderCommunity();return}
- const d=demoCommunity.find(x=>x.id===id); if(d){d.likes=(d.likes||0)+1;renderCommunity()}
+ if(idx>=0){all[idx].likes=Math.max(0,(all[idx].likes||0)+delta);writeHub(all)}
+ const d=demoCommunity.find(x=>x.id===id); if(d)d.likes=Math.max(0,(d.likes||0)+delta);
+ renderCommunity();
+ if(!surServeur)return;
+ fetch(`/api/builds/${encodeURIComponent(id)}/like`,{method:aime?'DELETE':'POST'})
+  .then(r=>r.ok?r.json():null)
+  .then(rep=>{
+    if(!rep||typeof rep.likes!=='number')return;
+    // Le serveur fait autorité sur le compteur : il connaît les likes des autres.
+    const t=readHub(); const i=t.findIndex(x=>x.id===id);
+    if(i>=0){t[i].likes=rep.likes;writeHub(t);renderCommunity()}
+  })
+  .catch(()=>{});
 }
 function openBuildModal(id){
  const x=hubById(id); if(!x)return;

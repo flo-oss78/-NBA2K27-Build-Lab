@@ -1763,3 +1763,74 @@ html[lang="en"] .badge-en{display:none}
 .footer-plan b{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
 .footer-plan a{font-size:13px}
 @media (max-width:420px){.footer-plan{gap:14px 24px}}
+
+/* ================= Cartes de builds de la communauté =================
+   Refonte de septembre 2026. Une carte se lit en une seconde : le gabarit,
+   les trois attributs qui font le build, son rôle, son nom, qui l'a fait.
+   La grande lettre du poste en fond donne une identité à chaque carte sans
+   image à héberger ni à modérer — et sans reprendre de visuel sous droits.
+   Les teintes sont celles des catégories du site, pas une palette de plus. */
+.community-list{display:grid;gap:12px;margin-top:14px;
+  grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
+.build-card{display:flex;flex-direction:column;overflow:hidden;
+  background:var(--panel-2);border:1px solid var(--line-soft);border-radius:var(--r)}
+.build-card:hover,.build-card:focus-within{border-color:var(--line)}
+.build-card.is-validated{border-color:rgba(34,211,238,.28)}
+
+/* --- bandeau visuel --- */
+.build-card-visuel{position:relative;padding:10px 12px 12px;min-height:118px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  background:linear-gradient(160deg,var(--poste-teinte,rgba(29,139,255,.16)),transparent 72%)}
+.build-card-visuel[data-poste=PG]{--poste-teinte:rgba(200,86,26,.20);--poste-vif:var(--cat-play)}
+.build-card-visuel[data-poste=SG]{--poste-teinte:rgba(19,138,69,.20);--poste-vif:var(--cat-shoot)}
+.build-card-visuel[data-poste=SF]{--poste-teinte:rgba(29,95,214,.20);--poste-vif:var(--cat-finish)}
+.build-card-visuel[data-poste=PF]{--poste-teinte:rgba(85,48,196,.20);--poste-vif:var(--cat-rebound)}
+.build-card-visuel[data-poste=C]{--poste-teinte:rgba(179,32,63,.20);--poste-vif:var(--cat-defense)}
+.build-filigrane{position:absolute;right:10px;top:50%;transform:translateY(-52%);
+  font-family:"Barlow Condensed",system-ui,sans-serif;font-weight:800;font-size:78px;line-height:1;
+  color:var(--poste-vif,var(--blue));opacity:.13;letter-spacing:-.03em;pointer-events:none;user-select:none}
+.build-taille,.build-poste{position:absolute;top:10px;font-size:11px;font-weight:700;
+  padding:3px 8px;border-radius:999px;letter-spacing:.02em}
+.build-taille{left:12px;background:rgba(0,0,0,.42);border:1px solid var(--line-soft);color:var(--text)}
+.build-poste{right:12px;background:var(--poste-vif,var(--blue));color:#08080c}
+.build-card-visuel .hub-quality{position:absolute;top:10px;right:56px}
+.build-attrs-cles{position:relative;display:flex;gap:6px;flex-wrap:wrap}
+.build-attrs-cles span{display:grid;gap:1px;justify-items:center;min-width:52px;padding:4px 7px;
+  background:rgba(0,0,0,.36);border:1px solid var(--line-soft);border-radius:8px}
+.build-attrs-cles i{font-style:normal;font-size:9.5px;letter-spacing:.06em;color:var(--dim)}
+.build-attrs-cles b{font-size:15px;font-variant-numeric:tabular-nums;line-height:1}
+
+/* --- corps --- */
+.build-card-corps{padding:11px 12px 9px;display:grid;gap:6px}
+.build-tags{display:flex;flex-wrap:wrap;gap:4px}
+.build-tags span{font-size:10.5px;padding:2px 7px;border-radius:999px;
+  background:rgba(255,255,255,.05);border:1px solid var(--line-soft);color:var(--muted)}
+.build-card-nom{margin:0;font-size:14.5px;line-height:1.25;overflow-wrap:anywhere;
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.build-card-gabarit{margin:0;font-size:11.5px;color:var(--dim);line-height:1.45}
+.build-card-chiffres{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;
+  font-size:11.5px;color:var(--dim);font-variant-numeric:tabular-nums}
+.build-card-chiffres .ok{color:var(--cyan)}
+.build-card-chiffres .warn{color:var(--amber)}
+.build-aime{background:none;border:0;padding:0;font:inherit;color:var(--dim);cursor:pointer;
+  display:inline-flex;align-items:center;gap:3px}
+.build-aime:hover,.build-aime:focus-visible{color:var(--red)}
+.build-aime.actif{color:var(--red)}
+.build-aime b{font-weight:700}
+
+/* --- pied : l'auteur, et seulement ensuite les actions --- */
+.build-card-pied{margin-top:auto;padding:9px 12px;display:flex;align-items:center;gap:8px;
+  flex-wrap:wrap;justify-content:space-between;border-top:1px solid var(--line-soft)}
+.build-auteur{display:inline-flex;align-items:center;gap:6px;font-size:12px;
+  color:var(--muted);text-decoration:none;min-width:0}
+.build-auteur img{border-radius:50%;flex:0 0 20px}
+.build-auteur b{color:var(--text);font-weight:700}
+a.build-auteur:hover b,a.build-auteur:focus-visible b{color:var(--cyan)}
+.build-auteur-sans{color:var(--dim);font-style:italic}
+.build-card-actions{display:flex;gap:6px;align-items:center}
+.build-card-actions button{font-size:11.5px;padding:4px 10px}
+
+@media (max-width:420px){
+  .community-list{grid-template-columns:1fr}
+  .build-filigrane{font-size:64px}
+}

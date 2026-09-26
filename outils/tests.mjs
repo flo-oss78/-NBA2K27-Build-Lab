@@ -1337,6 +1337,47 @@ async function testsNavigateur(base) {
       verifier(r.plan.some(h => h === '/reference/'), 'le plan du site ne mène pas aux badges');
     });
 
+    /* L'espace communautaire tenait dans une liste d'une colonne, avec six
+       boutons alignés et aucune trace de l'auteur — alors que les profils
+       venaient d'être construits. Chaque carte montre maintenant le gabarit,
+       les trois attributs qui font le build, son rôle, et qui l'a publié. */
+    await test('les cartes de la communauté se lisent d’un coup d’œil', async () => {
+      await nav.ouvrir(base + '/hub/?onglet=communaute');
+      await new Promise(r => setTimeout(r, 1200));
+      const r = await nav.evaluer(`
+        const c = [...document.querySelectorAll('.build-card')];
+        if (!c.length) return { vide: true };
+        const p = c[0];
+        const aime = p.querySelector('.build-aime');
+        return {
+          cartes: c.length,
+          colonnes: getComputedStyle(document.querySelector('.community-list'))
+            .gridTemplateColumns.split(' ').length,
+          filigrane: !!p.querySelector('.build-filigrane'),
+          poste: (p.querySelector('.build-poste')||{}).textContent || '',
+          attrs: p.querySelectorAll('.build-attrs-cles span').length,
+          auteurPartout: c.every(x => !!x.querySelector('.build-auteur')),
+          aimePartout: c.every(x => !!x.querySelector('.build-aime')),
+          etatAime: aime ? aime.getAttribute('aria-pressed') : null,
+          nom: !!p.querySelector('.build-card-nom'),
+          debordent: c.some(x => x.getBoundingClientRect().right > innerWidth + 1)
+        };`);
+      sansErreur('cartes de la communauté');
+      verifier(!r.vide, 'aucune carte de build dans l’onglet Communauté');
+      verifier(r.colonnes >= 2, `la liste reste sur ${r.colonnes} colonne sur un large écran`);
+      verifier(r.filigrane, 'les cartes n’ont pas d’identité visuelle');
+      verifier(/^(PG|SG|SF|PF|C)$/.test(r.poste), `poste illisible sur la carte : « ${r.poste} »`);
+      verifier(r.attrs === 3, `${r.attrs} attributs mis en avant au lieu de 3`);
+      verifier(r.nom, 'la carte n’affiche pas le nom du build');
+      // L'auteur est la raison d'être des comptes : il doit figurer partout,
+      // même quand le build a été publié sans compte (on le dit alors).
+      verifier(r.auteurPartout, 'une carte au moins n’indique pas qui a publié le build');
+      verifier(r.aimePartout, 'une carte au moins n’a pas de bouton « j’aime »');
+      verifier(r.etatAime === 'true' || r.etatAime === 'false',
+        'le bouton « j’aime » n’annonce pas son état : on ne sait pas si on a déjà aimé');
+      verifier(!r.debordent, 'une carte déborde de l’écran');
+    });
+
     await test('un build réel chargé garde exactement ses notes et son corps', async () => {
       await nav.ouvrir(base + '/');
       const r = await nav.evaluer(`

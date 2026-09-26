@@ -15,20 +15,30 @@ export async function onRequestGet({request, env}){
   const limit = Math.min(Math.max(parseInt(u.searchParams.get('limit')||'50',10),1),100);
   // 'trending' divise l'engagement par l'ancienneté : un build récent qui décolle
   // passe devant un ancien qui dort.
+  // Les colonnes sont préfixées « b. » : la jointure avec users amène un
+  // second created_at et un second slug, qui rendraient le tri ambigu.
   const sortMap = {
-    score:'score DESC', new:'created_at DESC', views:'views DESC',
-    likes:'likes DESC', height:'height DESC', trending:'updated_at DESC, likes DESC'
+    score:'b.score DESC', new:'b.created_at DESC', views:'b.views DESC',
+    likes:'b.likes DESC', height:'b.height DESC', trending:'b.updated_at DESC, b.likes DESC'
   };
   const order = sortMap[u.searchParams.get('sort')] || sortMap.score;
   const clauses=[]; const args=[];
-  if(q){ clauses.push('(lower(name) LIKE ? OR lower(style) LIKE ? OR lower(position) LIKE ?)'); const like=`%${q}%`; args.push(like,like,like); }
-  if(validPosition(pos)){ clauses.push('position=?'); args.push(pos); }
-  if(style && style!=='all'){ clauses.push('style=?'); args.push(style); }
-  if(mode){ clauses.push('modes_json LIKE ?'); args.push(`%"${mode}"%`); }
-  if(validated){ clauses.push('validated=1'); }
-  if(withCapBreakers){ clauses.push('cap_breakers>0'); }
+  if(q){ clauses.push('(lower(b.name) LIKE ? OR lower(b.style) LIKE ? OR lower(b.position) LIKE ?)'); const like=`%${q}%`; args.push(like,like,like); }
+  if(validPosition(pos)){ clauses.push('b.position=?'); args.push(pos); }
+  if(style && style!=='all'){ clauses.push('b.style=?'); args.push(style); }
+  if(mode){ clauses.push('b.modes_json LIKE ?'); args.push(`%"${mode}"%`); }
+  if(validated){ clauses.push('b.validated=1'); }
+  if(withCapBreakers){ clauses.push('b.cap_breakers>0'); }
   const where=clauses.length?'WHERE '+clauses.join(' AND '):'';
-  const stmt=env.DB.prepare(`SELECT * FROM builds ${where} ORDER BY ${order} LIMIT ?`).bind(...args,limit);
+  // Jointure sur users : chaque build publié depuis un compte emporte
+  // l'adresse publique de son auteur, pour que son pseudo mène à son profil.
+  // Un compte bloqué ne transmet rien — le build reste, l'auteur disparaît.
+  const stmt=env.DB.prepare(
+    `SELECT b.*, u.slug AS author_slug FROM builds b
+     LEFT JOIN users u ON u.id = b.author_id AND u.blocked = 0
+     ${where}
+     ORDER BY ${order} LIMIT ?`
+  ).bind(...args,limit);
   const {results}=await stmt.all();
   return json({builds:results.map(publicBuild)});
 }

@@ -318,5 +318,5 @@
 
   /* Contrat avec app.js : les onglets fournissent le tri (et le filtre « Mes
      builds »), app.js fournit la liste, les filtres et les actions. */
-  window.NBABL_HUB={tab:function(){return activeTab},sort:sortFor,quality:qualityLabel};
+  window.NBABL_HUB={tab:function(){return activeTab},sort:sortFor,quality:qualityLabel,shortAttr:shortAttr};
 })();

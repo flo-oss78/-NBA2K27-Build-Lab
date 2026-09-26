@@ -781,7 +781,11 @@
     "Moyenne": "Average",
     "badges": "badges",
     "Cap Breakers": "Cap Breakers",
-    "j’aime": "likes"
+    "j’aime": "likes",
+    "Exemple du site": "Site example",
+    "Sans compte": "No account",
+    "J’aime ce build": "Like this build",
+    "Je n’aime plus": "Remove like"
   },
   "motifs": [
     [
