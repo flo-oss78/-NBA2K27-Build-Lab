@@ -1302,6 +1302,41 @@ async function testsNavigateur(base) {
       verifier(r.exemple.encartMasque, 'l’encart « build vierge » reste affiché après le chargement d’un exemple');
     });
 
+    /* 88 % des pages vues étaient la page d'accueil et 2,1 pages par visiteur :
+       le site avait des badges détaillés, des milliers d'animations et une page
+       « Mon build » que presque personne n'ouvrait, faute qu'on les annonce.
+       La fin du parcours dit maintenant où aller, avec les chiffres du build. */
+    await test('la fin du parcours mène ailleurs, et le plan du site relie les pages', async () => {
+      await nav.ouvrir(base + '/?etape=recap');
+      await new Promise(r => setTimeout(r, 600));
+      const r = await nav.evaluer(`
+        const liens = [...document.querySelectorAll('#recapSuite a')];
+        const plan = [...document.querySelectorAll('.footer-plan a')];
+        return {
+          suite: liens.map(a => ({ href: a.getAttribute('href'),
+            titre: (a.querySelector('b')||{}).textContent || '',
+            dit: (a.querySelector('span')||{}).textContent || '' })),
+          visible: liens.length ? liens[0].getBoundingClientRect().height > 0 : false,
+          plan: plan.map(a => a.getAttribute('href'))
+        };`);
+      sansErreur('fin de parcours');
+      verifier(r.suite.length >= 4, `${r.suite.length} destinations en fin de parcours au lieu de 4`);
+      verifier(r.visible, 'le bloc « Et maintenant ? » ne s’affiche pas');
+      const cibles = new Set(r.suite.map(l => l.href));
+      verifier(cibles.size === r.suite.length, 'deux destinations mènent au même endroit');
+      for (const attendu of ['/reference/', '/mon-build/', '/hub/']) {
+        verifier([...cibles].some(h => h.startsWith(attendu)), `aucune destination vers ${attendu}`);
+      }
+      // Un lien qui annonce un chiffre se clique ; « voir les badges » beaucoup moins.
+      const avecChiffre = r.suite.filter(l => /\d/.test(l.dit)).length;
+      verifier(avecChiffre >= 2, `seulement ${avecChiffre} destinations annoncent un chiffre du build`);
+      verifier(r.suite.every(l => l.titre && l.dit), 'une destination est sans titre ou sans description');
+
+      verifier(r.plan.length >= 6, `plan du site : ${r.plan.length} liens seulement`);
+      verifier(r.plan.some(h => h === '/animations/'), 'le plan du site ne mène pas aux animations');
+      verifier(r.plan.some(h => h === '/reference/'), 'le plan du site ne mène pas aux badges');
+    });
+
     await test('un build réel chargé garde exactement ses notes et son corps', async () => {
       await nav.ouvrir(base + '/');
       const r = await nav.evaluer(`

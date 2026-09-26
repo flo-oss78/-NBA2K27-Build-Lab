@@ -102,6 +102,24 @@ ${corps}
 
 <footer>
   <p>NBA 2K27 Build Lab — ${en ? 'independent tool, public data, no official affiliation with 2K.' : 'outil indépendant, données publiques, aucune affiliation officielle avec 2K.'}</p>
+  <nav class="footer-plan" aria-label="${en ? 'Site map' : 'Plan du site'}">
+    <div>
+      <b>${en ? 'Create' : 'Créer'}</b>
+      <a href="${p}/">Builder</a>
+      <a href="${p}/hub/?onglet=trios">${en ? 'Trios' : 'Trios'}</a>
+      <a href="${p}/mon-build/">${en ? 'My build' : 'Mon build'}</a>
+    </div>
+    <div>
+      <b>${en ? 'Understand' : 'Comprendre'}</b>
+      <a href="${p}/reference/">${en ? 'All 53 badges' : 'Les 53 badges'}</a>
+      <a href="${p}/animations/">${en ? 'Animations by category' : 'Les animations par catégorie'}</a>
+      <a href="${p}/hub/?onglet=reels">${en ? 'Real builds' : 'Builds réels'}</a>
+    </div>
+    <div>
+      <b>${en ? 'Community' : 'Communauté'}</b>
+      <a href="${p}/hub/">${en ? 'Published builds' : 'Builds publiés'}</a>
+    </div>
+  </nav>
   <p class="footer-legal"><a href="${p}/mentions-legales/">${en ? 'Legal notice and privacy' : 'Mentions légales et confidentialité'}</a> · <a href="mailto:contact@lelabodesbuilds.com">${en ? 'Report a data error' : 'Signaler une erreur de données'}</a></p>
 </footer>
 

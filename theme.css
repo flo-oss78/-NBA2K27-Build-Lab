@@ -1742,3 +1742,24 @@ html[lang="en"] .badge-en{display:none}
   .anim-intro h1,.anim-liste h1{font-size:23px}
   .anim-cats{grid-template-columns:1fr}
 }
+
+/* ---- Et maintenant ? (fin du parcours de build) ----
+   88 % des pages vues étaient la page d'accueil : les visiteurs ne savaient
+   pas que le reste du site existait. Ce bloc le dit, au moment où le build
+   vient d'être fait. */
+.recap-suite-liens{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
+.recap-suite-lien{display:grid;gap:3px;padding:11px 13px;border:1px solid var(--line);border-radius:12px;
+  background:var(--panel-2,rgba(255,255,255,.03));text-decoration:none;color:inherit}
+.recap-suite-lien:hover,.recap-suite-lien:focus-visible{border-color:var(--cyan)}
+.recap-suite-lien b{font-size:14px}
+.recap-suite-lien span{color:var(--dim);font-size:12px;line-height:1.45}
+
+/* ---- Plan du site dans le pied de page ----
+   Présent sur chaque page, il relie les sections entre elles : c'est ce qui
+   permet à un lecteur comme à un moteur de recherche de trouver les pages de
+   badges et d'animations depuis n'importe où. */
+.footer-plan{display:flex;flex-wrap:wrap;gap:18px 40px;margin:14px 0;text-align:left}
+.footer-plan div{display:grid;gap:3px;align-content:start}
+.footer-plan b{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.footer-plan a{font-size:13px}
+@media (max-width:420px){.footer-plan{gap:14px 24px}}

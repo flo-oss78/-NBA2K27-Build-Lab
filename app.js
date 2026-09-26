@@ -284,7 +284,7 @@ function updateAttributeDeltas(){
 function update(){
  if(!BUILDER_PRESENT)return; /* page sans builder */
  updateProfileLabels();const caps=bodyCaps();clampInputsToCaps(caps);memoriserNotes();const r=ratings();updateThresholds();let sums={};Object.keys(data).forEach(k=>sums[k]=[]);inputs.forEach(x=>{document.getElementById('v'+x.dataset.name.replace(/[^a-z0-9]/gi,'')).textContent=x.value;sums[x.dataset.group].push(+x.value)});let avg=k=>Math.round(sums[k].reduce((a,b)=>a+b,0)/sums[k].length),vals={Finition:avg('Finition'),Tir:avg('Tir'),Création:avg('Création'),Défense:avg('Défense'),Rebond:avg('Rebond'),Physique:avg('Physique')};Object.entries(vals).forEach(([k,v])=>{const el=document.getElementById('avg-'+safeGroupId(k));if(el)el.textContent=v;});updateAttributeVisuals();const SCORE_W={Finition:1,Tir:1,Création:1,Défense:1,Rebond:.6,Physique:1};let wsum=0,wtot=0;Object.keys(vals).forEach(k=>{const w=SCORE_W[k]||1;wsum+=vals[k]*w;wtot+=w});let score=Math.round(wsum/wtot);document.getElementById('score').textContent=score;const ring=document.querySelector('.summary-ring');if(ring)ring.style.setProperty('--score-pct',Math.max(0,Math.min(100,score))+'%');texte('badgeReachable',unlockedBadgeCount(r));let nm=buildName(vals);document.getElementById('buildname').textContent=nm;const meta=document.getElementById('buildMeta');if(meta)meta.textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${document.getElementById('weight').value} lbs`;for(const [k,v] of Object.entries(vals)){let id={Finition:'finish',Tir:'shoot',Création:'play',Défense:'def',Rebond:'reb',Physique:'phys'}[k];const ve=document.getElementById(id+'Val');if(ve)ve.textContent=v;const be=document.getElementById(id+'Bar');if(be)be.style.width=v+'%'}updateAttributeDeltas();
- let capped=inputs.filter(x=>+x.value>=+(x.max||99)).length;document.getElementById('capStatus').textContent=`${capped} / ${inputs.length} au cap`;document.getElementById('bodyHint').textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${heightText(+document.getElementById('wing').value)} envergure — les maximums des attributs changent avec le gabarit.`;renderBadges(r);renderTakeovers(r);renderBreakers(r);texte('breakerTotal',breakerTotalValue());renderAnimations();renderScouting(r,vals);renderValidation(r,caps);majBuildVierge();ecrireContexteBientot();
+ let capped=inputs.filter(x=>+x.value>=+(x.max||99)).length;document.getElementById('capStatus').textContent=`${capped} / ${inputs.length} au cap`;document.getElementById('bodyHint').textContent=`${document.getElementById('position').value} • ${heightText(heightInches())} • ${heightText(+document.getElementById('wing').value)} envergure — les maximums des attributs changent avec le gabarit.`;renderBadges(r);renderTakeovers(r);renderBreakers(r);texte('breakerTotal',breakerTotalValue());renderAnimations();renderScouting(r,vals);renderValidation(r,caps);renderSuite(r);majBuildVierge();ecrireContexteBientot();
 }
 function badgeTier(def,r){
  const h=heightInches();
@@ -712,6 +712,44 @@ function unlockedAnimationCount(r){
 
 function escapeHTML(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function breakerTotalValue(){return inputs.reduce((s,x)=>s+ +(getBreaker(x.dataset.name)||0),0)}
+/* Où aller après avoir fait son build.
+   La mesure le disait sans ambiguïté : 88 % des pages vues étaient la page
+   d'accueil, 2,1 pages par visiteur. Le site avait des badges détaillés, des
+   milliers d'animations et une page « Mon build » que presque personne
+   n'ouvrait — rien ne les annonçait au moment où l'on vient de finir un
+   build. Chaque lien porte un chiffre tiré du build en cours : « 39 badges à
+   portée » se clique, « voir les badges » beaucoup moins. */
+function tableBadgesTotal(){return typeof badgeDefs!=='undefined'?badgeDefs.length:53}
+function renderSuite(r){
+ const zone=document.getElementById('recapSuite');
+ if(!zone)return;
+ const en=document.documentElement.lang==='en', p=en?'/en':'';
+ const badges=unlockedBadgeCount(r), anims=unlockedAnimationCount(r), cb=breakerTotalValue();
+ const nb=n=>n.toLocaleString(en?'en-GB':'fr-FR');
+ const dest=[
+  // Sur un build encore vierge, « 0 à portée » est exact mais n'appelle pas au
+  // clic : on dit alors ce qu'il y a à découvrir, ce qui est tout aussi vrai.
+  {href:p+'/reference/',titre:en?'Your badges':'Tes badges',
+   dit:badges
+     ?(en?`${nb(badges)} within reach — see what each one still needs`
+        :`${nb(badges)} à portée — vois ce qu’il manque pour les autres`)
+     :(en?`All ${nb(tableBadgesTotal())} badges and what each one asks for`
+        :`Les ${nb(tableBadgesTotal())} badges et ce qu’ils demandent`)},
+  {href:p+'/reference/?onglet=animations',titre:en?'Your animations':'Tes animations',
+   dit:en?`${nb(anims)} you can equip with this build`
+         :`${nb(anims)} que tu peux équiper avec ce build`},
+  {href:p+'/mon-build/',titre:en?'My build':'Mon build',
+   dit:cb?(en?`Your sheet, your progress, ${nb(cb)} Cap Breakers planned`
+             :`Ta fiche, ta progression, ${nb(cb)} Cap Breakers planifiés`)
+        :(en?'Your sheet, your Cap Breakers and your progress'
+           :'Ta fiche, tes Cap Breakers et ta progression')},
+  {href:p+'/hub/',titre:en?'Publish it':'Publie-le',
+   dit:en?'Show this build to the community, and see theirs'
+         :'Montre ce build à la communauté, et découvre les leurs'}
+ ];
+ zone.innerHTML=dest.map(d=>`<a class="recap-suite-lien" href="${d.href}">`
+  +`<b>${escapeHTML(d.titre)}</b><span>${escapeHTML(d.dit)}</span></a>`).join('');
+}
 
 function renderProDashboard(){if(!document.getElementById("proQualityScore"))return; /* section absente de cette page */
  const caps=bodyCaps(), r=ratings(), v=validateBuild(r,caps);
