@@ -81,13 +81,26 @@
     }
   }
 
+  /* Le « j'aime » se retire aussi. Cette fonction remplace celle de hub.js
+     (voir plus bas, window.likeBuild) : c'est donc ici que l'état doit être
+     tenu, sinon le cœur s'allume sans jamais pouvoir s'éteindre et le
+     compteur monte à chaque clic de la même personne. */
   async function likeServer(id){
+    const aime=typeof dejaAime==='function'?dejaAime(id):false;
+    if(typeof noterAime==='function')noterAime(id,!aime);
+    renderCommunity();                       // le cœur change tout de suite
     try{
-      const data=await api(`/builds/${encodeURIComponent(id)}/like`,{method:'POST'});
-      const arr=readHub(); const i=arr.findIndex(x=>x.id===id); if(i>=0){arr[i].likes=data.likes;writeHub(arr)}
+      const data=await api(`/builds/${encodeURIComponent(id)}/like`,{method:aime?'DELETE':'POST'});
+      const arr=readHub(); const i=arr.findIndex(x=>x.id===id);
+      if(i>=0&&typeof data.likes==='number'){arr[i].likes=data.likes;writeHub(arr)}
       renderCommunity();
     }catch(e){
-      likeBuildLocal(id);
+      // Hors ligne ou serveur muet : on garde le compte en local, sans perdre
+      // l'état déjà basculé plus haut.
+      const arr=readHub(); const i=arr.findIndex(x=>x.id===id);
+      if(i>=0){arr[i].likes=Math.max(0,(arr[i].likes||0)+(aime?-1:1));writeHub(arr)}
+      else{const d=demoCommunity.find(x=>x.id===id);if(d)d.likes=Math.max(0,(d.likes||0)+(aime?-1:1))}
+      renderCommunity();
     }
   }
 

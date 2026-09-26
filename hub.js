@@ -7,6 +7,19 @@
    - AVANT server-client.js, qui remplace likeBuild et openBuildModal par leurs
      versions serveur et réattache le bouton « Publier mon build ».
 */
+/* Ce qu'on a aimé, retenu sur cet appareil : le serveur, lui, reconnaît le
+   visiteur par une empreinte, mais la page ne peut pas la lire. Sans cette
+   mémoire, le cœur repartirait éteint à chaque visite et on ne saurait plus
+   ce qu'on a déjà aimé. */
+const AIMES_KEY='nbabl_aimes_v1';
+function lireAimes(){try{return JSON.parse(localStorage.getItem(AIMES_KEY)||'[]')}catch(e){return []}}
+function dejaAime(id){return lireAimes().indexOf(id)>=0}
+function noterAime(id,aime){
+ const l=lireAimes().filter(x=>x!==id);
+ if(aime)l.push(id);
+ try{localStorage.setItem(AIMES_KEY,JSON.stringify(l.slice(-400)))}catch(e){}
+}
+
 /* V10 — Build Hub / Compare / Badge Tokens / Synergy / Takeover Loadout */
 const V10_KEY='nba2k27_build_hub_v19';
 // Exemples affichés quand le hub est vide, explicitement étiquetés « Démo ».
@@ -140,18 +153,6 @@ function renderCommunity(){
  list.querySelectorAll('[data-compare-build]').forEach(btn=>btn.onclick=()=>addCompareById(btn.dataset.compareBuild));
  list.querySelectorAll('[data-like-build]').forEach(btn=>btn.onclick=()=>likeBuild(btn.dataset.likeBuild));
 }
-/* Ce qu'on a aimé, retenu sur cet appareil : le serveur, lui, reconnaît le
-   visiteur par une empreinte, mais la page ne peut pas la lire. Sans cette
-   mémoire, le cœur repartirait éteint à chaque visite et on ne saurait plus
-   ce qu'on a déjà aimé. */
-const AIMES_KEY='nbabl_aimes_v1';
-function lireAimes(){try{return JSON.parse(localStorage.getItem(AIMES_KEY)||'[]')}catch(e){return []}}
-function dejaAime(id){return lireAimes().indexOf(id)>=0}
-function noterAime(id,aime){
- const l=lireAimes().filter(x=>x!==id);
- if(aime)l.push(id);
- try{localStorage.setItem(AIMES_KEY,JSON.stringify(l.slice(-400)))}catch(e){}
-}
 function likeBuild(id){
  const aime=dejaAime(id), surServeur=/^build_/.test(id||'');
  // On bascule l'affichage tout de suite : attendre le réseau pour voir un
@@ -254,4 +255,7 @@ document.querySelectorAll('[data-close-modal]').forEach(x=>x.addEventListener('c
 renderCommunity();renderCompare();
 
 // Les onglets du hub (community.js) redemandent un rendu de la liste.
+// server-client.js remplace likeBuild par sa version serveur : il a besoin
+// de lire et d'écrire l'état du « j'aime », qui vit ici.
+window.dejaAime=dejaAime;window.noterAime=noterAime;
 window.renderCommunity=renderCommunity;

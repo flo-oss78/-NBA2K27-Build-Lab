@@ -1376,6 +1376,29 @@ async function testsNavigateur(base) {
       verifier(r.etatAime === 'true' || r.etatAime === 'false',
         'le bouton « j’aime » n’annonce pas son état : on ne sait pas si on a déjà aimé');
       verifier(!r.debordent, 'une carte déborde de l’écran');
+
+      /* Le bouton doit vraiment basculer. server-client.js remplace la
+         fonction de like par sa version serveur : vérifier la présence du
+         bouton ne dit rien de ce qui se passe au clic, et c'est précisément
+         là que l'état se perdait. */
+      const clic = await nav.evaluer(`
+        const b = document.querySelector('.build-aime');
+        const lire = () => { const x = document.querySelector('.build-aime');
+          return { etat: x.getAttribute('aria-pressed'), n: +(x.querySelector('b').textContent) }; };
+        const avant = lire();
+        b.click();
+        await new Promise(r => setTimeout(r, 500));
+        const apres = lire();
+        document.querySelector('.build-aime').click();
+        await new Promise(r => setTimeout(r, 500));
+        return { avant, apres, retour: lire() };`);
+      verifier(clic.apres.etat !== clic.avant.etat,
+        `le bouton « j’aime » ne change pas d’état au clic (${clic.avant.etat} → ${clic.apres.etat})`);
+      verifier(clic.apres.n !== clic.avant.n,
+        `le compteur ne bouge pas au clic (${clic.avant.n} → ${clic.apres.n})`);
+      verifier(clic.retour.etat === clic.avant.etat && clic.retour.n === clic.avant.n,
+        `un second clic ne retire pas le « j’aime » (${clic.apres.n} → ${clic.retour.n}, `
+        + `état ${clic.retour.etat} au lieu de ${clic.avant.etat})`);
     });
 
     await test('un build réel chargé garde exactement ses notes et son corps', async () => {
