@@ -6,6 +6,7 @@
 
 import {escHtml as esc} from './api/_utils.js';
 import {BADGES_SLUGS} from './badges-liste.js';
+import {ANIM_SLUGS} from './animations-liste.js';
 
 const MAX_URLS = 5000;
 
@@ -45,6 +46,16 @@ export async function onRequestGet({request, env}){
     const chemin = `/badge/${s}/`;
     urls.push(`<url><loc>${esc(origin)}${chemin}</loc>${alternates(chemin)}<changefreq>monthly</changefreq><priority>0.8</priority></url>`);
     urls.push(`<url><loc>${esc(origin)}/en${chemin}</loc>${alternates(chemin)}<changefreq>monthly</changefreq><priority>0.8</priority></url>`);
+  }
+
+  // Les animations, même raison : 2 595 exigences que le site connaît et que
+  // personne ne pouvait trouver par une recherche. Une page par catégorie
+  // plutôt qu'une par animation — 2 595 pages de deux lignes desserviraient
+  // le site au lieu de l'aider.
+  for (const chemin of ['/animations/', ...ANIM_SLUGS.map(s => `/animations/${s}/`)]) {
+    const prio = chemin === '/animations/' ? '0.9' : '0.8';
+    urls.push(`<url><loc>${esc(origin)}${chemin}</loc>${alternates(chemin)}<changefreq>monthly</changefreq><priority>${prio}</priority></url>`);
+    urls.push(`<url><loc>${esc(origin)}/en${chemin}</loc>${alternates(chemin)}<changefreq>monthly</changefreq><priority>${prio}</priority></url>`);
   }
 
   // Sans base configurée, on renvoie quand même un sitemap valide :

@@ -387,6 +387,70 @@ async function testsStatiques() {
       'le sitemap ne liste pas les pages de badges');
   });
 
+  /* Les 2 595 animations et leurs exigences sont le plus gros contenu du
+     site, et il était entièrement invisible : /reference/ construit sa liste
+     dans le navigateur. Une page par catégorie les rend lisibles — pas une
+     page par animation, qui en ferait 2 595 de deux lignes. */
+  await test('chaque catégorie d’animations a sa page lisible sans JavaScript', () => {
+    const ctxA = { window: {} };
+    vm.createContext(ctxA);
+    vm.runInContext(fs.readFileSync('animations.js', 'utf8') + ';this.A=ANIMATIONS;', ctxA);
+    const slug = n => String(n).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    const sansBalises = h => h.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<[^>]*>/g, ' ')
+      .replace(/&#39;/g, "'").replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/\s+/g, ' ');
+
+    const parCat = new Map();
+    for (const a of ctxA.A) {
+      if (!parCat.has(a.category)) parCat.set(a.category, []);
+      parCat.get(a.category).push(a);
+    }
+
+    const soucis = [];
+    for (const [cat, liste] of parCat) {
+      for (const [langue, fichier] of [['fr', `animations/${slug(cat)}/index.html`],
+                                       ['en', `en/animations/${slug(cat)}/index.html`]]) {
+        if (!fs.existsSync(fichier)) { soucis.push(`page absente : ${fichier}`); continue; }
+        const texte = sansBalises(fs.readFileSync(fichier, 'utf8'));
+        // Toutes les animations de la catégorie doivent figurer, pas seulement
+        // les premières : c'est la liste complète qui fait la valeur de la page.
+        const manquantes = liste.filter(a => !texte.includes(a.name));
+        if (manquantes.length) {
+          soucis.push(`${fichier} : ${manquantes.length} animations absentes du HTML `
+            + `(ex. ${manquantes.slice(0, 2).map(a => a.name).join(', ')})`);
+        }
+        if (!texte.includes(String(liste.length))) {
+          soucis.push(`${fichier} : le nombre d’animations (${liste.length}) n’est pas affiché`);
+        }
+        if (langue === 'fr' && /\b(Requirements|Height|Sorted from)\b/.test(texte)) {
+          soucis.push(`${fichier} : de l’anglais dans la version française`);
+        }
+        if (langue === 'en' && /\b(Exigences|Accueil|Classées|Toutes les catégories)\b/.test(texte)) {
+          soucis.push(`${fichier} : du français dans la version anglaise`);
+        }
+      }
+    }
+
+    // L'index doit mener à chaque catégorie, sinon les pages sont orphelines.
+    for (const [langue, fichier] of [['fr', 'animations/index.html'], ['en', 'en/animations/index.html']]) {
+      if (!fs.existsSync(fichier)) { soucis.push(`index absent : ${fichier}`); continue; }
+      const html = fs.readFileSync(fichier, 'utf8');
+      const prefixe = langue === 'en' ? '/en' : '';
+      const absentes = [...parCat.keys()].filter(c => !html.includes(`${prefixe}/animations/${slug(c)}/`));
+      if (absentes.length) soucis.push(`${fichier} : ${absentes.length} catégories non liées depuis l’index`);
+    }
+
+    verifier(!soucis.length, soucis.slice(0, 6).join('\n'));
+
+    const liste = fs.readFileSync('functions/animations-liste.js', 'utf8');
+    verifier([...parCat.keys()].every(c => liste.includes(`"${slug(c)}"`)),
+      'functions/animations-liste.js est en retard : régénère les pages');
+    verifier(/ANIM_SLUGS/.test(fs.readFileSync('functions/sitemap.xml.js', 'utf8')),
+      'le sitemap ne liste pas les pages d’animations');
+    verifier(/\/animations\//.test(fs.readFileSync('reference/index.html', 'utf8')),
+      '/reference/ ne mène pas aux pages d’animations : elles resteraient introuvables');
+  });
+
   /* Le site compte ses visites lui-même plutôt que d'appeler un service
      extérieur. Ce qui rend cette mesure acceptable — pas de bandeau, pas de
      traceur — tient à trois choses qu'un changement pourrait défaire sans

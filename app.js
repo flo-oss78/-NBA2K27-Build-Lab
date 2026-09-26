@@ -610,7 +610,17 @@ function carteAnimation(a,ok,r,h,conseils){
   `${!heightOK?`<p class="missing">Réservée aux joueurs de ${m(a.minH)} à ${m(a.maxH)}.</p>`:''}`+
   `${manques.length?`<p class="missing">Il te manque : ${manques.map(([k,n])=>`${escapeHTML(String(k).split(' ou ').map(nomA).join(' ou '))} +${n}`).join(' et ')}.</p>`:''}`+
   `<div class="anim-sources"><span class="anim-source ${cls}" title="${escapeHTML(titre)}">${txt}</span>${a.jeu?'<span class="anim-source jeu" title="Équipée sur un vrai MyPLAYER dont les attributs respectent cette exigence">Confirmée en jeu</span>':''}</div>`+
-  `${a.note?`<div class="anim-note">${escapeHTML(a.note)}</div>`:''}</article>`;
+  `${a.note?`<div class="anim-note">${escapeHTML(a.note)}</div>`:''}`+
+  `<p class="badge-fiche-lien"><a href="${lienCategorieAnimation(a.category)}">${document.documentElement.lang==='en'?'All '+escapeHTML(a.category):'Toutes les '+escapeHTML(a.category)}</a></p></article>`;
+}
+/* Chaque catégorie d'animations a sa page en HTML (outils/generer-animations.mjs).
+   Elle existe pour les moteurs de recherche — la liste d'ici est construite en
+   JavaScript, donc invisible — et sert de tableau consultable, classé de
+   l'animation la plus accessible à la plus exigeante. */
+function lienCategorieAnimation(cat){
+ const s=String(cat).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
+   .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+ return (document.documentElement.lang==='en'?'/en':'')+'/animations/'+s+'/';
 }
 function renderAnimations(){
  texte('animTotal',ANIMATIONS.length); /* compteur du builder, même sans la liste */

@@ -1720,3 +1720,25 @@ html[lang="en"] .badge-en{display:none}
 .badge-fiche-lien a{color:var(--dim)}
 .badge-fiche-lien a:hover,.badge-fiche-lien a:focus-visible{color:var(--cyan)}
 @media (max-width:420px){.badge-fiche h1{font-size:24px}}
+
+/* ---- Pages d'animations (/animations/ et /animations/<catégorie>/) ---- */
+.hq-page-anim{max-width:980px;margin:0 auto;padding:16px;display:grid;gap:14px}
+.anim-intro h1{margin:0 0 8px;font-size:28px;line-height:1.15;text-wrap:balance}
+.anim-intro p{margin:0;max-width:66ch;line-height:1.6;font-size:14px}
+.anim-compte{margin:6px 0 14px;color:var(--dim);font-size:12.5px}
+.anim-liste h1{margin:2px 0 0;font-size:28px;line-height:1.15;text-wrap:balance}
+.anim-table th[scope=row]{white-space:nowrap}
+.anim-table td:nth-child(2){text-align:left}
+.anim-table .anim-taille{white-space:nowrap;color:var(--dim);font-size:12.5px}
+.anim-famille h2{margin:0 0 4px;font-size:17px;display:flex;align-items:baseline;gap:8px}
+.anim-famille h2 small{color:var(--dim);font-size:12px;font-weight:400}
+.anim-famille-texte{margin:0 0 10px;color:var(--dim);font-size:12.5px;line-height:1.5}
+.anim-cats{margin:0;padding:0;list-style:none;display:grid;gap:4px 14px;
+  grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.anim-cats li{font-size:13px}
+.anim-cats small{color:var(--dim);font-size:11px;margin-left:3px}
+.anim-vers-pages{margin:8px 0 0;font-size:12.5px}
+@media (max-width:420px){
+  .anim-intro h1,.anim-liste h1{font-size:23px}
+  .anim-cats{grid-template-columns:1fr}
+}
