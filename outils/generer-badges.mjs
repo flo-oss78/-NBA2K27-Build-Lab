@@ -175,5 +175,16 @@ fs.writeFileSync('functions/badges-liste.js',
   `/* Généré par outils/generer-badges.mjs — ne pas modifier à la main. */\n`
   + `export const BADGES_SLUGS = ${JSON.stringify(slugs)};\n`, 'utf8');
 
+/* Les définitions complètes, pour que la fiche publique d'un build puisse dire
+   quels badges il débloque — elle est rendue côté serveur, loin de
+   builder-data.js. Même raison que ci-dessus : ce n'est pas un module. */
+const defs = BADGES.map(d => ({
+  nom: d.name, fr: (frParNom[d.name] || {}).fr || d.name, slug: slug(d.name),
+  cat: d.cat, req: d.req, logic: d.logic, minH: d.minH, maxH: d.maxH
+}));
+fs.writeFileSync('functions/badges-defs.js',
+  `/* Généré par outils/generer-badges.mjs — ne pas modifier à la main. */\n`
+  + `export const BADGES_DEFS = ${JSON.stringify(defs)};\n`, 'utf8');
+
 console.log(`${ecrites} pages de badges générées (${BADGES.length} badges × 2 langues), `
   + `liste écrite dans functions/badges-liste.js`);

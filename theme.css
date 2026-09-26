@@ -1834,3 +1834,44 @@ a.build-auteur:hover b,a.build-auteur:focus-visible b{color:var(--cyan)}
   .community-list{grid-template-columns:1fr}
   .build-filigrane{font-size:64px}
 }
+
+/* ---- Fiche publique d'un build (/b/<id>) ----
+   Rendue côté serveur : ce qui suit n'habille que ce qui est déjà lisible. */
+.bd-groups .bd-row{display:grid;grid-template-columns:1fr minmax(60px,110px) auto;
+  gap:10px;align-items:center;padding:4px 0;font-size:13px}
+.bd-jauge{display:block;height:6px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden}
+.bd-jauge em{display:block;height:100%;border-radius:99px;background:var(--jauge,var(--blue))}
+.bd-group.cat-finish{--jauge:var(--cat-finish)}
+.bd-group.cat-shoot{--jauge:var(--cat-shoot)}
+.bd-group.cat-play{--jauge:var(--cat-play)}
+.bd-group.cat-defense{--jauge:var(--cat-defense)}
+.bd-group.cat-rebound{--jauge:var(--cat-rebound)}
+.bd-group.cat-physical{--jauge:var(--cat-physical)}
+.bd-groups .bd-row b{font-variant-numeric:tabular-nums;text-align:right;min-width:26px}
+
+.bd-h2 small{color:var(--dim);font-weight:400;font-size:13px;margin-left:6px}
+.bd-badges{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px;
+  grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+.bd-badge{display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:6px 10px;border:1px solid var(--line-soft);border-radius:9px;
+  background:var(--panel-2);font-size:12.5px}
+.bd-badge a{text-decoration:none;color:var(--text);overflow-wrap:anywhere}
+.bd-badge a:hover,.bd-badge a:focus-visible{color:var(--cyan)}
+.bd-badge span{font-size:11px;white-space:nowrap;color:var(--dim)}
+.bd-badge.niv-1{border-left:3px solid #C9803F}
+.bd-badge.niv-2{border-left:3px solid #C5CCD6}
+.bd-badge.niv-3{border-left:3px solid var(--amber)}
+.bd-badge.niv-4{border-left:3px solid #B36BFF}
+.bd-badge.niv-4 span{color:#B36BFF}
+
+.bd-pied{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;
+  margin-top:16px;padding-top:14px;border-top:1px solid var(--line-soft)}
+.bd-pied .build-auteur img{border-radius:50%}
+.bd-qr{margin-top:14px;display:grid;gap:8px;justify-items:start}
+.bd-qr h2{margin:0;font-size:15px}
+.bd-qr-image{width:148px;max-width:100%;line-height:0}
+.bd-qr-image svg{width:100%;height:auto;border-radius:8px}
+@media (max-width:420px){
+  .bd-groups .bd-row{grid-template-columns:1fr 70px auto}
+  .bd-badges{grid-template-columns:1fr}
+}

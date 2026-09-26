@@ -1812,6 +1812,35 @@ async function testsProduction() {
     verifier(suivre.status === 401, `suivre sans compte → HTTP ${suivre.status} au lieu de 401`);
   });
 
+  /* La fiche publique est ce qu'on reçoit quand quelqu'un partage un build.
+     Elle est rendue côté serveur : son contenu doit être entier sans
+     JavaScript, y compris les badges que le build débloque — la question que
+     se pose quiconque regarde le build d'un autre. */
+  await test('la fiche publique d’un build montre tout sans JavaScript', async () => {
+    const liste = await (await fetch(`${URL_PROD}/api/builds?limit=1`)).json();
+    const build = (liste.builds || [])[0];
+    if (!build) { verifier(true, ''); return; }   // aucun build publié : rien à juger
+    const r = await fetch(`${URL_PROD}/b/${encodeURIComponent(build.id)}`);
+    verifier(r.ok, `la fiche répond HTTP ${r.status}`);
+    const html = await r.text();
+    const texte = html.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<[^>]*>/g, ' ');
+
+    verifier(texte.includes(build.name), 'le nom du build n’apparaît pas dans le HTML');
+    verifier(/Badges débloqués/.test(texte), 'la fiche ne dit pas quels badges le build débloque');
+    verifier(/bd-jauge/.test(html), 'les attributs n’ont pas de barre : ils restent une colonne de chiffres');
+    // L'en-tête affichait « NBA 2K27 BUILD LAB » quand le site s'appelle
+    // autrement : une page partagée doit ressembler au site qu'elle représente.
+    verifier(/LE LABO/.test(html), 'l’en-tête de la fiche n’est pas celui du site');
+    verifier(/footer-plan/.test(html), 'la fiche ne mène nulle part : ni badges, ni animations');
+    verifier(/mentions-legales/.test(html), 'la fiche ne mène pas aux mentions légales');
+    verifier(/id="bdQr"/.test(html), 'pas de code à scanner pour ouvrir le build sur téléphone');
+    // Publié sans compte ou avec : la fiche doit le dire, jamais laisser un vide.
+    verifier(/Publié (par|sans compte)/.test(texte), 'la fiche ne dit pas qui a publié le build');
+
+    const absente = await fetch(`${URL_PROD}/b/build_inexistant_pour_le_test`);
+    verifier(absente.status === 404, `un build inconnu → HTTP ${absente.status} au lieu de 404`);
+  });
+
   await test('les anciennes adresses /blueprints/ et /trios/ mènent à l\u2019onglet Trios', async () => {
     for (const ancien of ['/blueprints/', '/blueprints', '/trios/', '/trios']) {
       const r = await fetch(URL_PROD + ancien, { redirect: 'manual' });

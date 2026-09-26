@@ -4,6 +4,29 @@
    laisse le JavaScript du site reprendre la main pour la partie interactive. */
 
 import {escHtml as esc, rateLimit} from '../api/_utils.js';
+import {BADGES_DEFS} from '../badges-defs.js';
+
+/* Les badges que ce build débloque, calculés ici : la page est rendue côté
+   serveur et n'a pas accès aux tables du navigateur. C'est la question que se
+   pose quiconque regarde le build de quelqu'un d'autre — « qu'est-ce que ça
+   donne, concrètement ». */
+const PALIERS=['Bronze','Argent','Or','Hall of Fame'];
+function badgesDuBuild(attrs,hauteur){
+  const out=[];
+  for(const d of BADGES_DEFS){
+    if(hauteur<d.minH||hauteur>d.maxH) continue;
+    let niveau=0;
+    for(let i=0;i<4;i++){
+      const atteint=d.logic==='OR'
+        ? d.req.some(q=>(attrs[q[0]]||0)>=(q[i+1]??999))
+        : d.req.every(q=>(attrs[q[0]]||0)>=(q[i+1]??999));
+      if(atteint) niveau=i+1;
+    }
+    if(niveau) out.push({...d,niveau,palier:PALIERS[niveau-1]});
+  }
+  // Le plus haut palier d'abord : c'est ce qui caractérise le build.
+  return out.sort((a,b)=>b.niveau-a.niveau||a.fr.localeCompare(b.fr));
+}
 
 const POS_LABEL={PG:'Meneur',SG:'Arrière',SF:'Ailier',PF:'Ailier fort',C:'Pivot'};
 const MODE_LABEL={park:'Park (3v3)',rec:'REC (5v5)',proam:'Pro-Am','1v1':'1v1',mycareer:'MyCAREER'};
@@ -11,6 +34,11 @@ const MODE_LABEL={park:'Park (3v3)',rec:'REC (5v5)',proam:'Pro-Am','1v1':'1v1',m
 function heightText(h){return Math.floor(h/12)+"'"+(h%12)+'"'}
 function cm(i){return Math.round(i*2.54)}
 function kg(l){return Math.round(l*0.45359237)}
+
+/* Les mêmes classes de couleur que partout ailleurs sur le site : une page
+   rendue ici ne doit pas ressembler à un autre site que le reste. */
+const GROUPE_CLS={'Finition':'finish','Tir':'shoot','Création':'play',
+  'Défense':'defense','Rebond':'rebound','Physique':'physical'};
 
 const GROUPS=[
   ['Finition',['Close Shot','Driving Layup','Driving Dunk','Standing Dunk','Post Control']],
@@ -50,6 +78,19 @@ export async function onRequestGet({params,env,request}){
   try{cbPlan=JSON.parse(row.cb_plan_json||'[]')}catch(e){}
 
   const top=Object.entries(attrs).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  const badges=badgesDuBuild(attrs,Number(row.height)||0);
+  const parPalier=PALIERS.map((p,i)=>({p,n:badges.filter(b=>b.niveau===i+1).length}))
+    .filter(x=>x.n).reverse();
+  const repartition=parPalier.map(x=>`${x.n} en ${x.p}`).join(', ')+'.';
+  // L'auteur : affiché seulement s'il a un compte, sinon le pseudo ne mène
+  // nulle part et ressemble à un lien mort.
+  let auteur=null;
+  if(row.author_id){
+    try{
+      auteur=await env.DB.prepare('SELECT pseudo, slug, avatar FROM users WHERE id=? AND blocked=0')
+        .bind(row.author_id).first();
+    }catch(e){ /* la fiche vaut mieux sans auteur que pas de fiche */ }
+  }
   const posLabel=POS_LABEL[row.position]||row.position;
   const title=`${row.name} — ${row.position} ${heightText(row.height)} | NBA 2K27 Build Lab`;
   const desc=`Build NBA 2K27 ${posLabel} ${heightText(row.height)}, ${row.weight} lbs. `+
@@ -89,8 +130,14 @@ export async function onRequestGet({params,env,request}){
 </head>
 <body class="build-page">
 <header class="reference-header">
-  <div class="reference-brand"><div>NBA <b>2K27</b></div><small>BUILD LAB</small></div>
-  <nav class="reference-nav" aria-label="Navigation"><a href="/">Créer</a><a href="/hub/">Builds</a><a href="/mon-build/">Mon build</a></nav>
+  <div class="reference-brand"><div>LE LABO <b>DES&nbsp;BUILDS</b></div><small>NBA 2K27</small></div>
+  <nav class="reference-nav" aria-label="Navigation principale">
+    <a href="/" data-nav="creer">Créer</a>
+    <a href="/hub/" data-nav="builds">Builds</a>
+    <a href="/reference/" data-nav="badges">Badges</a>
+    <a href="/reference/?onglet=animations" data-nav="animations">Animations</a>
+    <a href="/mon-build/" data-nav="monbuild">Mon build</a>
+  </nav>
   <div class="reference-actions"><a class="pill" href="/">Ouvrir le builder</a></div>
 </header>
 <main>
@@ -125,11 +172,29 @@ export async function onRequestGet({params,env,request}){
 
     <h2 class="bd-h2">Attributs</h2>
     <div class="bd-groups">
-      ${GROUPS.map(([g,keys])=>`<section class="bd-group">
+      ${GROUPS.map(([g,keys])=>`<section class="bd-group cat-${GROUPE_CLS[g]||'finish'}">
         <h3>${esc(g)}</h3>
-        ${keys.map(k=>`<div class="bd-row"><span>${esc(k)}</span><b>${attrs[k]!=null?attrs[k]:'—'}</b></div>`).join('')}
+        ${keys.map(k=>{
+          const v=attrs[k];
+          // La barre part de 25, le minimum du jeu : mesurer depuis zéro
+          // écraserait toutes les valeurs dans la même moitié droite.
+          const pct=v!=null?Math.max(0,Math.min(100,Math.round((v-25)/74*100))):0;
+          return `<div class="bd-row"><span>${esc(k)}</span>`
+            +`<i class="bd-jauge" aria-hidden="true"><em style="width:${pct}%"></em></i>`
+            +`<b>${v!=null?v:'—'}</b></div>`;
+        }).join('')}
       </section>`).join('')}
     </div>
+
+    ${badges.length?`<h2 class="bd-h2">Badges débloqués <small>${badges.length}</small></h2>
+    <p class="sub">Calculés d'après les attributs de ce build et sa taille. ${repartition}</p>
+    <ul class="bd-badges">
+      ${badges.slice(0,24).map(b=>`<li class="bd-badge niv-${b.niveau}">`
+        +`<a href="/badge/${esc(b.slug)}/">${esc(b.fr)}</a><span>${esc(b.palier)}</span></li>`).join('')}
+    </ul>
+    ${badges.length>24?`<p class="sub">Et ${badges.length-24} autres. <a href="/reference/">Voir les 53 badges</a></p>`:''}`
+    :`<h2 class="bd-h2">Badges débloqués</h2>
+    <p class="sub">Aucun badge avec ces attributs. <a href="/reference/">Vois ce que chacun demande</a>.</p>`}
 
     ${cbPlan.length?`<h2 class="bd-h2">Guide Cap Breaker</h2>
     <p class="sub">Ordre d'application recommandé par le créateur.</p>
@@ -141,12 +206,35 @@ export async function onRequestGet({params,env,request}){
       <span><b>${row.cap_breakers||0}</b> cap breakers</span>
     </div>
 
-    <a class="cta" href="/?b=${encodeURIComponent(id)}">Ouvrir ce build dans le builder</a>
+    <div class="bd-pied">
+      ${auteur?`<a class="build-auteur" href="/u/${encodeURIComponent(auteur.slug)}">`
+        +`${auteur.avatar?`<img src="/avatar/${encodeURIComponent(auteur.slug)}" alt="" width="28" height="28" loading="lazy">`:''}`
+        +`<span>Publié par <b>${esc(auteur.pseudo)}</b></span></a>`
+        :`<span class="build-auteur build-auteur-sans">Publié sans compte</span>`}
+      <a class="cta" href="/?b=${encodeURIComponent(id)}">Ouvrir ce build dans le builder</a>
+    </div>
   </article>
+
+  <!-- Ouvrir le build sur son téléphone : c'est là qu'on a NBA 2K HQ sous la
+       main, et recopier une adresse à la main n'arrive jamais. -->
+  <aside class="panel bd-qr">
+    <h2>Ouvrir sur ton téléphone</h2>
+    <p class="sub">Scanne ce code pour retrouver ce build sur mobile${row.hq_link?', puis ouvre le lien NBA 2K HQ ci-dessus':''}.</p>
+    <div id="bdQr" class="bd-qr-image" data-lien="${esc(canonical)}"></div>
+  </aside>
 </main>
 <footer>
   <p>NBA 2K27 Build Lab — outil indépendant, données publiques, aucune affiliation officielle avec 2K.</p>
+  <nav class="footer-plan" aria-label="Plan du site">
+    <div><b>Créer</b><a href="/">Builder</a><a href="/hub/?onglet=trios">Trios</a><a href="/mon-build/">Mon build</a></div>
+    <div><b>Comprendre</b><a href="/reference/">Les 53 badges</a><a href="/animations/">Les animations par catégorie</a><a href="/hub/?onglet=reels">Builds réels</a></div>
+    <div><b>Communauté</b><a href="/hub/">Builds publiés</a></div>
+  </nav>
+  <p class="footer-legal"><a href="/mentions-legales/">Mentions légales et confidentialité</a> · <a href="mailto:contact@lelabodesbuilds.com">Signaler une erreur de données</a></p>
 </footer>
+<script src="/qr.js"></script>
+<script src="/fiche-build.js"></script>
+<script src="/mesure.js"></script>
 </body>
 </html>`;
 
