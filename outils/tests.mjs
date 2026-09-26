@@ -318,6 +318,75 @@ async function testsStatiques() {
     verifier(!morts.length, 'liens morts : ' + morts.join(', '));
   });
 
+  /* /reference/ construit ses 53 badges en JavaScript : un moteur de recherche
+     n'y trouvait pas un seul nom de badge, et le site ne recevait aucun
+     visiteur venu d'une recherche. Chaque badge a maintenant sa page en HTML.
+     Ce test vérifie ce qui compte vraiment : que le contenu soit lisible sans
+     exécuter la moindre ligne de JavaScript, et qu'il reste en accord avec les
+     données du site — sinon on oublierait de régénérer après une correction. */
+  await test('chaque badge a sa page lisible sans JavaScript, dans les deux langues', () => {
+    // builder-data.js publie ses tables sur window : sans lui, il s'arrête.
+    const ctx = { window: {} };
+    vm.createContext(ctx);
+    vm.runInContext(fs.readFileSync('builder-data.js', 'utf8') + ';this.B=badgeDefs;', ctx);
+    const FR = JSON.parse(fs.readFileSync('donnees/badges-fr-2khq.json', 'utf8'));
+    const frParNom = Object.fromEntries(FR.badges.map(b => [b.en, b]));
+    const slug = n => String(n).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    // Les apostrophes voyagent sous trois formes — droite, typographique et
+    // échappée en &#39; — selon qu'on lit la donnée ou le HTML produit. On les
+    // ramène toutes à la même avant de comparer.
+    const memeApostrophe = t => t.replace(/&#39;/g, "'").replace(/[’‘]/g, "'");
+    const sansBalises = h => memeApostrophe(
+      h.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<[^>]*>/g, ' ')
+        .replace(/&amp;/g, '&').replace(/&quot;/g, '"')).replace(/\s+/g, ' ');
+
+    const soucis = [];
+    for (const def of ctx.B) {
+      const s = slug(def.name);
+      for (const [langue, fichier] of [['fr', `badge/${s}/index.html`], ['en', `en/badge/${s}/index.html`]]) {
+        if (!fs.existsSync(fichier)) { soucis.push(`page absente : ${fichier}`); continue; }
+        const html = fs.readFileSync(fichier, 'utf8');
+        const texte = sansBalises(html);
+        const nom = langue === 'en' ? def.name : ((frParNom[def.name] || {}).fr || def.name);
+
+        if (!texte.includes(memeApostrophe(nom))) soucis.push(`${fichier} : le nom « ${nom} » n’apparaît pas dans le HTML`);
+        // Les valeurs exigées doivent être lisibles telles quelles, pas calculées.
+        const hof = def.req[0][4];
+        if (hof != null && !texte.includes(String(hof))) {
+          soucis.push(`${fichier} : l’exigence Hall of Fame (${hof}) n’est pas dans le HTML`);
+        }
+        if (!/<link rel="canonical"/.test(html)) soucis.push(`${fichier} : sans canonical`);
+        if ((html.match(/hreflang=/g) || []).length < 3) soucis.push(`${fichier} : hreflang incomplet`);
+        if (!/<h1>/.test(html)) soucis.push(`${fichier} : sans titre h1`);
+        if (langue === 'fr') {
+          const desc = (frParNom[def.name] || {}).desc;
+          if (desc && !texte.includes(memeApostrophe(desc.slice(0, 40)))) {
+            soucis.push(`${fichier} : la description du jeu a changé, régénère les pages`);
+          }
+        }
+      }
+    }
+
+    // Une page anglaise qui garde du français trahit un oubli de traduction.
+    const motsFr = /\b(Palier|Accueil|Disponible de|Tester dans le builder|Ce qu|Comment le débloquer|Autres badges|Nom anglais)\b/;
+    for (const def of ctx.B.slice(0, 12)) {
+      const f = `en/badge/${slug(def.name)}/index.html`;
+      if (fs.existsSync(f) && motsFr.test(sansBalises(fs.readFileSync(f, 'utf8')))) {
+        soucis.push(`${f} : du français dans la version anglaise`);
+      }
+    }
+
+    verifier(!soucis.length, soucis.slice(0, 8).join('\n'));
+
+    // Le sitemap doit connaître ces pages, sinon Google met des mois à les voir.
+    const liste = fs.readFileSync('functions/badges-liste.js', 'utf8');
+    verifier(ctx.B.every(d => liste.includes(`"${slug(d.name)}"`)),
+      'functions/badges-liste.js est en retard sur badgeDefs : régénère les pages');
+    verifier(/BADGES_SLUGS/.test(fs.readFileSync('functions/sitemap.xml.js', 'utf8')),
+      'le sitemap ne liste pas les pages de badges');
+  });
+
   /* Le site compte ses visites lui-même plutôt que d'appeler un service
      extérieur. Ce qui rend cette mesure acceptable — pas de bandeau, pas de
      traceur — tient à trois choses qu'un changement pourrait défaire sans

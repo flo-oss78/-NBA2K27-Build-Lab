@@ -5,6 +5,7 @@
    publiés, les plus récemment mis à jour en premier. */
 
 import {escHtml as esc} from './api/_utils.js';
+import {BADGES_SLUGS} from './badges-liste.js';
 
 const MAX_URLS = 5000;
 
@@ -35,6 +36,15 @@ export async function onRequestGet({request, env}){
   for (const [chemin, priorite] of PAGES) {
     urls.push(`<url><loc>${esc(origin)}${chemin}</loc>${alternates(chemin)}<changefreq>weekly</changefreq><priority>${priorite}</priority></url>`);
     urls.push(`<url><loc>${esc(origin)}/en${chemin}</loc>${alternates(chemin)}<changefreq>weekly</changefreq><priority>${priorite}</priority></url>`);
+  }
+
+  // Une page par badge, dans les deux langues : c'est le contenu que les
+  // joueurs cherchent nommément, et il n'existait dans aucune page servie —
+  // /reference/ construit ses badges en JavaScript, donc invisible ici.
+  for (const s of BADGES_SLUGS) {
+    const chemin = `/badge/${s}/`;
+    urls.push(`<url><loc>${esc(origin)}${chemin}</loc>${alternates(chemin)}<changefreq>monthly</changefreq><priority>0.8</priority></url>`);
+    urls.push(`<url><loc>${esc(origin)}/en${chemin}</loc>${alternates(chemin)}<changefreq>monthly</changefreq><priority>0.8</priority></url>`);
   }
 
   // Sans base configurée, on renvoie quand même un sitemap valide :

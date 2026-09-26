@@ -295,6 +295,16 @@ function badgeTier(def,r){
  return level?{tier:tiers[level-1],cls:['bronze','silver','gold','hof'][level-1],level}:{tier:'Non débloqué',cls:'none',level:0};
 }
 function badgeIcon(cat){return ({Tir:'🎯',Création:'🪄',Finition:'🔥',Défense:'🛡️',Rebond:'🏀',Physique:'⚡'}[cat]||'🏅')}
+/* Chaque badge a sa page, écrite en HTML par outils/generer-badges.mjs. Elle
+   existe d'abord pour les moteurs de recherche — /reference/ construit ses
+   badges en JavaScript et ne leur montrait rien — mais elle sert aussi de
+   fiche à lire posément. Le lien doit donc partir d'ici, sinon personne, ni
+   Google ni un joueur, ne la trouve. */
+function lienBadge(nom){
+ const s=String(nom).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
+   .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+ return (document.documentElement.lang==='en'?'/en':'')+'/badge/'+s+'/';
+}
 function renderBadges(r){if(!document.getElementById("badgeList"))return; /* section absente de cette page */
  const filter=document.getElementById('badgeFilter').value,search=document.getElementById('badgeSearch').value.toLowerCase().trim();
  const source=getDataQuality?.('badges');
@@ -341,6 +351,7 @@ function renderBadges(r){if(!document.getElementById("badgeList"))return; /* sec
    <div class="badge-reqs"><div class="req-ligne req-tete"><span>Attribut</span><span>Toi</span><i>B</i><i>A</i><i>O</i><i>HOF</i></div>${lignes}
    ${def.req.length>1?`<p class="req-logique">${def.logic==='OR'?'Un seul de ces attributs suffit.':'Tous ces attributs sont requis.'}</p>`:''}</div>
    ${suite?`<p class="badge-next">${suite}</p>`:''}
+   <p class="badge-fiche-lien"><a href="${lienBadge(def.name)}">${document.documentElement.lang==='en'?'Badge page':'Fiche du badge'}</a></p>
    </article>`;
  });
  list.innerHTML=html||'<div class="empty">Aucun badge dans ce filtre.</div>';

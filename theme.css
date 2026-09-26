@@ -1688,3 +1688,35 @@ html[lang="en"] .badge-en{display:none}
   .profil-avatar{width:52px;height:52px;flex-basis:52px}
   .profil-tete h1{font-size:22px}
 }
+
+/* ---- Fiche d'un badge (/badge/<nom>/) ----
+   Ces pages existent d'abord pour être lues par un moteur de recherche : la
+   page Badges construit tout en JavaScript et ne lui montrait rien. */
+.hq-page-badge{max-width:860px;margin:0 auto;padding:16px;display:grid;gap:14px}
+.fil-ariane{font-size:12.5px;color:var(--dim)}
+.fil-ariane a{color:var(--dim)}
+.fil-ariane a:hover,.fil-ariane a:focus-visible{color:var(--cyan)}
+.badge-fiche h1{margin:2px 0 0;font-size:30px;line-height:1.15;text-wrap:balance}
+.badge-fiche h2{margin:20px 0 6px;font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--dim)}
+.badge-cat{margin:0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--cyan)}
+.badge-autre-nom{margin:6px 0 0;color:var(--dim);font-size:12.5px}
+.badge-fiche .badge-desc{margin:0;font-size:14.5px;line-height:1.6;max-width:62ch}
+.badge-reserve{margin:6px 0 0;color:var(--amber);font-size:12.5px}
+.badge-table-zone{overflow-x:auto}
+.badge-table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:13.5px}
+.badge-table caption{text-align:left;color:var(--dim);font-size:12px;padding-bottom:6px}
+.badge-table th,.badge-table td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right}
+.badge-table thead th{color:var(--dim);font-weight:600;font-size:12px}
+.badge-table th[scope=row]{text-align:left;font-weight:700}
+.badge-table tbody tr:last-child th,.badge-table tbody tr:last-child td{border-bottom:0}
+.badge-regle,.badge-taille{margin:8px 0 0;color:var(--dim);font-size:12.5px}
+.badge-action{margin:18px 0 0}
+.badge-source{margin:14px 0 0;color:var(--dim);font-size:11.5px}
+.badge-voisins h2{margin:0 0 8px;font-size:15px}
+.badge-voisins ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px 10px}
+.badge-voisins li a{font-size:13px}
+.badge-voisins p{margin:12px 0 0;font-size:13px}
+.badge-fiche-lien{margin:8px 0 0;font-size:12px}
+.badge-fiche-lien a{color:var(--dim)}
+.badge-fiche-lien a:hover,.badge-fiche-lien a:focus-visible{color:var(--cyan)}
+@media (max-width:420px){.badge-fiche h1{font-size:24px}}
