@@ -43,6 +43,20 @@ const BUILD_JEU = { position: 'SG', height: 75, weight: 185, wing: 78, style: '�
            'Vertical': 80 } };
 const ATTRIBUTS = Object.keys(BUILD_JEU.attrs);
 
+/* Second témoin, relevé dans le jeu le 26 septembre 2026 (meneur dunkeur,
+   captures de l'écran Cap Breaker incluses). Le site le jugeait impossible à
+   108 % : le budget de référence était calé sur le build MOYEN, si bien que la
+   moitié des builds réels le dépassaient. Les valeurs ci-dessous sont celles
+   payées avec les points d'attributs — les gains de Cap Breaker (Driving Dunk
+   +17, Ball Handle +5, Three-Point +1, Vertical +3) relèvent le plafond, pas
+   la note, et ne coûtent donc rien au budget. */
+const BUILD_JEU_MENEUR = { position: 'PG', height: 76, weight: 175, wing: 80,
+  attrs: { 'Close Shot': 65, 'Driving Layup': 76, 'Driving Dunk': 79, 'Standing Dunk': 40,
+           'Post Control': 41, 'Mid-Range': 80, 'Three-Point': 90, 'Free Throw': 99,
+           'Pass Accuracy': 90, 'Ball Handle': 91, 'Speed With Ball': 91, 'Interior Defense': 51,
+           'Perimeter Defense': 72, 'Steal': 87, 'Block': 60, 'Offensive Rebound': 32,
+           'Defensive Rebound': 57, 'Speed': 87, 'Agility': 76, 'Strength': 34, 'Vertical': 79 } };
+
 const pause = ms => new Promise(r => setTimeout(r, ms));
 
 /* ------------------------------------------------------------------ rapport */
@@ -284,10 +298,18 @@ async function testsStatiques() {
     verifier(['PG', 'SG', 'SF', 'PF', 'C'].every(p => M[p]), 'il manque un modèle de budget par poste');
     for (const [cle, m] of Object.entries(M)) verifier(m.marge > 0 && m.marge < 0.2 && m.w.length === 24, `modèle de budget ${cle} incohérent (marge ${m.marge}, ${m.w.length} coefficients)`);
     verifier(S.sources.every(s => /^https:\/\//.test(s.url)) && /estim/i.test(S.avertissement), 'sources ou avertissement manquants');
-    // Les builds réels à 99 doivent retomber dans la marge de leur modèle, pour la plupart.
-    const parts = B.map(b => { const e = ctx.budgetEstime(b[1], b[2], b[3], b[4], Object.fromEntries(A.map((a, i) => [a, b[6][i]]))); return Math.abs(e.part - 1) <= e.marge; });
-    const dedans = parts.filter(Boolean).length / parts.length;
-    verifier(dedans > 0.9, `seulement ${(dedans * 100).toFixed(1)} % des builds réels dans leur marge de budget`);
+    /* Les builds réels doivent tenir dans le budget. 100 % n'est plus le build
+       moyen mais le plus cher que le jeu autorise : un vrai build se situe donc
+       en dessous, et la moyenne du groupe doit rester haute — si elle
+       s'effondrait, c'est que le plafond aurait été relevé au point de ne plus
+       rien contraindre. Combien dépassent est vérifié séparément, avec les
+       builds relevés dans le jeu. */
+    const parts = B.map(b => ctx.budgetEstime(b[1], b[2], b[3], b[4],
+      Object.fromEntries(A.map((a, i) => [a, b[6][i]]))).part);
+    const moyenne = parts.reduce((t, p) => t + p, 0) / parts.length;
+    verifier(moyenne > 0.8 && moyenne < 1,
+      `les builds réels coûtent en moyenne ${(moyenne * 100).toFixed(0)} % du budget : `
+      + `le plafond ne correspond plus à ce que le jeu autorise`);
   });
 
   await test('les plafonds relevés dans 2K HQ sont cohérents et appliqués', () => {
@@ -477,6 +499,49 @@ async function testsStatiques() {
     const legal = fs.readFileSync('mentions-legales/index.html', 'utf8');
     verifier(/Mesure de fréquentation/.test(legal),
       'les mentions légales ne parlent pas de la mesure de fréquentation');
+  });
+
+  /* Un build qui existe dans le jeu doit être réalisable sur le site. Le
+     budget de référence était la MOYENNE des builds réels : la moitié d'entre
+     eux la dépassaient, et le site refusait des builds que des joueurs avaient
+     sous les yeux. Il est désormais calé sur le percentile 99 — le plus cher
+     que le jeu laisse faire. Ce test garde les deux bornes : les vrais builds
+     passent, « tout au maximum » reste impossible. */
+  await test('les builds qui existent dans le jeu tiennent dans le budget', () => {
+    const ctx = { window: {} };
+    vm.createContext(ctx);
+    vm.runInContext(fs.readFileSync('builds-reels.js', 'utf8')
+      + ';this.f=budgetEstime;this.A=BUILDS_ATTRIBUTS;this.B=BUILDS_REELS;', ctx);
+
+    for (const [nom, b] of [['relevé du 13 septembre', BUILD_JEU],
+                            ['meneur dunkeur du 26 septembre', BUILD_JEU_MENEUR]]) {
+      const r = ctx.f(b.position, b.height, b.weight, b.wing, b.attrs);
+      verifier(r, `aucun budget calculé pour le build « ${nom} »`);
+      verifier(r.part <= 1,
+        `le build « ${nom} », relevé dans le jeu, est jugé impossible (${(r.part * 100).toFixed(1)} %)`);
+    }
+
+    // La grande masse des builds réels doit passer : au-dessus de 2 %, c'est
+    // que le point de calage a de nouveau glissé vers la moyenne.
+    let tot = 0, dep = 0, pire = 0;
+    for (const b of ctx.B) {
+      const notes = Object.fromEntries(ctx.A.map((a, i) => [a, b[6][i]]));
+      const r = ctx.f(b[1], b[2], b[3], b[4], notes);
+      if (!r) continue;
+      tot++;
+      if (r.part > 1) { dep++; pire = Math.max(pire, r.part); }
+    }
+    verifier(dep / tot <= 0.02,
+      `${dep} builds réels sur ${tot} (${(dep / tot * 100).toFixed(0)} %) sont jugés impossibles`);
+    verifier(pire < 1.1, `un build réel dépasse de trop : ${(pire * 100).toFixed(0)} %`);
+
+    // Et l'autre borne : tout au maximum doit rester hors d'atteinte.
+    for (const [pos, h, w, wing] of [['PG', 74, 170, 76], ['C', 86, 250, 88]]) {
+      const tout99 = Object.fromEntries(ctx.A.map(a => [a, 99]));
+      const r = ctx.f(pos, h, w, wing, tout99);
+      verifier(r.part > 1.5,
+        `tout à 99 en ${pos} ne coûte que ${(r.part * 100).toFixed(0)} % : la limite ne protège plus`);
+    }
   });
 
   /* L'adresse d'un avatar Discord contient l'identifiant Discord de la

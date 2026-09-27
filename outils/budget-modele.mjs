@@ -75,15 +75,30 @@ function ajuster(S, plancher) {
     idx.forEach((i, a) => w[i] = s[a]);
     const sous = idx.filter(i => i < 21 && w[i] < plancher);
     if (!sous.length) {
-      const budget = X.reduce((t, x) => t + x.reduce((u, v, i) => u + v * w[i], 0), 0) / m;
-      return { w, budget };
+      const couts = X.map(x => x.reduce((u, v, i) => u + v * w[i], 0));
+      const moyenne = couts.reduce((t, c) => t + c, 0) / m;
+      /* Le budget du jeu est un plafond, pas une moyenne. En prenant la
+         moyenne des builds réels comme 100 %, la moitié d'entre eux la
+         dépassaient : le site refusait 1 903 builds réels sur 3 679, dont des
+         builds recopiés du jeu par des joueurs. On cale donc 100 % sur le
+         percentile 99 des coûts observés — le build le plus cher que le jeu
+         laisse faire, sans se laisser tirer par une donnée aberrante.
+         La moyenne reste calculée : c'est elle qui sert à mesurer la
+         dispersion du modèle, donc la marge annoncée. */
+      const tries = [...couts].sort((a, b) => a - b);
+      const budget = tries[Math.min(tries.length - 1, Math.floor(tries.length * 0.99))];
+      return { w, budget, moyenne };
     }
     sous.forEach(i => fixes.set(i, plancher));
   }
   throw new Error('ajustement du budget : pas de solution');
 }
 
-const ecart = (b, mod) => f(b).reduce((u, v, i) => u + v * mod.w[i], 0) / mod.budget - 1;
+/* Écart au build moyen, pas au plafond : la marge dit à quel point le modèle
+   prédit bien le coût d'un build, ce qui se mesure autour du centre de la
+   distribution. Rapportée au plafond, elle mélangerait erreur et écart normal
+   entre un build moyen et le build le plus cher. */
+const ecart = (b, mod) => f(b).reduce((u, v, i) => u + v * mod.w[i], 0) / mod.moyenne - 1;
 
 let graine = 42; const hasard = () => (graine = (graine * 16807) % 2147483647) / 2147483647;
 function marge(S, plancher) {
