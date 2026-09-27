@@ -501,6 +501,44 @@ async function testsStatiques() {
       'les mentions légales ne parlent pas de la mesure de fréquentation');
   });
 
+  /* Un nom de build vient d'un autre joueur, par le serveur. Inséré tel quel
+     dans la page, il n'est plus du texte mais du balisage : le tableau de
+     comparaison le faisait, et un build nommé avec une balise se serait
+     exécuté chez celui qui le comparait. La politique de sécurité en limite
+     les dégâts, mais elle est la dernière ligne, pas la première. */
+  await test('rien de ce qu’écrit un joueur n’est inséré sans échappement', () => {
+    const CHAMPS = '(name|author|description|style|position|score|slug)';
+    const fautifs = [];
+    for (const f of ['hub.js', 'server-client.js', 'builds-page.js', 'community.js',
+                     'mon-build.js', 'builds-ui.js', 'app.js']) {
+      if (!fs.existsSync(f)) continue;
+      const src = fs.readFileSync(f, 'utf8');
+      src.split('\n').forEach((ligne, i) => {
+        // Une interpolation d'un champ venu des données, dans un gabarit HTML,
+        // sans passer par une fonction d'échappement.
+        if (!/innerHTML|return `<|\+ *`</.test(ligne) && !/`<[a-z]/.test(ligne)) return;
+        const m = ligne.match(new RegExp('\\$\\{[a-z]+\\.' + CHAMPS + '[^}]*\\}', 'g')) || [];
+        for (const brut of m) {
+          if (/escapeHTML|esc\(|escHtml/.test(brut)) continue;
+          // Un test qui choisit entre deux littéraux (« ${x.score>=100?'ready':''} »)
+          // ne place pas la donnée dans la page : il en dérive une classe.
+          if (/\?[^}]*'[^']*'/.test(brut)) continue;
+          fautifs.push(`${f}:${i + 1} ${brut}`);
+        }
+      });
+    }
+    verifier(!fautifs.length,
+      'insertions HTML sans échappement :\n  ' + fautifs.slice(0, 6).join('\n  '));
+
+    // Côté serveur, la fiche publique rend elle aussi du contenu de joueur.
+    const fiche = fs.readFileSync('functions/b/[id].js', 'utf8');
+    verifier(/esc\(row\.name\)/.test(fiche), 'la fiche publique n’échappe pas le nom du build');
+    // Et la page de profil ne doit pas construire de HTML du tout.
+    const profil = fs.readFileSync('profil.js', 'utf8');
+    const innerAvecDonnee = /innerHTML *= *[^;]*\$\{/.test(profil);
+    verifier(!innerAvecDonnee, 'profil.js construit du HTML avec des données : il doit poser du texte');
+  });
+
   /* Un build qui existe dans le jeu doit être réalisable sur le site. Le
      budget de référence était la MOYENNE des builds réels : la moitié d'entre
      eux la dépassaient, et le site refusait des builds que des joueurs avaient
@@ -1980,6 +2018,28 @@ async function testsProduction() {
     const suivre = await fetch(`${URL_PROD}/api/suivre`, {
       method: 'POST', headers: { 'content-type': 'application/json' }, body: '{"slug":"x"}' });
     verifier(suivre.status === 401, `suivre sans compte → HTTP ${suivre.status} au lieu de 401`);
+  });
+
+  /* Le déploiement publie le dossier entier. Un audit a trouvé en ligne la
+     configuration Cloudflare (nom et identifiant de la base), le schéma SQL,
+     les outils de test et le script de déploiement — qui contient des chemins
+     personnels. Rien d'exploitable directement, mais rien qui doive traîner. */
+  await test('les fichiers de travail ne sont pas servis en ligne', async () => {
+    const interdits = ['/wrangler.toml', '/deployer.cmd', '/README.md',
+      '/outils/tests.mjs', '/outils/navigateur.mjs',
+      '/migrations/0004_comptes_discord.sql', '/donnees/en.json'];
+    const servis = [];
+    for (const chemin of interdits) {
+      const r = await fetch(URL_PROD + chemin);
+      if (r.status !== 404) servis.push(`${chemin} → HTTP ${r.status}`);
+    }
+    verifier(!servis.length, 'accessibles publiquement :\n  ' + servis.join('\n  '));
+
+    // Et rien de ce qui est servi ne doit contenir de secret.
+    const config = await fetch(`${URL_PROD}/site-config.js`);
+    const texte = await config.text();
+    verifier(!/SECRET|client_secret|password|api[_-]?key/i.test(texte),
+      'site-config.js contient quelque chose qui ressemble à un secret');
   });
 
   /* La fiche publique est ce qu'on reçoit quand quelqu'un partage un build.

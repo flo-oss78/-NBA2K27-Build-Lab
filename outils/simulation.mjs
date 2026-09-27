@@ -88,7 +88,7 @@ const joueursVus = new Map();      // joueur cité → combien de fois
 let chrono = { total: 0, n: 0, pire: 0, pireBuild: '' };
 const variete = { noms: 0, cats: 0, pire: 0, pireMoyenne: 0, n: 0, recordPire: 0, recordOu: '', recordNom: '' };
 
-await nav.ouvrir(base + '/', 1500);
+await nav.ouvrir(base + '/creer/', 1500);   // le builder vit dans /creer/ depuis la page d'accueil
 
 const EXTREMES = process.argv.includes('--extremes') ? corpsExtremes() : null;
 const total = EXTREMES ? EXTREMES.length : COMBIEN;

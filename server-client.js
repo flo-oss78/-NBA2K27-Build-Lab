@@ -136,8 +136,8 @@
     const attrs=x.attributes||{}; const top=Object.entries(attrs).sort((a,b)=>b[1]-a[1]).slice(0,8);
     const commentsHtml=comments.length?comments.map(c=>`<div class="server-comment"><b>${esc(c.nickname)}</b><span>${new Date(c.created_at).toLocaleDateString('fr-FR')}</span><p>${esc(c.body)}</p></div>`).join(''):'<div class="empty">Pas encore de commentaire.</div>';
     const body=`<div class="modal-kicker">${x.validated?'✓ BUILD VALIDÉ':'⚠ BUILD À VÉRIFIER'} • 🌐 SERVEUR</div>
-      <h2>${esc(x.name)}</h2><p class="sub">${x.position} • ${heightLabel(x.height)} • ${x.weight} lbs • ${heightLabel(x.wing)} envergure • ${esc(x.style||'—')}</p>
-      <div class="modal-stats"><div><b>${x.score||0}</b><span>Moyenne</span></div><div><b>${x.badges||0}</b><span>Badges</span></div><div><b>${x.animations||0}</b><span>Animations</span></div><div><b>${x.likes||0}</b><span>Likes</span></div></div>
+      <h2>${esc(x.name)}</h2><p class="sub">${esc(x.position)} • ${heightLabel(x.height)} • ${x.weight} lbs • ${heightLabel(x.wing)} envergure • ${esc(x.style||'—')}</p>
+      <div class="modal-stats"><div><b>${esc(x.score||0)}</b><span>Moyenne</span></div><div><b>${x.badges||0}</b><span>Badges</span></div><div><b>${x.animations||0}</b><span>Animations</span></div><div><b>${x.likes||0}</b><span>Likes</span></div></div>
       <h3>Attributs principaux</h3><div class="modal-attrs">${top.map(([k,v])=>`<div><span>${esc(k)}</span><b>${v}</b></div>`).join('')}</div>
       ${comments.length?`<h3>Commentaires</h3><div id="serverComments">${commentsHtml}</div>`:''}
       <div class="modal-actions"><button id="modalLoad">Charger ce build</button><button id="modalCompare" class="secondary">Comparer</button><button id="modalShare" class="secondary">Copier le lien</button></div>`;

@@ -343,7 +343,7 @@ function renderBadges(r){if(!document.getElementById("badgeList"))return; /* sec
    else suite=manques.length?`Pour ${PALIERS[st.level]} : `+manques.map(x=>`${escapeHTML(nomA(x[0]))} +${x[1]}`).join(' et ')+'.':'';
   }
   html+=`<article class="badge-card cat-${CAT_CLS[def.cat]||'none'} ${st.cls} ${ok?'unlocked':''}">
-   <div class="badge-photo ${st.cls}" role="img" aria-label="${nomBadge(def.name)} (${def.name}) — ${st.tier}">${typeof iconeBadge==='function'?iconeBadge(def.name,def.cat,st.level):`<span aria-hidden="true">${badgeIcon(def.cat)}</span>`}</div>
+   <div class="badge-photo ${st.cls}" role="img" aria-label="${escapeHTML(nomBadge(def.name))} (${escapeHTML(def.name)}) — ${escapeHTML(st.tier)}">${typeof iconeBadge==='function'?iconeBadge(def.name,def.cat,st.level):`<span aria-hidden="true">${badgeIcon(def.cat)}</span>`}</div>
    <div class="badge-titre"><div class="badge-names">${nomBadgeHTML(def.name)}</div><span class="badge-category">${def.cat}</span></div>
    <span class="badge-tier ${st.cls}">${horsTaille?'Hors taille':ok?st.tier:'Pas encore'}</span>
    ${BADGE_DESC_FR[def.name]?`<p class="badge-desc">${escapeHTML(BADGE_DESC_FR[def.name])}</p>`:`<p class="badge-desc manquante">Description du jeu pas encore relevée.</p>`}
@@ -358,7 +358,7 @@ function renderBadges(r){if(!document.getElementById("badgeList"))return; /* sec
  texte('badgeUnlocked',unlocked+' accessibles'); texte('badgeTotal',badgeDefs.length);
 }
 
-function renderTakeovers(r){if(!document.getElementById("takeoverList"))return; /* section absente de cette page */let list=document.getElementById('takeoverList'),scores=takeoverDefs.map(([name,attr,need])=>({name,attr,need,score:Math.min(100,Math.round((r[attr]||0)/need*100))})).sort((a,b)=>b.score-a.score);list.innerHTML=scores.map(x=>`<button class="takeover ${x.score>=100?'ready':''}" data-take="${x.name}"><span>${x.name}<small>${x.attr} requis : ${x.need}</small></span><b>${x.score}%</b></button>`).join('');texte('takeoverScore',scores[0].score+' / 100');list.querySelectorAll('.takeover').forEach(b=>b.onclick=()=>{list.querySelectorAll('.takeover').forEach(x=>x.classList.remove('selected'));b.classList.add('selected')})}
+function renderTakeovers(r){if(!document.getElementById("takeoverList"))return; /* section absente de cette page */let list=document.getElementById('takeoverList'),scores=takeoverDefs.map(([name,attr,need])=>({name,attr,need,score:Math.min(100,Math.round((r[attr]||0)/need*100))})).sort((a,b)=>b.score-a.score);list.innerHTML=scores.map(x=>`<button class="takeover ${x.score>=100?'ready':''}" data-take="${escapeHTML(x.name)}"><span>${escapeHTML(x.name)}<small>${escapeHTML(x.attr)} requis : ${escapeHTML(x.need)}</small></span><b>${escapeHTML(x.score)}%</b></button>`).join('');texte('takeoverScore',scores[0].score+' / 100');list.querySelectorAll('.takeover').forEach(b=>b.onclick=()=>{list.querySelectorAll('.takeover').forEach(x=>x.classList.remove('selected'));b.classList.add('selected')})}
 function buildBodySignature(){
  const p=[position.value,height.value,weight.value,wing.value].join('|');
  let h=0; for(let i=0;i<p.length;i++) h=((h<<5)-h+p.charCodeAt(i))|0;

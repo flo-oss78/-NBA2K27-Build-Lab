@@ -12,7 +12,7 @@ import { navigateur, serveurLocal, RACINE, pause } from './navigateur.mjs';
 
 process.chdir(RACINE);
 
-const PAGES = ['/', '/hub/', '/reference/', '/mon-build/', '/mentions-legales/', '/en/', '/en/reference/'];
+const PAGES = ['/', '/creer/', '/hub/', '/reference/', '/mon-build/', '/mentions-legales/', '/en/', '/en/creer/', '/en/reference/'];
 const srv = await serveurLocal();
 const base = `http://127.0.0.1:${srv.address().port}`;
 const nav = await navigateur();

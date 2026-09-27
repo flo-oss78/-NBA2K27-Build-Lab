@@ -14,9 +14,15 @@ const RACINE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 process.chdir(RACINE);
 
 const SCRIPTS = fs.readdirSync('.').filter(f => f.endsWith('.js') && !['sw.js', 'i18n-en.js'].includes(f));
-const PAGES = ['index.html', 'hub/index.html', 'reference/index.html', 'mon-build/index.html', 'mentions-legales/index.html', '404.html'];
+const PAGES = ['index.html', 'creer/index.html', 'hub/index.html', 'reference/index.html', 'mon-build/index.html', 'u/index.html', 'mentions-legales/index.html', '404.html'];
 const sources = Object.fromEntries(SCRIPTS.map(f => [f, fs.readFileSync(f, 'utf8')]));
-const html = PAGES.map(p => fs.readFileSync(p, 'utf8')).join('\n');
+/* Les pages rendues côté serveur comptent autant que les fichiers HTML : la
+   fiche d'un build (/b/<id>) et les pages de badges n'existent nulle part en
+   tant que fichier de la racine, mais leur balisage est bien servi. Sans
+   elles, l'outil signalait comme introuvables des identifiants qui existent. */
+const RENDUES = ['functions/b/[id].js', 'badge/deadeye/index.html', 'animations/crossover/index.html'];
+const html = [...PAGES, ...RENDUES.filter(f => fs.existsSync(f))]
+  .map(p => fs.readFileSync(p, 'utf8')).join('\n');
 const tout = Object.values(sources).join('\n');
 
 const dire = [];

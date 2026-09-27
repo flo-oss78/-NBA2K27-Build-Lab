@@ -130,7 +130,7 @@ function renderCommunity(){
      <div class="build-card-corps">
        ${tags.length?`<div class="build-tags">${tags.map(t=>`<span>${escapeHTML(t)}</span>`).join('')}</div>`:''}
        <h3 class="build-card-nom">${escapeHTML(x.name)}${isDemo?'<span class="build-demo-tag">Démo</span>':''}</h3>
-       <p class="build-card-gabarit">${heightLabel(x.height)} · ${x.weight} lbs · ${heightLabel(x.wing)} envergure · ${escapeHTML(x.style||'—')} · <b>${x.score||0}</b> de moyenne</p>
+       <p class="build-card-gabarit">${heightLabel(x.height)} · ${x.weight} lbs · ${heightLabel(x.wing)} envergure · ${escapeHTML(x.style||'—')} · <b>${escapeHTML(x.score||0)}</b> de moyenne</p>
        <div class="build-card-chiffres">
          <button type="button" class="build-aime${aime?' actif':''}" data-like-build="${x.id}" aria-pressed="${aime?'true':'false'}" title="${aime?'Je n’aime plus':'J’aime ce build'}">♥ <b>${x.likes||0}</b></button>
          <span title="Vues">👁 ${x.views||0}</span>
@@ -182,8 +182,8 @@ function openBuildModal(id){
  const attrs=x.attributes||{};
  const top=Object.entries(attrs).sort((a,b)=>b[1]-a[1]).slice(0,6);
  const body=`<div class="modal-kicker">${x.validated?'✓ BUILD VALIDÉ':'⚠ BUILD À VÉRIFIER'}</div>
-   <h2>${escapeHTML(x.name)}</h2><p class="sub">${x.position} • ${heightLabel(x.height)} • ${x.weight} lbs • ${heightLabel(x.wing)} envergure • ${escapeHTML(x.style||'—')}</p>
-   <div class="modal-stats"><div><b>${x.score||0}</b><span>Moyenne</span></div><div><b>${x.badges||0}</b><span>Badges</span></div><div><b>${x.animations||0}</b><span>Animations</span></div><div><b>${x.capBreakers||0}</b><span>CB</span></div></div>
+   <h2>${escapeHTML(x.name)}</h2><p class="sub">${escapeHTML(x.position)} • ${heightLabel(x.height)} • ${x.weight} lbs • ${heightLabel(x.wing)} envergure • ${escapeHTML(x.style||'—')}</p>
+   <div class="modal-stats"><div><b>${escapeHTML(x.score||0)}</b><span>Moyenne</span></div><div><b>${x.badges||0}</b><span>Badges</span></div><div><b>${x.animations||0}</b><span>Animations</span></div><div><b>${x.capBreakers||0}</b><span>CB</span></div></div>
    <h3>Top attributs</h3><div class="modal-attrs">${top.map(([k,v])=>`<div><span>${escapeHTML(k)}</span><b>${v}</b></div>`).join('')}</div>
    <div class="modal-actions"><button id="modalLoad">Charger ce build</button><button id="modalCompare" class="secondary">Comparer</button><button id="modalShare" class="secondary">Copier le lien</button></div>`;
  document.getElementById('buildModalContent').innerHTML=body;
@@ -228,11 +228,14 @@ let compareBuilds=[];
 function addCompareById(id){const x=hubById(id);if(!x)return;if(compareBuilds.some(b=>b.id===x.id))return;if(compareBuilds.length>=3){alert('Maximum 3 builds.');return}compareBuilds.push(x);renderCompare()}
 function renderCompare(){
  const slots=document.getElementById('compareSlots');if(!slots)return;
- slots.innerHTML=[0,1,2].map(i=>{const x=compareBuilds[i];return x?`<div class="compare-slot filled"><b>${x.name}</b><small>${x.position} • ${heightLabel(x.height)} • moy. ${x.score}</small><button data-remove-compare="${x.id}">×</button></div>`:`<div class="compare-slot"><span>Emplacement ${i+1}</span><small>Ajoute un build depuis le Build Hub</small></div>`}).join('');
+ /* Ces builds viennent du serveur, donc d'autres joueurs : leur nom est du
+    texte que quelqu'un a écrit. Sans échappement, un build nommé avec une
+    balise s'insérerait tel quel dans la page de celui qui le compare. */
+ slots.innerHTML=[0,1,2].map(i=>{const x=compareBuilds[i];return x?`<div class="compare-slot filled"><b>${escapeHTML(x.name)}</b><small>${escapeHTML(x.position)} • ${heightLabel(x.height)} • moy. ${escapeHTML(x.score)}</small><button data-remove-compare="${escapeHTML(x.id)}">×</button></div>`:`<div class="compare-slot"><span>Emplacement ${i+1}</span><small>Ajoute un build depuis le Build Hub</small></div>`}).join('');
  slots.querySelectorAll('[data-remove-compare]').forEach(b=>b.onclick=()=>{compareBuilds=compareBuilds.filter(x=>x.id!==b.dataset.removeCompare);renderCompare()});
  const wrap=document.getElementById('compareTable'); if(compareBuilds.length<2){wrap.innerHTML='<div class="empty">Sélectionne au moins 2 builds pour lancer la comparaison.</div>';return}
  const keys=['Close Shot','Driving Layup','Driving Dunk','Three-Point','Mid-Range','Pass Accuracy','Ball Handle','Speed With Ball','Perimeter Defense','Steal','Block','Defensive Rebound','Speed','Agility','Strength','Vertical'];
- wrap.innerHTML=`<table class="compare-table"><thead><tr><th>Attribut</th>${compareBuilds.map(x=>`<th>${x.name}<small>${x.position} • ${heightLabel(x.height)}</small></th>`).join('')}</tr></thead><tbody>${keys.map(k=>`<tr><td>${k}</td>${compareBuilds.map(x=>`<td>${x.attributes?.[k]??'—'}</td>`).join('')}</tr>`).join('')}<tr class="compare-total"><td>Moyenne des attributs</td>${compareBuilds.map(x=>`<td>${x.score}</td>`).join('')}</tr></tbody></table>`;
+ wrap.innerHTML=`<table class="compare-table"><thead><tr><th>Attribut</th>${compareBuilds.map(x=>`<th>${escapeHTML(x.name)}<small>${escapeHTML(x.position)} • ${heightLabel(x.height)}</small></th>`).join('')}</tr></thead><tbody>${keys.map(k=>`<tr><td>${escapeHTML(k)}</td>${compareBuilds.map(x=>`<td>${escapeHTML(x.attributes?.[k]??'—')}</td>`).join('')}</tr>`).join('')}<tr class="compare-total"><td>Moyenne des attributs</td>${compareBuilds.map(x=>`<td>${escapeHTML(x.score)}</td>`).join('')}</tr></tbody></table>`;
 }
 
 /* Écouteurs et rendu initial, déplacés depuis le bas d'app.js. */

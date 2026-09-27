@@ -12,3 +12,16 @@
 /progression/   /mon-build/?onglet=progression  301
 /progression/*  /mon-build/?onglet=progression  301
 
+
+# Fichiers de travail publiés par le déploiement mais qui n'ont rien à faire
+# en ligne : configuration Cloudflare (nom et identifiant de la base), schéma
+# de la base, outils de test et de génération, script de déploiement (qui
+# contient des chemins personnels), données sources déjà intégrées aux
+# scripts du site. Aucun n'est chargé par une page ; un audit les a trouvés
+# accessibles à qui connaît leur nom.
+/wrangler.toml    /404.html  404
+/deployer.cmd     /404.html  404
+/README.md        /404.html  404
+/outils/*         /404.html  404
+/migrations/*     /404.html  404
+/donnees/*        /404.html  404
