@@ -422,11 +422,11 @@
     "ou": "texte"
    },
    {
-    "texte": "Publier dans les builds de la communauté",
+    "texte": "Envoyer ce build :",
     "ou": "texte"
    },
    {
-    "texte": "Ton build devient visible par tout le monde et reçoit une adresse à partager.",
+    "texte": "Publier rend ton build visible par tout le monde et lui donne une adresse à partager.",
     "ou": "texte"
    },
    {
@@ -4107,6 +4107,105 @@
     "texte": "Ton build devient visible par tout le monde et reçoit une adresse à partager."
    },
    {
+    "texte": "Le Labo des Builds — créer son build NBA 2K27"
+   },
+   {
+    "texte": "Le Labo des Builds — build your NBA 2K27 MyPLAYER"
+   },
+   {
+    "texte": "Le Labo des Builds : crée ton build NBA 2K27 avant de dépenser tes VC. Maximums d'attributs par gabarit, 53 badges, 2 595 animations et leurs exigences, Cap Breakers."
+   },
+   {
+    "texte": "Le Labo des Builds: plan your NBA 2K27 build before spending any VC. Attribute maximums for every body, 53 badges, 2,595 animations and their requirements, Cap Breakers."
+   },
+   {
+    "texte": "Crée ton build NBA 2K27 avant de dépenser tes VC : maximums d'attributs par gabarit, badges, animations et Cap Breakers."
+   },
+   {
+    "texte": "Sache ce que vaut ton build avant de dépenser tes VC"
+   },
+   {
+    "texte": "Le Labo des Builds montre ce que ton gabarit autorise vraiment : jusqu'où chaque attribut peut monter, quels badges tu débloques, quelles animations tu pourras équiper. Gratuit, sans inscription, en français."
+   },
+   {
+    "texte": "Le Labo des Builds shows what your body actually allows: how high each attribute can go, which badges you unlock, which animations you will be able to equip. Free, no sign-up."
+   },
+   {
+    "texte": "Voir les builds des autres"
+   },
+   {
+    "texte": "corps relevés dans le jeu"
+   },
+   {
+    "texte": "badges et leurs paliers"
+   },
+   {
+    "texte": "animations et leurs exigences"
+   },
+   {
+    "texte": "builds réels pour comparer"
+   },
+   {
+    "texte": "À quoi ça sert"
+   },
+   {
+    "texte": "Dans NBA 2K27, un build se paie en VC et ne se corrige pas. Avant de valider, il faut savoir trois choses : jusqu'où chaque attribut peut monter avec la taille, le poids et l'envergure choisis ; quels badges ces attributs débloquent, et à quel palier ; quelles animations resteront hors de portée. Le jeu ne répond à aucune de ces questions avant que le build soit créé."
+   },
+   {
+    "texte": "Ce site y répond pendant que tu règles tes curseurs, en te montrant au passage ce qu'un point de plus te ferait gagner — ou perdre ailleurs."
+   },
+   {
+    "texte": "Par où commencer"
+   },
+   {
+    "texte": "Le builder"
+   },
+   {
+    "texte": "Choisis ton corps, place tes points d'attributs, et vois en temps réel les maximums, les badges et les animations que ça t'ouvre."
+   },
+   {
+    "texte": "Pick your body, spend your attribute points, and watch the maximums, badges and animations move as you go."
+   },
+   {
+    "texte": "Ce que fait chaque badge, les attributs exigés pour Bronze, Argent, Or et Hall of Fame, et la taille requise."
+   },
+   {
+    "texte": "Les animations"
+   },
+   {
+    "texte": "2 595 animations classées par catégorie, de la plus accessible à la plus exigeante, avec les attributs de chacune."
+   },
+   {
+    "texte": "Les builds de la communauté"
+   },
+   {
+    "texte": "Les builds publiés par les joueurs, et 3 679 builds réels pour comparer le tien à ce qui se joue vraiment."
+   },
+   {
+    "texte": "Builds published by players, plus 3,679 real builds to compare yours with what people actually play."
+   },
+   {
+    "texte": "Ta fiche complète : badges et leurs niveaux, plan de Cap Breakers, progression à suivre en jeu."
+   },
+   {
+    "texte": "Les trios"
+   },
+   {
+    "texte": "Des gabarits prêts à jouer si tu ne sais pas par où commencer : choisis-en un et ajuste-le ensuite."
+   },
+   {
+    "texte": "D'où viennent les chiffres"
+   },
+   {
+    "texte": "Les maximums d'attributs sont relevés à la main dans le builder du jeu et l'application NBA 2K HQ, sur 340 corps. Les exigences d'animations sont recoupées entre plusieurs sources publiques, et le site indique à chaque fois si une valeur est"
+   },
+   {
+    "texte": "— plutôt que de tout afficher du même ton."
+   },
+   {
+    "texte": "Ce site est un outil indépendant, réalisé par un joueur. Il n'est ni affilié à 2K ni à la NBA, et ne reproduit aucun visuel du jeu."
+   },
+   {
     "texte": "Terminer au cercle, layups, dunks et jeu au poste."
    },
    {
@@ -5689,6 +5788,14 @@
    },
    {
     "texte": ").join(''):'<div><span>Build déjà optimisé</span><b>Aucun changement</b></div>'}</div><div class=\"modal-actions\"><button data-close-modal>Garder ce build</button><button class=\"secondary\" data-close-modal>Fermer</button></div>"
+   }
+  ],
+  "partage-reseaux.js": [
+   {
+    "texte": "Lien du build copié."
+   },
+   {
+    "texte": "Copie impossible sur cet appareil."
    }
   ],
   "profil.js": [

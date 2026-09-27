@@ -1507,6 +1507,41 @@ async function testsNavigateur(base) {
         `le build partagé a été perdu en chemin (${apres.recherche})`);
     });
 
+    /* Envoyer un build ailleurs. Les boutons de partage habituels chargent un
+       script du réseau, qui voit passer tous les visiteurs même sans clic :
+       la politique de sécurité du site les bloquerait, et la mesure d'audience
+       promet qu'aucune donnée ne part chez un tiers. Ici, de simples liens. */
+    await test('envoyer un build ailleurs n’appelle aucun service extérieur', async () => {
+      await nav.ouvrir(base + '/creer/?etape=recap');
+      await new Promise(r => setTimeout(r, 700));
+      const r = await nav.evaluer(`
+        const b = document.getElementById('partagerAilleurs');
+        if (!b) return { absent: true };
+        b.click();
+        await new Promise(r => setTimeout(r, 300));
+        const zone = document.getElementById('reseaux');
+        const liens = [...document.querySelectorAll('#reseaux a[data-reseau]')]
+          .map(a => a.getAttribute('href'));
+        return {
+          deplie: zone && !zone.hidden,
+          liens,
+          copier: !!document.querySelector('#reseaux [data-reseau="copier"]'),
+          // Rien d'un réseau social ne doit être chargé par la page.
+          scriptsTiers: [...document.querySelectorAll('script[src]')]
+            .map(s => s.src).filter(u => !u.startsWith(location.origin))
+        };`);
+      sansErreur('envoyer ailleurs');
+      verifier(!r.absent, 'aucun bouton pour envoyer le build ailleurs');
+      verifier(r.deplie, 'le bouton « Envoyer » n’ouvre rien sur ordinateur');
+      verifier(r.liens.length >= 3, `${r.liens.length} destinations de partage seulement`);
+      verifier(r.copier, 'pas de « copier le lien » parmi les destinations');
+      // Chaque lien doit emporter le build, sinon il envoie vers une page vide.
+      const sansBuild = r.liens.filter(h => !/build%3D|build=/.test(h || ''));
+      verifier(!sansBuild.length, `un lien de partage ne contient pas le build : ${sansBuild[0]}`);
+      verifier(!r.scriptsTiers.length,
+        'la page charge un script extérieur : ' + r.scriptsTiers.join(', '));
+    });
+
     /* Publier depuis la fin du parcours. Ce test ne publie rien : il répond
        « non » à la confirmation et vérifie qu'aucune requête ne part — sinon,
        lancé sur la production, il créerait un vrai build à chaque passage. */

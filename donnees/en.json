@@ -387,7 +387,11 @@
     "Les maximums d'attributs sont relevés à la main dans le builder du jeu et l'application NBA 2K HQ, sur 340 corps. Les exigences d'animations sont recoupées entre plusieurs sources publiques, et le site indique à chaque fois si une valeur est": "Attribute maximums are read by hand from the in-game builder and the NBA 2K HQ app, across 340 bodies. Animation requirements are cross-checked between public sources, and the site always says whether a value is",
     "— plutôt que de tout afficher du même ton.": "— rather than showing everything in the same voice.",
     "Ce site est un outil indépendant, réalisé par un joueur. Il n'est ni affilié à 2K ni à la NBA, et ne reproduit aucun visuel du jeu.": "This site is an independent tool made by a player. It is not affiliated with 2K or the NBA, and reproduces no artwork from the game.",
-    "Ce que contient le site": "What the site holds"
+    "Ce que contient le site": "What the site holds",
+    "Envoyer ce build :": "Send this build:",
+    "Publier rend ton build visible par tout le monde et lui donne une adresse à partager.": "Publishing makes your build visible to everyone and gives it an address you can share.",
+    "Envoyer": "Send",
+    "Publier": "Publish"
   },
   "scripts": {
     "Terminer au cercle, layups, dunks et jeu au poste.": "Finishing at the rim, layups, dunks and post play.",
@@ -818,7 +822,8 @@
     "J’aime ce build": "Like this build",
     "Je n’aime plus": "Remove like",
     "Build publié : il est maintenant dans les builds de la communauté.": "Build published: it is now in the community builds.",
-    "Voir ta fiche publique ?": "View your public page?"
+    "Voir ta fiche publique ?": "View your public page?",
+    "Copie impossible sur cet appareil.": "Copying is not available on this device."
   },
   "motifs": [
     [

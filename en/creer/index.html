@@ -59,7 +59,7 @@
   <div class="reference-actions">
     <div id="compteZone" class="compte-zone" hidden></div>
     <a class="lang-switch" href="/creer/" hreflang="fr" lang="fr" title="Version française">FR</a>
-    <span id="referenceVersion">V26.35</span>
+    <span id="referenceVersion">V26.36</span>
     <button id="referenceSettings" type="button" aria-label="Open settings" aria-expanded="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.9 19.3a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.7 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.56V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.56 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z"/></svg>
     </button>
@@ -326,14 +326,26 @@
           <!-- Publier depuis ici : jusqu'à présent il fallait aller au hub et
                y retrouver le bouton, alors que l'envie de partager vient au
                moment où le build est fini. -->
-          <p class="recap-publier"><button type="button" data-publier class="hq-pilule hq-pilule-forte">Publish to the community builds</button>
-            <span>Your build becomes visible to everyone and gets an address you can share.</span></p>
           <div class="exact-actions">
             <button id="save" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>Save</button>
             <button id="load" type="button" class="secondary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"/></svg>Load</button>
             <button id="share" type="button" class="secondary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>Copy link</button>
             <button id="printCard" type="button" class="secondary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>Build sheet</button>
+            <!-- Envoyer le build ailleurs : le menu du téléphone quand il
+                 existe, sinon les trois endroits où se parle NBA 2K. -->
+            <button id="partagerAilleurs" type="button" class="secondary" aria-expanded="false" aria-controls="reseaux"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>Send</button>
+            <!-- Publier tient dans la même rangée que les autres actions :
+                 c'est une façon de garder son build, pas un geste à part. -->
+            <button type="button" data-publier class="publier-action"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>Publish</button>
           </div>
+          <div id="reseaux" class="reseaux" hidden>
+            <span>Send this build:</span>
+            <a data-reseau="x" href="#" target="_blank" rel="noopener">X</a>
+            <a data-reseau="reddit" href="#" target="_blank" rel="noopener">Reddit</a>
+            <a data-reseau="whatsapp" href="#" target="_blank" rel="noopener">WhatsApp</a>
+            <button type="button" data-reseau="copier">Copy link</button>
+          </div>
+          <p class="recap-publier-mot">Publishing makes your build visible to everyone and gives it an address you can share.</p>
         </div>
 
         <div class="panel exact-card builds-reels-carte">
@@ -590,6 +602,7 @@
 <script src="/community.js"></script>
 <script src="/sections-repliables.js"></script>
 <script src="/compte.js"></script>
+<script src="/partage-reseaux.js"></script>
 <script src="/ui.js"></script>
 <script src="/hq-builder.js"></script>
 <script src="/attributs-jeu.js"></script>
