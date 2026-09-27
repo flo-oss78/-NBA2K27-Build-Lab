@@ -58,7 +58,7 @@
   <div class="reference-actions">
     <div id="compteZone" class="compte-zone" hidden></div>
     <a class="lang-switch" href="/" hreflang="fr" lang="fr" title="Version française">FR</a>
-    <span id="referenceVersion">V26.33</span>
+    <span id="referenceVersion">V26.34</span>
     <button id="referenceSettings" type="button" aria-label="Open settings" aria-expanded="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.9 19.3a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.7 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.56V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.56 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z"/></svg>
     </button>
@@ -322,6 +322,11 @@
 
         <div class="panel exact-card recap-garder">
           <div class="exact-card-title"><h2>Keep your build</h2></div>
+          <!-- Publier depuis ici : jusqu'à présent il fallait aller au hub et
+               y retrouver le bouton, alors que l'envie de partager vient au
+               moment où le build est fini. -->
+          <p class="recap-publier"><button type="button" data-publier class="hq-pilule hq-pilule-forte">Publish to the community builds</button>
+            <span>Your build becomes visible to everyone and gets an address you can share.</span></p>
           <div class="exact-actions">
             <button id="save" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>Save</button>
             <button id="load" type="button" class="secondary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"/></svg>Load</button>

@@ -1466,6 +1466,35 @@ async function testsNavigateur(base) {
         + `état ${clic.retour.etat} au lieu de ${clic.avant.etat})`);
     });
 
+    /* Publier depuis la fin du parcours. Ce test ne publie rien : il répond
+       « non » à la confirmation et vérifie qu'aucune requête ne part — sinon,
+       lancé sur la production, il créerait un vrai build à chaque passage. */
+    await test('on peut publier son build depuis la fin du parcours, sans clic distrait', async () => {
+      await nav.ouvrir(base + '/?etape=recap');
+      await new Promise(r => setTimeout(r, 700));
+      const r = await nav.evaluer(`
+        const b = document.querySelector('[data-publier]');
+        if (!b) return { absent: true };
+        const rect = b.getBoundingClientRect();
+        // On neutralise la confirmation et on surveille le réseau : rien ne
+        // doit partir tant que la personne n'a pas dit oui.
+        const vraiConfirm = window.confirm, vraiFetch = window.fetch;
+        let demande = false, envoye = false;
+        window.confirm = () => { demande = true; return false; };
+        window.fetch = (...a) => { if (/\\/api\\/builds/.test(String(a[0]))) envoye = true;
+          return vraiFetch.apply(window, a); };
+        b.click();
+        await new Promise(r => setTimeout(r, 400));
+        window.confirm = vraiConfirm; window.fetch = vraiFetch;
+        return { texte: b.textContent.trim(), visible: rect.height > 0, demande, envoye };`);
+      sansErreur('publier depuis le récap');
+      verifier(!r.absent, 'aucun bouton pour publier à la fin du parcours');
+      verifier(r.visible, 'le bouton « publier » ne s’affiche pas');
+      verifier(/publier/i.test(r.texte), `libellé peu clair : « ${r.texte} »`);
+      verifier(r.demande, 'publier ne demande aucune confirmation : un clic distrait rend le build public');
+      verifier(!r.envoye, 'le build est parti alors que la confirmation a été refusée');
+    });
+
     await test('un build réel chargé garde exactement ses notes et son corps', async () => {
       await nav.ouvrir(base + '/');
       const r = await nav.evaluer(`

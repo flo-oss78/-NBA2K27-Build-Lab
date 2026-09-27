@@ -1875,3 +1875,9 @@ a.build-auteur:hover b,a.build-auteur:focus-visible b{color:var(--cyan)}
   .bd-groups .bd-row{grid-template-columns:1fr 70px auto}
   .bd-badges{grid-template-columns:1fr}
 }
+
+/* ---- Publier depuis la fin du parcours ----
+   Le bouton était seulement dans le hub : il fallait y aller et l'y
+   retrouver, alors que l'envie de partager vient quand le build est fini. */
+.recap-publier{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 10px}
+.recap-publier span{color:var(--dim);font-size:12px;line-height:1.45;flex:1 1 220px}

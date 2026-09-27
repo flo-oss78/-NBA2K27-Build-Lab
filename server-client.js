@@ -58,6 +58,8 @@
     };
   }
 
+  const dire=(t,ton)=>{ if(window.NBABL_TOAST)window.NBABL_TOAST(t,ton||'level'); else alert(t); };
+
   async function publishCurrent(){
     const build=currentBuildObject();
     // Depuis /hub/, sans build encore composé sur cet appareil : on envoie
@@ -67,17 +69,31 @@
       location.href='/';
       return;
     }
+    /* Publier rend le build visible par tout le monde et lui donne une adresse
+       publique : ça ne doit pas partir sur un clic distrait, surtout depuis le
+       builder où le bouton est sous la main. On dit ce qui part, et où. */
+    const taille=Math.floor(build.height/12)+'\''+(build.height%12)+'"';
+    if(!confirm('Publier « '+build.name+' » ('+build.position+' '+taille+') dans les builds de la communauté ?\n\n'
+      +'Il sera visible par tout le monde et recevra une adresse publique.')) return;
+
     const meta=currentBuildMeta();
     if(meta)build.meta=meta;
     try{
       const data=await api('/builds',{method:'POST',body:JSON.stringify(build)});
       const owners=getOwners(); owners[data.build.id]=data.ownerToken; saveOwners(owners);
       mergeServerBuilds([data.build]);
-      alert('✅ Build publié sur le serveur. Il est maintenant visible par tout le monde.');
       renderCommunity();
+      dire('Build publié : il est maintenant dans les builds de la communauté.');
+      // Depuis le builder, on propose d'aller le voir : sans ça, rien ne montre
+      // que quelque chose s'est passé ailleurs sur le site.
+      if(!/^\/hub\//.test(location.pathname)&&data.build&&data.build.id){
+        setTimeout(function(){
+          if(confirm('Voir ta fiche publique ?')) location.href='/b/'+encodeURIComponent(data.build.id);
+        },400);
+      }
     }catch(e){
       const arr=readHub();arr.unshift(build);writeHub(arr.slice(0,100));renderCommunity();
-      alert('⚠️ Serveur indisponible : le build a été sauvegardé localement.\n\n'+e.message);
+      dire('Serveur indisponible : le build est gardé sur cet appareil. '+e.message,'warn');
     }
   }
 
@@ -133,9 +149,15 @@
     // Commentaires fermés pour le lancement : plus de formulaire (voir functions/api/builds/[id]/comments.js).
   }
 
-  // Replace the local-only button with server publishing while preserving local fallback.
+  /* Publier passe par le serveur, avec repli local. Tous les boutons marqués
+     data-publier sont branchés, pas seulement celui du hub : on publie aussi
+     depuis la fin du parcours de build, là où l'envie vient. */
   const add=document.getElementById('addCurrentBuild');
   if(add){const clone=add.cloneNode(true);add.replaceWith(clone);clone.addEventListener('click',publishCurrent)}
+  document.querySelectorAll('[data-publier]').forEach(function(b){
+    b.addEventListener('click',publishCurrent);
+  });
+  window.NBABL_PUBLIER=publishCurrent;
 
   // Server-aware likes and build details.
   window.likeBuild=likeServer;
