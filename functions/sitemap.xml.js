@@ -22,6 +22,7 @@ export async function onRequestGet({request, env}){
   // /trios/ est devenu un onglet de /hub/ (redirection 301).
   const PAGES = [
     ['/', '1.0'],
+    ['/creer/', '1.0'],
     ['/hub/', '0.9'],
     ['/reference/', '0.9'],
     ['/mon-build/', '0.7'],

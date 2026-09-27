@@ -66,7 +66,7 @@
     // l'utilisateur au builder plutôt que de publier un objet vide.
     if(!build){
       alert('Compose d’abord ton build dans le builder, puis reviens le publier.');
-      location.href='/';
+      location.href='/creer/';
       return;
     }
     /* Publier rend le build visible par tout le monde et lui donne une adresse

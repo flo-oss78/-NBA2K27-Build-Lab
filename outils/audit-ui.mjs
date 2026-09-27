@@ -20,7 +20,7 @@ process.chdir(RACINE);
 
 const PROD = process.argv.includes('--prod');
 const URL_PROD = 'https://lelabodesbuilds.com';
-const PAGES = ['/', '/hub/', '/reference/', '/mon-build/', '/mentions-legales/'];
+const PAGES = ['/', '/creer/', '/hub/', '/reference/', '/mon-build/', '/mentions-legales/'];
 const LANGUES = ['', '/en'];
 const ECRANS = [[375, 812, true, 'téléphone'], [1440, 900, false, 'ordinateur']];
 const MODES = ['simple', 'expert'];

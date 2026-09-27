@@ -28,7 +28,7 @@ process.chdir(RACINE);
 const PROD = process.argv.includes('--prod');
 const URL_PROD = 'https://lelabodesbuilds.com';
 const PAGES = [
-  { chemin: '/',             fichier: 'index.html',             nav: 'Créer' },
+  { chemin: '/creer/',       fichier: 'creer/index.html',       nav: 'Créer' },
   { chemin: '/hub/',         fichier: 'hub/index.html',         nav: 'Builds' },
   { chemin: '/reference/',   fichier: 'reference/index.html',   nav: 'Badges' },
   { chemin: '/mon-build/',   fichier: 'mon-build/index.html',   nav: 'Mon build' }
@@ -824,7 +824,7 @@ async function testsNavigateur(base) {
     });
 
     await test('le builder construit ses curseurs et recalcule', async () => {
-      await nav.ouvrir(base + '/');
+      await nav.ouvrir(base + '/creer/');
       const r = await nav.evaluer(`
         const attendus = Object.values(data).flat().length;
         const curseurs = document.querySelectorAll('#attributeGroups input[type=range]');
@@ -843,7 +843,7 @@ async function testsNavigateur(base) {
     });
 
     await test('mode Simple par défaut, Expert révèle tout, le choix suit d\u2019une page à l\u2019autre', async () => {
-      await nav.ouvrir(base + '/');
+      await nav.ouvrir(base + '/creer/');
       const simple = await nav.evaluer(`
         const avances = [...document.querySelectorAll('[data-mode="expert"]')];
         return { stocke: localStorage.getItem('nba2k27_mode_v1'),
@@ -883,7 +883,7 @@ async function testsNavigateur(base) {
 
     // Demande du 15/09/2026 : un builder épuré, avec un fil conducteur quand on fait son build.
     await test('le builder guide pas à pas : Corps, Attributs, Badges, Animations, Récap', async () => {
-      await nav.ouvrir(base + '/');
+      await nav.ouvrir(base + '/creer/');
       const r = await nav.evaluer(`
         const pause = () => new Promise(r => setTimeout(r, 120));
         const etapes = [...document.querySelectorAll('.hq-etapes [role="tab"]')];
@@ -979,17 +979,17 @@ async function testsNavigateur(base) {
     // Le builder « Créer » rouvre le dernier build ; « Repartir de zéro » (?nouveau=1) repart d'un build vierge.
     await test('le builder rouvre le dernier build, et « Repartir de zéro » repart d’un build vierge', async () => {
       // Visiteur qui n'a rien modifié : aucun build « rouvert », aucun build en cours.
-      await nav.ouvrir(base + '/');
+      await nav.ouvrir(base + '/creer/');
       await nav.evaluer(`localStorage.removeItem('nba2k27_ctx_v1');`);
-      await nav.ouvrir(base + '/');
-      await nav.ouvrir(base + '/');
+      await nav.ouvrir(base + '/creer/');
+      await nav.ouvrir(base + '/creer/');
       const vierge = await nav.evaluer(`return { bandeau: !!document.getElementById('buildRouvert').offsetParent, ctx: lireContexte() };`);
       verifier(!vierge.bandeau && vierge.ctx === null, `visiteur sans build : bandeau ${vierge.bandeau}, build en cours ${JSON.stringify(vierge.ctx)}`);
       const code = Buffer.from(JSON.stringify(BUILD_JEU), 'utf8').toString('base64');
       await nav.ouvrir(`${base}/?build=${encodeURIComponent(code)}`);
       const attendu = await nav.evaluer(`return { corps: [position.value, +height.value, +weight.value, +wing.value],
         notes: Object.fromEntries(inputs.map(x => [x.dataset.name, +x.value])) };`);
-      await nav.ouvrir(base + '/');
+      await nav.ouvrir(base + '/creer/');
       sansErreur('réouverture du dernier build');
       const r = await nav.evaluer(`return { corps: [position.value, +height.value, +weight.value, +wing.value],
         notes: Object.fromEntries(inputs.map(x => [x.dataset.name, +x.value])),
@@ -998,7 +998,7 @@ async function testsNavigateur(base) {
       const ecarts = Object.keys(attendu.notes).filter(k => attendu.notes[k] !== r.notes[k]);
       verifier(!ecarts.length, 'notes modifiées à la réouverture : ' + ecarts.join(', '));
       verifier(r.bandeau, 'rien ne signale que le dernier build a été rouvert');
-      await nav.ouvrir(base + '/?nouveau=1');
+      await nav.ouvrir(base + '/creer/?nouveau=1');
       const v = await nav.evaluer(`return { position: position.value, bandeau: !!document.getElementById('buildRouvert').offsetParent };`);
       verifier(v.position !== attendu.corps[0] && !v.bandeau, `« Repartir de zéro » : poste ${v.position}, bandeau visible ${v.bandeau}`);
       sansErreur('repartir de zéro');
@@ -1141,7 +1141,7 @@ async function testsNavigateur(base) {
         'Pass Accuracy': [75, 75], 'Ball Handle': [86, 86], 'Speed With Ball': [77, 77], 'Interior Defense': [44, 44],
         'Perimeter Defense': [91, 91], 'Steal': [84, 84], 'Block': [45, 45], 'Offensive Rebound': [27, 27],
         'Defensive Rebound': [51, 51], 'Speed': [87, 87], 'Agility': [85, 85], 'Strength': [52, 52], 'Vertical': [80, 80] };
-      await nav.ouvrir(base + '/');
+      await nav.ouvrir(base + '/creer/');
       const r = await nav.evaluer(`
         const jeu = ${JSON.stringify(jeu)};
         const el = id => document.getElementById(id);
@@ -1246,7 +1246,7 @@ async function testsNavigateur(base) {
     });
 
     await test('les points d’attributs sont limités : monter l’un oblige à baisser l’autre', async () => {
-      await nav.ouvrir(base + '/');
+      await nav.ouvrir(base + '/creer/');
       const r = await nav.evaluer(`
         const el = id => document.getElementById(id), attendre = ms => new Promise(r => setTimeout(r, ms));
         const curseur = n => [...document.querySelectorAll('#attributeGroups input')].find(x => x.dataset.name === n);
@@ -1302,9 +1302,9 @@ async function testsNavigateur(base) {
     await test('le builder s’ouvre vierge, et un curseur qui refuse de monter le dit sur l’attribut', async () => {
       // Le builder rouvre le dernier build : pour juger l'arrivée d'un nouveau
       // venu, il faut un navigateur sans passé, pas celui du test précédent.
-      await nav.ouvrir(base + '/');
+      await nav.ouvrir(base + '/creer/');
       await nav.evaluer('localStorage.clear(); return 1;');
-      await nav.ouvrir(base + '/?etape=attributs');
+      await nav.ouvrir(base + '/creer/?etape=attributs');
       const r = await nav.evaluer(`
         const el = id => document.getElementById(id), attendre = ms => new Promise(r => setTimeout(r, ms));
         const curseurs = () => [...document.querySelectorAll('#attributeGroups input[type=range]')];
@@ -1372,7 +1372,7 @@ async function testsNavigateur(base) {
        « Mon build » que presque personne n'ouvrait, faute qu'on les annonce.
        La fin du parcours dit maintenant où aller, avec les chiffres du build. */
     await test('la fin du parcours mène ailleurs, et le plan du site relie les pages', async () => {
-      await nav.ouvrir(base + '/?etape=recap');
+      await nav.ouvrir(base + '/creer/?etape=recap');
       await new Promise(r => setTimeout(r, 600));
       const r = await nav.evaluer(`
         const liens = [...document.querySelectorAll('#recapSuite a')];
@@ -1466,11 +1466,52 @@ async function testsNavigateur(base) {
         + `état ${clic.retour.etat} au lieu de ${clic.avant.etat})`);
     });
 
+    /* La racine du site portait le builder : un moteur de recherche n'y
+       trouvait aucun texte disant ce qu'est Le Labo des Builds, et son titre
+       principal affichait « Mon build ». Elle présente désormais le site.
+       Mais des liens de partage pointent encore vers la racine avec un build
+       dedans — les laisser tomber sur la présentation casserait un lien que
+       quelqu'un a envoyé à quelqu'un d'autre. */
+    await test('la page d’accueil présente le site, et ne casse pas les liens de partage', async () => {
+      await nav.ouvrir(base + '/');
+      await new Promise(r => setTimeout(r, 500));
+      const r = await nav.evaluer(`
+        const h1 = document.querySelector('h1');
+        const liens = [...document.querySelectorAll('main a')].map(a => a.getAttribute('href'));
+        return {
+          titre: document.title,
+          h1: h1 ? h1.textContent.trim() : '',
+          nomDansLaPage: /Labo des Builds/.test(document.body.innerText),
+          mots: document.body.innerText.split(/\\s+/).filter(Boolean).length,
+          liens,
+          ld: !!document.querySelector('script[type="application/ld+json"]')
+        };`);
+      sansErreur('page d’accueil');
+      verifier(/Labo des Builds/.test(r.titre), `le titre ne nomme pas le site : « ${r.titre} »`);
+      verifier(r.h1 && r.h1 !== 'Mon build', `titre principal inutilisable : « ${r.h1} »`);
+      verifier(r.nomDansLaPage, 'le nom du site n’apparaît nulle part dans le texte de la page');
+      // Une page d'accueil sans texte n'apprend rien à un moteur de recherche.
+      verifier(r.mots > 150, `seulement ${r.mots} mots sur la page d’accueil`);
+      verifier(r.ld, 'la page d’accueil n’a pas sa carte d’identité schema.org');
+      for (const cible of ['/creer/', '/hub/', '/reference/', '/animations/', '/mon-build/']) {
+        verifier(r.liens.includes(cible), `la page d’accueil ne mène pas à ${cible}`);
+      }
+
+      // Le point sensible : un lien de partage déjà en circulation.
+      await nav.ouvrir(base + '/?build=TEST123');
+      await new Promise(r => setTimeout(r, 900));
+      const apres = await nav.evaluer(`return { chemin: location.pathname, recherche: location.search }`);
+      verifier(apres.chemin === '/creer/',
+        `un lien de partage arrive sur ${apres.chemin} au lieu du builder`);
+      verifier(apres.recherche.includes('build=TEST123'),
+        `le build partagé a été perdu en chemin (${apres.recherche})`);
+    });
+
     /* Publier depuis la fin du parcours. Ce test ne publie rien : il répond
        « non » à la confirmation et vérifie qu'aucune requête ne part — sinon,
        lancé sur la production, il créerait un vrai build à chaque passage. */
     await test('on peut publier son build depuis la fin du parcours, sans clic distrait', async () => {
-      await nav.ouvrir(base + '/?etape=recap');
+      await nav.ouvrir(base + '/creer/?etape=recap');
       await new Promise(r => setTimeout(r, 700));
       const r = await nav.evaluer(`
         const b = document.querySelector('[data-publier]');
@@ -1496,7 +1537,7 @@ async function testsNavigateur(base) {
     });
 
     await test('un build réel chargé garde exactement ses notes et son corps', async () => {
-      await nav.ouvrir(base + '/');
+      await nav.ouvrir(base + '/creer/');
       const r = await nav.evaluer(`
         const el = id => document.getElementById(id), attendre = ms => new Promise(r => setTimeout(r, ms));
         el('position').value = 'C'; el('position').dispatchEvent(new Event('input', { bubbles: true }));
@@ -1538,7 +1579,7 @@ async function testsNavigateur(base) {
       await nav.cliquerEtAttendre(`document.querySelector('[data-apply="${bp.id}"]').click()`);
       const arrivee = await nav.evaluer(`return { chemin: location.pathname,
         poste: document.getElementById('position')?.value, taille: document.getElementById('height')?.value };`);
-      verifier(arrivee.chemin === '/', `arrivée sur ${arrivee.chemin} au lieu de /`);
+      verifier(arrivee.chemin === '/creer/', `arrivée sur ${arrivee.chemin} au lieu du builder`);
       verifier(arrivee.poste === bp.pos && arrivee.taille === bp.h,
         `gabarit ${arrivee.poste} / ${arrivee.taille} au lieu de ${bp.pos} / ${bp.h}`);
       sansErreur('après la passerelle trio');
@@ -1563,9 +1604,9 @@ async function testsNavigateur(base) {
       verifier(r.onglets > 0, 'onglets du hub absents');
     });
     await test('le builder dit si les plafonds sont exacts, estimés ou approximatifs', async () => {
-      await nav.ouvrir(base + '/');
+      await nav.ouvrir(base + '/creer/');
       await nav.evaluer(`localStorage.removeItem(IMPORT_JEU_KEY);`);
-      await nav.ouvrir(base + '/');
+      await nav.ouvrir(base + '/creer/');
       const r = await nav.evaluer(`
         const POSTES = ['PG','SG','SF','PF','C'];
         const poste = (h,w,e) => POSTES.find(p => { const c = corpsLegal(p,h); return c && w>=c.poidsMin && w<=c.poidsMax && e>=c.envMin && e<=c.envMax; });
@@ -1602,7 +1643,7 @@ async function testsNavigateur(base) {
       sansErreur('indicateur de fiabilité des plafonds');
     });
     await test('l’étape Attributs montre, comme le jeu, les badges de l’attribut choisi et leurs paliers', async () => {
-      await nav.ouvrir(base + '/?etape=attributs');
+      await nav.ouvrir(base + '/creer/?etape=attributs');
       const r = await nav.evaluer(`
         const ligne = n => document.querySelector('#attributeGroups .attr[data-attr="'+n+'"]');
         const surOk = window.inputs.every(x => x.closest('.attr').querySelector('.attr-sur')?.textContent === '/ ' + x.max);
@@ -1654,7 +1695,7 @@ async function testsNavigateur(base) {
     });
 
     await test('chaque catégorie propose une animation conseillée, pour n\u2019importe quel corps', async () => {
-      await nav.ouvrir(base + '/');
+      await nav.ouvrir(base + '/creer/');
       const r = await nav.evaluer(`
         // 60 builds tirés au hasard (graine fixe) parmi les corps autorisés, notes de 25 à 99.
         let graine = 27; const hasard = () => (graine = (graine * 16807) % 2147483647) / 2147483647;
@@ -1721,7 +1762,7 @@ async function testsNavigateur(base) {
       const arrivee = await nav.evaluer(`return { chemin: location.pathname,
         corps: [position.value, +height.value, +weight.value, +wing.value],
         notes: BUILDS_ATTRIBUTS.map(a => +inputs.find(x => x.dataset.name === a).value) };`);
-      verifier(arrivee.chemin === '/', `arrivée sur ${arrivee.chemin}`);
+      verifier(arrivee.chemin === '/creer/', `arrivée sur ${arrivee.chemin} au lieu du builder`);
       verifier(JSON.stringify(arrivee.corps) === JSON.stringify([pos, h, w, wing]), `corps ${arrivee.corps} au lieu de ${[pos, h, w, wing]} (${nom})`);
       const ecarts = v.map((n, i) => n === arrivee.notes[i] ? null : `${i} : ${arrivee.notes[i]} au lieu de ${n}`).filter(Boolean);
       verifier(!ecarts.length, `« ${nom} » modifié à l\u2019ouverture : ${ecarts.join(', ')}`);

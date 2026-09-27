@@ -1,8 +1,194 @@
 {
- "genere": "2026-09-24",
+ "genere": "2026-09-27",
  "note": "Source unique des textes à traduire. Régénérer après toute modification des textes français.",
  "pages": {
   "index.html": [
+   {
+    "texte": "Le Labo des Builds — créer son build NBA 2K27",
+    "ou": "texte"
+   },
+   {
+    "texte": "Aller au contenu",
+    "ou": "texte"
+   },
+   {
+    "texte": "LE LABO",
+    "ou": "texte"
+   },
+   {
+    "texte": "Créer",
+    "ou": "texte"
+   },
+   {
+    "texte": "Sache ce que vaut ton build avant de dépenser tes VC",
+    "ou": "texte"
+   },
+   {
+    "texte": "Le Labo des Builds montre ce que ton gabarit autorise vraiment : jusqu'où chaque attribut peut monter, quels badges tu débloques, quelles animations tu pourras équiper. Gratuit, sans inscription, en français.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Créer mon build",
+    "ou": "texte"
+   },
+   {
+    "texte": "Voir les builds des autres",
+    "ou": "texte"
+   },
+   {
+    "texte": "corps relevés dans le jeu",
+    "ou": "texte"
+   },
+   {
+    "texte": "badges et leurs paliers",
+    "ou": "texte"
+   },
+   {
+    "texte": "animations et leurs exigences",
+    "ou": "texte"
+   },
+   {
+    "texte": "builds réels pour comparer",
+    "ou": "texte"
+   },
+   {
+    "texte": "À quoi ça sert",
+    "ou": "texte"
+   },
+   {
+    "texte": "Dans NBA 2K27, un build se paie en VC et ne se corrige pas. Avant de valider, il faut savoir trois choses : jusqu'où chaque attribut peut monter avec la taille, le poids et l'envergure choisis ; quels badges ces attributs débloquent, et à quel palier ; quelles animations resteront hors de portée. Le jeu ne répond à aucune de ces questions avant que le build soit créé.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Ce site y répond pendant que tu règles tes curseurs, en te montrant au passage ce qu'un point de plus te ferait gagner — ou perdre ailleurs.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Par où commencer",
+    "ou": "texte"
+   },
+   {
+    "texte": "Le builder",
+    "ou": "texte"
+   },
+   {
+    "texte": "Choisis ton corps, place tes points d'attributs, et vois en temps réel les maximums, les badges et les animations que ça t'ouvre.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Les 53 badges",
+    "ou": "texte"
+   },
+   {
+    "texte": "Ce que fait chaque badge, les attributs exigés pour Bronze, Argent, Or et Hall of Fame, et la taille requise.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Les animations",
+    "ou": "texte"
+   },
+   {
+    "texte": "2 595 animations classées par catégorie, de la plus accessible à la plus exigeante, avec les attributs de chacune.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Les builds de la communauté",
+    "ou": "texte"
+   },
+   {
+    "texte": "Les builds publiés par les joueurs, et 3 679 builds réels pour comparer le tien à ce qui se joue vraiment.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Ta fiche complète : badges et leurs niveaux, plan de Cap Breakers, progression à suivre en jeu.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Les trios",
+    "ou": "texte"
+   },
+   {
+    "texte": "Des gabarits prêts à jouer si tu ne sais pas par où commencer : choisis-en un et ajuste-le ensuite.",
+    "ou": "texte"
+   },
+   {
+    "texte": "D'où viennent les chiffres",
+    "ou": "texte"
+   },
+   {
+    "texte": "Les maximums d'attributs sont relevés à la main dans le builder du jeu et l'application NBA 2K HQ, sur 340 corps. Les exigences d'animations sont recoupées entre plusieurs sources publiques, et le site indique à chaque fois si une valeur est",
+    "ou": "texte"
+   },
+   {
+    "texte": "estimée",
+    "ou": "texte"
+   },
+   {
+    "texte": "ou",
+    "ou": "texte"
+   },
+   {
+    "texte": "— plutôt que de tout afficher du même ton.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Ce site est un outil indépendant, réalisé par un joueur. Il n'est ni affilié à 2K ni à la NBA, et ne reproduit aucun visuel du jeu.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Mentions légales et confidentialité",
+    "ou": "texte"
+   },
+   {
+    "texte": "NBA 2K27 Build Lab — outil indépendant, données publiques, aucune affiliation officielle avec 2K.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Les animations par catégorie",
+    "ou": "texte"
+   },
+   {
+    "texte": "Builds réels",
+    "ou": "texte"
+   },
+   {
+    "texte": "Communauté",
+    "ou": "texte"
+   },
+   {
+    "texte": "Builds publiés",
+    "ou": "texte"
+   },
+   {
+    "texte": "Signaler une erreur de données",
+    "ou": "texte"
+   },
+   {
+    "texte": "Le Labo des Builds : crée ton build NBA 2K27 avant de dépenser tes VC. Maximums d'attributs par gabarit, 53 badges, 2 595 animations et leurs exigences, Cap Breakers.",
+    "ou": "content"
+   },
+   {
+    "texte": "Crée ton build NBA 2K27 avant de dépenser tes VC : maximums d'attributs par gabarit, badges, animations et Cap Breakers.",
+    "ou": "content"
+   },
+   {
+    "texte": "Build Lab NBA 2K27 : 340 corps relevés, 94 % de maximums justes, 53 badges, plus de 2 500 animations.",
+    "ou": "content"
+   },
+   {
+    "texte": "Le Labo des Builds",
+    "ou": "content"
+   },
+   {
+    "texte": "Ce que contient le site",
+    "ou": "aria-label"
+   },
+   {
+    "texte": "Plan du site",
+    "ou": "aria-label"
+   }
+  ],
+  "creer/index.html": [
    {
     "texte": "Le Labo des Builds — builder NBA 2K27",
     "ou": "texte"
@@ -236,11 +422,23 @@
     "ou": "texte"
    },
    {
+    "texte": "Publier dans les builds de la communauté",
+    "ou": "texte"
+   },
+   {
+    "texte": "Ton build devient visible par tout le monde et reçoit une adresse à partager.",
+    "ou": "texte"
+   },
+   {
     "texte": "Builds réels proches",
     "ou": "texte"
    },
    {
     "texte": "même poste, taille ±1",
+    "ou": "texte"
+   },
+   {
+    "texte": "Et maintenant&nbsp;?",
     "ou": "texte"
    },
    {
@@ -448,6 +646,26 @@
     "ou": "texte"
    },
    {
+    "texte": "Les 53 badges",
+    "ou": "texte"
+   },
+   {
+    "texte": "Les animations par catégorie",
+    "ou": "texte"
+   },
+   {
+    "texte": "Builds réels",
+    "ou": "texte"
+   },
+   {
+    "texte": "Communauté",
+    "ou": "texte"
+   },
+   {
+    "texte": "Builds publiés",
+    "ou": "texte"
+   },
+   {
     "texte": "Mentions légales et confidentialité",
     "ou": "texte"
    },
@@ -513,6 +731,10 @@
    },
    {
     "texte": "Détail du build",
+    "ou": "aria-label"
+   },
+   {
+    "texte": "Plan du site",
     "ou": "aria-label"
    }
   ],
@@ -654,6 +876,18 @@
     "ou": "texte"
    },
    {
+    "texte": "Les 53 badges",
+    "ou": "texte"
+   },
+   {
+    "texte": "Les animations par catégorie",
+    "ou": "texte"
+   },
+   {
+    "texte": "Builds publiés",
+    "ou": "texte"
+   },
+   {
     "texte": "Mentions légales et confidentialité",
     "ou": "texte"
    },
@@ -740,6 +974,10 @@
    {
     "texte": "Détail du build",
     "ou": "aria-label"
+   },
+   {
+    "texte": "Plan du site",
+    "ou": "aria-label"
    }
   ],
   "reference/index.html": [
@@ -792,6 +1030,10 @@
     "ou": "texte"
    },
    {
+    "texte": "Parcourir les 2 595 animations par catégorie",
+    "ou": "texte"
+   },
+   {
     "texte": "Toutes les catégories",
     "ou": "texte"
    },
@@ -833,6 +1075,26 @@
    },
    {
     "texte": ": leurs jumpers sont testés en Hall of Fame, sans boosts, sans badges et sans shot meter, sur une station automatisée. On ne cherche pas à refaire ça ici.",
+    "ou": "texte"
+   },
+   {
+    "texte": "Les 53 badges",
+    "ou": "texte"
+   },
+   {
+    "texte": "Les animations par catégorie",
+    "ou": "texte"
+   },
+   {
+    "texte": "Builds réels",
+    "ou": "texte"
+   },
+   {
+    "texte": "Communauté",
+    "ou": "texte"
+   },
+   {
+    "texte": "Builds publiés",
     "ou": "texte"
    },
    {
@@ -909,6 +1171,10 @@
    },
    {
     "texte": "Détail du build",
+    "ou": "aria-label"
+   },
+   {
+    "texte": "Plan du site",
     "ou": "aria-label"
    }
   ],
@@ -1118,6 +1384,26 @@
     "ou": "texte"
    },
    {
+    "texte": "Les 53 badges",
+    "ou": "texte"
+   },
+   {
+    "texte": "Les animations par catégorie",
+    "ou": "texte"
+   },
+   {
+    "texte": "Builds réels",
+    "ou": "texte"
+   },
+   {
+    "texte": "Communauté",
+    "ou": "texte"
+   },
+   {
+    "texte": "Builds publiés",
+    "ou": "texte"
+   },
+   {
     "texte": "Mentions légales et confidentialité",
     "ou": "texte"
    },
@@ -1155,6 +1441,10 @@
    },
    {
     "texte": "Sections de mon build",
+    "ou": "aria-label"
+   },
+   {
+    "texte": "Plan du site",
     "ou": "aria-label"
    }
   ],
@@ -1196,6 +1486,22 @@
     "ou": "texte"
    },
    {
+    "texte": "Les 53 badges",
+    "ou": "texte"
+   },
+   {
+    "texte": "Les animations par catégorie",
+    "ou": "texte"
+   },
+   {
+    "texte": "Builds réels",
+    "ou": "texte"
+   },
+   {
+    "texte": "Communauté",
+    "ou": "texte"
+   },
+   {
     "texte": "Mentions légales et confidentialité",
     "ou": "texte"
    },
@@ -1221,6 +1527,10 @@
    },
    {
     "texte": "Ouvrir les réglages",
+    "ou": "aria-label"
+   },
+   {
+    "texte": "Plan du site",
     "ou": "aria-label"
    }
   ],
@@ -1434,6 +1744,26 @@
     "ou": "texte"
    },
    {
+    "texte": "Les 53 badges",
+    "ou": "texte"
+   },
+   {
+    "texte": "Les animations par catégorie",
+    "ou": "texte"
+   },
+   {
+    "texte": "Builds réels",
+    "ou": "texte"
+   },
+   {
+    "texte": "Communauté",
+    "ou": "texte"
+   },
+   {
+    "texte": "Builds publiés",
+    "ou": "texte"
+   },
+   {
     "texte": "Signaler une erreur de données",
     "ou": "texte"
    },
@@ -1444,6 +1774,10 @@
    {
     "texte": "Build Lab NBA 2K27 : 340 corps relevés, 94 % de maximums justes, 53 badges, plus de 2 500 animations.",
     "ou": "content"
+   },
+   {
+    "texte": "Plan du site",
+    "ou": "aria-label"
    }
   ],
   "404.html": [
@@ -1480,12 +1814,36 @@
     "ou": "texte"
    },
    {
+    "texte": "Les 53 badges",
+    "ou": "texte"
+   },
+   {
+    "texte": "Les animations par catégorie",
+    "ou": "texte"
+   },
+   {
+    "texte": "Builds réels",
+    "ou": "texte"
+   },
+   {
+    "texte": "Communauté",
+    "ou": "texte"
+   },
+   {
+    "texte": "Builds publiés",
+    "ou": "texte"
+   },
+   {
     "texte": "Mentions légales et confidentialité",
     "ou": "texte"
    },
    {
     "texte": "Signaler une erreur de données",
     "ou": "texte"
+   },
+   {
+    "texte": "Plan du site",
+    "ou": "aria-label"
    }
   ]
  },
@@ -3722,6 +4080,33 @@
     "texte": "The button is on your profile. It erases your Discord identifier, your name, your avatar, your public address and who you follow. The builds you published stay online but are no longer linked to you, so links shared by others keep working; write to us if you want them removed too."
    },
    {
+    "texte": "Mesure de fréquentation."
+   },
+   {
+    "texte": "Parcourir les 2 595 animations par catégorie"
+   },
+   {
+    "texte": "Plan du site"
+   },
+   {
+    "texte": "Les 53 badges"
+   },
+   {
+    "texte": "Les animations par catégorie"
+   },
+   {
+    "texte": "Et maintenant&nbsp;?"
+   },
+   {
+    "texte": "Et maintenant ?"
+   },
+   {
+    "texte": "Publier dans les builds de la communauté"
+   },
+   {
+    "texte": "Ton build devient visible par tout le monde et reçoit une adresse à partager."
+   },
+   {
     "texte": "Terminer au cercle, layups, dunks et jeu au poste."
    },
    {
@@ -4931,6 +5316,24 @@
     "texte": "Le profil n’a pas pu être chargé."
    },
    {
+    "texte": "Exemple du site"
+   },
+   {
+    "texte": "Sans compte"
+   },
+   {
+    "texte": "J’aime ce build"
+   },
+   {
+    "texte": "Je n’aime plus"
+   },
+   {
+    "texte": "Build publié : il est maintenant dans les builds de la communauté."
+   },
+   {
+    "texte": "Voir ta fiche publique ?"
+   },
+   {
     "texte": "Afficher plus \\\\(([^)]*?) sur ([^)]*?) restants\\\\)"
    },
    {
@@ -5585,10 +5988,19 @@
     "texte": "Compose d’abord ton build dans le builder, puis reviens le publier."
    },
    {
-    "texte": "✅ Build publié sur le serveur. Il est maintenant visible par tout le monde."
+    "texte": ") dans les builds de la communauté ?"
    },
    {
-    "texte": "⚠️ Serveur indisponible : le build a été sauvegardé localement."
+    "texte": "Il sera visible par tout le monde et recevra une adresse publique."
+   },
+   {
+    "texte": "Build publié : il est maintenant dans les builds de la communauté."
+   },
+   {
+    "texte": "Voir ta fiche publique ?"
+   },
+   {
+    "texte": "Serveur indisponible : le build est gardé sur cet appareil."
    },
    {
     "texte": "<div class=\"empty\">Pas encore de commentaire.</div>"

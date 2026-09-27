@@ -159,7 +159,7 @@
     var attrs={};
     BUILDS_ATTRIBUTS.forEach(function(a,j){attrs[a]=String(b[6][j])});
     var build={position:b[1],height:String(b[2]),weight:String(b[3]),wing:String(b[4]),style:'Équilibré',hand:'Droite',attrs:attrs};
-    location.href='/?build='+encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(build)))));
+    location.href='/creer/?build='+encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(build)))));
   });
 
   var s=window.BUILDS_SOURCE||(typeof BUILDS_SOURCE!=='undefined'?BUILDS_SOURCE:null);

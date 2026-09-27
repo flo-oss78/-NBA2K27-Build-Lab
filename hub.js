@@ -210,7 +210,7 @@ function loadHubBuild(id){
  if(!document.getElementById('builder')){
    const attrs={}; Object.keys(obj.attrs||{}).forEach(k=>attrs[k]=String(obj.attrs[k]));
    const charge={...obj,attrs,hand:'Droite'};
-   location.href='/?build='+encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(charge)))));
+   location.href='/creer/?build='+encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(charge)))));
    return;
  }
  apply(obj);
@@ -219,7 +219,7 @@ function loadHubBuild(id){
 }
 function addCurrentToHub(){
  const x=currentBuildObject();
- if(!x){alert('Compose d’abord ton build dans le builder.');location.href='/';return}
+ if(!x){alert('Compose d’abord ton build dans le builder.');location.href='/creer/';return}
  const arr=readHub();arr.unshift(x);writeHub(arr.slice(0,30));renderCommunity();
  alert('Build ajouté à ta bibliothèque locale.');
 }

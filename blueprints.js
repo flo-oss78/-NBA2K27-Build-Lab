@@ -200,7 +200,7 @@
     Object.keys(cibles).forEach(function(k){attrs[k]=String(cibles[k])});
     var obj={position:bp.pos,height:String(bp.h),weight:String(bp.w),
              wing:String(bp.wing),style:styleFor(bp),hand:'Droite',attrs:attrs};
-    location.href='/?build='+encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(obj)))));
+    location.href='/creer/?build='+encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(obj)))));
   }
 
   function applyBlueprint(id){

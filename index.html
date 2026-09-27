@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#060608">
 <meta name="color-scheme" content="dark">
-<meta name="description" content="Crée ton build NBA 2K27 : les maximums d’attributs de ton gabarit, les badges et les animations que tu peux vraiment équiper, comme dans le jeu.">
-<title>Le Labo des Builds — builder NBA 2K27</title>
+<meta name="description" content="Le Labo des Builds : crée ton build NBA 2K27 avant de dépenser tes VC. Maximums d'attributs par gabarit, 53 badges, 2 595 animations et leurs exigences, Cap Breakers.">
+<title>Le Labo des Builds — créer son build NBA 2K27</title>
 
 <link rel="canonical" href="https://lelabodesbuilds.com/">
 <link rel="alternate" hreflang="fr" href="https://lelabodesbuilds.com/">
@@ -19,8 +19,8 @@
 <link rel="stylesheet" href="/theme.css">
 <link rel="stylesheet" href="/hq.css">
 
-<meta property="og:title" content="Le Labo des Builds — crée ton build NBA 2K27">
-<meta property="og:description" content="Crée ton build NBA 2K27 : les maximums d’attributs de ton gabarit, les badges et les animations que tu peux vraiment équiper, comme dans le jeu.">
+<meta property="og:title" content="Le Labo des Builds — créer son build NBA 2K27">
+<meta property="og:description" content="Crée ton build NBA 2K27 avant de dépenser tes VC : maximums d'attributs par gabarit, badges, animations et Cap Breakers.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://lelabodesbuilds.com/">
 <meta property="og:locale" content="fr_FR">
@@ -37,8 +37,8 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Le Labo des Builds","alternateName":["Labo des Builds","Le Labo des Builds NBA 2K27"],"url":"https://lelabodesbuilds.com/","inLanguage":"fr","description":"Créer un build NBA 2K27 : maximums d’attributs par gabarit, badges, animations et Cap Breakers, avant de dépenser ses VC.","publisher":{"@type":"Organization","name":"Le Labo des Builds","url":"https://lelabodesbuilds.com/"}}</script>
 </head>
 
-<body>
-<a class="skip-link" href="#builder">Aller au contenu</a>
+<body class="page-accueil">
+<a class="skip-link" href="#main">Aller au contenu</a>
 
 <header class="reference-header">
   <div class="reference-brand">
@@ -46,488 +46,89 @@
     <small>NBA 2K27</small>
   </div>
   <nav class="reference-nav" aria-label="Navigation principale">
-    <a href="/" data-nav="creer" class="active" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Créer</a>
+    <a href="/creer/" data-nav="creer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Créer</a>
     <a href="/hub/" data-nav="builds"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Builds</a>
     <a href="/reference/" data-nav="badges"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/></svg>Badges</a>
-    <a href="/reference/?onglet=animations" data-nav="animations"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c2 2 3 5 3 8s-1 6-3 8M12 4c-2 2-3 5-3 8s1 6 3 8"/></svg>Animations</a>
+    <a href="/animations/" data-nav="animations"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c2 2 3 5 3 8s-1 6-3 8M12 4c-2 2-3 5-3 8s1 6 3 8"/></svg>Animations</a>
     <a href="/mon-build/" data-nav="monbuild"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>Mon build</a>
   </nav>
-  <div class="mode-switch header-mode" role="group" aria-label="Niveau d'affichage">
-    <button id="modeSimple" type="button" class="mode-btn" aria-pressed="true">Simple</button>
-    <button id="modeExpert" type="button" class="mode-btn" aria-pressed="false">Expert</button>
-  </div>
   <div class="reference-actions">
     <div id="compteZone" class="compte-zone" hidden></div>
     <a class="lang-switch" href="/en/" hreflang="en" lang="en" title="English version">EN</a>
-    <span id="referenceVersion">V26.34</span>
-    <button id="referenceSettings" type="button" aria-label="Ouvrir les réglages" aria-expanded="false">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.9 19.3a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.7 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.56V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.56 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z"/></svg>
-    </button>
+    <span id="referenceVersion">V26.35</span>
   </div>
 </header>
 
-<main id="main">
+<main id="main" class="hq-page-accueil">
 
-<!-- Entrée du mode simple : les deux façons de partir d'un build tout fait
-     plutôt que de vingt-deux curseurs vides. Masqué en mode expert. -->
-<div class="start-here">
-  <div>
-    <b>Par où commencer&nbsp;?</b>
-    <span>Pars d'un modèle ou réponds à trois questions — tu ajusteras ensuite.</span>
-  </div>
-  <div class="start-here-actions">
-    <a class="primary" href="/hub/?onglet=trios">Partir d'un trio</a>
-    <button type="button" data-ouvrir-assistant>Répondre à 3 questions</button>
-    <button type="button" data-passer-expert class="secondary">Tout afficher</button>
-  </div>
-</div>
+  <section class="accueil-ouverture">
+    <p class="accueil-surtitre">NBA 2K27 · MyPLAYER</p>
+    <h1>Sache ce que vaut ton build avant de dépenser tes VC</h1>
+    <p class="accueil-chapo">Le Labo des Builds montre ce que ton gabarit autorise vraiment : jusqu'où chaque attribut peut monter, quels badges tu débloques, quelles animations tu pourras équiper. Gratuit, sans inscription, en français.</p>
+    <p class="accueil-actions">
+      <a class="hq-pilule hq-pilule-forte" href="/creer/">Créer mon build</a>
+      <a class="hq-pilule" href="/hub/">Voir les builds des autres</a>
+    </p>
+  </section>
 
-<!-- ============ BUILDER (écran principal) ============ -->
-<section id="builder" class="builder-exact hq-builder" aria-label="Builder NBA 2K27">
+  <section class="accueil-chiffres" aria-label="Ce que contient le site">
+    <div><b>340</b><span>corps relevés dans le jeu</span></div>
+    <div><b>53</b><span>badges et leurs paliers</span></div>
+    <div><b>2 595</b><span>animations et leurs exigences</span></div>
+    <div><b>3 679</b><span>builds réels pour comparer</span></div>
+  </section>
 
-  <div id="wizardBanner" class="wizard-banner" hidden>
-    <div><b>Première fois ?</b><span>Réponds à 3 questions, on te propose 3 builds prêts à jouer.</span></div>
-    <div class="wizard-banner-actions">
-      <button type="button" id="startWizard">Lancer l'assistant</button>
-      <button type="button" id="wizardDismiss" class="secondary small-btn">Non merci</button>
+  <section class="accueil-quoi">
+    <h2>À quoi ça sert</h2>
+    <p>Dans NBA 2K27, un build se paie en VC et ne se corrige pas. Avant de valider, il faut savoir trois choses : jusqu'où chaque attribut peut monter avec la taille, le poids et l'envergure choisis ; quels badges ces attributs débloquent, et à quel palier ; quelles animations resteront hors de portée. Le jeu ne répond à aucune de ces questions avant que le build soit créé.</p>
+    <p>Ce site y répond pendant que tu règles tes curseurs, en te montrant au passage ce qu'un point de plus te ferait gagner — ou perdre ailleurs.</p>
+  </section>
+
+  <section class="accueil-cartes">
+    <h2>Par où commencer</h2>
+    <div class="accueil-grille">
+      <a class="accueil-carte" href="/creer/">
+        <b>Le builder</b>
+        <span>Choisis ton corps, place tes points d'attributs, et vois en temps réel les maximums, les badges et les animations que ça t'ouvre.</span>
+      </a>
+      <a class="accueil-carte" href="/reference/">
+        <b>Les 53 badges</b>
+        <span>Ce que fait chaque badge, les attributs exigés pour Bronze, Argent, Or et Hall of Fame, et la taille requise.</span>
+      </a>
+      <a class="accueil-carte" href="/animations/">
+        <b>Les animations</b>
+        <span>2 595 animations classées par catégorie, de la plus accessible à la plus exigeante, avec les attributs de chacune.</span>
+      </a>
+      <a class="accueil-carte" href="/hub/">
+        <b>Les builds de la communauté</b>
+        <span>Les builds publiés par les joueurs, et 3 679 builds réels pour comparer le tien à ce qui se joue vraiment.</span>
+      </a>
+      <a class="accueil-carte" href="/mon-build/">
+        <b>Mon build</b>
+        <span>Ta fiche complète : badges et leurs niveaux, plan de Cap Breakers, progression à suivre en jeu.</span>
+      </a>
+      <a class="accueil-carte" href="/hub/?onglet=trios">
+        <b>Les trios</b>
+        <span>Des gabarits prêts à jouer si tu ne sais pas par où commencer : choisis-en un et ajuste-le ensuite.</span>
+      </a>
     </div>
-  </div>
+  </section>
 
-  <div id="activeBlueprint" class="active-blueprint" hidden></div>
-
-  <!-- Le builder rouvre le dernier build (app.js) : on le dit, et on permet de repartir de zéro. -->
-  <p id="buildRouvert" class="build-rouvert" hidden>Ton dernier build a été rouvert. <a href="/?nouveau=1">Repartir de zéro</a></p>
-
-  <!-- En-tête du build façon 2K HQ. Il ne calcule rien : hq-builder.js y
-       recopie ce que app.js affiche (moyenne, nom, gabarit, budget). -->
-  <div class="hq-tete">
-    <div class="hq-hexa" aria-hidden="true">
-      <svg viewBox="0 0 88 96"><path d="M44 3 84 25v46L44 93 4 71V25z"/></svg>
-      <div><b id="hqNote">—</b><small>Moyenne</small></div>
-    </div>
-    <div class="hq-tete-texte">
-      <p class="hq-surtitre"><span id="hqPoste">Meneur de jeu</span> · <span id="hqStyle">Slasher</span></p>
-      <h1 id="hqNom">Mon build</h1>
-      <p id="hqGabarit" class="hq-gabarit">—</p>
-      <p id="hqPlafonds" class="hq-plafonds approx" role="status"></p>
-      <div id="hqBudget" class="hq-budget" hidden>
-        <div class="hq-jauge" aria-hidden="true"><i id="hqBudgetZone"></i><em id="hqBudgetBarre"></em></div>
-        <span>Points d’attributs utilisés : <b id="hqBudgetValeur"></b> <small id="hqBudgetMarge"></small></span>
-      </div>
-    </div>
-    <div class="hq-tete-actions">
-      <button type="button" class="hq-pilule hq-pilule-forte" data-hq-clic="importJeuOuvrir">Importer mon build du jeu</button>
-      <button type="button" class="hq-pilule" data-hq-clic="share">Copier le lien</button>
-      <button type="button" class="hq-pilule" data-hq-clic="printCard">Fiche build</button>
-    </div>
-  </div>
-
-  <!-- Fil conducteur du build : cinq étapes, une à la fois (hq-builder.js).
-       Les onglets gardent role="tab" : le clavier et les tests les parcourent. -->
-  <div class="builder-exact-grid">
-
-    <div class="builder-centre">
-      <div class="hq-onglets hq-etapes" role="tablist" aria-label="Étapes du build">
-        <button type="button" role="tab" id="ongletCorps" data-onglet="corps" data-libelle="Corps" aria-controls="panneauCorps" aria-selected="true"><i aria-hidden="true">1</i>Corps</button>
-        <button type="button" role="tab" id="ongletAttributs" data-onglet="attributs" data-libelle="Attributs" aria-controls="panneauAttributs" aria-selected="false" tabindex="-1"><i aria-hidden="true">2</i>Attributs</button>
-        <button type="button" role="tab" id="ongletBadges" data-onglet="badges" data-libelle="Badges" aria-controls="panneauBadges" aria-selected="false" tabindex="-1"><i aria-hidden="true">3</i>Badges</button>
-        <button type="button" role="tab" id="ongletAnimations" data-onglet="animations" data-libelle="Animations" aria-controls="panneauAnimations" aria-selected="false" tabindex="-1"><i aria-hidden="true">4</i>Animations</button>
-        <button type="button" role="tab" id="ongletRecap" data-onglet="recap" data-libelle="Récap" aria-controls="panneauRecap" aria-selected="false" tabindex="-1"><i aria-hidden="true">5</i>Récap</button>
-      </div>
-
-      <!-- Étape 1 : corps et style de jeu -->
-      <div id="panneauCorps" class="hq-panneau" role="tabpanel" aria-labelledby="ongletCorps">
-        <div class="panel exact-card body-card">
-          <div class="exact-card-title"><h2>Corps du joueur</h2><span>Maximums selon le gabarit</span></div>
-
-          <!-- Sélecteur en roues (hq-builder.js). À l'étape Attributs, la barre
-               passe au-dessus des curseurs, fixée en bas de l'écran sur mobile. -->
-          <div id="barreCorpsCorps" class="etape-barre-slot">
-            <div class="hq-barre-corps">
-              <div id="hqRoues" class="hq-roues"></div>
-              <button type="button" class="hq-enregistrer" data-hq-clic="save">Enregistrer le build</button>
-            </div>
-          </div>
-
-          <!-- Champs d'origine : masqués à l'écran, ils restent la source de vérité du moteur. -->
-          <label for="position" class="hq-cache">Poste
-            <select id="position">
-              <option selected>PG</option><option>SG</option><option>SF</option><option>PF</option><option>C</option>
-            </select>
-          </label>
-
-          <label for="height" class="hq-cache">Taille <output id="heightOut" for="height">6'6" (198 cm)</output>
-            <input id="height" type="range" min="69" max="88" value="78" step="1">
-          </label>
-
-          <label for="weight" class="hq-cache">Poids <output id="weightOut" for="weight">180 lbs (82 kg)</output>
-            <input id="weight" type="range" min="140" max="300" value="180" step="1">
-          </label>
-
-          <label for="wing" class="hq-cache">Envergure <output id="wingOut" for="wing">6'10" (208 cm)</output>
-            <input id="wing" type="range" min="69" max="96" value="82" step="1">
-          </label>
-
-          <div class="hq-selects">
-            <label for="dominantHand">Main forte
-              <select id="dominantHand"><option value="Droite" selected>Droite</option><option value="Gauche">Gauche</option></select>
-            </label>
-
-            <label for="style">Archétype
-              <select id="style">
-                <option>Équilibré</option><option>Shooter</option><option selected>Slasher</option>
-                <option>Playmaker</option><option>Lockdown</option><option>Big</option>
-              </select>
-            </label>
-          </div>
-
-          <p class="etape-libelle">Style de jeu</p>
-          <div class="style-strip" role="tablist" aria-label="Styles de build">
-            <button class="style-card" type="button" data-style-preset="Équilibré" role="tab" aria-selected="false">
-              <span class="style-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v14M5 7h14M7 7l-2 5h4L7 7Zm10 0-2 5h4l-2-5ZM8 20h8M9 17h6"/></svg></span>
-              <strong>Équilibré</strong><small>Polyvalent</small>
-            </button>
-            <button class="style-card" type="button" data-style-preset="Shooter" role="tab" aria-selected="false">
-              <span class="style-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="m18 6 2-2M4 12H2"/></svg></span>
-              <strong>Shooter</strong><small>Tir à 3 pts</small>
-            </button>
-            <button class="style-card" type="button" data-style-preset="Slasher" role="tab" aria-selected="false">
-              <span class="style-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="13" cy="5" r="2"/><path d="m12 8-3 5 3 2 1-4 2 3 3-1-3-5M12 15l-2 6M12 15l4 6"/></svg></span>
-              <strong>Slasher</strong><small>Attaque cercle</small>
-            </button>
-            <button class="style-card" type="button" data-style-preset="Playmaker" role="tab" aria-selected="false">
-              <span class="style-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c2 2 3 5 3 8s-1 6-3 8M12 4c-2 2-3 5-3 8s1 6 3 8"/></svg></span>
-              <strong>Playmaker</strong><small>Création de jeu</small>
-            </button>
-            <button class="style-card" type="button" data-style-preset="Lockdown" role="tab" aria-selected="false">
-              <span class="style-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 20 6v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3Z"/></svg></span>
-              <strong>Lockdown</strong><small>Défense</small>
-            </button>
-            <button class="style-card" type="button" data-style-preset="Big" role="tab" aria-selected="false">
-              <span class="style-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h16M4 15h16M7 6v12M17 6v12M9 8v8M15 8v8"/></svg></span>
-              <strong>Big</strong><small>Intérieur</small>
-            </button>
-          </div>
-
-          <div class="selected-style-panel">
-            <div class="selected-style-copy">
-              <span class="style-kicker">Style sélectionné</span>
-              <div class="selected-style-title">
-                <span id="selectedStyleIcon" aria-hidden="true"></span>
-                <h2 id="selectedStyleName">Slasher</h2>
-                <em id="selectedStyleBadge">✓ Optimisé</em>
-              </div>
-              <p id="selectedStyleText">Attaque le cercle, finition élite, crée de l'espace et peut finir en force.</p>
-              <div class="style-checks">
-                <span>Attributs optimisés</span>
-                <span>Meilleurs badges sélectionnés</span>
-                <span>Animations recommandées</span>
-                <span>Réglages adaptés à la taille et au poste</span>
-              </div>
-            </div>
-            <button class="change-style-btn" type="button" id="changeStyleBtn">Changer de style</button>
-          </div>
-
-          <div class="exact-hint" id="bodyHint">Les dimensions modifient les plafonds d'attributs. Les caps affichés simulent le builder 2K27&nbsp;: modèle indicatif, non officiel.</div>
-
-          <div id="importJeuEtat" class="import-jeu-etat" role="status" hidden></div>
-          <button class="import-jeu-btn" type="button" id="importJeuOuvrir">Importer mon build du jeu</button>
-
-          <button class="reset-style" type="button" id="resetStylePreset">Réinitialiser ce style</button>
-        </div>
-
-        <div id="buildTagPreview" class="build-tag-preview" hidden></div>
-      </div>
-
-      <!-- Étape 2 : attributs -->
-      <div id="panneauAttributs" class="hq-panneau" role="tabpanel" aria-labelledby="ongletAttributs" hidden>
-        <div id="barreCorpsAttributs" class="etape-barre-slot"></div>
-        <div class="panel exact-card attributes-exact-card">
-          <div class="exact-card-title">
-            <h2>Attributs <span id="selectedStyleAttrTitle">(optimisés Slasher)</span></h2>
-            <div class="attr-tools">
-              <button type="button" id="undoBtn" class="small-btn" aria-label="Annuler" title="Annuler (Ctrl+Z)" disabled>↶</button>
-              <button type="button" id="redoBtn" class="small-btn" aria-label="Rétablir" title="Rétablir (Ctrl+Maj+Z)" disabled>↷</button>
-              <span id="capStatus">1 / 21 au cap</span>
-            </div>
-          </div>
-          <!-- Visible tant qu'aucun point n'a été placé : dit où on en est et
-               propose un raccourci pour ceux qui veulent voir le site rempli. -->
-          <p id="buildVierge" class="build-vierge" hidden>Build vierge : aucun point d’attribut dépensé. Monte les attributs que tu veux, ou <button type="button" id="chargerExemple" class="lien-bouton">pars d’un exemple</button>.</p>
-          <div id="attributeGroups"></div>
-        </div>
-      </div>
-
-      <!-- Étape 3 : badges et takeovers -->
-      <div id="panneauBadges" class="hq-panneau" role="tabpanel" aria-labelledby="ongletBadges" hidden>
-        <div class="panel exact-card badge-reco-card">
-          <div class="exact-card-title">
-            <h2>Meilleurs badges</h2>
-            <button class="view-all-btn" type="button" id="viewAllStyleBadges">Voir tous les badges</button>
-          </div>
-          <div id="styleBadgeRecommendations" class="style-badge-grid"></div>
-        </div>
-        <div class="panel exact-card takeover-reco-card">
-          <div class="exact-card-title"><h2>Takeovers conseillés</h2></div>
-          <div id="styleTakeoverRecommendations" class="style-takeover-grid"></div>
-        </div>
-      </div>
-
-      <!-- Étape 4 : animations, dans l'ordre de l'écran du jeu -->
-      <div id="panneauAnimations" class="hq-panneau" role="tabpanel" aria-labelledby="ongletAnimations" hidden>
-        <div class="panel exact-card animation-reco-card">
-          <div class="exact-card-title"><h2>Animations conseillées</h2><a class="view-all-btn" href="/reference/?onglet=animations">Toutes les animations</a></div>
-          <p class="anim-regle">Pour chaque catégorie, l’animation la plus exigeante que ton build peut équiper à sa taille. Règle du site, pas un classement officiel.</p>
-          <div id="styleAnimationRecommendations" class="style-animation-list"></div>
-        </div>
-      </div>
-
-      <!-- Étape 5 : récapitulatif, budget, sauvegarde et builds réels proches -->
-      <div id="panneauRecap" class="hq-panneau" role="tabpanel" aria-labelledby="ongletRecap" hidden>
-        <div class="panel exact-card summary-card">
-          <div class="exact-card-title"><h2>Résumé du build</h2></div>
-          <div class="summary-head">
-            <div class="summary-ring"><strong id="score">74</strong><small>Moyenne</small></div>
-            <div><b id="buildname">Two-Way Creator</b><p id="buildMeta">PG • 6'6" • 180 lbs</p></div>
-          </div>
-          <!-- Ce chiffre n'est PAS la note globale du jeu : un build à 96 en jeu
-               tombait ici à 70 et recevait « B+ ». -->
-          <p class="summary-note">Moyenne de tes attributs par secteur. Ce n’est pas la note globale (GNR) du jeu, que 2K calcule autrement.</p>
-          <div class="summary-bars">
-            <div class="sbar finish"><span>Finition</span><b id="finishVal">71</b><i><em id="finishBar"></em></i></div>
-            <div class="sbar shoot"><span>Tir</span><b id="shootVal">81</b><i><em id="shootBar"></em></i></div>
-            <div class="sbar play"><span>Organisation</span><b id="playVal">81</b><i><em id="playBar"></em></i></div>
-            <div class="sbar defense"><span>Défense</span><b id="defVal">72</b><i><em id="defBar"></em></i></div>
-            <div class="sbar rebound"><span>Rebond</span><b id="rebVal">55</b><i><em id="rebBar"></em></i></div>
-            <div class="sbar physical"><span>Physique</span><b id="physVal">78</b><i><em id="physBar"></em></i></div>
-          </div>
-          <div class="summary-counts">
-            <div><b id="badgeReachable">39</b><span>badges à portée</span></div>
-            <div><b id="breakerTotal">0</b><span>Cap Breakers planifiés</span></div>
-            <div><b id="badgeTotal">0</b><span>badges dans le jeu</span></div>
-            <div><b id="animTotal">0</b><span>animations dans la base</span></div>
-          </div>
-          <div class="summary-actions">
-            <button id="optimize" type="button">Optimiser ce build</button>
-            <button id="reset" type="button" class="secondary">Tout réinitialiser</button>
-          </div>
-        </div>
-
-        <!-- Budget ESTIMÉ sur des builds réels : la règle exacte du jeu n'est pas publique. -->
-        <div id="budgetEstime" class="panel exact-card budget-estime" hidden>
-          <div class="exact-card-title"><h2>Points d’attributs utilisés</h2><span><b id="budgetEstimeValeur">—</b> <small id="budgetEstimeMarge"></small></span></div>
-          <div class="budget-jauge" aria-hidden="true"><i id="budgetEstimeZone"></i><em id="budgetEstimeBarre"></em></div>
-          <p id="budgetEstimeTexte" class="budget-texte"></p>
-          <p class="budget-note">Le jeu n’affiche pas combien de points d’attributs il te reste. On l’estime en comparant ton build à de vrais builds montés au maximum (99) ; la zone claire montre la marge d’erreur.</p>
-        </div>
-
-        <div class="panel exact-card recap-garder">
-          <div class="exact-card-title"><h2>Garder ton build</h2></div>
-          <!-- Publier depuis ici : jusqu'à présent il fallait aller au hub et
-               y retrouver le bouton, alors que l'envie de partager vient au
-               moment où le build est fini. -->
-          <p class="recap-publier"><button type="button" data-publier class="hq-pilule hq-pilule-forte">Publier dans les builds de la communauté</button>
-            <span>Ton build devient visible par tout le monde et reçoit une adresse à partager.</span></p>
-          <div class="exact-actions">
-            <button id="save" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>Sauvegarder</button>
-            <button id="load" type="button" class="secondary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"/></svg>Charger</button>
-            <button id="share" type="button" class="secondary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>Copier le lien</button>
-            <button id="printCard" type="button" class="secondary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>Fiche build</button>
-          </div>
-        </div>
-
-        <div class="panel exact-card builds-reels-carte">
-          <div class="exact-card-title"><h2>Builds réels proches</h2><span>même poste, taille ±1</span></div>
-          <p id="buildsSource" class="data-note"></p>
-          <div id="buildsProches" class="builds-proches"></div>
-        </div>
-
-        <!-- Fin du parcours : c'est ici qu'on dit où aller ensuite. Sans ce
-             bloc, 88 % des visiteurs ne quittaient jamais cette page — ils ne
-             savaient pas que le reste du site existait. Les chiffres viennent
-             du build en cours (app.js), pour que chaque lien dise ce qu'on y
-             trouvera vraiment. -->
-        <div class="panel exact-card recap-suite">
-          <div class="exact-card-title"><h2>Et maintenant&nbsp;?</h2></div>
-          <div id="recapSuite" class="recap-suite-liens"></div>
-        </div>
-      </div>
-
-      <div class="etapes-suite">
-        <button type="button" id="etapePrecedente" class="secondary" hidden>← <span></span></button>
-        <button type="button" id="etapeSuivante">Suivant : <span>Attributs</span> →</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="exact-footer-bar" data-mode="expert">
-    <div>
-      <b>Données badges et animations : sources publiques vérifiées par la communauté.</b>
-      <small>Les caps du builder restent un modèle indicatif, sans validation officielle de 2K.</small>
-    </div>
-    <span id="styleAppliedStatus">Style appliqué automatiquement</span>
-  </div>
-
-  <div class="exact-hidden-legacy" aria-hidden="true">
-    <div id="attributeQuickNav"></div><div id="overallHint"></div>
-  </div>
-</section>
-
-<!-- ============ BUILD INTELLIGENCE ============ -->
-<section id="intelligence" data-mode="expert" class="panel v15-intelligence">
-  <div class="section-title">
-    <div>
-      <p class="eyebrow">Build intelligence</p>
-      <h2>Comprends ton build avant de dépenser tes VC</h2>
-      <p class="sub">Ton identité de joueur, les prochains paliers utiles et les profils NBA 2K27 les plus proches.</p>
-    </div>
-  </div>
-  <div class="identity-grid">
-    <div class="identity-card"><span class="v15-label">Identité</span><strong id="v15IdentityName">—</strong><p id="v15IdentityText">Modifie tes attributs pour construire ton identité.</p><div id="v15IdentityTags" class="v15-tags"></div></div>
-    <div class="identity-card"><span class="v15-label">Profil</span><div id="v15CategoryScores" class="v15-category-scores"></div></div>
-    <div class="identity-card"><span class="v15-label">Prochain objectif</span><strong id="v15NextTitle">—</strong><p id="v15NextText">Le moteur cherche le prochain palier utile.</p><button id="v15JumpNext" type="button" class="secondary small-btn">Voir l'attribut</button></div>
-  </div>
-  <div class="v15-columns">
-    <div>
-      <div class="v15-subtitle"><h3>Ce que tu gagnes maintenant</h3><span id="v15UnlockCount">0 objectif proche</span></div>
-      <div id="v15Unlocks" class="v15-unlocks"></div>
-    </div>
-    <div>
-      <div class="v15-subtitle"><h3>Tu ressembles à qui ?</h3><span>Référence NBA 2K27</span></div>
-      <div id="v15Players" class="v15-players"></div>
-      <p class="v15-source-note">Les profils joueurs viennent de 2KRatings. Le matching est un indicateur de similarité, pas une promesse qu'un MyPLAYER reproduira exactement un joueur NBA.</p>
-    </div>
-  </div>
-  <details class="v15-advanced"><summary>Pourquoi ce résultat ?</summary><div id="v15Why" class="v15-why"></div></details>
-</section>
-
-<!-- ============ BUILD DNA ============ -->
-<section id="build-dna" data-mode="expert" class="panel build-dna-panel">
-  <div class="section-title">
-    <div>
-      <p class="eyebrow">Build DNA</p>
-      <h2>Décris le joueur que tu veux</h2>
-      <p class="sub">Écris ton objectif en français. Le moteur extrait les contraintes détectables, construit plusieurs compromis et explique ce qu'il sacrifie.</p>
-    </div>
-    <span class="pill">Local, sans compte</span>
-  </div>
-  <div class="dna-input-row">
-    <textarea id="dnaPrompt" rows="3" aria-label="Décris ton joueur" placeholder="Ex. Je veux un ailier 6'8 3&D, 90+ à 3 points, Gold Challenger, 85+ steal, bon handle et assez de dunk pour finir au cercle."></textarea>
-    <button id="dnaRun" type="button">Générer mes builds</button>
-  </div>
-  <div class="dna-chips">
-    <button type="button" data-dna-example="Je veux un 6'8 3&D avec 90+ à 3 points, Gold Challenger et 85+ steal.">3&amp;D 6'8</button>
-    <button type="button" data-dna-example="Je veux un guard rapide, gros handle, bon tir et excellente création.">Créateur</button>
-    <button type="button" data-dna-example="Je veux un intérieur défensif, fort, rebond et contres.">Big défensif</button>
-    <button type="button" data-dna-example="Je veux un slasher avec dunk, verticalité et défense correcte.">Slasher</button>
-  </div>
-  <div id="dnaReadout" class="dna-readout"><div class="empty">Décris ton joueur, puis lance l'analyse.</div></div>
-</section>
-
-<!-- ============ VALIDATEUR ============ -->
-<section id="validator" data-mode="expert" class="panel validator-panel">
-  <div class="section-title">
-    <div><p class="eyebrow">Validateur</p><h2>Vérification du build</h2></div>
-    <span id="validationStatus" class="validation-status">Analyse…</span>
-  </div>
-  <div class="validation-grid">
-    <div class="validation-main">
-      <div id="validationHeadline" class="validation-headline">Analyse en cours…</div>
-      <p id="validationText" class="sub">Le moteur contrôle le gabarit, les caps, les badges et les animations présentes dans la base embarquée.</p>
-      <div id="validationErrors" class="validation-errors"></div>
-    </div>
-    <div class="validation-checks">
-      <div><span>Gabarit</span><b id="checkBody">—</b></div>
-      <div><span>Attributs et caps</span><b id="checkCaps">—</b></div>
-      <div><span>Badges</span><b id="checkBadges">—</b></div>
-      <div><span>Animations</span><b id="checkAnimations">—</b></div>
-    </div>
-  </div>
-  <p class="validation-note"><b>À savoir :</b> ce validateur garantit la cohérence avec les règles de données intégrées au site. Il ne peut pas promettre une exactitude officielle tant que 2K ne publie pas les tables internes des caps du builder 2K27. Les règles non documentées sont signalées comme <b>indicatives</b>.</p>
-</section>
-
-<!-- ============ SCOUTING ============ -->
-<section class="panel scout" id="scouting" data-mode="expert">
-  <div class="section-title"><div><p class="eyebrow">Scouting report</p><h2>Analyse automatique du build</h2></div><span id="scoutVerdict" class="pill">—</span></div>
-  <div class="scout-grid">
-    <div><h3>Points forts</h3><div id="strengths" class="tag-list"></div></div>
-    <div><h3>Points faibles</h3><div id="weaknesses" class="tag-list"></div></div>
-    <div><h3>Style recommandé</h3><div id="recommendedStyle" class="scout-big">—</div><p id="scoutText" class="sub"></p></div>
-  </div>
-  <div class="compare-box">
-    <div><b>Profil NBA 2K27 de référence</b><span id="referenceBuild">—</span></div>
-    <div><b>Compatibilité</b><strong id="referenceScore">0%</strong></div>
-    <button id="exportBuild" type="button" class="secondary">Exporter la fiche</button>
-  </div>
-</section>
-
-<!-- ============ PRO DASHBOARD ============ -->
-<section id="proDashboard" data-mode="expert" class="panel pro-dashboard">
-  <div class="section-title">
-    <div>
-      <p class="eyebrow">Pro dashboard</p>
-      <h2>Tout contrôler avant de dépenser tes VC</h2>
-      <p class="sub">Qualité du build, reproductibilité et points encore incertains, au même endroit.</p>
-    </div>
-    <span id="dataConfidencePill" class="pill">Analyse</span>
-  </div>
-  <div class="pro-dashboard-grid">
-    <div class="pro-score-card">
-      <div class="pro-score-ring"><strong id="proQualityScore">0</strong><small>/100</small></div>
-      <div><b id="proQualityLabel">Analyse en cours</b><span id="proQualityText">Le moteur combine cohérence du gabarit, caps, badges et animations.</span></div>
-    </div>
-    <div class="coverage-card">
-      <h3>Couverture des données</h3>
-      <div class="coverage-grid">
-        <div><b id="coverageBadges">53</b><span>badges intégrés</span></div>
-        <div><b id="coverageAnimations">0</b><span>animations intégrées</span></div>
-        <div><b id="coverageOfficial">0</b><span>règles vérifiées</span></div>
-        <div><b id="coverageIndicative">0</b><span>règles indicatives</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="repro-grid">
-    <div class="repro-card"><div class="repro-title"><b>Checklist de reproductibilité</b><span id="reproPercent">0%</span></div><div id="reproList"></div></div>
-    <div class="repro-card"><b>Ce qui peut encore changer</b><ul id="uncertaintyList" class="uncertainty-list"></ul></div>
-  </div>
-</section>
-
-<!-- ============ GUIDE ============ -->
-<section id="nbabl-quick-guide" data-mode="expert" class="nbabl-game-guide" aria-label="Guide rapide">
-  <div>
-    <strong>La règle simple</strong>
-    <span>Corps → secteur de jeu → note → palier → badges et animations. Tu n'as pas besoin de connaître NBA 2K pour comprendre le builder.</span>
-  </div>
-  <div class="guide-steps"><b>1. Choisis</b><b>2. Augmente</b><b>3. Vérifie</b><b>4. Optimise</b></div>
-</section>
-
-<section class="features" data-mode="expert">
-  <h2>Le builder en une page</h2>
-  <div class="cards">
-    <div>📐<b>Caps</b><p>Taille, poids et envergure recalculent les plafonds.</p></div>
-    <div>🏆<b>Badges</b><p>Bronze, Argent, Or et Hall of Fame selon les seuils disponibles.</p></div>
-    <div>🎯<b>Animations</b><p>Dunks, layups, dribbles, tirs, passes et motion styles.</p></div>
-    <div>⚡<b>Takeover</b><p>Les spécialisations qui correspondent à ton profil.</p></div>
-  </div>
-</section>
-
-<div id="buildModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Détail du build">
-  <div class="modal-backdrop" data-close-modal></div>
-  <div class="modal-card">
-    <button class="modal-close" type="button" data-close-modal aria-label="Fermer">×</button>
-    <div id="buildModalContent"></div>
-  </div>
-</div>
+  <section class="accueil-serieux">
+    <h2>D'où viennent les chiffres</h2>
+    <p>Les maximums d'attributs sont relevés à la main dans le builder du jeu et l'application NBA 2K HQ, sur 340 corps. Les exigences d'animations sont recoupées entre plusieurs sources publiques, et le site indique à chaque fois si une valeur est <b>exacte</b>, <b>estimée</b> ou <b>approximative</b> — plutôt que de tout afficher du même ton.</p>
+    <p>Ce site est un outil indépendant, réalisé par un joueur. Il n'est ni affilié à 2K ni à la NBA, et ne reproduit aucun visuel du jeu.</p>
+    <p class="accueil-legal"><a href="/mentions-legales/">Mentions légales et confidentialité</a></p>
+  </section>
 
 </main>
 
 <footer>
   <p>NBA 2K27 Build Lab — outil indépendant, données publiques, aucune affiliation officielle avec 2K.</p>
-  <p class="footer-credit">Pour les données de tir mesurées en laboratoire (green window, vitesse de tir, tests de badges), va voir <a href="https://www.nba2klab.com/" target="_blank" rel="noopener">NBA2KLab</a> : leurs jumpers sont testés en Hall of Fame, sans boosts, sans badges et sans shot meter, sur une station automatisée. On ne cherche pas à refaire ça ici.</p>
   <nav class="footer-plan" aria-label="Plan du site">
     <div>
       <b>Créer</b>
-      <a href="/">Builder</a>
+      <a href="/creer/">Builder</a>
       <a href="/hub/?onglet=trios">Trios</a>
       <a href="/mon-build/">Mon build</a>
     </div>
@@ -542,57 +143,13 @@
       <a href="/hub/">Builds publiés</a>
     </div>
   </nav>
-
   <p class="footer-legal"><a href="/mentions-legales/">Mentions légales et confidentialité</a> · <a href="mailto:contact@lelabodesbuilds.com">Signaler une erreur de données</a></p>
 </footer>
 
-<div id="pwaInstall" class="pwa-install" hidden>
-  <span id="pwaInstallText">Installe NBA 2K27 Build Lab sur ton téléphone.</span>
-  <button id="pwaInstallBtn" type="button">Installer</button>
-  <button id="pwaInstallClose" type="button" class="secondary">Plus tard</button>
-</div>
-<div id="pwaUpdate" class="pwa-install" hidden>
-  <span>Une nouvelle version de Build Lab est disponible.</span>
-  <button id="pwaUpdateBtn" type="button">Actualiser</button>
-</div>
-
 <script src="/site-config.js"></script>
-<script src="/animations.js"></script>
-<script src="/dna-engine.js"></script>
-<script src="/data-registry.js"></script>
-<script src="/data-validation.js"></script>
-<script src="/players-core.js"></script>
-<!-- Ordre imposé par l'exécution d'app.js :
-     - builder-data.js et validator.js AVANT : app.js lit les tables et appelle
-       renderValidation() dès son premier rendu ;
-     - optimizer.js et hub.js APRÈS : ils appellent app.js, jamais l'inverse ;
-     - hub.js avant server-client.js, qui remplace likeBuild/openBuildModal. -->
-<script src="/builder-data.js"></script>
-<script src="/badge-icones.js"></script>
-<script src="/validator.js"></script>
-<script src="/builds-reels.js"></script>
-<script src="/caps-deduits.js"></script>
-<script src="/paliers.js"></script>
-<script src="/app.js"></script>
-<script src="/import-jeu.js"></script>
-<script src="/builds-ui.js"></script>
-<script src="/optimizer.js"></script>
-<script src="/hub.js"></script>
-<script src="/v15-intelligence.js"></script>
-<script src="/server-client.js"></script>
-<script src="/style-presets.js"></script>
-<script src="/blueprints.js"></script>
-<script src="/progression.js"></script>
-<script src="/qr.js"></script>
-<script src="/share.js"></script>
-<script src="/assist.js"></script>
-<script src="/build-sheet.js"></script>
-<script src="/community.js"></script>
-<script src="/sections-repliables.js"></script>
+<script src="/accueil.js"></script>
 <script src="/compte.js"></script>
 <script src="/ui.js"></script>
-<script src="/hq-builder.js"></script>
-<script src="/attributs-jeu.js"></script>
 <script src="/mesure.js"></script>
 </body>
 </html>
