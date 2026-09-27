@@ -91,6 +91,20 @@ function page(fichier) {
 
   html = html.replace(/@@BLOC(\d+)@@/g, (m, i) => coffre[+i]);
 
+  /* La carte d'identité du site (schema.org) est mise de côté pendant la
+     traduction — un remplacement mot à mot casserait le JSON. On l'adapte
+     donc ici : la page est en anglais, sa description doit l'être aussi. */
+  html = html.replace(/<script type="application\/ld\+json">(.*?)<\/script>/s, (bloc, json) => {
+    try {
+      const o = JSON.parse(json);
+      if (o['@type'] !== 'WebSite') return bloc;
+      o.inLanguage = 'en';
+      o.description = 'Build your NBA 2K27 MyPLAYER: attribute maximums for each body, '
+        + 'badges, animations and Cap Breakers, before spending any VC.';
+      return `<script type="application/ld+json">${JSON.stringify(o)}</script>`;
+    } catch { return bloc; }
+  });
+
   const sortie = fichier === '404.html' ? 'en/404.html' : 'en/' + fichier;
   fs.mkdirSync(path.dirname(sortie), { recursive: true });
   fs.writeFileSync(sortie, crlf ? html.replace(/\n/g, '\r\n') : html);
